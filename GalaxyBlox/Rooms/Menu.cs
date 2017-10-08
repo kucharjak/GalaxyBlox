@@ -45,7 +45,7 @@ namespace GalaxyBlox.Rooms
                 Position = new Vector2(padding, btnStartPosY),
                 Alpha = 0.5f,
                 BackgroundColor = new Color(121, 140, 170),
-                Text = "New Game",
+                Text = "Nová hra",
                 ShowText = true,
                 TextColor = Color.White,
                 TextSpriteFont = Game1.Contents.ButtonText
@@ -57,7 +57,7 @@ namespace GalaxyBlox.Rooms
                 Position = new Vector2(padding, btnStartPosY + 65),
                 Alpha = 0.5f,
                 BackgroundColor = new Color(121, 140, 170),
-                Text = "Controls",
+                Text = "Ovládání",
                 ShowText = true,
                 TextColor = Color.White,
                 TextSpriteFont = Game1.Contents.ButtonText
@@ -69,7 +69,7 @@ namespace GalaxyBlox.Rooms
                 Position = new Vector2(padding, btnStartPosY + 65 * 2),
                 Alpha = 0.5f,
                 BackgroundColor = new Color(121, 140, 170),
-                Text = "Settings",
+                Text = "Nastavení",
                 ShowText = true,
                 TextColor = Color.White,
                 TextSpriteFont = Game1.Contents.ButtonText
@@ -81,7 +81,7 @@ namespace GalaxyBlox.Rooms
                 Position = new Vector2(padding, btnStartPosY + 65 * 3),
                 Alpha = 0.5f,
                 BackgroundColor = new Color(121, 140, 170),
-                Text = "Exit",
+                Text = "Konec",
                 ShowText = true,
                 TextColor = Color.White,
                 TextSpriteFont = Game1.Contents.ButtonText
