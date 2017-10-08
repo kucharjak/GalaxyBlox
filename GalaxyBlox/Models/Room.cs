@@ -68,13 +68,16 @@ namespace GalaxyBlox.Models
             foreach (var obj in objects)
             {
                 spriteBatch.Draw(
-                    Game1.Pix,
-                    ScaleRect(new Rectangle((int)obj.Position.X, (int)obj.Position.Y, obj.Size.Width, obj.Size.Height)),
+                    Game1.Contents.Pix,
+                    ScaleRect(new Rectangle((int)obj.Position.X, (int)obj.Position.Y, (int)obj.Size.X, (int)obj.Size.Y)),
                     obj.Color);
+
+                if (obj.ShowText)
+                    spriteBatch.DrawString(obj.TextSpriteFont, obj.Text, ScaleVector2(obj.TextPosition), obj.TextColor, 0f, new Vector2(), 1f, SpriteEffects.None, 0f);
             }
 
             if (touchPoint != null)
-                spriteBatch.Draw(Game1.Pix,
+                spriteBatch.Draw(Game1.Contents.Pix,
                     new Rectangle(
                         touchPoint.Value.X - 25,
                         touchPoint.Value.Y - 25,
@@ -90,6 +93,12 @@ namespace GalaxyBlox.Models
         protected virtual void HandleInput(TouchLocation input)
         {
             touchPoint = new Point((int)input.Position.X, (int)input.Position.Y);
+        }
+
+        private Vector2 ScaleVector2(Vector2 vect)
+        {
+            var resultVect = new Vector2(vect.X * scale + offsetX, vect.Y * scale + offsetY);
+            return resultVect;
         }
 
         private Rectangle ScaleRect(Rectangle rect)

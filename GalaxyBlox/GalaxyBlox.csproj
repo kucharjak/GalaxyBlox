@@ -69,6 +69,7 @@
     <Compile Include="Rooms\Menu.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\Fonts\ButtonText.spritefont" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>

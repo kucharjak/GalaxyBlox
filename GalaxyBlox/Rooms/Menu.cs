@@ -12,6 +12,7 @@ using GalaxyBlox.Models;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Android.Util;
+using Microsoft.Xna.Framework;
 
 namespace GalaxyBlox.Rooms
 {
@@ -29,13 +30,63 @@ namespace GalaxyBlox.Rooms
 
         private void loadObjects()
         {
+            padding = 30;
             //objects.Add(new GameObject()
             //{
             //    Size = new Android.Util.Size(RoomSize.Width - 2 * padding, RoomSize.Height - 2 * padding),
             //    Position = new Microsoft.Xna.Framework.Vector2(padding, padding)
             //});
-
-
+            var btnSize = new Vector2(RoomSize.Width - 2 * padding, 50);
+            var btnCount = 4;
+            var btnStartPosY = (RoomSize.Height - (50 * btnCount + 10 * (btnCount - 1))) / 2;
+            objects.Add(new GameObject()
+            {
+                Size = btnSize,
+                Position = new Vector2(padding, btnStartPosY),
+                Alpha = 0.5f,
+                BackgroundColor = new Color(121, 140, 170),
+                Text = "New Game",
+                ShowText = true,
+                TextColor = Color.White,
+                TextSpriteFont = Game1.Contents.ButtonText
+            });
+            objects.Last().CenterText(scale);
+            objects.Add(new GameObject()
+            {
+                Size = btnSize,
+                Position = new Vector2(padding, btnStartPosY + 65),
+                Alpha = 0.5f,
+                BackgroundColor = new Color(121, 140, 170),
+                Text = "Controls",
+                ShowText = true,
+                TextColor = Color.White,
+                TextSpriteFont = Game1.Contents.ButtonText
+            });
+            objects.Last().CenterText(scale);
+            objects.Add(new GameObject()
+            {
+                Size = btnSize,
+                Position = new Vector2(padding, btnStartPosY + 65 * 2),
+                Alpha = 0.5f,
+                BackgroundColor = new Color(121, 140, 170),
+                Text = "Settings",
+                ShowText = true,
+                TextColor = Color.White,
+                TextSpriteFont = Game1.Contents.ButtonText
+            });
+            objects.Last().CenterText(scale);
+            objects.Add(new GameObject()
+            {
+                Size = btnSize,
+                Position = new Vector2(padding, btnStartPosY + 65 * 3),
+                Alpha = 0.5f,
+                BackgroundColor = new Color(121, 140, 170),
+                Text = "Exit",
+                ShowText = true,
+                TextColor = Color.White,
+                TextSpriteFont = Game1.Contents.ButtonText
+            });
+            objects.Last().CenterText(scale);
         }
     }
 }
