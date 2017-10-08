@@ -1,6 +1,9 @@
+using Android.Util;
+using GalaxyBlox.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 
 namespace GalaxyBlox
 {
@@ -9,8 +12,15 @@ namespace GalaxyBlox
     /// </summary>
     public class Game1 : Game
     {
+        public static Size GameSize = new Size(480, 800);
+        public static Texture2D Pix;
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        bool inMenu;
+        Room menu;
+        Room gameRoom;
 
         public Game1()
         {
@@ -18,9 +28,8 @@ namespace GalaxyBlox
             Content.RootDirectory = "Content";
 
             graphics.IsFullScreen = true;
-            graphics.PreferredBackBufferWidth = 800;
-            graphics.PreferredBackBufferHeight = 480;
-            graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+            //graphics.PreferredBackBufferWidth = GameWindow.Width;
+            //graphics.PreferredBackBufferHeight = GameWindow.Height;
         }
 
         /// <summary>
@@ -31,8 +40,6 @@ namespace GalaxyBlox
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             base.Initialize();
         }
 
@@ -45,7 +52,11 @@ namespace GalaxyBlox
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            Pix = Content.Load<Texture2D>("Sprites/pixel");
+
+            menu = new Rooms.Menu(new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Game1.GameSize);
+            menu.LoadContent(Content);
+            inMenu = true;
         }
 
         /// <summary>
@@ -64,10 +75,10 @@ namespace GalaxyBlox
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                Exit();
-
-            // TODO: Add your update logic here
+            if (inMenu)
+                menu.Update(gameTime);
+            else
+                gameRoom.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -79,9 +90,14 @@ namespace GalaxyBlox
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            spriteBatch.Begin();
 
-            // TODO: Add your drawing code here
+            if (inMenu)
+                menu.Draw(gameTime, spriteBatch);
+            else
+                gameRoom.Draw(gameTime, spriteBatch);
 
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }
