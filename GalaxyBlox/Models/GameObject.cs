@@ -22,8 +22,15 @@ namespace GalaxyBlox.Models
 
         public Vector2 Size;
         public Vector2 Position;
+        protected float displayScale = 1f;
 
-        public string Text = "";
+        public string Text
+        {
+            get { return text; }
+            set { text = value; if (TextIsCentered) CenterText(); }
+        }
+        private string text;
+        public bool TextIsCentered = false;
         public bool ShowText = false;
         public Color TextColor = Color.Black;
         public Point TextOffset = new Point();
@@ -36,10 +43,23 @@ namespace GalaxyBlox.Models
         public Color BackgroundColor = Color.White;
         public float Alpha = 1f;
 
-        public void CenterText(float roomScale)
+        public Rectangle Rectangle
+        {
+            get
+            {
+                return new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
+            }
+        }
+
+        public GameObject(float scale)
+        {
+            displayScale = scale;
+        }
+
+        public void CenterText()
         {
             var textSize = TextSpriteFont.MeasureString(Text);
-            TextOffset = new Point((int)((Size.X - textSize.X / roomScale) / 2), (int)((Size.Y - textSize.Y / roomScale) / 2));
+            TextOffset = new Point((int)((Size.X - textSize.X / displayScale) / 2), (int)((Size.Y - textSize.Y / displayScale) / 2));
         }
     }
 }

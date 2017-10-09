@@ -28,7 +28,7 @@ namespace GalaxyBlox
         bool inMenu;
         Room menu;
         Room gameRoom;
-
+        
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);

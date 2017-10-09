@@ -76,14 +76,14 @@ namespace GalaxyBlox.Models
                     spriteBatch.DrawString(obj.TextSpriteFont, obj.Text, ScaleVector2(obj.TextPosition), obj.TextColor, 0f, new Vector2(), 1f, SpriteEffects.None, 0f);
             }
 
-            if (touchPoint != null)
-                spriteBatch.Draw(Game1.Contents.Pix,
-                    new Rectangle(
-                        touchPoint.Value.X - 25,
-                        touchPoint.Value.Y - 25,
-                        50,
-                        50),
-                    Color.Green);
+            //if (touchPoint != null)
+            //    spriteBatch.Draw(Game1.Contents.Pix,
+            //        new Rectangle(
+            //            touchPoint.Value.X - 25,
+            //            touchPoint.Value.Y - 25,
+            //            50,
+            //            50),
+            //        Color.Green);
         }
 
         public virtual void LoadContent(ContentManager content)
@@ -92,7 +92,54 @@ namespace GalaxyBlox.Models
 
         protected virtual void HandleInput(TouchLocation input)
         {
-            touchPoint = new Point((int)input.Position.X, (int)input.Position.Y);
+            var vectInput = UnScaleVector(input.Position);
+            var rectInput = new Rectangle((int)vectInput.X, (int)vectInput.Y, 1, 1);
+            //touchPoint = new Point((int)input.Position.X, (int)input.Position.Y);
+            var buttons = objects.Where(btn => btn.Type == "button").ToArray();
+            if (buttons.Count() == 0)
+                return;
+
+            switch (input.State)
+            {
+                case TouchLocationState.Moved:
+                case TouchLocationState.Pressed:
+                    {
+                        var touchedButton = buttons.Where(btn => btn.Rectangle.Intersects(rectInput)).FirstOrDefault();
+                        if (touchedButton != null)
+                            (touchedButton as Button).Touch();
+
+                        var releasedButtons = buttons.Where(btn => !btn.Rectangle.Intersects(rectInput) && btn != touchedButton);
+                        foreach (var btn in releasedButtons)
+                            (btn as Button).Release();
+                    }
+                    break;
+                case TouchLocationState.Released:
+                    {
+                        var pressedButton = buttons.Where(btn => btn.Rectangle.Intersects(rectInput)).FirstOrDefault();
+                        if (pressedButton != null)
+                            (pressedButton as Button).Press();
+                    }
+                    break;
+            }
+
+            //var touchedButton = buttons.Where(btn => btn.Rectangle.Intersects(rectInput) && !(btn as Button).IsTouched).FirstOrDefault();
+            //if (touchedButton != null)
+            //    (touchedButton as Button).Touch();
+
+            //var pressedButtons = buttons.Where(btn => (btn as Button).IsTouched && !btn.Rectangle.Intersects(rectInput));
+            //foreach (var btn in pressedButtons)
+            //    (btn as Button).Press();
+
+            //var releasedButtons = buttons.Where(btn => !(btn as Button).IsTouched && !btn.Rectangle.Intersects(rectInput) && !pressedButtons.Contains(btn));
+            //foreach (var btn in releasedButtons)
+            //    (btn as Button).Release();
+
+        }
+
+        private Vector2 UnScaleVector(Vector2 vect)
+        {
+            var resultVect = new Vector2(vect.X / scale - offsetX, vect.Y / scale - offsetY);
+            return resultVect;
         }
 
         private Vector2 ScaleVector2(Vector2 vect)
