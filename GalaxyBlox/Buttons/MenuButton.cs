@@ -5,40 +5,41 @@ using System.Text;
 
 using GalaxyBlox.Models;
 using Microsoft.Xna.Framework;
+using GalaxyBlox.Static;
 
 namespace GalaxyBlox.Buttons
 {
     class MenuButton : Button
     {
-        public MenuButton(float scale) : base (scale)
+        public MenuButton(Room parentRoom) : base (parentRoom)
         {
+            BackgroundImage = Contents.Textures.Pix;
             Alpha = 0.5f;
-            BackgroundColor = new Color(121, 140, 170);
+            BackgroundColor = Contents.Colors.MenuButtonBackgroundColor;
+            DefaultBackgroundColor = Contents.Colors.MenuButtonBackgroundColor;
+            SelectedBackgroundColor = Contents.Colors.MenuButtonSelectedBackgroundColor;
+            TextColor = Contents.Colors.MenuButtonTextColor;
+
             ShowText = true;
-            TextColor = Color.White;
-            TextSpriteFont = Game1.Contents.ButtonText;
+            TextSpriteFont = Contents.Fonts.MenuButtonText;
         }
 
         public override void Touch()
         {
             base.Touch();
-
-            BackgroundColor = Color.Red;
+            Scale = 1.05f;
         }
 
         public override void Press()
         {
             base.Press();
-            
-            Text = "HELL YEA";
-            BackgroundColor = new Color(121, 140, 170);
+            Scale = 1.05f;
         }
 
         public override void Release()
         {
             base.Release();
-
-            BackgroundColor = new Color(121, 140, 170);
+            Scale = 1f;
         }
 
         public override void PressAction()

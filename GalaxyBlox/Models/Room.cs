@@ -23,9 +23,9 @@ namespace GalaxyBlox.Models
         public Texture2D Background;
         public Size RoomSize;
 
-        protected float scale = 1f;
-        protected float offsetX = 0f;
-        protected float offsetY = 0f;
+        public float Scale = 1f;
+        public float OffsetX = 0f;
+        public float OffsetY = 0f;
 
         protected int padding = 20;
 
@@ -37,13 +37,13 @@ namespace GalaxyBlox.Models
 
             if (RealSize.Width - GameSize.Width > RealSize.Height - GameSize.Height)
             { // HEIGHT + X offset
-                scale = RealSize.Height / (GameSize.Height * 1f);
-                offsetX = (int)((RealSize.Width - (GameSize.Width * scale)) / 2);
+                Scale = RealSize.Height / (GameSize.Height * 1f);
+                OffsetX = (int)((RealSize.Width - (GameSize.Width * Scale)) / 2);
             }
             else
             { // WIDTH  + Y offset
-                scale = RealSize.Width / (GameSize.Width * 1f);
-                offsetY = (int)((RealSize.Height - (GameSize.Height * scale)) / 2);
+                Scale = RealSize.Width / (GameSize.Width * 1f);
+                OffsetY = (int)((RealSize.Height - (GameSize.Height * Scale)) / 2);
             }
         }
 
@@ -67,13 +67,7 @@ namespace GalaxyBlox.Models
 
             foreach (var obj in objects)
             {
-                spriteBatch.Draw(
-                    Game1.Contents.Pix,
-                    ScaleRect(new Rectangle((int)obj.Position.X, (int)obj.Position.Y, (int)obj.Size.X, (int)obj.Size.Y)),
-                    obj.Color);
-
-                if (obj.ShowText)
-                    spriteBatch.DrawString(obj.TextSpriteFont, obj.Text, ScaleVector2(obj.TextPosition), obj.TextColor, 0f, new Vector2(), 1f, SpriteEffects.None, 0f);
+                obj.Draw(spriteBatch);
             }
 
             //if (touchPoint != null)
@@ -94,7 +88,6 @@ namespace GalaxyBlox.Models
         {
             var vectInput = UnScaleVector(input.Position);
             var rectInput = new Rectangle((int)vectInput.X, (int)vectInput.Y, 1, 1);
-            //touchPoint = new Point((int)input.Position.X, (int)input.Position.Y);
             var buttons = objects.Where(btn => btn.Type == "button").ToArray();
             if (buttons.Count() == 0)
                 return;
@@ -121,42 +114,18 @@ namespace GalaxyBlox.Models
                     }
                     break;
             }
-
-            //var touchedButton = buttons.Where(btn => btn.Rectangle.Intersects(rectInput) && !(btn as Button).IsTouched).FirstOrDefault();
-            //if (touchedButton != null)
-            //    (touchedButton as Button).Touch();
-
-            //var pressedButtons = buttons.Where(btn => (btn as Button).IsTouched && !btn.Rectangle.Intersects(rectInput));
-            //foreach (var btn in pressedButtons)
-            //    (btn as Button).Press();
-
-            //var releasedButtons = buttons.Where(btn => !(btn as Button).IsTouched && !btn.Rectangle.Intersects(rectInput) && !pressedButtons.Contains(btn));
-            //foreach (var btn in releasedButtons)
-            //    (btn as Button).Release();
-
         }
 
         private Vector2 UnScaleVector(Vector2 vect)
         {
-            var resultVect = new Vector2(vect.X / scale - offsetX, vect.Y / scale - offsetY);
+            var resultVect = new Vector2(vect.X / Scale - OffsetX, vect.Y / Scale - OffsetY);
             return resultVect;
         }
 
         private Vector2 ScaleVector2(Vector2 vect)
         {
-            var resultVect = new Vector2(vect.X * scale + offsetX, vect.Y * scale + offsetY);
+            var resultVect = new Vector2(vect.X * Scale + OffsetX, vect.Y * Scale + OffsetY);
             return resultVect;
-        }
-
-        private Rectangle ScaleRect(Rectangle rect)
-        {
-            var resultRect = new Rectangle(
-                (int)(rect.X * scale + offsetX),
-                (int)(rect.Y * scale + offsetY),
-                (int)(rect.Width * scale),
-                (int)(rect.Height * scale)
-                );
-            return resultRect;
         }
     }
 }

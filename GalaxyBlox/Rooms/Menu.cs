@@ -35,7 +35,7 @@ namespace GalaxyBlox.Rooms
             var btnSize = new Vector2(RoomSize.Width - 2 * padding, 50);
             var btnCount = 4;
             var btnStartPosY = (RoomSize.Height - (50 * btnCount + 10 * (btnCount - 1))) / 2;
-            objects.Add(new MenuButton(scale)
+            objects.Add(new MenuButton(this)
             {
                 Size = btnSize,
                 Position = new Vector2(padding, btnStartPosY),
@@ -43,7 +43,7 @@ namespace GalaxyBlox.Rooms
                 Text = "Nová hra",
                 ButttonID = 1
             });
-            objects.Add(new MenuButton(scale)
+            objects.Add(new MenuButton(this)
             {
                 Size = btnSize,
                 Position = new Vector2(padding, btnStartPosY + 65),
@@ -51,7 +51,7 @@ namespace GalaxyBlox.Rooms
                 Text = "Ovládání",
                 ButttonID = 2
             });
-            objects.Add(new MenuButton(scale)
+            objects.Add(new MenuButton(this)
             {
                 Size = btnSize,
                 Position = new Vector2(padding, btnStartPosY + 65 * 2),
@@ -59,7 +59,7 @@ namespace GalaxyBlox.Rooms
                 Text = "Nastavení",
                 ButttonID = 3
             });
-            objects.Add(new MenuButton(scale)
+            objects.Add(new MenuButton(this)
             {
                 Size = btnSize,
                 Position = new Vector2(padding, btnStartPosY + 65 * 3),

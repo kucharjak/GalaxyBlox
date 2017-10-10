@@ -17,25 +17,31 @@ namespace GalaxyBlox.Models
     {
         public bool IsTouched;
         public int ButttonID = 0;
+        public Color SelectedBackgroundColor;
+        public Color DefaultBackgroundColor;
 
-        public Button(float scale) : base (scale)
+        public Button(Room parentRoom) : base (parentRoom)
         {
             Type = "button";
+            Origin = new Vector2(0.5f);
         }
 
         public virtual void Touch()
         {
             IsTouched = true;
+            BackgroundColor = SelectedBackgroundColor;
         }
 
         public virtual void Release()
         {
             IsTouched = false;
+            BackgroundColor = DefaultBackgroundColor;
         }
 
         public virtual void Press()
         {
             IsTouched = false;
+            BackgroundColor = SelectedBackgroundColor;
 
             PressAction();
         }

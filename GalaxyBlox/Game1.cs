@@ -12,15 +12,7 @@ namespace GalaxyBlox
     /// </summary>
     public class Game1 : Game
     {
-        public static Size GameSize = new Size(480, 800);
-
-        public class Contents
-        {
-            public static Texture2D Pix;
-
-            public static SpriteFont ButtonText;
-        }
-             
+        public static Size GameSize = new Size(480, 800);             
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -59,8 +51,8 @@ namespace GalaxyBlox
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Contents.Pix = Content.Load<Texture2D>("Sprites/pixel");
-            Contents.ButtonText = Content.Load<SpriteFont>("Fonts/ButtonText");
+            Static.Contents.Textures.Pix = Content.Load<Texture2D>("Sprites/pixel");
+            Static.Contents.Fonts.MenuButtonText = Content.Load<SpriteFont>("Fonts/ButtonText");
 
             menu = new Rooms.Menu(new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Game1.GameSize);
             menu.LoadContent(Content);
