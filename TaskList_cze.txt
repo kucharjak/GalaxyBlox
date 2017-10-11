@@ -1,4 +1,6 @@
 Rozšíøení 
+ - vytvoøit "Color schemes", kdy budu schopný mít color scheme na tlaèítko a ten si jen podám do toho tlaèítka, pøidávání barev postupnì v kontruktoru a nebudu si díky tomu muset držet v pamìti tøi barvy, ale jen jednu referenci "noice"
+ - vymyslet chytøejší zpùsob, jak tlaèítkùm pøidat eventy
  - pøidat herní místnost
  - vymyslet pøepínání
  - vymyslet pauzu hry
@@ -17,7 +19,7 @@ Kontrola
  - ovìøit 
  
 Bugy
- - Ukonèení aplikace trvá hodiny - podle všeho to není správný zpùsob jak ukonèovat aplikace a Android se jí pokouší restartovat, protože si myslí, že spadla
+
  
 
  
@@ -26,3 +28,4 @@ Bugy
 --------------HOTOVO--------------
 ----------------------------------
 
+- Ukonèení aplikace trvá hodiny - podle všeho to není správný zpùsob jak ukonèovat aplikace a Android se jí pokouší restartovat, protože si myslí, že spadla

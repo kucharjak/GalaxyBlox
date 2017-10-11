@@ -18,6 +18,7 @@ namespace GalaxyBlox.Buttons
             BackgroundColor = Contents.Colors.MenuButtonBackgroundColor;
             DefaultBackgroundColor = Contents.Colors.MenuButtonBackgroundColor;
             SelectedBackgroundColor = Contents.Colors.MenuButtonSelectedBackgroundColor;
+            PressBackgroundColor = Contents.Colors.MenuButtonPressBackgroundColor;
             TextColor = Contents.Colors.MenuButtonTextColor;
 
             ShowText = true;
@@ -26,20 +27,23 @@ namespace GalaxyBlox.Buttons
 
         public override void Touch()
         {
-            base.Touch();
             Scale = 1.05f;
+
+            base.Touch();
         }
 
         public override void Press()
         {
+            Scale = 1f;
+
             base.Press();
-            Scale = 1.05f;
         }
 
         public override void Release()
         {
-            base.Release();
             Scale = 1f;
+
+            base.Release();
         }
 
         public override void PressAction()
@@ -49,7 +53,7 @@ namespace GalaxyBlox.Buttons
                 case 1: break;
                 case 2: break;
                 case 3: break;
-                case 4: System.Environment.Exit(0); break;
+                case 4: Game.Activity.Finish(); break;
             }
         }
     }

@@ -30,6 +30,7 @@ namespace GalaxyBlox.Static
         {
             public static Color MenuButtonBackgroundColor = new Color(121, 140, 170);
             public static Color MenuButtonSelectedBackgroundColor = new Color(153, 189, 247);
+            public static Color MenuButtonPressBackgroundColor = new Color(89, 107, 135);
             public static Color MenuButtonTextColor = Color.White;
         }
     }

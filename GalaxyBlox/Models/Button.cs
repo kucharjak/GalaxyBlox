@@ -19,6 +19,7 @@ namespace GalaxyBlox.Models
         public int ButttonID = 0;
         public Color SelectedBackgroundColor;
         public Color DefaultBackgroundColor;
+        public Color PressBackgroundColor;
 
         public Button(Room parentRoom) : base (parentRoom)
         {
@@ -41,7 +42,7 @@ namespace GalaxyBlox.Models
         public virtual void Press()
         {
             IsTouched = false;
-            BackgroundColor = SelectedBackgroundColor;
+            BackgroundColor = DefaultBackgroundColor;
 
             PressAction();
         }
