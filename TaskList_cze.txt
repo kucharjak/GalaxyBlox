@@ -1,0 +1,28 @@
+Rozšíøení 
+ - pøidat herní místnost
+ - vymyslet pøepínání
+ - vymyslet pauzu hry
+ - pøidat tlaèítka na ovládání hry
+ - zaèít pracovat na høe
+
+Features
+ - animace klikání
+ - Vytvoøit objekt okna, který bude øešit nastavení a zobrazení ovládání
+
+SpiceIt
+ - zmìnit background (upravit pùvodní - vymazat hvìzdy, upravit barvy) a pøidat hvìzdy jako jiný objekty i s animací + pøidat padající "komety" za náhodnou dobu
+ 
+
+Kontrola
+ - ovìøit 
+ 
+Bugy
+ - Ukonèení aplikace trvá hodiny - podle všeho to není správný zpùsob jak ukonèovat aplikace a Android se jí pokouší restartovat, protože si myslí, že spadla
+ 
+
+ 
+ 
+----------------------------------
+--------------HOTOVO--------------
+----------------------------------
+
