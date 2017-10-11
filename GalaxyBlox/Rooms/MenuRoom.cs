@@ -17,20 +17,22 @@ using GalaxyBlox.Buttons;
 
 namespace GalaxyBlox.Rooms
 {
-    class Menu : Room
+    class MenuRoom : Room
     {
-        public Menu(Size RealSize, Size GameSize) : base(RealSize, GameSize)
+        public MenuRoom(Size realSize, Size gameSize) : base(realSize, gameSize)
         {
         }
 
         public override void LoadContent(ContentManager content)
         {
+            base.LoadContent(content);
             Background = content.Load<Texture2D>("Backgrounds/menu");
-            loadObjects();
         }
 
-        private void loadObjects()
+        protected override void AddObjects()
         {
+            base.AddObjects();
+
             padding = 30;
             var btnSize = new Vector2(RoomSize.Width - 2 * padding, 50);
             var btnCount = 4;

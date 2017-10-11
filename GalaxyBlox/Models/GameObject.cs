@@ -52,7 +52,7 @@ namespace GalaxyBlox.Models
         public Color BackgroundColor = Color.White;
         public float Alpha = 1f;
 
-        public Rectangle Rectangle { get { return new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y); } }
+        public Rectangle Rectangle { get { return new Rectangle((int)(Position.X), (int)(Position.Y), (int)Size.X, (int)Size.Y); } }
 
         public GameObject(Room parentRoom)
         {
@@ -63,11 +63,11 @@ namespace GalaxyBlox.Models
         {
             spriteBatch.Draw(
                     BackgroundImage,
-                    DisplayRectWithScale(), //ScaleRect(new Rectangle((int)obj.Position.X, (int)obj.Position.Y, (int)obj.Size.X, (int)obj.Size.Y)),
+                    DisplayRectWithScaleAndRoomPosition(), //ScaleRect(new Rectangle((int)obj.Position.X, (int)obj.Position.Y, (int)obj.Size.X, (int)obj.Size.Y)),
                     Color);
 
             if (ShowText)
-                spriteBatch.DrawString(TextSpriteFont, Text, DisplayTextPositionWithScale(), TextColor, 0f, new Vector2(), Scale, SpriteEffects.None, 0f);
+                spriteBatch.DrawString(TextSpriteFont, Text, DisplayTextPositionWithScale() + ParentRoom.Position, TextColor, 0f, new Vector2(), Scale, SpriteEffects.None, 0f);
         }
 
         public void CenterText()
@@ -81,16 +81,16 @@ namespace GalaxyBlox.Models
             var offsetY = Origin.Y * (textSize.Y * Scale - textSize.Y);
 
             var resultVect = new Vector2(
-                TextPosition.X * ParentRoom.Scale + ParentRoom.OffsetX - offsetX,
-                TextPosition.Y * ParentRoom.Scale + ParentRoom.OffsetY - offsetY);
+                TextPosition.X * ParentRoom.Scale + ParentRoom.InGameOffsetX - offsetX,
+                TextPosition.Y * ParentRoom.Scale + ParentRoom.InGameOffsetY - offsetY);
             return resultVect;
         }
 
         public Rectangle DisplayRect()
         {
             var resultRect = new Rectangle(
-                (int)(Position.X * ParentRoom.Scale + ParentRoom.OffsetX),
-                (int)(Position.Y * ParentRoom.Scale + ParentRoom.OffsetY),
+                (int)(Position.X * ParentRoom.Scale + ParentRoom.InGameOffsetX),
+                (int)(Position.Y * ParentRoom.Scale + ParentRoom.InGameOffsetY),
                 (int)(Size.X * ParentRoom.Scale),
                 (int)(Size.Y * ParentRoom.Scale)
                 );
@@ -103,8 +103,22 @@ namespace GalaxyBlox.Models
             var offsetY = Origin.Y * (Size.Y * Scale - Size.Y);
 
             var resultRect = new Rectangle(
-                (int)(Position.X * ParentRoom.Scale + ParentRoom.OffsetX - offsetX),
-                (int)(Position.Y * ParentRoom.Scale + ParentRoom.OffsetY - offsetY),
+                (int)(Position.X * ParentRoom.Scale + ParentRoom.InGameOffsetX - offsetX),
+                (int)(Position.Y * ParentRoom.Scale + ParentRoom.InGameOffsetY - offsetY),
+                (int)(Size.X * ParentRoom.Scale * Scale),
+                (int)(Size.Y * ParentRoom.Scale * Scale)
+                );
+            return resultRect;
+        }
+
+        public Rectangle DisplayRectWithScaleAndRoomPosition()
+        {
+            var offsetX = Origin.X * (Size.X * Scale - Size.X);
+            var offsetY = Origin.Y * (Size.Y * Scale - Size.Y);
+
+            var resultRect = new Rectangle(
+                (int)(Position.X * ParentRoom.Scale + ParentRoom.InGameOffsetX - offsetX + ParentRoom.Position.X),
+                (int)(Position.Y * ParentRoom.Scale + ParentRoom.InGameOffsetY - offsetY + ParentRoom.Position.Y),
                 (int)(Size.X * ParentRoom.Scale * Scale),
                 (int)(Size.Y * ParentRoom.Scale * Scale)
                 );

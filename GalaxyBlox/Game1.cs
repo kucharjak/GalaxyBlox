@@ -12,14 +12,14 @@ namespace GalaxyBlox
     /// </summary>
     public class Game1 : Game
     {
-        public static Size GameSize = new Size(480, 800);             
-
+        public static Game1 ActiveGame;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        bool inMenu;
-        Room menu;
+        //public static bool InMenu;
+        Room menuRoom;
         Room gameRoom;
+        RoomChanger roomChanger;
         
         public Game1()
         {
@@ -29,6 +29,7 @@ namespace GalaxyBlox
             graphics.IsFullScreen = true;
             //graphics.PreferredBackBufferWidth = GameWindow.Width;
             //graphics.PreferredBackBufferHeight = GameWindow.Height;
+            ActiveGame = this;
         }
 
         /// <summary>
@@ -54,9 +55,16 @@ namespace GalaxyBlox
             Static.Contents.Textures.Pix = Content.Load<Texture2D>("Sprites/pixel");
             Static.Contents.Fonts.MenuButtonText = Content.Load<SpriteFont>("Fonts/ButtonText");
 
-            menu = new Rooms.Menu(new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Game1.GameSize);
-            menu.LoadContent(Content);
-            inMenu = true;
+            menuRoom = new Rooms.MenuRoom(new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Static.Settings.GameSize);
+            menuRoom.LoadContent(Content);
+            menuRoom.IsVisible = true;
+            menuRoom.IsPaused = false;
+            gameRoom = new Rooms.GameRoom(new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Static.Settings.GameSize);
+            gameRoom.LoadContent(Content);
+            gameRoom.IsVisible = false;
+            gameRoom.IsPaused = true;
+
+            roomChanger = new RoomChanger(menuRoom, gameRoom, new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));
         }
 
         /// <summary>
@@ -75,10 +83,11 @@ namespace GalaxyBlox
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (inMenu)
-                menu.Update(gameTime);
-            else
-                gameRoom.Update(gameTime);
+            if (roomChanger != null)
+                roomChanger.Update(gameTime);
+
+            menuRoom.Update(gameTime);
+            gameRoom.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -89,16 +98,19 @@ namespace GalaxyBlox
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Purple);
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
-            if (inMenu)
-                menu.Draw(gameTime, spriteBatch);
-            else
-                gameRoom.Draw(gameTime, spriteBatch);
+            menuRoom.Draw(gameTime, spriteBatch);
+            gameRoom.Draw(gameTime, spriteBatch);
 
             spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        public void ChangeRooms()
+        {
+            roomChanger.Change(true);
         }
     }
 }

@@ -50,7 +50,7 @@ namespace GalaxyBlox.Buttons
         {
             switch (ButttonID)
             {
-                case 1: break;
+                case 1: Game1.ActiveGame.ChangeRooms();/*Game1.InMenu = false;*/ break;
                 case 2: break;
                 case 3: break;
                 case 4: Game.Activity.Finish(); break;
