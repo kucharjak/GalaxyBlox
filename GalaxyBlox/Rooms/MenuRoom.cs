@@ -7,7 +7,6 @@ using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
-using Android.Widget;
 using GalaxyBlox.Models;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
@@ -31,44 +30,71 @@ namespace GalaxyBlox.Rooms
 
         protected override void AddObjects()
         {
-            base.AddObjects();
+            GameObject objToAdd;
 
-            padding = 30;
+            var padding = 30;
             var btnSize = new Vector2(RoomSize.Width - 2 * padding, 50);
             var btnCount = 4;
             var btnStartPosY = (RoomSize.Height - (50 * btnCount + 10 * (btnCount - 1))) / 2;
-            objects.Add(new MenuButton(this)
+
+            ////// ADDING BUTTONS //////
+            objToAdd = new MenuButton(this)
             {
                 Size = btnSize,
                 Position = new Vector2(padding, btnStartPosY),
                 TextIsCentered = true,
-                Text = "Nová hra",
-                ButttonID = 1
-            });
-            objects.Add(new MenuButton(this)
+                Text = "Nová hra"
+            };
+            (objToAdd as Button).Click += btnNewGame_Click;
+            objects.Add(objToAdd);
+
+            objToAdd = new MenuButton(this)
             {
                 Size = btnSize,
                 Position = new Vector2(padding, btnStartPosY + 65),
                 TextIsCentered = true,
-                Text = "Ovládání",
-                ButttonID = 2
-            });
-            objects.Add(new MenuButton(this)
+                Text = "Ovládání"
+            };
+            (objToAdd as Button).Click += btnControls_Click;
+            objects.Add(objToAdd);
+
+            objToAdd = new MenuButton(this)
             {
                 Size = btnSize,
                 Position = new Vector2(padding, btnStartPosY + 65 * 2),
                 TextIsCentered = true,
-                Text = "Nastavení",
-                ButttonID = 3
-            });
-            objects.Add(new MenuButton(this)
+                Text = "Nastavení"
+            };
+            (objToAdd as Button).Click += btnSettings_Click;
+            objects.Add(objToAdd);
+
+            objToAdd = new MenuButton(this)
             {
                 Size = btnSize,
                 Position = new Vector2(padding, btnStartPosY + 65 * 3),
                 TextIsCentered = true,
-                Text = "Konec",
-                ButttonID = 4
-            });
+                Text = "Konec"
+            };
+            (objToAdd as Button).Click += btnFinish_Click;
+            objects.Add(objToAdd);
+        }
+
+        private void btnFinish_Click(object sender, EventArgs e)
+        {
+            Game1.Activity.Finish();
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void btnControls_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void btnNewGame_Click(object sender, EventArgs e)
+        {
+            Game1.ActiveGame.ChangeRooms();
         }
     }
 }

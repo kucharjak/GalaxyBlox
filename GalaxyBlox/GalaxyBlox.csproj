@@ -68,10 +68,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activity1.cs" />
+    <Compile Include="Buttons\PauseButton.cs" />
+    <Compile Include="Buttons\ControlButton.cs" />
     <Compile Include="Buttons\MenuButton.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Models\Button.cs" />
     <Compile Include="Models\GameObject.cs" />
+    <Compile Include="Models\PlayingArena.cs" />
     <Compile Include="Models\Room.cs" />
     <Compile Include="Models\RoomChanger.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
@@ -110,6 +113,11 @@
   <ItemGroup>
     <Content Include="Content\Backgrounds\game.png" />
     <Content Include="Content\Backgrounds\menu.png" />
+    <Content Include="Content\Sprites\ControlButton_left.png" />
+    <Content Include="Content\Sprites\ControlButton_right.png" />
+    <Content Include="Content\Sprites\ControlButton_down.png" />
+    <Content Include="Content\Sprites\ControlButton_pause.png" />
+    <Content Include="Content\Sprites\ControlButton_rotate.png" />
     <Content Include="Content\Sprites\pixel.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />

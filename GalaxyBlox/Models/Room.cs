@@ -32,7 +32,7 @@ namespace GalaxyBlox.Models
         public float InGameOffsetX = 0f;
         public float InGameOffsetY = 0f;
 
-        protected int padding = 20;
+        //protected int padding = 20;
 
         public Room(Size RealSize, Size GameSize)
         {
@@ -99,18 +99,18 @@ namespace GalaxyBlox.Models
                         {
                             var touchedButton = buttons.Where(btn => btn.DisplayRectWithScaleAndRoomPosition().Intersects(rectInput)).FirstOrDefault();
                             if (touchedButton != null)
-                                (touchedButton as Button).Touch();
+                                (touchedButton as Button).RaiseHover(new EventArgs());
 
                             var releasedButtons = buttons.Where(btn => !btn.DisplayRectWithScaleAndRoomPosition().Intersects(rectInput) && btn != touchedButton);
                             foreach (var btn in releasedButtons)
-                                (btn as Button).Release();
+                                (btn as Button).RaiseRelease(new EventArgs());
                         }
                         break;
                     case TouchLocationState.Released:
                         {
                             var pressedButton = buttons.Where(btn => btn.DisplayRectWithScaleAndRoomPosition().Intersects(rectInput)).FirstOrDefault();
                             if (pressedButton != null)
-                                (pressedButton as Button).Press();
+                                (pressedButton as Button).RaiseClick(new EventArgs());
                         }
                         break;
                 }

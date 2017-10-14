@@ -54,6 +54,11 @@ namespace GalaxyBlox
 
             Static.Contents.Textures.Pix = Content.Load<Texture2D>("Sprites/pixel");
             Static.Contents.Fonts.MenuButtonText = Content.Load<SpriteFont>("Fonts/ButtonText");
+            Static.Contents.Textures.ControlButton_down = Content.Load<Texture2D>("Sprites/ControlButton_down");
+            Static.Contents.Textures.ControlButton_left = Content.Load<Texture2D>("Sprites/ControlButton_left");
+            Static.Contents.Textures.ControlButton_right = Content.Load<Texture2D>("Sprites/ControlButton_right");
+            Static.Contents.Textures.ControlButton_rotate = Content.Load<Texture2D>("Sprites/ControlButton_rotate");
+            Static.Contents.Textures.ControlButton_pause = Content.Load<Texture2D>("Sprites/ControlButton_pause");
 
             menuRoom = new Rooms.MenuRoom(new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Static.Settings.GameSize);
             menuRoom.LoadContent(Content);

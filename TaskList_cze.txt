@@ -1,10 +1,15 @@
 Rozšíøení 
  - vytvoøit "Color schemes", kdy budu schopný mít color scheme na tlaèítko a ten si jen podám do toho tlaèítka, pøidávání barev postupnì v kontruktoru a nebudu si díky tomu muset držet v pamìti tøi barvy, ale jen jednu referenci "noice"
- - vymyslet chytøejší zpùsob, jak tlaèítkùm pøidat eventy
- - vymyslet pauzu hry
- - pøidat tlaèítka na ovládání hry
  - zaèít pracovat na høe
+ - pøidat objekt, který bude obstarávat logiku hry
+ - zaèít vykreslovat základní objekty
+ - pøidat eventy na zmìnu skóre a pøípadnou smrt
+ 
+ - vymyslet frontu na další kostièkový objekty 
+ - vymyslet jiný tvary, než ty základní
 
+ 
+ 
 Features
  - animace klikání
  - Vytvoøit objekt okna, který bude øešit nastavení a zobrazení ovládání
@@ -17,6 +22,7 @@ Kontrola
  - ovìøit chování textu na jiných obrazovkách - pøípadnì opravit
  
 Bugy
+ - zkusit ovìøit jak moc je problematický pøeklikávání pokud pøejíždím po tlaèítkách, než si nìjaký vyberu a zavést to, že se odklikne jen a pouze to na které jsem pùvdnì klik
 
  
 
@@ -29,3 +35,6 @@ Bugy
 - Ukonèení aplikace trvá hodiny - podle všeho to není správný zpùsob jak ukonèovat aplikace a Android se jí pokouší restartovat, protože si myslí, že spadla
 - pøidat herní místnost
 - vymyslet pøepínání
+- vymyslet chytøejší zpùsob, jak tlaèítkùm pøidat eventy
+- vymyslet pauzu hry
+- pøidat tlaèítka na ovládání hry
