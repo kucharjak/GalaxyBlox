@@ -59,6 +59,10 @@ namespace GalaxyBlox.Models
             ParentRoom = parentRoom;
         }
 
+        public virtual void Update(GameTime gameTime)
+        {
+        }
+
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(

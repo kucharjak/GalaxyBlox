@@ -26,7 +26,7 @@ namespace GalaxyBlox.Buttons
 
         protected override void Hovered()
         {
-            Scale = 1.2f;
+            Scale = 1.4f;
             base.Hovered();
         }
     }

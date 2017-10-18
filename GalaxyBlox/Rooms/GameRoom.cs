@@ -96,6 +96,12 @@ namespace GalaxyBlox.Rooms
             };
             (objToAdd as Button).Click += btnRight_Click;
             objects.Add(objToAdd);
+
+            var plyArnPosY = padding + 65;
+            objToAdd = new PlayingArena(this,
+                new Vector2(RoomSize.Width, RoomSize.Height - plyArnPosY - (btnSize.Y + 2 * padding)),
+                new Vector2(0, plyArnPosY));
+            objects.Add(objToAdd);
         }
 
         private void btnPause_Click(object sender, EventArgs e)

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using System;
 
 namespace GalaxyBlox
 {
@@ -13,6 +14,8 @@ namespace GalaxyBlox
     public class Game1 : Game
     {
         public static Game1 ActiveGame;
+        public static Random Random;
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -41,6 +44,19 @@ namespace GalaxyBlox
         protected override void Initialize()
         {
             base.Initialize();
+
+            Random = new Random(unchecked((int)DateTime.Now.Ticks));
+
+            menuRoom = new Rooms.MenuRoom(new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Static.Settings.GameSize);
+            menuRoom.LoadContent(Content);
+            menuRoom.IsVisible = true;
+            menuRoom.IsPaused = false;
+            gameRoom = new Rooms.GameRoom(new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Static.Settings.GameSize);
+            gameRoom.LoadContent(Content);
+            gameRoom.IsVisible = false;
+            gameRoom.IsPaused = true;
+
+            roomChanger = new RoomChanger(menuRoom, gameRoom, new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));
         }
 
         /// <summary>
@@ -59,17 +75,6 @@ namespace GalaxyBlox
             Static.Contents.Textures.ControlButton_right = Content.Load<Texture2D>("Sprites/ControlButton_right");
             Static.Contents.Textures.ControlButton_rotate = Content.Load<Texture2D>("Sprites/ControlButton_rotate");
             Static.Contents.Textures.ControlButton_pause = Content.Load<Texture2D>("Sprites/ControlButton_pause");
-
-            menuRoom = new Rooms.MenuRoom(new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Static.Settings.GameSize);
-            menuRoom.LoadContent(Content);
-            menuRoom.IsVisible = true;
-            menuRoom.IsPaused = false;
-            gameRoom = new Rooms.GameRoom(new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Static.Settings.GameSize);
-            gameRoom.LoadContent(Content);
-            gameRoom.IsVisible = false;
-            gameRoom.IsPaused = true;
-
-            roomChanger = new RoomChanger(menuRoom, gameRoom, new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));
         }
 
         /// <summary>

@@ -33,13 +33,26 @@ namespace GalaxyBlox.Static
 
         public static class Colors
         {
+            public static List<Color> GameCubesColors = new List<Color>
+            {
+                Color.White,
+                Color.Red,
+                Color.Blue,
+                Color.Green,
+                Color.Orange,
+                Color.Yellow,
+                Color.Purple
+            };
+
+            public static Color GamePlaygroundColor = new Color(73, 127, 216);
+
             public static Color MenuButtonBackgroundColor = new Color(121, 140, 170);
             public static Color MenuButtonSelectedColor = new Color(153, 189, 247);
             public static Color MenuButtonPressColor = new Color(121, 140, 170);//new Color(89, 107, 135);
             public static Color MenuButtonTextColor = Color.White;
 
             public static Color PauseButtonBackgroundColor = new Color(108, 239, 21);
-            public static Color PauseButtonSelectedColor = new Color(108, 239, 21); //new Color(173, 255, 66);
+            public static Color PauseButtonSelectedColor = new Color(200, 255, 20); //new Color(108, 239, 21);
 
             public static Color ControlButtonBackgroundColor = new Color(186, 197, 216);
             public static Color ControlButtonSelectColor = Color.White;

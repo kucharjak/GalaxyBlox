@@ -60,6 +60,9 @@ namespace GalaxyBlox.Models
             var input = TouchPanel.GetState().Where(tch => tch.State != TouchLocationState.Invalid).FirstOrDefault();
             if (input != null)
                 HandleInput(input);
+
+            foreach (var obj in objects)
+                obj.Update(gameTime);
         }
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
