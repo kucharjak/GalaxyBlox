@@ -16,47 +16,60 @@ namespace GalaxyBlox.Models
         private Color actorColor;
         private Point actorPosition;
 
-        private int[,] gamePlayground;
-        private Color gamePlaygroundColor;
-        private Vector2 gamePlaygroundPosition; // for more precision
-        private Vector2 gamePlaygroundSize;
-        private float gamePadding;
-        private float gameCubeSize;
-        private float gameCubePadding;
+        private int[,] playground;
+        private Color?[,] playgroundEffectsArray;
+        private int playgroundInnerPadding;
+        private int playgroundCubeSize;
+        private int playgroundCubeMargin;
 
         private int gameSpeed = 1000; // move actor in 1000 ms = 1 s
-        private int gameTimeElapsed = 0; 
+        private int gameTimeElapsed = 0;
 
+        private Color BackgroundColor;
+        private Color BorderColor;
+        private RenderTarget2D renderTarget;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="parentRoom"></param>
+        /// <param name="size"></param>
+        /// <param name="position"></param>
         public PlayingArena(Room parentRoom, Vector2 size, Vector2 position) : base(parentRoom)
         {
-            Size = size;
-            Position = position;
-            BackgroundImage = Contents.Textures.Pix;
-            gamePlayground = new int[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height];
-            BackgroundColor = Contents.Colors.GamePlaygroundColor;
-
-            if (Size.X / (float)Settings.GameArenaSize.Width < Size.Y / (float)Settings.GameArenaSize.Height)
-            { // WIDTH
-                gameCubeSize = (Size.X / (float)Settings.GameArenaSize.Width);
-                Size = new Vector2(Size.X, Settings.GameArenaSize.Height * gameCubeSize);
-                Position = new Vector2(Position.X, (size.Y - Size.Y) / 2f);
-                //gamePlaygroundSize = new Vector2(Size.X, Settings.GameArenaSize.Height * gameCubeSize);
-                //gamePlaygroundPosition = new Vector2(Position.X, (Size.Y - gamePlaygroundSize.Y) / 2);
-            } else
-            { // HEIGHT
-                gameCubeSize = (Size.Y / (float)Settings.GameArenaSize.Height);
-                Size = new Vector2(Settings.GameArenaSize.Width * gameCubeSize, Size.Y);
-                Position = new Vector2((size.X - Size.X) / 2f, Position.Y);
-                //gamePlaygroundSize = new Vector2(Settings.GameArenaSize.Width * gameCubeSize, Size.Y);
-                //gamePlaygroundPosition = new Vector2((Size.X - gamePlaygroundSize.X) / 2, Position.Y);
-            }
+            playground = new int[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height];
+            BackgroundColor = Contents.Colors.PlaygroundColor;
+            BorderColor = Contents.Colors.PlaygroundColor;
+            Alpha = 1f;
             
-            gameCubePadding = (int)(gameCubeSize * 0.04f);
-            gamePadding = (int)(gameCubeSize * 0.2f);
-            gameCubeSize = (((Size.X - (float)((Settings.GameArenaSize.Width - 1) * gameCubePadding) - (float)(2 * gamePadding))) / (float)Settings.GameArenaSize.Width);
+            playgroundInnerPadding = 4;
+            playgroundCubeMargin = 1;
+
+            var spaceLeftForCubes = new Size(
+                (int)(size.X - 2 * playgroundInnerPadding - (Settings.GameArenaSize.Width - 1) * playgroundCubeMargin),
+                (int)(size.Y - 2 * playgroundInnerPadding - (Settings.GameArenaSize.Height - 1) * playgroundCubeMargin));
+
+            if (spaceLeftForCubes.Width / (float)Settings.GameArenaSize.Width < spaceLeftForCubes.Height / (float)Settings.GameArenaSize.Height)
+            { // WIDTH
+                playgroundCubeSize = spaceLeftForCubes.Width / Settings.GameArenaSize.Width;
+            }
+            else
+            { // HEIGHT
+                playgroundCubeSize = spaceLeftForCubes.Height / Settings.GameArenaSize.Height;
+            }
+
+            Size = new Vector2(
+                (Settings.GameArenaSize.Width - 1) * (playgroundCubeSize + playgroundCubeMargin) + playgroundCubeSize + 2 * playgroundInnerPadding,
+                (Settings.GameArenaSize.Height - 1) * (playgroundCubeSize + playgroundCubeMargin) + playgroundCubeSize + 2 * playgroundInnerPadding);
+
+            Position = new Vector2(
+                (size.X - Size.X) / 2,
+                (position.Y + size.Y) - Size.Y);
 
             CreateActor();
-            Alpha = 0.75f;
+
+            renderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)Size.X, (int)Size.Y);
+            BackgroundImage = renderTarget;
         }
 
         public override void Update(GameTime gameTime)
@@ -70,26 +83,60 @@ namespace GalaxyBlox.Models
                 {
                     //MoveActorDown();
                     gameTimeElapsed = 0;
+                } 
+            }
+
+            UpdateEffectsArray();
+        }
+
+        public override void Prepare(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        {
+            graphicsDevice.SetRenderTarget(renderTarget);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+
+            graphicsDevice.DepthStencilState = new DepthStencilState() { DepthBufferEnable = true };
+            graphicsDevice.Clear(BorderColor);
+
+            spriteBatch.Draw(
+                Contents.Textures.Pix,
+                new Rectangle(playgroundInnerPadding - 2 * playgroundCubeMargin, playgroundInnerPadding - 2 * playgroundCubeMargin, (int)Size.X  - 2 * (playgroundInnerPadding - 2 * playgroundCubeMargin), (int)Size.Y - 2 * (playgroundInnerPadding - 2 * playgroundCubeMargin)),
+                BackgroundColor);
+
+            for (int x = 0; x < playground.GetLength(0); x++)
+            {
+                for (int y = 0; y < playground.GetLength(1); y++)
+                {
+                    spriteBatch.Draw(
+                        Contents.Textures.Pix,
+                        new Rectangle(playgroundInnerPadding + x * (playgroundCubeSize + playgroundCubeMargin), playgroundInnerPadding + y * (playgroundCubeSize + playgroundCubeMargin), playgroundCubeSize, playgroundCubeSize), 
+                        GetCubeColor(x,y));
                 }
             }
+
+            spriteBatch.End();
+            graphicsDevice.SetRenderTarget(null);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
+        }
 
-            for (int x = 0; x < gamePlayground.GetLength(0); x++)
-            {
-                for (int y = 0; y < gamePlayground.GetLength(1); y++)
-                {
-                    spriteBatch.Draw(BackgroundImage, GetCubeDisplayRectangle(x, y), GetCubeColor(x, y));
-                }
-            }
+        public void MoveDown()
+        {
+        }
 
-            //spriteBatch.Draw(
-            //    newTexture,
-            //    DisplayRectWithScaleAndRoomPosition(),
-            //    Color);
+        public void MoveRight()
+        {
+        }
+
+        public void MoveLeft()
+        {
+        }
+
+        public void Rotate()
+        {
+            CreateActor();
         }
 
         private void MoveActorDown()
@@ -108,29 +155,35 @@ namespace GalaxyBlox.Models
             actor[2, 1] = false;
 
             actorColor = Contents.Colors.GameCubesColors[Game1.Random.Next(1, Contents.Colors.GameCubesColors.Count - 1)];
-            actorPosition = new Point(Game1.Random.Next(0, gamePlayground.GetLength(0) - actor.GetLength(0)), 0);
+            actorPosition = new Point(Game1.Random.Next(0, playground.GetLength(0) - actor.GetLength(0)), 0);
+            gameTimeElapsed = 0;
         }
 
-        public Color GetCubeColor(int posX, int posY)
+        private void UpdateEffectsArray()
         {
-            var result = Contents.Colors.GameCubesColors[gamePlayground[posX, posY]];
-            if (gamePlayground[posX, posY] == 0)
-                return result * 0.5f;
+            playgroundEffectsArray = new Color?[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height];
+            for (int x = 0; x < actor.GetLength(0); x++)
+            {
+                for (int y = 0; y < actor.GetLength(1); y++)
+                {
+                    if (actor[x,y])
+                    {
+                        playgroundEffectsArray[actorPosition.X + x, actorPosition.Y + y] = actorColor;
+                    }
+                }
+            }
+        }
+
+        private Color GetCubeColor(int posX, int posY)
+        {
+            var result = Contents.Colors.GameCubesColors[playground[posX, posY]];
+            //if (playground[posX, posY] == 0)
+            //    result *= 0.5f;
+
+            if (playgroundEffectsArray != null && playgroundEffectsArray[posX, posY].HasValue)
+                result = playgroundEffectsArray[posX, posY].Value;
 
             return result;
-        }
-
-        public Rectangle GetCubeDisplayRectangle(int posX, int posY)
-        {
-            var offsetX = Origin.X * (Size.X * Scale - Size.X);
-            var offsetY = Origin.Y * (Size.Y * Scale - Size.Y);
-
-            var resultRect = new Rectangle(
-                (int)((Position.X + gamePadding + (gameCubePadding + gameCubeSize) * posX) * ParentRoom.Scale + ParentRoom.InGameOffsetX - offsetX + ParentRoom.Position.X),
-                (int)((Position.Y + gamePadding + (gameCubePadding + gameCubeSize) * posY) * ParentRoom.Scale + ParentRoom.InGameOffsetY - offsetY + ParentRoom.Position.Y),
-                (int)(gameCubeSize * ParentRoom.Scale * Scale),
-                (int)(gameCubeSize * ParentRoom.Scale * Scale));
-            return resultRect;
         }
     }
 }

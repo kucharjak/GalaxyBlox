@@ -79,21 +79,21 @@ namespace GalaxyBlox.Models
         {
             Scale = 1.05f;
             IsTouched = true;
-            BackgroundColor = SelectedBackgroundColor;
+            Color = SelectedBackgroundColor;
         }
 
         protected virtual void Released()
         {
             Scale = 1f;
             IsTouched = false;
-            BackgroundColor = DefaultBackgroundColor;
+            Color = DefaultBackgroundColor;
         }
 
         protected virtual void Clicked()
         {
             Scale = 1f;
             IsTouched = false;
-            BackgroundColor = DefaultBackgroundColor;
+            Color = DefaultBackgroundColor;
         }
     }
 }

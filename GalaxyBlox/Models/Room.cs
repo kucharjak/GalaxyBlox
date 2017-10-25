@@ -65,6 +65,12 @@ namespace GalaxyBlox.Models
                 obj.Update(gameTime);
         }
 
+        public virtual void Prepare(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        {
+            foreach (var obj in objects)
+                obj.Prepare(spriteBatch, graphicsDevice);
+        }
+
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (!IsVisible)
@@ -74,9 +80,7 @@ namespace GalaxyBlox.Models
                 spriteBatch.Draw(Background, new Rectangle((int)Position.X, (int)Position.Y, spriteBatch.GraphicsDevice.Viewport.Width, spriteBatch.GraphicsDevice.Viewport.Height), Color.White);
 
             foreach (var obj in objects)
-            {
                 obj.Draw(spriteBatch);
-            }
         }
 
         public virtual void LoadContent(ContentManager content)

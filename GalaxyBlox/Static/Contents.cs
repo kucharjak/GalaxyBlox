@@ -35,7 +35,7 @@ namespace GalaxyBlox.Static
         {
             public static List<Color> GameCubesColors = new List<Color>
             {
-                Color.White,
+                new Color(158, 194, 255) * 0.6f,
                 Color.Red,
                 Color.Blue,
                 Color.Green,
@@ -44,7 +44,8 @@ namespace GalaxyBlox.Static
                 Color.Purple
             };
 
-            public static Color GamePlaygroundColor = new Color(73, 127, 216);
+            public static Color PlaygroundColor = new Color(73, 127, 216) * 0.75f;
+            public static Color PlaygroundBorderColor = new Color(248, 255, 175);
 
             public static Color MenuButtonBackgroundColor = new Color(121, 140, 170);
             public static Color MenuButtonSelectedColor = new Color(153, 189, 247);

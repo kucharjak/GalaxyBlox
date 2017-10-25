@@ -15,7 +15,7 @@ namespace GalaxyBlox.Buttons
         {
             BackgroundImage = Contents.Textures.Pix;
             Alpha = 0.5f;
-            BackgroundColor = Contents.Colors.MenuButtonBackgroundColor;
+            Color = Contents.Colors.MenuButtonBackgroundColor;
             DefaultBackgroundColor = Contents.Colors.MenuButtonBackgroundColor;
             SelectedBackgroundColor = Contents.Colors.MenuButtonSelectedColor;
             PressBackgroundColor = Contents.Colors.MenuButtonPressColor;

@@ -109,6 +109,10 @@ namespace GalaxyBlox
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Purple);
+
+            menuRoom.Prepare(spriteBatch, GraphicsDevice);
+            gameRoom.Prepare(spriteBatch, GraphicsDevice);
+
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
             menuRoom.Draw(gameTime, spriteBatch);

@@ -55,7 +55,7 @@ namespace GalaxyBlox.Rooms
             {
                 Size = new Vector2(RoomSize.Width + 10, btnSize.Y + 2 * padding + 5), // +5 je korekce, ať tam nejsou nějaký hnusný mezery
                 Position = new Vector2(-5, RoomSize.Height - btnSize.Y - 2 * padding),
-                BackgroundColor = Contents.Colors.BackgroundControlsColor,
+                Color = Contents.Colors.BackgroundControlsColor,
                 BackgroundImage = Contents.Textures.Pix
             };
             objects.Add(objToAdd);
@@ -100,7 +100,10 @@ namespace GalaxyBlox.Rooms
             var plyArnPosY = padding + 65;
             objToAdd = new PlayingArena(this,
                 new Vector2(RoomSize.Width, RoomSize.Height - plyArnPosY - (btnSize.Y + 2 * padding)),
-                new Vector2(0, plyArnPosY));
+                new Vector2(0, plyArnPosY))
+            {
+                Name = "main_playground"
+            };
             objects.Add(objToAdd);
         }
 
@@ -111,18 +114,30 @@ namespace GalaxyBlox.Rooms
 
         private void btnRight_Click(object sender, EventArgs e)
         {
+            var playground = objects.Where(obj => obj.Name == "main_playground").FirstOrDefault();
+            if (playground != null)
+                (playground as PlayingArena).MoveRight();
         }
 
         private void btnRotate_Click(object sender, EventArgs e)
         {
+            var playground = objects.Where(obj => obj.Name == "main_playground").FirstOrDefault();
+            if (playground != null)
+                (playground as PlayingArena).Rotate();
         }
 
         private void btnDown_Click(object sender, EventArgs e)
         {
+            var playground = objects.Where(obj => obj.Name == "main_playground").FirstOrDefault();
+            if (playground != null)
+                (playground as PlayingArena).MoveDown();
         }
 
         private void btnLeft_Click(object sender, EventArgs e)
         {
+            var playground = objects.Where(obj => obj.Name == "main_playground").FirstOrDefault();
+            if (playground != null)
+                (playground as PlayingArena).MoveLeft();
         }
     }
 }
