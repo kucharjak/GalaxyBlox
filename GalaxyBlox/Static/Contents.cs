@@ -33,9 +33,9 @@ namespace GalaxyBlox.Static
 
         public static class Colors
         {
-            public static List<Color> GameCubesColors = new List<Color>
+            public static readonly List<Color> GameCubesColors = new List<Color>
             {
-                new Color(158, 194, 255) * 0.6f,
+                new Color(158, 194, 255) * 0.6f, // first possition reserved for neutral/ empty like color
                 Color.Red,
                 Color.Blue,
                 Color.Green,
@@ -59,6 +59,57 @@ namespace GalaxyBlox.Static
             public static Color ControlButtonSelectColor = Color.White;
 
             public static Color BackgroundControlsColor = new Color(100, 114, 137);
+        }
+
+        public static class Shapes
+        {
+            public static readonly List<bool[,]> ShapeBank = new List<bool[,]>() // basic shapes
+            {
+                new bool[,]
+                {
+                    {true, false },
+                    {true, true },
+                    {true, false }
+                },
+                new bool[,]
+                {
+                    {true, true, true, true }
+                },
+                new bool[,]
+                {
+                    {true, false },
+                    {true, false },
+                    {true, true }
+                },
+                new bool[,]
+                {
+                    {false, true },
+                    {false, true },
+                    {true, true }
+                },
+                new bool[,]
+                {
+                    {true, true },
+                    {true, true }
+                },
+                new bool[,]
+                {
+                    {false, true },
+                    {true, true },
+                    {true, false }
+                },
+                new bool[,]
+                {
+                    {true, false },
+                    {true, true },
+                    {false, true }
+                }
+            };
+
+            public static bool[,] GetRandomShape()
+            {
+                return ShapeBank[Game1.Random.Next(0, ShapeBank.Count() - 1)];
+            }
         }
     }
 }

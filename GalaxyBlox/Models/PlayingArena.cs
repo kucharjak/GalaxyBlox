@@ -12,6 +12,13 @@ namespace GalaxyBlox.Models
 {
     class PlayingArena : GameObject
     {
+        private long score = 0;
+        public long Score
+        {
+            get { return score; }
+            set { score = value; }
+        }
+
         private bool[,] actor;
         private Color actorColor;
         private Point actorPosition;
@@ -22,7 +29,7 @@ namespace GalaxyBlox.Models
         private int playgroundCubeSize;
         private int playgroundCubeMargin;
 
-        private int gameSpeed = 1000; // move actor in 1000 ms = 1 s
+        private int gameSpeed; // move actor in 1000 ms (= 1 s)
         private int gameTimeElapsed = 0;
 
         private Color BackgroundColor;
@@ -66,7 +73,7 @@ namespace GalaxyBlox.Models
                 (size.X - Size.X) / 2,
                 (position.Y + size.Y) - Size.Y);
 
-            CreateActor();
+            CreateNewActor();
 
             renderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)Size.X, (int)Size.Y);
             BackgroundImage = renderTarget;
@@ -81,7 +88,7 @@ namespace GalaxyBlox.Models
                 gameTimeElapsed += gameTime.ElapsedGameTime.Milliseconds;
                 if (gameTimeElapsed > gameSpeed)
                 {
-                    //MoveActorDown();
+                    MoveActorDown();
                     gameTimeElapsed = 0;
                 } 
             }
@@ -124,39 +131,217 @@ namespace GalaxyBlox.Models
 
         public void MoveDown()
         {
+            SetGameSpeed(true);
         }
 
         public void MoveRight()
         {
+            var newPosition = new Point(actorPosition.X + 1, actorPosition.Y);
+            if (ActorCollide(newPosition, actor))
+                return;
+
+            actorPosition = newPosition;
         }
 
         public void MoveLeft()
         {
+            var newPosition = new Point(actorPosition.X - 1, actorPosition.Y);
+            if (ActorCollide(newPosition, actor))
+                return;
+
+            actorPosition = newPosition;
         }
 
         public void Rotate()
         {
-            CreateActor();
+            var newActor = RotateActor(actor);
+            var newPosition = actorPosition;
+            if (newActor.GetLength(0) + actorPosition.X > playground.GetLength(0))
+                newPosition.X = playground.GetLength(0) - newActor.GetLength(0);
+
+            if (ActorCollide(newPosition, newActor))
+                return;
+
+            actor = newActor;
+            actorPosition = newPosition;
+        }
+
+        // Private methods
+
+        private bool[,] RotateActor(bool[,] actorArray, int nTimes)
+        {
+            var resultActor = new bool[actorArray.GetLength(0), actorArray.GetLength(1)];
+            Array.Copy(actorArray, resultActor, actorArray.GetLength(0) * actorArray.GetLength(1));
+
+            for (int times = 0; times < nTimes; times++)
+            {
+                resultActor = RotateActor(resultActor);
+            }
+
+            return resultActor;
+        }
+
+        private bool[,] RotateActor(bool[,] actorArray)
+        {
+            var resultArray = new bool[actorArray.GetLength(1), actorArray.GetLength(0)];
+
+            for (int x = 0; x < actorArray.GetLength(0); x++)
+            {
+                for (int y = 0; y < actorArray.GetLength(1); y++)
+                {
+                    resultArray[(actorArray.GetLength(1) - 1) - y, x] = actorArray[x, y];
+                }
+            }
+
+            return resultArray;
         }
 
         private void MoveActorDown()
         {
-            actorPosition.Y++;
+            var newPosition = new Point(actorPosition.X, actorPosition.Y + 1);
+
+            if (!ActorCollide(newPosition, actor))
+            {
+                actorPosition = newPosition;
+            }
+            else
+            {
+                InsertActorToPlayground();
+                CheckPlaygroundForFullLines();
+                CreateNewActor();
+            }
         }
 
-        private void CreateActor()
+        private void CheckPlaygroundForFullLines()
         {
-            actor = new bool[3, 2];
-            actor[0, 0] = true;
-            actor[1, 0] = true;
-            actor[2, 0] = true;
-            actor[0, 1] = false;
-            actor[1, 1] = true;
-            actor[2, 1] = false;
+            var fullLines = new List<int>();
+            for (int y = 0; y < playground.GetLength(1); y++)
+            {
+                var fullLine = true;
+                for (int x = 0; x < playground.GetLength(0); x++)
+                {
+                    if (playground[x, y] == 0)
+                    {
+                        fullLine = false;
+                        break;
+                    }
+                }
 
+                if (fullLine)
+                    fullLines.Add(y);
+            }
+
+            if (fullLines.Count > 0)
+            {
+                // count score
+                // TODO
+
+                // refil playground with-out fullLines
+                var playgroundPosY = playground.GetLength(1) - 1;
+                for (int y = playground.GetLength(1) - 1; y >= fullLines.Count; y--)
+                {
+                    if (fullLines.Contains(y))
+                    {
+                        for (int x = 0; x < playground.GetLength(0); x++)
+                        {
+                            playground[x, y] = 0;
+                        }
+
+                        continue;
+                    }
+
+                    for(int x = 0; x < playground.GetLength(0); x++)
+                    {
+                        playground[x, playgroundPosY] = playground[x, y];
+                    }
+
+                    playgroundPosY--;
+                }
+            }
+        }
+
+        private void InsertActorToPlayground()
+        {
+            var actorBoxes = new int[actor.GetLength(0), actor.GetLength(1)];
+            var actorColorPos = Contents.Colors.GameCubesColors.IndexOf(actorColor);
+            if (actorColorPos < 1)
+                actorColorPos = 1;
+
+            for (int x = 0; x < actor.GetLength(0); x++)
+            {
+                for (int y = 0; y < actor.GetLength(1); y++)
+                {
+                    if (actor[x, y])
+                    {
+                        actorBoxes[x, y] = actorColorPos;
+                    }
+                }
+            }
+
+            InsertBoxesToPlayground(actorPosition, actorBoxes);
+        }
+
+        private void InsertBoxesToPlayground(Point boxesPosition, int[,] boxesArray, bool insertZeros = false)
+        {
+            for (int x = 0; x < boxesArray.GetLength(0); x++)
+            {
+                for (int y = 0; y < boxesArray.GetLength(1); y++)
+                {
+                    if (boxesArray[x, y] > 0 || insertZeros)
+                    {
+                        var boxPosition = new Point(boxesPosition.X + x, boxesPosition.Y + y);
+                        if (boxPosition.X < playground.GetLength(0) && boxPosition.Y < playground.GetLength(1) && boxPosition.X >= 0 && boxPosition.Y >= 0) 
+                        { 
+                            playground[boxPosition.X, boxPosition.Y] = boxesArray[x, y];
+                        }
+                    }
+                }
+            }
+        }
+        
+        private bool ActorCollide(Point actorPosition, bool[,] actorArray)
+        {
+            for (int x = 0; x < actorArray.GetLength(0); x++)
+            {
+                for (int y = 0; y < actorArray.GetLength(1); y++)
+                {
+                    if (actorArray[x, y])
+                    {
+                        var boxPosition = new Point(actorPosition.X + x, actorPosition.Y + y);
+                        if (boxPosition.X >= playground.GetLength(0) || 
+                            boxPosition.Y >= playground.GetLength(1) || 
+                            boxPosition.X < 0 ||
+                            boxPosition.Y < 0 ||
+                            playground[boxPosition.X, boxPosition.Y] > 0)
+                        { // collision happened
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        private void CreateNewActor()
+        {
+            actor = Contents.Shapes.GetRandomShape();
+            actor = RotateActor(actor, Game1.Random.Next(0, 3)); // rotate actor randomly for variation and funzies
             actorColor = Contents.Colors.GameCubesColors[Game1.Random.Next(1, Contents.Colors.GameCubesColors.Count - 1)];
-            actorPosition = new Point(Game1.Random.Next(0, playground.GetLength(0) - actor.GetLength(0)), 0);
+            actorPosition = new Point(Game1.Random.Next(0, playground.GetLength(0) - actor.GetLength(0) + 1), 0);
+
             gameTimeElapsed = 0;
+            SetGameSpeed();
+        }
+
+        /// <summary>
+        /// Game speed is defined by game score
+        /// </summary>
+        private void SetGameSpeed(bool fallFaster = false)
+        {
+            if (!fallFaster)
+                gameSpeed = 1000;
+            else
+                gameSpeed = 50;
         }
 
         private void UpdateEffectsArray()
