@@ -36,10 +36,12 @@ namespace GalaxyBlox.Models
         public float TextScale = 1f;
 
         public Texture2D BackgroundImage = null;
-        public Color ColorAlpha { get { return Color * Alpha; } }
-        public Color Color = Color.White;
+        public Color Color { get { return BaseColor * Alpha; } }
+        public Color BaseColor = Color.White;
         public float Alpha = 1f;
         public float LayerDepth = 0f;
+
+        public bool Enabled = true;
 
         public Rectangle Rectangle { get { return new Rectangle((int)(Position.X), (int)(Position.Y), (int)Size.X, (int)Size.Y); } }
 
@@ -58,10 +60,11 @@ namespace GalaxyBlox.Models
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(BackgroundImage, DisplayRectWithScaleAndRoomPosition(), null, ColorAlpha, 0, new Vector2(), SpriteEffects.None, LayerDepth);
+            var baseAlpha = Enabled ? 1f : .25f;
+            spriteBatch.Draw(BackgroundImage, DisplayRectWithScaleAndRoomPosition(), null, Color * baseAlpha, 0, new Vector2(), SpriteEffects.None, LayerDepth);
 
             if (ShowText)
-                spriteBatch.DrawString(TextSpriteFont, Text, DisplayTextPositionWithScale() + ParentRoom.Position, TextColor, 0f, new Vector2(), Scale, SpriteEffects.None, LayerDepth + 0.01f);
+                spriteBatch.DrawString(TextSpriteFont, Text, DisplayTextPositionWithScale() + ParentRoom.Position, TextColor * baseAlpha, 0f, new Vector2(), Scale, SpriteEffects.None, LayerDepth + 0.01f);
         }
 
         public void CenterText()

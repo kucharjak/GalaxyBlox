@@ -12,7 +12,9 @@ namespace GalaxyBlox.Rooms
 {
     class GameRoom : Room
     {
-        public GameRoom(Size realSize, Size gameSize) : base(realSize, gameSize)
+        private PlayingArena arena;
+
+        public GameRoom(RoomManager parent, string name, Size realSize, Size gameSize) : base(parent, name, realSize, gameSize)
         {
         }
 
@@ -47,7 +49,7 @@ namespace GalaxyBlox.Rooms
             {
                 Size = new Vector2(RoomSize.Width + 10, btnSize.Y + 2 * padding + 5), // +5 correction
                 Position = new Vector2(-5, RoomSize.Height - btnSize.Y - 2 * padding),
-                Color = Contents.Colors.BackgroundControlsColor,
+                BaseColor = Contents.Colors.BackgroundControlsColor,
                 BackgroundImage = Contents.Textures.Pix,
                 LayerDepth = 0.5f
             };
@@ -97,61 +99,59 @@ namespace GalaxyBlox.Rooms
             objects.Add(objToAdd);
 
             var plyArnPosY = padding + 65;
-            objToAdd = new PlayingArena(this,
+            arena = new PlayingArena(this,
                 new Vector2(RoomSize.Width, RoomSize.Height - plyArnPosY - (btnSize.Y + 2 * padding)),
                 new Vector2(0, plyArnPosY))
             {
                 Name = "main_playground",
                 LayerDepth = 0.5f
             };
-            objects.Add(objToAdd);
+            objects.Add(arena);
+        }
+
+        public override void AfterChangeEvent(string args)
+        {
+            base.AfterChangeEvent(args);
+
+            if (args == "newGame")
+            {
+                arena.StartNewGame();
+            }
         }
 
         private void btnPause_Click(object sender, EventArgs e)
         {
-            Game1.ActiveGame.ChangeRooms();
+            ParentRoomManager.ChangeRooms(args: "pause");
         }
 
         private void btnRight_Click(object sender, EventArgs e)
         {
-            var playground = objects.Where(obj => obj.Name == "main_playground").FirstOrDefault();
-            if (playground != null)
-                (playground as PlayingArena).MoveRight();
+            arena.MoveRight();
         }
 
         private void btnRotate_Click(object sender, EventArgs e)
         {
-            var playground = objects.Where(obj => obj.Name == "main_playground").FirstOrDefault();
-            if (playground != null)
-                (playground as PlayingArena).Rotate();
+            arena.Rotate();
         }
 
         private void btnDown_Click(object sender, EventArgs e)
         {
-            var playground = objects.Where(obj => obj.Name == "main_playground").FirstOrDefault();
-            if (playground != null && (sender as Button).HoverTime < 150)
-                (playground as PlayingArena).MakeActorFall();
+            arena.MakeActorFall();
         }
 
         private void btnDown_Hover(object sender, EventArgs e)
         {
-            var playground = objects.Where(obj => obj.Name == "main_playground").FirstOrDefault();
-            if (playground != null)
-                (playground as PlayingArena).MakeActorSpeedup();
+            arena.MakeActorSpeedup();
         }
 
         private void btnDown_Release(object sender, EventArgs e)
         {
-            var playground = objects.Where(obj => obj.Name == "main_playground").FirstOrDefault();
-            if (playground != null)
-                (playground as PlayingArena).SlowDownActor();
+            arena.SlowDownActor();
         }
 
         private void btnLeft_Click(object sender, EventArgs e)
         {
-            var playground = objects.Where(obj => obj.Name == "main_playground").FirstOrDefault();
-            if (playground != null)
-                (playground as PlayingArena).MoveLeft();
+            arena.MoveLeft();
         }
     }
 }

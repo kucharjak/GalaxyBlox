@@ -14,7 +14,7 @@ namespace GalaxyBlox.Buttons
         public PauseButton(Room parentRoom) : base (parentRoom)
         {
             Alpha = 1f;
-            Color = Contents.Colors.PauseButtonBackgroundColor;
+            BaseColor = Contents.Colors.PauseButtonBackgroundColor;
             DefaultBackgroundColor = Contents.Colors.PauseButtonBackgroundColor;
             SelectedBackgroundColor = Contents.Colors.PauseButtonSelectedColor;
             PressBackgroundColor = Contents.Colors.PauseButtonBackgroundColor;

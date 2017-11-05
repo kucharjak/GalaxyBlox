@@ -1,6 +1,7 @@
 using Android.Util;
 using GalaxyBlox.Models;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
@@ -12,15 +13,14 @@ namespace GalaxyBlox
     public class Game1 : Game
     {
         public static Game1 ActiveGame;
+        public static ContentManager GameContent;
+         
         public static Random Random;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        //public static bool InMenu;
-        Room menuRoom;
-        Room gameRoom;
-        RoomChanger roomChanger;
+        RoomManager RoomManager;
         
         public Game1()
         {
@@ -43,18 +43,9 @@ namespace GalaxyBlox
         {
             base.Initialize();
 
+            GameContent = Content;
             Random = new Random(unchecked((int)DateTime.Now.Ticks));
-
-            menuRoom = new Rooms.MenuRoom(new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Static.Settings.GameSize);
-            menuRoom.LoadContent(Content);
-            menuRoom.IsVisible = true;
-            menuRoom.IsPaused = false;
-            gameRoom = new Rooms.GameRoom(new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Static.Settings.GameSize);
-            gameRoom.LoadContent(Content);
-            gameRoom.IsVisible = false;
-            gameRoom.IsPaused = true;
-
-            roomChanger = new RoomChanger(menuRoom, gameRoom, new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height));
+            RoomManager = new RoomManager(GraphicsDevice);
         }
 
         /// <summary>
@@ -91,11 +82,7 @@ namespace GalaxyBlox
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (roomChanger != null)
-                roomChanger.Update(gameTime);
-
-            menuRoom.Update(gameTime);
-            gameRoom.Update(gameTime);
+            RoomManager.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -106,23 +93,9 @@ namespace GalaxyBlox
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Purple);
-
-            menuRoom.Prepare(spriteBatch, GraphicsDevice);
-            gameRoom.Prepare(spriteBatch, GraphicsDevice);
-
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
-
-            menuRoom.Draw(gameTime, spriteBatch);
-            gameRoom.Draw(gameTime, spriteBatch);
-
-            spriteBatch.End();
             base.Draw(gameTime);
-        }
 
-        public void ChangeRooms()
-        {
-            roomChanger.Change(true);
+            RoomManager.Draw(gameTime, spriteBatch, GraphicsDevice);
         }
     }
 }

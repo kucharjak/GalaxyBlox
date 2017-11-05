@@ -12,6 +12,7 @@ namespace GalaxyBlox.Models
 {
     class Room
     {
+        public RoomManager ParentRoomManager;
         protected List<GameObject> objects = new List<GameObject>();
         public Texture2D Background;
         public Size RoomSize;
@@ -24,10 +25,14 @@ namespace GalaxyBlox.Models
         public float InGameOffsetX = 0f;
         public float InGameOffsetY = 0f;
 
+        public string Name = "";
+
         //protected int padding = 20;
 
-        public Room(Size RealSize, Size GameSize)
+        public Room(RoomManager parent, string name, Size RealSize, Size GameSize)
         {
+            ParentRoomManager = parent;
+            Name = name;
             RoomSize = GameSize;
 
             if (RealSize.Width - GameSize.Width > RealSize.Height - GameSize.Height)
@@ -79,6 +84,10 @@ namespace GalaxyBlox.Models
         {
             AddObjects();
         }
+        
+        public virtual void AfterChangeEvent(string args)
+        {
+        }
 
         protected virtual void AddObjects()
         {
@@ -120,7 +129,7 @@ namespace GalaxyBlox.Models
             }
 
             if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.Back))
-                Game1.ActiveGame.ChangeRooms();
+                ParentRoomManager.ChangeRooms();
                 //Game1.InMenu = true;
         }
 

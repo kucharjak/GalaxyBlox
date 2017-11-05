@@ -11,13 +11,25 @@ using Android.Views;
 using Android.Widget;
 using Microsoft.Xna.Framework;
 using Android.Util;
+using GalaxyBlox.EventArgsClasses;
 
 namespace GalaxyBlox.Models
 {
     class RoomChanger
     {
+        public event EventHandler AfterChange;
+        protected virtual void OnAfterChange(ChangerEventArgs e)
+        {
+            EventHandler handler = AfterChange;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
         protected bool changing = false;
         protected bool deactivateRooms = false;
+        protected string args;
 
         protected Size displaySize;
         protected Room firstRoom;
@@ -37,13 +49,17 @@ namespace GalaxyBlox.Models
         {
             if (!changing)
                 return;
-
+            
             Swip();
+
+            OnAfterChange(new ChangerEventArgs(firstRoom, secondRoom));
+            firstRoom.AfterChangeEvent(args);
+            secondRoom.AfterChangeEvent(args);
         }
 
         public virtual void Swip()
         {
-            firstRoom.Position = new Vector2(displaySize.Width, 0);
+            firstRoom.Position = new Vector2(displaySize.Width / 2, 0);
             secondRoom.Position = Vector2.Zero;
 
             var tmpRoom = firstRoom;
@@ -58,8 +74,9 @@ namespace GalaxyBlox.Models
             changing = false;
         }
 
-        public void Change(bool deactivate = false)
+        public void Change(string args = "", bool deactivate = false)
         {
+            this.args = args;
             deactivateRooms = deactivate;
             changing = true;
         }

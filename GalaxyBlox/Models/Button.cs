@@ -35,7 +35,7 @@ namespace GalaxyBlox.Models
 
         public void RaiseClick(EventArgs e)
         {
-            if (State != ButtonState.Clicked)
+            if (Enabled && State != ButtonState.Clicked)
             {
                 State = ButtonState.Clicked;
                 Clicked();
@@ -55,7 +55,7 @@ namespace GalaxyBlox.Models
 
         public void RaiseRelease(EventArgs e)
         {
-            if (State != ButtonState.Released)
+            if (Enabled && State != ButtonState.Released)
             {
                 State = ButtonState.Released;
                 Released();
@@ -75,7 +75,7 @@ namespace GalaxyBlox.Models
 
         public void RaiseHover(EventArgs e)
         {
-            if (State != ButtonState.Hovered)
+            if (Enabled && State != ButtonState.Hovered)
             {
                 State = ButtonState.Hovered;
                 Hovered();
@@ -102,14 +102,14 @@ namespace GalaxyBlox.Models
         {
             Scale = 1.05f;
             IsTouched = true;
-            Color = SelectedBackgroundColor;
+            BaseColor = SelectedBackgroundColor;
         }
 
         protected virtual void Released()
         {
             Scale = 1f;
             IsTouched = false;
-            Color = DefaultBackgroundColor;
+            BaseColor = DefaultBackgroundColor;
             HoverTime = 0;
         }
 
@@ -117,7 +117,7 @@ namespace GalaxyBlox.Models
         {
             Scale = 1f;
             IsTouched = false;
-            Color = DefaultBackgroundColor;
+            BaseColor = DefaultBackgroundColor;
         }
 
         public enum ButtonState

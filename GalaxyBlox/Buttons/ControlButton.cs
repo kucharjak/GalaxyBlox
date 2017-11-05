@@ -14,7 +14,7 @@ namespace GalaxyBlox.Buttons
         public ControlButton(Room parentRoom) : base (parentRoom)
         {
             Alpha = 1f;
-            Color = Contents.Colors.ControlButtonBackgroundColor;
+            BaseColor = Contents.Colors.ControlButtonBackgroundColor;
             DefaultBackgroundColor = Contents.Colors.ControlButtonBackgroundColor;
             SelectedBackgroundColor = Contents.Colors.ControlButtonSelectColor;
             PressBackgroundColor = Contents.Colors.ControlButtonBackgroundColor;

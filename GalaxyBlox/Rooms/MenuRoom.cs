@@ -5,12 +5,15 @@ using Microsoft.Xna.Framework.Content;
 using Android.Util;
 using Microsoft.Xna.Framework;
 using GalaxyBlox.Buttons;
+using System.Linq;
 
 namespace GalaxyBlox.Rooms
 {
     class MenuRoom : Room
     {
-        public MenuRoom(Size realSize, Size gameSize) : base(realSize, gameSize)
+        Button btnContinue;
+
+        public MenuRoom(RoomManager parent, string name, Size realSize, Size gameSize) : base(parent, name, realSize, gameSize)
         {
         }
 
@@ -26,14 +29,26 @@ namespace GalaxyBlox.Rooms
 
             var padding = 30;
             var btnSize = new Vector2(RoomSize.Width - 2 * padding, 50);
-            var btnCount = 4;
+            var btnCount = 5;
             var btnStartPosY = (RoomSize.Height - (50 * btnCount + 10 * (btnCount - 1))) / 2;
 
             ////// ADDING BUTTONS //////
-            objToAdd = new MenuButton(this)
+            btnContinue = new MenuButton(this)
             {
                 Size = btnSize,
                 Position = new Vector2(padding, btnStartPosY),
+                TextIsCentered = true,
+                Text = "Pokračovat",
+                LayerDepth = 0.5f,
+                Enabled = false
+            };
+            btnContinue.Click += btnContinue_Click;
+            objects.Add(btnContinue);
+
+            objToAdd = new MenuButton(this)
+            {
+                Size = btnSize,
+                Position = new Vector2(padding, btnStartPosY + 65),
                 TextIsCentered = true,
                 Text = "Nová hra",
                 LayerDepth = 0.5f   
@@ -44,7 +59,7 @@ namespace GalaxyBlox.Rooms
             objToAdd = new MenuButton(this)
             {
                 Size = btnSize,
-                Position = new Vector2(padding, btnStartPosY + 65),
+                Position = new Vector2(padding, btnStartPosY + 65 * 2),
                 TextIsCentered = true,
                 Text = "Ovládání",
                 LayerDepth = 0.5f
@@ -55,7 +70,7 @@ namespace GalaxyBlox.Rooms
             objToAdd = new MenuButton(this)
             {
                 Size = btnSize,
-                Position = new Vector2(padding, btnStartPosY + 65 * 2),
+                Position = new Vector2(padding, btnStartPosY + 65 * 3),
                 TextIsCentered = true,
                 Text = "Nastavení",
                 LayerDepth = 0.5f
@@ -66,13 +81,23 @@ namespace GalaxyBlox.Rooms
             objToAdd = new MenuButton(this)
             {
                 Size = btnSize,
-                Position = new Vector2(padding, btnStartPosY + 65 * 3),
+                Position = new Vector2(padding, btnStartPosY + 65 * 4),
                 TextIsCentered = true,
                 Text = "Konec",
                 LayerDepth = 0.5f
             };
             (objToAdd as Button).Click += btnFinish_Click;
             objects.Add(objToAdd);
+        }
+
+        public override void AfterChangeEvent(string args)
+        {
+            base.AfterChangeEvent(args);
+
+            if (args == "newGame")
+            {
+                btnContinue.Enabled = true;
+            }
         }
 
         private void btnFinish_Click(object sender, EventArgs e)
@@ -88,9 +113,14 @@ namespace GalaxyBlox.Rooms
         {
         }
 
+        private void btnContinue_Click(object sender, EventArgs e)
+        {
+            ParentRoomManager.ChangeRooms(args: "continue");
+        }
+
         private void btnNewGame_Click(object sender, EventArgs e)
         {
-            Game1.ActiveGame.ChangeRooms();
+            ParentRoomManager.ChangeRooms(args: "newGame");
         }
     }
 }
