@@ -82,6 +82,7 @@
     <Compile Include="Rooms\GameRoom.cs" />
     <Compile Include="Rooms\MenuRoom.cs" />
     <Compile Include="Static\Contents.cs" />
+    <Compile Include="Static\SettingOptions.cs" />
     <Compile Include="Static\Settings.cs" />
   </ItemGroup>
   <ItemGroup>

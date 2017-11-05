@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using Android.Util;
+﻿using Android.Util;
+using GalaxyBlox.Static;
 
 namespace GalaxyBlox.Static
 {
@@ -17,5 +7,7 @@ namespace GalaxyBlox.Static
     {
         public static Size GameSize = new Size(480, 800); // new Size(720, 1200);
         public static Size GameArenaSize = new Size(12, 20);
+        
+        public static SettingOptions.Indicator Indicator =  SettingOptions.Indicator.Shape;
     }
 }

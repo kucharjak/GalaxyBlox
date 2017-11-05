@@ -23,6 +23,8 @@ namespace GalaxyBlox.Models
         private Color actorColor;
         private Point actorPosition;
 
+        private Color indicatorColor;
+
         private int[,] playground;
         private Color?[,] playgroundEffectsArray;
         private int playgroundInnerPadding;
@@ -74,6 +76,7 @@ namespace GalaxyBlox.Models
                 (position.Y + size.Y) - Size.Y);
 
             CreateNewActor();
+            indicatorColor = Contents.Colors.IndicatorColor;
 
             renderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)Size.X, (int)Size.Y);
             BackgroundImage = renderTarget;
@@ -326,7 +329,7 @@ namespace GalaxyBlox.Models
         {
             actor = Contents.Shapes.GetRandomShape();
             actor = RotateActor(actor, Game1.Random.Next(0, 3)); // rotate actor randomly for variation and funzies
-            actorColor = Contents.Colors.GameCubesColors[Game1.Random.Next(1, Contents.Colors.GameCubesColors.Count - 1)];
+            actorColor = Contents.Colors.GameCubesColors[Game1.Random.Next(1, Contents.Colors.GameCubesColors.Count)];
             actorPosition = new Point(Game1.Random.Next(0, playground.GetLength(0) - actor.GetLength(0) + 1), 0);
 
             gameTimeElapsed = 0;
@@ -341,21 +344,85 @@ namespace GalaxyBlox.Models
             if (!fallFaster)
                 gameSpeed = 1000;
             else
-                gameSpeed = 50;
+                gameSpeed = 1;
         }
 
         private void UpdateEffectsArray()
         {
-            playgroundEffectsArray = new Color?[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height];
-            for (int x = 0; x < actor.GetLength(0); x++)
+            playgroundEffectsArray = new Color?[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height]; // create new effects array
+
+            if (Settings.Indicator != SettingOptions.Indicator.None) // draw indicator if set
+                DrawIndicator();
+
+            DrawActor(actor, actorPosition, actorColor);
+        }
+
+        private void DrawActor(bool[,] actorToDraw, Point positionToDraw, Color colorToDraw)
+        {
+            for (int x = 0; x < actorToDraw.GetLength(0); x++)
             {
-                for (int y = 0; y < actor.GetLength(1); y++)
+                for (int y = 0; y < actorToDraw.GetLength(1); y++)
                 {
-                    if (actor[x,y])
+                    if (actorToDraw[x, y])
                     {
-                        playgroundEffectsArray[actorPosition.X + x, actorPosition.Y + y] = actorColor;
+                        playgroundEffectsArray[positionToDraw.X + x, positionToDraw.Y + y] = colorToDraw;
                     }
                 }
+            }
+        }
+
+        private void DrawIndicator()
+        {
+            switch(Settings.Indicator)
+            {
+                case SettingOptions.Indicator.Shadow:
+                    {
+                        for (int actorX = 0; actorX < actor.GetLength(0); actorX++)
+                        {
+                            var startPosition = new Point(actorPosition.X + actorX, actorPosition.Y);
+
+                            bool foundActor = false;
+                            for (int actorY = actor.GetLength(1) - 1; actorY >= 0; actorY--)
+                            {
+                                if (actor[actorX, actorY])
+                                {
+                                    foundActor = true;
+                                    startPosition.Y = actorPosition.Y + (actorY + 1);
+                                    break;
+                                }
+                            }
+                            if (!foundActor)
+                                continue;
+
+                            if (startPosition.Y == actorPosition.Y)
+                                startPosition.Y = actorPosition.Y + actor.GetLength(1);
+
+                            for (int y = startPosition.Y; y < playgroundEffectsArray.GetLength(1); y++)
+                            {
+                                if (playground[startPosition.X, y] == 0)
+                                    playgroundEffectsArray[startPosition.X, y] = indicatorColor;
+                                else
+                                    break;
+                            }
+                        }
+                    } break;
+                case SettingOptions.Indicator.Shape:
+                    {
+                        var shadowPosition = actorPosition;
+
+                        for (int y = shadowPosition.Y; y < playground.GetLength(1); y++)
+                        {
+                            shadowPosition.Y = y;
+                            if (ActorCollide(shadowPosition, actor))
+                            {
+                                shadowPosition.Y--;
+                                break;
+                            }
+                        }
+                        if (shadowPosition.Y >= 0)
+                            DrawActor(actor, shadowPosition, indicatorColor);
+
+                    } break;
             }
         }
 

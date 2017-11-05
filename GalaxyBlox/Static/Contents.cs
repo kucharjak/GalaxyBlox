@@ -37,12 +37,12 @@ namespace GalaxyBlox.Static
             {
                 new Color(158, 194, 255) * 0.6f, // first possition reserved for neutral/ empty like color
                 Color.Red,
-                Color.Blue,
-                Color.Green,
-                Color.Orange,
+                new Color(44, 244, 0), // better green shade
                 Color.Yellow,
-                Color.Purple
+                Color.Blue
             };
+
+            public static Color IndicatorColor = Color.Purple * 0.2f;
 
             public static Color PlaygroundColor = new Color(73, 127, 216) * 0.75f;
             public static Color PlaygroundBorderColor = new Color(248, 255, 175);
