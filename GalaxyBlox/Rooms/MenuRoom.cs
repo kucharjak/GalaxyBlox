@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
 using GalaxyBlox.Models;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
@@ -43,7 +35,8 @@ namespace GalaxyBlox.Rooms
                 Size = btnSize,
                 Position = new Vector2(padding, btnStartPosY),
                 TextIsCentered = true,
-                Text = "Nová hra"
+                Text = "Nová hra",
+                LayerDepth = 0.5f   
             };
             (objToAdd as Button).Click += btnNewGame_Click;
             objects.Add(objToAdd);
@@ -53,7 +46,8 @@ namespace GalaxyBlox.Rooms
                 Size = btnSize,
                 Position = new Vector2(padding, btnStartPosY + 65),
                 TextIsCentered = true,
-                Text = "Ovládání"
+                Text = "Ovládání",
+                LayerDepth = 0.5f
             };
             (objToAdd as Button).Click += btnControls_Click;
             objects.Add(objToAdd);
@@ -63,7 +57,8 @@ namespace GalaxyBlox.Rooms
                 Size = btnSize,
                 Position = new Vector2(padding, btnStartPosY + 65 * 2),
                 TextIsCentered = true,
-                Text = "Nastavení"
+                Text = "Nastavení",
+                LayerDepth = 0.5f
             };
             (objToAdd as Button).Click += btnSettings_Click;
             objects.Add(objToAdd);
@@ -73,7 +68,8 @@ namespace GalaxyBlox.Rooms
                 Size = btnSize,
                 Position = new Vector2(padding, btnStartPosY + 65 * 3),
                 TextIsCentered = true,
-                Text = "Konec"
+                Text = "Konec",
+                LayerDepth = 0.5f
             };
             (objToAdd as Button).Click += btnFinish_Click;
             objects.Add(objToAdd);

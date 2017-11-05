@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using Android.Util;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GalaxyBlox.Models
@@ -51,6 +39,7 @@ namespace GalaxyBlox.Models
         public Color ColorAlpha { get { return Color * Alpha; } }
         public Color Color = Color.White;
         public float Alpha = 1f;
+        public float LayerDepth = 0f;
 
         public Rectangle Rectangle { get { return new Rectangle((int)(Position.X), (int)(Position.Y), (int)Size.X, (int)Size.Y); } }
 
@@ -69,13 +58,10 @@ namespace GalaxyBlox.Models
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(
-                    BackgroundImage,
-                    DisplayRectWithScaleAndRoomPosition(), //ScaleRect(new Rectangle((int)obj.Position.X, (int)obj.Position.Y, (int)obj.Size.X, (int)obj.Size.Y)),
-                    ColorAlpha);
+            spriteBatch.Draw(BackgroundImage, DisplayRectWithScaleAndRoomPosition(), null, ColorAlpha, 0, new Vector2(), SpriteEffects.None, LayerDepth);
 
             if (ShowText)
-                spriteBatch.DrawString(TextSpriteFont, Text, DisplayTextPositionWithScale() + ParentRoom.Position, TextColor, 0f, new Vector2(), Scale, SpriteEffects.None, 0f);
+                spriteBatch.DrawString(TextSpriteFont, Text, DisplayTextPositionWithScale() + ParentRoom.Position, TextColor, 0f, new Vector2(), Scale, SpriteEffects.None, LayerDepth + 0.01f);
         }
 
         public void CenterText()

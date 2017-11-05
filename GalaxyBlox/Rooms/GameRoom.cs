@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
 using Android.Util;
-using Android.Views;
 using GalaxyBlox.Models;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -22,7 +14,6 @@ namespace GalaxyBlox.Rooms
     {
         public GameRoom(Size realSize, Size gameSize) : base(realSize, gameSize)
         {
-        
         }
 
         public override void LoadContent(ContentManager content)
@@ -42,7 +33,8 @@ namespace GalaxyBlox.Rooms
             {
                 Size = btnPauseSize,
                 Position = new Vector2(RoomSize.Width - btnPauseSize.X - padding, padding),
-                BackgroundImage = Contents.Textures.ControlButton_pause
+                BackgroundImage = Contents.Textures.ControlButton_pause,
+                LayerDepth = 0.5f
             };
             (objToAdd as Button).Click += btnPause_Click;
             objects.Add(objToAdd);
@@ -53,10 +45,11 @@ namespace GalaxyBlox.Rooms
             ///// ADDING BACKGROUNDS AND FRAMES /////
             objToAdd = new GameObject(this)
             {
-                Size = new Vector2(RoomSize.Width + 10, btnSize.Y + 2 * padding + 5), // +5 je korekce, ať tam nejsou nějaký hnusný mezery
+                Size = new Vector2(RoomSize.Width + 10, btnSize.Y + 2 * padding + 5), // +5 correction
                 Position = new Vector2(-5, RoomSize.Height - btnSize.Y - 2 * padding),
                 Color = Contents.Colors.BackgroundControlsColor,
-                BackgroundImage = Contents.Textures.Pix
+                BackgroundImage = Contents.Textures.Pix,
+                LayerDepth = 0.5f
             };
             objects.Add(objToAdd);
 
@@ -65,7 +58,8 @@ namespace GalaxyBlox.Rooms
             {
                 Size = btnSize,
                 Position = new Vector2(btnPartSize * 0 + padding + ((btnPartSize - btnSize.X) / 2f), RoomSize.Height - padding - btnSize.Y),
-                BackgroundImage = Contents.Textures.ControlButton_left
+                BackgroundImage = Contents.Textures.ControlButton_left,
+                LayerDepth = 0.5f
             };
             (objToAdd as Button).Click += btnLeft_Click;
             objects.Add(objToAdd);
@@ -75,6 +69,7 @@ namespace GalaxyBlox.Rooms
                 Size = btnSize,
                 Position = new Vector2(btnPartSize * 1 + padding + ((btnPartSize - btnSize.X) / 2f), RoomSize.Height - padding - btnSize.Y),
                 BackgroundImage = Contents.Textures.ControlButton_down,
+                LayerDepth = 0.5f
             };
             (objToAdd as Button).Click += btnDown_Click;
             (objToAdd as Button).Hover += btnDown_Hover;
@@ -86,6 +81,7 @@ namespace GalaxyBlox.Rooms
                 Size = btnSize,
                 Position = new Vector2(btnPartSize * 2 + padding + ((btnPartSize - btnSize.X) / 2f), RoomSize.Height - padding - btnSize.Y),
                 BackgroundImage = Contents.Textures.ControlButton_rotate,
+                LayerDepth = 0.5f
             };
             (objToAdd as Button).Click += btnRotate_Click;
             objects.Add(objToAdd);
@@ -95,6 +91,7 @@ namespace GalaxyBlox.Rooms
                 Size = btnSize,
                 Position = new Vector2(btnPartSize * 3 + padding + ((btnPartSize - btnSize.X) / 2f), RoomSize.Height - padding - btnSize.Y),
                 BackgroundImage = Contents.Textures.ControlButton_right,
+                LayerDepth = 0.5f
             };
             (objToAdd as Button).Click += btnRight_Click;
             objects.Add(objToAdd);
@@ -104,7 +101,8 @@ namespace GalaxyBlox.Rooms
                 new Vector2(RoomSize.Width, RoomSize.Height - plyArnPosY - (btnSize.Y + 2 * padding)),
                 new Vector2(0, plyArnPosY))
             {
-                Name = "main_playground"
+                Name = "main_playground",
+                LayerDepth = 0.5f
             };
             objects.Add(objToAdd);
         }

@@ -2,8 +2,6 @@ using Android.Util;
 using GalaxyBlox.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
 using System;
 
 namespace GalaxyBlox
@@ -113,7 +111,7 @@ namespace GalaxyBlox
             menuRoom.Prepare(spriteBatch, GraphicsDevice);
             gameRoom.Prepare(spriteBatch, GraphicsDevice);
 
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
             menuRoom.Draw(gameTime, spriteBatch);
             gameRoom.Draw(gameTime, spriteBatch);
