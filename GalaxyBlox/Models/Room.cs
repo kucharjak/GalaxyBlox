@@ -99,18 +99,18 @@ namespace GalaxyBlox.Models
             var buttons = objects.Where(btn => btn.Type == "button").ToArray();
             if (buttons.Count() > 0)
             {
+                Button touchedButton = null;
                 switch (input.State)
                 {
                     case TouchLocationState.Moved:
                     case TouchLocationState.Pressed:
                         {
-                            var touchedButton = buttons.Where(btn => btn.DisplayRectWithScaleAndRoomPosition().Intersects(rectInput)).FirstOrDefault();
-                            if (touchedButton != null)
-                                (touchedButton as Button).RaiseHover(new EventArgs());
-
-                            var releasedButtons = buttons.Where(btn => !btn.DisplayRectWithScaleAndRoomPosition().Intersects(rectInput) && btn != touchedButton);
-                            foreach (var btn in releasedButtons)
-                                (btn as Button).RaiseRelease(new EventArgs());
+                            var touch = buttons.Where(btn => btn.DisplayRectWithScaleAndRoomPosition().Intersects(rectInput)).FirstOrDefault();
+                            if (touch != null)
+                            {
+                                touchedButton = (touch as Button);
+                                touchedButton.RaiseHover(new EventArgs());
+                            }
                         }
                         break;
                     case TouchLocationState.Released:
@@ -121,6 +121,10 @@ namespace GalaxyBlox.Models
                         }
                         break;
                 }
+
+                var releasedButtons = buttons.Where(btn => btn != touchedButton);
+                foreach (var btn in releasedButtons)
+                    (btn as Button).RaiseRelease(new EventArgs());
             }
 
             if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.Back))

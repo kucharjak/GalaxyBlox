@@ -33,6 +33,7 @@ namespace GalaxyBlox.Models
 
         private int gameSpeed; // move actor in 1000 ms (= 1 s)
         private int gameTimeElapsed = 0;
+        private bool actorFalling;
 
         private Color BackgroundColor;
         private Color BorderColor;
@@ -132,9 +133,26 @@ namespace GalaxyBlox.Models
             base.Draw(spriteBatch);
         }
 
-        public void MoveDown()
+        public void SlowDownActor()
         {
-            SetGameSpeed(true);
+            if (actorFalling)
+                return;
+
+            SetGameSpeed(SettingOptions.GameSpeed.Normal);
+        }
+
+        public void MakeActorSpeedup()
+        {
+            if (actorFalling)
+                return;
+
+            SetGameSpeed(SettingOptions.GameSpeed.Speedup);
+        }
+
+        public void MakeActorFall()
+        {
+            actorFalling = true;
+            SetGameSpeed(SettingOptions.GameSpeed.Falling);
         }
 
         public void MoveRight()
@@ -331,20 +349,23 @@ namespace GalaxyBlox.Models
             actor = RotateActor(actor, Game1.Random.Next(0, 3)); // rotate actor randomly for variation and funzies
             actorColor = Contents.Colors.GameCubesColors[Game1.Random.Next(1, Contents.Colors.GameCubesColors.Count)];
             actorPosition = new Point(Game1.Random.Next(0, playground.GetLength(0) - actor.GetLength(0) + 1), 0);
-
+            
             gameTimeElapsed = 0;
-            SetGameSpeed();
+            actorFalling = false;
+            SetGameSpeed(SettingOptions.GameSpeed.Normal);
         }
 
         /// <summary>
         /// Game speed is defined by game score
         /// </summary>
-        private void SetGameSpeed(bool fallFaster = false)
+        private void SetGameSpeed(SettingOptions.GameSpeed gameSpeedSetting)
         {
-            if (!fallFaster)
-                gameSpeed = 1000;
-            else
-                gameSpeed = 1;
+            switch(gameSpeedSetting)
+            {
+                case SettingOptions.GameSpeed.Normal:  gameSpeed = 1000; break;
+                case SettingOptions.GameSpeed.Speedup: gameSpeed = 50; break;
+                case SettingOptions.GameSpeed.Falling: gameSpeed = 1; break;
+            }
         }
 
         private void UpdateEffectsArray()

@@ -20,6 +20,7 @@ Kontrola
  - ovìøit chování textu na jiných obrazovkách - pøípadnì opravit
  
 Bugy
+ - zkusit ušetøit FPS
  - když se musí odstranit více lajn, tak se to obèas všechno neposune
  - zkusit ovìøit jak moc je problematický pøeklikávání pokud pøejíždím po tlaèítkách, než si nìjaký vyberu a zavést to, že se odklikne jen a pouze to na které jsem pùvdnì klik
 

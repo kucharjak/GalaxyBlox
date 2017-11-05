@@ -61,7 +61,7 @@ namespace GalaxyBlox.Rooms
             objects.Add(objToAdd);
 
             ///// ADDING CONTROL BUTTONS //////
-            objToAdd = new ControlButton(this)
+            objToAdd = new ControlButton(this) // LEFT BUTTON
             {
                 Size = btnSize,
                 Position = new Vector2(btnPartSize * 0 + padding + ((btnPartSize - btnSize.X) / 2f), RoomSize.Height - padding - btnSize.Y),
@@ -70,16 +70,18 @@ namespace GalaxyBlox.Rooms
             (objToAdd as Button).Click += btnLeft_Click;
             objects.Add(objToAdd);
 
-            objToAdd = new ControlButton(this)
+            objToAdd = new ControlButton(this) // DOWN BUTTON
             {
                 Size = btnSize,
                 Position = new Vector2(btnPartSize * 1 + padding + ((btnPartSize - btnSize.X) / 2f), RoomSize.Height - padding - btnSize.Y),
                 BackgroundImage = Contents.Textures.ControlButton_down,
             };
             (objToAdd as Button).Click += btnDown_Click;
+            (objToAdd as Button).Hover += btnDown_Hover;
+            (objToAdd as Button).Release += btnDown_Release;
             objects.Add(objToAdd);
 
-            objToAdd = new ControlButton(this)
+            objToAdd = new ControlButton(this) // ROTATE BUTTON
             {
                 Size = btnSize,
                 Position = new Vector2(btnPartSize * 2 + padding + ((btnPartSize - btnSize.X) / 2f), RoomSize.Height - padding - btnSize.Y),
@@ -88,7 +90,7 @@ namespace GalaxyBlox.Rooms
             (objToAdd as Button).Click += btnRotate_Click;
             objects.Add(objToAdd);
 
-            objToAdd = new ControlButton(this)
+            objToAdd = new ControlButton(this) // RIGHT BUTTON
             {
                 Size = btnSize,
                 Position = new Vector2(btnPartSize * 3 + padding + ((btnPartSize - btnSize.X) / 2f), RoomSize.Height - padding - btnSize.Y),
@@ -129,8 +131,22 @@ namespace GalaxyBlox.Rooms
         private void btnDown_Click(object sender, EventArgs e)
         {
             var playground = objects.Where(obj => obj.Name == "main_playground").FirstOrDefault();
+            if (playground != null && (sender as Button).HoverTime < 150)
+                (playground as PlayingArena).MakeActorFall();
+        }
+
+        private void btnDown_Hover(object sender, EventArgs e)
+        {
+            var playground = objects.Where(obj => obj.Name == "main_playground").FirstOrDefault();
             if (playground != null)
-                (playground as PlayingArena).MoveDown();
+                (playground as PlayingArena).MakeActorSpeedup();
+        }
+
+        private void btnDown_Release(object sender, EventArgs e)
+        {
+            var playground = objects.Where(obj => obj.Name == "main_playground").FirstOrDefault();
+            if (playground != null)
+                (playground as PlayingArena).SlowDownActor();
         }
 
         private void btnLeft_Click(object sender, EventArgs e)

@@ -20,5 +20,12 @@ namespace GalaxyBlox.Static
             Shadow,
             Shape
         }
+
+        public enum GameSpeed
+        {
+            Normal,
+            Speedup,
+            Falling
+        }
     }
 }

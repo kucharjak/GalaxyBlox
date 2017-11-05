@@ -16,10 +16,12 @@ namespace GalaxyBlox.Models
     class Button : GameObject
     {
         public bool IsTouched;
-        public int ButttonID = 0;
         public Color SelectedBackgroundColor;
         public Color DefaultBackgroundColor;
         public Color PressBackgroundColor;
+        public ButtonState State = ButtonState.None;
+
+        public int HoverTime = 0;
 
         public event EventHandler Click;
         protected virtual void OnClick(EventArgs e)
@@ -33,8 +35,12 @@ namespace GalaxyBlox.Models
 
         public void RaiseClick(EventArgs e)
         {
-            Clicked();
-            OnClick(e);
+            if (State != ButtonState.Clicked)
+            {
+                State = ButtonState.Clicked;
+                Clicked();
+                OnClick(e);
+            }
         }
 
         public event EventHandler Release;
@@ -49,8 +55,12 @@ namespace GalaxyBlox.Models
 
         public void RaiseRelease(EventArgs e)
         {
-            Released();
-            OnRelease(e);
+            if (State != ButtonState.Released)
+            {
+                State = ButtonState.Released;
+                Released();
+                OnRelease(e);
+            }
         }
 
         public event EventHandler Hover;
@@ -65,14 +75,27 @@ namespace GalaxyBlox.Models
 
         public void RaiseHover(EventArgs e)
         {
-            Hovered();
-            OnHover(e);
+            if (State != ButtonState.Hovered)
+            {
+                State = ButtonState.Hovered;
+                Hovered();
+                OnHover(e);
+            }
         }
 
         public Button(Room parentRoom) : base (parentRoom)
         {
             Type = "button";
             Origin = new Vector2(0.5f);
+            HoverTime = 0;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            if (IsTouched)
+                HoverTime += gameTime.ElapsedGameTime.Milliseconds;
         }
 
         protected virtual void Hovered()
@@ -87,6 +110,7 @@ namespace GalaxyBlox.Models
             Scale = 1f;
             IsTouched = false;
             Color = DefaultBackgroundColor;
+            HoverTime = 0;
         }
 
         protected virtual void Clicked()
@@ -94,6 +118,14 @@ namespace GalaxyBlox.Models
             Scale = 1f;
             IsTouched = false;
             Color = DefaultBackgroundColor;
+        }
+
+        public enum ButtonState
+        {
+            None,
+            Clicked,
+            Hovered,
+            Released
         }
     }
 }
