@@ -136,7 +136,9 @@ namespace GalaxyBlox.Rooms
 
         private void btnDown_Click(object sender, EventArgs e)
         {
-            arena.MakeActorFall();
+            var btn = (sender as Button);
+            if (btn.HoverTime < 150)
+                arena.MakeActorFall();
         }
 
         private void btnDown_Hover(object sender, EventArgs e)
