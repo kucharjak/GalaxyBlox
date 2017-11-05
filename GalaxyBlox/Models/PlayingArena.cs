@@ -23,8 +23,6 @@ namespace GalaxyBlox.Models
         private Color actorColor;
         private Point actorPosition;
 
-        private Color indicatorColor;
-
         private int[,] playground;
         private Color?[,] playgroundEffectsArray;
         private int playgroundInnerPadding;
@@ -47,14 +45,13 @@ namespace GalaxyBlox.Models
         /// <param name="position"></param>
         public PlayingArena(Room parentRoom, Vector2 size, Vector2 position) : base(parentRoom)
         {
-            playground = new int[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height];
             BackgroundColor = Contents.Colors.PlaygroundColor;
             BorderColor = Contents.Colors.PlaygroundColor;
             Alpha = 1f;
             
             playgroundInnerPadding = 4;
             playgroundCubeMargin = 1;
-
+            
             var spaceLeftForCubes = new Size(
                 (int)(size.X - 2 * playgroundInnerPadding - (Settings.GameArenaSize.Width - 1) * playgroundCubeMargin),
                 (int)(size.Y - 2 * playgroundInnerPadding - (Settings.GameArenaSize.Height - 1) * playgroundCubeMargin));
@@ -75,12 +72,11 @@ namespace GalaxyBlox.Models
             Position = new Vector2(
                 (size.X - Size.X) / 2,
                 (position.Y + size.Y) - Size.Y);
-
-            CreateNewActor();
-            indicatorColor = Contents.Colors.IndicatorColor;
-
+            
             renderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)Size.X, (int)Size.Y);
             BackgroundImage = renderTarget;
+
+            StartNewGame();
         }
 
         public override void Update(GameTime gameTime)
@@ -131,6 +127,13 @@ namespace GalaxyBlox.Models
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
+        }
+
+        public void StartNewGame()
+        {
+            playground = new int[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height];
+            playgroundEffectsArray = new Color?[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height];
+            CreateNewActor();
         }
 
         public void SlowDownActor()
@@ -228,8 +231,20 @@ namespace GalaxyBlox.Models
             else
             {
                 InsertActorToPlayground();
+                CheckGameOver();
                 CheckPlaygroundForFullLines();
                 CreateNewActor();
+            }
+        }
+
+        private void CheckGameOver()
+        {
+            for (int x = 0; x < playground.GetLength(0); x++)
+            {
+                if (playground[x, 0] > 0)
+                { // call game over
+                    StartNewGame();
+                }
             }
         }
 
@@ -421,7 +436,7 @@ namespace GalaxyBlox.Models
                             for (int y = startPosition.Y; y < playgroundEffectsArray.GetLength(1); y++)
                             {
                                 if (playground[startPosition.X, y] == 0)
-                                    playgroundEffectsArray[startPosition.X, y] = indicatorColor;
+                                    playgroundEffectsArray[startPosition.X, y] = Contents.Colors.IndicatorColor;
                                 else
                                     break;
                             }
@@ -441,7 +456,7 @@ namespace GalaxyBlox.Models
                             }
                         }
                         if (shadowPosition.Y >= 0)
-                            DrawActor(actor, shadowPosition, indicatorColor);
+                            DrawActor(actor, shadowPosition, Contents.Colors.IndicatorColor);
 
                     } break;
             }
