@@ -12,12 +12,29 @@ namespace GalaxyBlox.Models
 {
     class PlayingArena : GameObject
     {
+        public event EventHandler ScoreChanged;
+        protected virtual void OnScoreChange(EventArgs e)
+        {
+            EventHandler handler = ScoreChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
         private long score = 0;
         public long Score
         {
             get { return score; }
-            set { score = value; }
+            set
+            {
+                score = value;
+                UpdateLevel();
+                OnScoreChange(new EventArgs());
+            }
         }
+
+        public int Level { get; set; } = 0;
 
         private bool[,] actor;
         private Color actorColor;
@@ -70,7 +87,7 @@ namespace GalaxyBlox.Models
                 (Settings.GameArenaSize.Height - 1) * (playgroundCubeSize + playgroundCubeMargin) + playgroundCubeSize + 2 * playgroundInnerPadding);
 
             Position = new Vector2(
-                (size.X - Size.X) / 2,
+                0, //(size.X - Size.X) / 2,
                 (position.Y + size.Y) - Size.Y);
             
             renderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)Size.X, (int)Size.Y);
@@ -270,7 +287,7 @@ namespace GalaxyBlox.Models
             if (fullLines.Count > 0)
             {
                 // count score
-                // TODO
+                Score += (long)(Math.Pow(fullLines.Count, 3) * playground.GetLength(0)); // TODO: Test speed of score growt and decide which would be the best
 
                 // refil playground with-out fullLines
                 var playgroundPosY = playground.GetLength(1) - 1;
@@ -370,16 +387,35 @@ namespace GalaxyBlox.Models
             SetGameSpeed(SettingOptions.GameSpeed.Normal);
         }
 
+        private void UpdateLevel()
+        {
+            var level = 0;
+            var scoreCap = 0;
+            while (scoreCap  < Score)
+            {
+                scoreCap += level * 50;
+                level++;
+            }
+            Level = level;
+        }
+
         /// <summary>
         /// Game speed is defined by game score
         /// </summary>
         private void SetGameSpeed(SettingOptions.GameSpeed gameSpeedSetting)
         {
+            var maxFallingSpeed = 250;
             switch(gameSpeedSetting)
             {
-                case SettingOptions.GameSpeed.Normal:  gameSpeed = 1000; break;
-                case SettingOptions.GameSpeed.Speedup: gameSpeed = 50; break;
-                case SettingOptions.GameSpeed.Falling: gameSpeed = 1; break;
+                case SettingOptions.GameSpeed.Normal:
+                    gameSpeed = (int)(1000 - 2 * Math.Pow(Level, 2)); // TODO test more speeds
+                    if (gameSpeed < maxFallingSpeed)
+                        gameSpeed = maxFallingSpeed;
+                    break;
+                case SettingOptions.GameSpeed.Speedup:
+                    gameSpeed = 50; break;
+                case SettingOptions.GameSpeed.Falling:
+                    gameSpeed = 1; break;
             }
         }
 

@@ -7,12 +7,15 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using GalaxyBlox.Buttons;
 using GalaxyBlox.Static;
+using GalaxyBlox.Utils;
 
 namespace GalaxyBlox.Rooms
 {
     class GameRoom : Room
     {
         private PlayingArena arena;
+        private GameObject scoreBoard;
+        private GameObject levelBoard;
 
         public GameRoom(RoomManager parent, string name, Size realSize, Size gameSize) : base(parent, name, realSize, gameSize)
         {
@@ -27,19 +30,8 @@ namespace GalaxyBlox.Rooms
         protected override void AddObjects()
         {
             GameObject objToAdd;
-            var btnPauseSize = new Vector2(50);
+            var leftPanelWidth = 60;
             var padding = 15;
-
-            ///// ADDING PAUSE BUTTON //////
-            objToAdd = new PauseButton(this)
-            {
-                Size = btnPauseSize,
-                Position = new Vector2(RoomSize.Width - btnPauseSize.X - padding, padding),
-                BackgroundImage = Contents.Textures.ControlButton_pause,
-                LayerDepth = 0.5f
-            };
-            (objToAdd as Button).Click += btnPause_Click;
-            objects.Add(objToAdd);
 
             var btnSize = new Vector2(75); //new Vector2(RoomSize.Width / 4 - 5);
             var btnCount = 4;
@@ -51,7 +43,7 @@ namespace GalaxyBlox.Rooms
                 Position = new Vector2(-5, RoomSize.Height - btnSize.Y - 2 * padding),
                 BaseColor = Contents.Colors.BackgroundControlsColor,
                 BackgroundImage = Contents.Textures.Pix,
-                LayerDepth = 0.5f
+                LayerDepth = 0.3f
             };
             objects.Add(objToAdd);
 
@@ -99,14 +91,143 @@ namespace GalaxyBlox.Rooms
             objects.Add(objToAdd);
 
             var plyArnPosY = padding + 65;
+            
             arena = new PlayingArena(this,
-                new Vector2(RoomSize.Width, RoomSize.Height - plyArnPosY - (btnSize.Y + 2 * padding)),
+                new Vector2(RoomSize.Width - leftPanelWidth - 2 * padding, RoomSize.Height - plyArnPosY - (btnSize.Y + 2 * padding)),
                 new Vector2(0, plyArnPosY))
             {
                 Name = "main_playground",
                 LayerDepth = 0.5f
             };
+            arena.ScoreChanged += Arena_ScoreChanged;
             objects.Add(arena);
+
+            // ADDING LEFT PANEL
+            ///// ADDING PAUSE BUTTON //////
+            leftPanelWidth = (int)(RoomSize.Width - arena.Size.X - 2 * padding);
+            var leftPanelPosY = arena.Position.Y;
+            objToAdd = new PauseButton(this)
+            {
+                Size = new Vector2(leftPanelWidth, leftPanelWidth),
+                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
+                BackgroundImage = Contents.Textures.ControlButton_pause,
+                LayerDepth = 0.5f
+            };
+            (objToAdd as Button).Click += btnPause_Click;
+            objects.Add(objToAdd);
+
+            //// ADDING LABEL FOR SCORE
+            leftPanelPosY += (int)(padding + objToAdd.Size.Y);
+            objToAdd = new GameObject(this) // label for Score
+            {
+                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
+                Size = new Vector2(leftPanelWidth, 40),
+                LayerDepth = 0.5f,
+                BackgroundImage = Contents.Textures.Pix,
+                BaseColor = Contents.Colors.PanelHeaderBackgroundColor,
+                Alpha = 0.6f,
+                TextAlignment = TextAlignment.Center,
+                TextSpriteFont = Contents.Fonts.PanelHeaderText,
+                ShowText = true,
+                TextColor = Color.White,
+                Text = "Skore"
+            };
+            objects.Add(objToAdd);
+
+            //// ADDING SCORE BOARD
+            leftPanelPosY += (int)objToAdd.Size.Y;
+            scoreBoard = new GameObject(this)
+            {
+                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
+                Size = new Vector2(leftPanelWidth, 65),
+                LayerDepth = 0.5f,
+                TextAlignment = TextAlignment.Center,
+                BackgroundImage = Contents.Textures.Pix,
+                BaseColor = Contents.Colors.PanelContentBackgroundColor,
+                Alpha = 0.3f,
+                TextSpriteFont = Contents.Fonts.PanelContentText,
+                ShowText = true,
+                TextColor = Color.White,
+                Text = arena.Score.ToString()
+            };
+            objects.Add(scoreBoard);
+
+            //// ADDING LABEL FOR LEVEL
+            leftPanelPosY += (int)(padding + scoreBoard.Size.Y);
+            objToAdd = new GameObject(this) 
+            {
+                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
+                Size = new Vector2(leftPanelWidth, 40),
+                LayerDepth = 0.5f,
+                BackgroundImage = Contents.Textures.Pix,
+                BaseColor = Contents.Colors.PanelHeaderBackgroundColor,
+                Alpha = 0.6f,
+                TextAlignment = TextAlignment.Center,
+                TextSpriteFont = Contents.Fonts.PanelHeaderText,
+                ShowText = true,
+                TextColor = Color.White,
+                Text = "Level"
+            };
+            objects.Add(objToAdd);
+
+            //// ADDING LEVEL BOARD
+            leftPanelPosY += (int)objToAdd.Size.Y;
+            levelBoard = new GameObject(this)
+            {
+                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
+                Size = new Vector2(leftPanelWidth, 65),
+                LayerDepth = 0.5f,
+                TextAlignment = TextAlignment.Center,
+                BackgroundImage = Contents.Textures.Pix,
+                BaseColor = Contents.Colors.PanelContentBackgroundColor,
+                Alpha = 0.3f,
+                TextSpriteFont = Contents.Fonts.PanelContentText,
+                ShowText = true,
+                TextColor = Color.White,
+                Text = arena.Level.ToString()
+            };
+            objects.Add(levelBoard);
+
+            //// ADDING LABEL BONUS
+            leftPanelPosY += (int)(padding + levelBoard.Size.Y);
+            objToAdd = new GameObject(this)
+            {
+                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
+                Size = new Vector2(leftPanelWidth, 40),
+                LayerDepth = 0.5f,
+                BackgroundImage = Contents.Textures.Pix,
+                BaseColor = Contents.Colors.PanelHeaderBackgroundColor,
+                Alpha = 0.6f,
+                TextAlignment = TextAlignment.Center,
+                TextSpriteFont = Contents.Fonts.PanelHeaderText,
+                ShowText = true,
+                TextColor = Color.White,
+                Text = "Bonus"
+            };
+            objects.Add(objToAdd);
+
+            //// ADDING BONUS BTN
+            leftPanelPosY += (int)objToAdd.Size.Y;
+            objToAdd = new GameObject(this)
+            {
+                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
+                Size = new Vector2(leftPanelWidth, 65),
+                LayerDepth = 0.5f,
+                TextAlignment = TextAlignment.Center,
+                BackgroundImage = Contents.Textures.Pix,
+                BaseColor = Contents.Colors.PanelContentBackgroundColor,
+                Alpha = 0.3f
+            };
+            objects.Add(objToAdd);
+        }
+
+        private void Arena_ScoreChanged(object sender, EventArgs e)
+        {
+            if (scoreBoard != null)
+                scoreBoard.Text = Strings.ScoreToString(arena.Score, 3); // TODO přepočítat na hodnoty, které nebudou mít více než 3 čísla a 1 znak (např.: 128K)
+
+            if (levelBoard != null)
+                levelBoard.Text = arena.Level.ToString();
         }
 
         public override void AfterChangeEvent(string args)

@@ -116,3 +116,17 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ControlButton_right.png
 
+#begin Fonts/PanelContentText.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/PanelContentText.spritefont
+
+#begin Fonts/PanelHeaderText.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/PanelHeaderText.spritefont
+

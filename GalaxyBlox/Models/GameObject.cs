@@ -9,24 +9,42 @@ namespace GalaxyBlox.Models
         public string Type = "";
         protected Room ParentRoom;
 
-        public Vector2 Size;
+        private Vector2 size;
+        public Vector2 Size
+        {
+            get { return size; }
+            set
+            {
+                size = value;
+                if (text != "")
+                    UpdateTextPosition();
+            }
+        }
         public Vector2 Position;
         public Vector2 Origin;
-        //protected float displayScale = 1f;
         public float Scale = 1f; // scale for drawing - for example when i need bigger object for a second (animation, or just to stand out like hovered button)
 
         public string Text
         {
             get { return text; }
-            set {
+            set
+            {
                 text = value;
-                textSize = TextSpriteFont.MeasureString(Text);
-                if (TextIsCentered)
-                    CenterText();
+                textSize = TextSpriteFont.MeasureString(text);
+                UpdateTextPosition();
             }
         }
         private string text;
-        public bool TextIsCentered = false;
+        private TextAlignment textAlignment;
+        public TextAlignment TextAlignment
+        {
+            get { return textAlignment; }
+            set
+            {
+                textAlignment = value;
+                UpdateTextPosition();
+            }
+        } 
         public bool ShowText = false;
         public Color TextColor = Color.Black;
         public Point TextOffset = new Point();
@@ -52,6 +70,8 @@ namespace GalaxyBlox.Models
 
         public virtual void Update(GameTime gameTime)
         {
+            if (!Enabled)
+                return;
         }
 
         public virtual void Prepare(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
@@ -61,15 +81,22 @@ namespace GalaxyBlox.Models
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             var baseAlpha = Enabled ? 1f : .25f;
-            spriteBatch.Draw(BackgroundImage, DisplayRectWithScaleAndRoomPosition(), null, Color * baseAlpha, 0, new Vector2(), SpriteEffects.None, LayerDepth);
 
-            if (ShowText)
+            if (BackgroundImage != null)
+                spriteBatch.Draw(BackgroundImage, DisplayRectWithScaleAndRoomPosition(), null, Color * baseAlpha, 0, new Vector2(), SpriteEffects.None, LayerDepth);
+
+            if (ShowText && TextSpriteFont != null)
                 spriteBatch.DrawString(TextSpriteFont, Text, DisplayTextPositionWithScale() + ParentRoom.Position, TextColor * baseAlpha, 0f, new Vector2(), Scale, SpriteEffects.None, LayerDepth + 0.01f);
         }
 
-        public void CenterText()
+        private void UpdateTextPosition()
         {
-            TextOffset = new Point((int)((Size.X - textSize.X / ParentRoom.Scale) / 2), (int)((Size.Y - textSize.Y / ParentRoom.Scale) / 2));
+            switch(TextAlignment)
+            {
+                case TextAlignment.Left: TextOffset = new Point(0, (int)((Size.Y - textSize.Y / ParentRoom.Scale) / 2)); break;
+                case TextAlignment.Right: TextOffset = new Point((int)((Size.X - textSize.X / ParentRoom.Scale)), (int)((Size.Y - textSize.Y / ParentRoom.Scale) / 2)); break;
+                case TextAlignment.Center: TextOffset = new Point((int)((Size.X - textSize.X / ParentRoom.Scale) / 2), (int)((Size.Y - textSize.Y / ParentRoom.Scale) / 2)); break;
+            }
         }
 
         public Vector2 DisplayTextPositionWithScale()
@@ -121,5 +148,12 @@ namespace GalaxyBlox.Models
                 );
             return resultRect;
         }
+    }
+
+    public enum TextAlignment
+    {
+        Left,
+        Right,
+        Center
     }
 }

@@ -29,6 +29,8 @@ namespace GalaxyBlox.Static
         public static class Fonts
         {
             public static SpriteFont MenuButtonText;
+            public static SpriteFont PanelHeaderText;
+            public static SpriteFont PanelContentText;
         }
 
         public static class Colors
@@ -59,6 +61,9 @@ namespace GalaxyBlox.Static
             public static Color ControlButtonSelectColor = Color.White;
 
             public static Color BackgroundControlsColor = new Color(100, 114, 137);
+
+            public static Color PanelHeaderBackgroundColor = new Color(121, 140, 170);
+            public static Color PanelContentBackgroundColor = new Color(100, 118, 147);
         }
 
         public static class Shapes

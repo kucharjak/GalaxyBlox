@@ -37,7 +37,7 @@ namespace GalaxyBlox.Rooms
             {
                 Size = btnSize,
                 Position = new Vector2(padding, btnStartPosY),
-                TextIsCentered = true,
+                TextAlignment = TextAlignment.Center,
                 Text = "Pokračovat",
                 LayerDepth = 0.5f,
                 Enabled = false
@@ -49,7 +49,7 @@ namespace GalaxyBlox.Rooms
             {
                 Size = btnSize,
                 Position = new Vector2(padding, btnStartPosY + 65),
-                TextIsCentered = true,
+                TextAlignment = TextAlignment.Center,
                 Text = "Nová hra",
                 LayerDepth = 0.5f   
             };
@@ -60,7 +60,7 @@ namespace GalaxyBlox.Rooms
             {
                 Size = btnSize,
                 Position = new Vector2(padding, btnStartPosY + 65 * 2),
-                TextIsCentered = true,
+                TextAlignment = TextAlignment.Center,
                 Text = "Ovládání",
                 LayerDepth = 0.5f
             };
@@ -71,7 +71,7 @@ namespace GalaxyBlox.Rooms
             {
                 Size = btnSize,
                 Position = new Vector2(padding, btnStartPosY + 65 * 3),
-                TextIsCentered = true,
+                TextAlignment = TextAlignment.Center,
                 Text = "Nastavení",
                 LayerDepth = 0.5f
             };
@@ -82,7 +82,7 @@ namespace GalaxyBlox.Rooms
             {
                 Size = btnSize,
                 Position = new Vector2(padding, btnStartPosY + 65 * 4),
-                TextIsCentered = true,
+                TextAlignment = TextAlignment.Center,
                 Text = "Konec",
                 LayerDepth = 0.5f
             };
