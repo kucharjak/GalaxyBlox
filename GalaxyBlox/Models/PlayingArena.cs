@@ -150,6 +150,7 @@ namespace GalaxyBlox.Models
         {
             playground = new int[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height];
             playgroundEffectsArray = new Color?[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height];
+            Score = 0;
             CreateNewActor();
         }
 
@@ -291,7 +292,7 @@ namespace GalaxyBlox.Models
 
                 // refil playground with-out fullLines
                 var playgroundPosY = playground.GetLength(1) - 1;
-                for (int y = playground.GetLength(1) - 1; y >= fullLines.Count; y--)
+                for (int y = playground.GetLength(1) - 1; y >= 0; y--)
                 {
                     if (fullLines.Contains(y))
                     {
@@ -393,8 +394,8 @@ namespace GalaxyBlox.Models
             var scoreCap = 0;
             while (scoreCap  < Score)
             {
-                scoreCap += level * 50;
                 level++;
+                scoreCap += level * 50;
             }
             Level = level;
         }
@@ -408,7 +409,7 @@ namespace GalaxyBlox.Models
             switch(gameSpeedSetting)
             {
                 case SettingOptions.GameSpeed.Normal:
-                    gameSpeed = (int)(1000 - 2 * Math.Pow(Level, 2)); // TODO test more speeds
+                    gameSpeed = (int)(1000 - Math.Pow(Level, 2)); // TODO test more speeds
                     if (gameSpeed < maxFallingSpeed)
                         gameSpeed = maxFallingSpeed;
                     break;
