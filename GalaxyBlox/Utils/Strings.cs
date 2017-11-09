@@ -20,29 +20,28 @@ namespace GalaxyBlox.Utils
             if (scoreString.Length <= scoreLenght)
                 return scoreString;
 
-            var suffix = "";
-            if (score >= 1000000000)
+            var suffixesList = new List<Tuple<int, string>>()
             {
-                suffix = "B";
-                scoreString = ((int)(score / 1000000000)).ToString();
-                if (scoreString.Length < scoreLenght)
-                    scoreString += "." + ((int)(score % 1000000000)).ToString().Substring(0, scoreLenght - scoreString.Length);
-            }
-            else if (score >= 1000000)
+                 new Tuple<int, string>(9, "B"),
+                 new Tuple<int, string>(6, "M"),
+                 new Tuple<int, string>(3, "K")
+            };
+
+            foreach(var suffixItem in suffixesList)
             {
-                suffix = "M";
-                scoreString = ((int)(score / 1000000)).ToString();
-                if (scoreString.Length < scoreLenght)
-                    scoreString += "." + ((int)(score % 1000000)).ToString().Substring(0, scoreLenght - scoreString.Length);
+                if (scoreString.Length > suffixItem.Item1)
+                {
+                    var tmpScoreString = scoreString;
+                    scoreString = tmpScoreString.Substring(0, scoreString.Length - suffixItem.Item1);
+                    if (scoreString.Length < scoreLenght)
+                    {
+                        var rest = tmpScoreString.Substring(scoreString.Length, scoreLenght - scoreString.Length);
+                        if (rest.Replace("0", "").Count() > 0)
+                            scoreString += "." + rest;
+                    }
+                    scoreString += suffixItem.Item2;
+                }
             }
-            else if (score >= 1000)
-            {
-                suffix = "K";
-                scoreString = ((int)(score / 1000)).ToString();
-                if (scoreString.Length < scoreLenght)
-                    scoreString += "." + ((int)(score % 1000)).ToString().Substring(0, scoreLenght - scoreString.Length);
-            }
-            scoreString += suffix;
 
             return scoreString;
         }
