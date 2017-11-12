@@ -6,12 +6,14 @@ using Android.Util;
 using Microsoft.Xna.Framework;
 using GalaxyBlox.Buttons;
 using System.Linq;
+using GalaxyBlox.Static;
 
 namespace GalaxyBlox.Rooms
 {
     class MenuRoom : Room
     {
         Button btnContinue;
+        GameObject highScore;
 
         public MenuRoom(RoomManager parent, string name, Size realSize, Size gameSize) : base(parent, name, realSize, gameSize)
         {
@@ -31,6 +33,22 @@ namespace GalaxyBlox.Rooms
             var btnSize = new Vector2(RoomSize.Width - 2 * padding, 50);
             var btnCount = 5;
             var btnStartPosY = (RoomSize.Height - (50 * btnCount + 10 * (btnCount - 1))) / 2;
+
+            // Adding HighScore
+            //// ADDING LABEL FOR SCORE
+            highScore = new GameObject(this) // label for Score
+            {
+                Position = new Vector2(padding, btnStartPosY - 35),
+                Size = new Vector2(btnSize.X, 35),
+                LayerDepth = 0.5f,
+                Alpha = 1f,
+                TextAlignment = TextAlignment.Left,
+                TextSpriteFont = Contents.Fonts.MenuButtonText,
+                ShowText = true,
+                TextColor = Color.White
+            };
+            objects.Add(highScore);
+            ResetHighScoreText();
 
             ////// ADDING BUTTONS //////
             btnContinue = new MenuButton(this)
@@ -98,6 +116,13 @@ namespace GalaxyBlox.Rooms
             {
                 btnContinue.Enabled = true;
             }
+
+            ResetHighScoreText();
+        }
+
+        private void ResetHighScoreText()
+        {
+            highScore.Text = $"Highscore: { Settings.SettingsClass.HighScore.ToString() }";
         }
 
         private void btnFinish_Click(object sender, EventArgs e)

@@ -14,7 +14,7 @@ namespace GalaxyBlox
     {
         public static Game1 ActiveGame;
         public static ContentManager GameContent;
-         
+
         public static Random Random;
 
         GraphicsDeviceManager graphics;
@@ -42,6 +42,8 @@ namespace GalaxyBlox
         protected override void Initialize()
         {
             base.Initialize();
+
+            Static.Settings.LoadSettings();
 
             GameContent = Content;
             Random = new Random(unchecked((int)DateTime.Now.Ticks));

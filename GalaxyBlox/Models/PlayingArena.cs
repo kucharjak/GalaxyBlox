@@ -278,9 +278,18 @@ namespace GalaxyBlox.Models
             {
                 if (playground[x, 0] > 0)
                 { // call game over
-                    StartNewGame();
+                    GameOver();
+                    break;
                 }
             }
+        }
+
+        private void GameOver()
+        {
+            if (Score > Settings.SettingsClass.HighScore)
+                Settings.SaveHighScore(Score);
+
+            StartNewGame();
         }
 
         private void CheckPlaygroundForFullLines()
