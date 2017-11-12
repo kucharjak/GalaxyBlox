@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using GalaxyBlox.Buttons;
 using GalaxyBlox.Static;
 using GalaxyBlox.Utils;
+using GalaxyBlox.EventArgsClasses;
 
 namespace GalaxyBlox.Rooms
 {
@@ -16,6 +17,7 @@ namespace GalaxyBlox.Rooms
         private PlayingArena arena;
         private GameObject scoreBoard;
         private GameObject levelBoard;
+        private ActorViewer nextActor;
 
         public GameRoom(RoomManager parent, string name, Size realSize, Size gameSize) : base(parent, name, realSize, gameSize)
         {
@@ -100,12 +102,15 @@ namespace GalaxyBlox.Rooms
                 LayerDepth = 0.5f
             };
             arena.ScoreChanged += Arena_ScoreChanged;
+            arena.ActorsQueueChanged += Arena_ActorsQueueChanged;
             objects.Add(arena);
 
             // ADDING LEFT PANEL
+            var objectsAlpha = 0.6f;
+
             ///// ADDING PAUSE BUTTON //////
             leftPanelWidth = (int)(RoomSize.Width - arena.Size.X - 2 * padding);
-            var leftPanelPosY = arena.Position.Y;
+            var leftPanelPosY = (int)arena.Position.Y;
             objToAdd = new PauseButton(this)
             {
                 Size = new Vector2(leftPanelWidth, leftPanelWidth),
@@ -121,11 +126,11 @@ namespace GalaxyBlox.Rooms
             objToAdd = new GameObject(this) // label for Score
             {
                 Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
-                Size = new Vector2(leftPanelWidth, 40),
+                Size = new Vector2(leftPanelWidth, 35),
                 LayerDepth = 0.5f,
                 BackgroundImage = Contents.Textures.Pix,
                 BaseColor = Contents.Colors.PanelHeaderBackgroundColor,
-                Alpha = 0.6f,
+                Alpha = objectsAlpha,
                 TextAlignment = TextAlignment.Center,
                 TextSpriteFont = Contents.Fonts.PanelHeaderText,
                 ShowText = true,
@@ -139,12 +144,12 @@ namespace GalaxyBlox.Rooms
             scoreBoard = new GameObject(this)
             {
                 Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
-                Size = new Vector2(leftPanelWidth, 65),
+                Size = new Vector2(leftPanelWidth, 55),
                 LayerDepth = 0.5f,
                 TextAlignment = TextAlignment.Center,
                 BackgroundImage = Contents.Textures.Pix,
                 BaseColor = Contents.Colors.PanelContentBackgroundColor,
-                Alpha = 0.3f,
+                Alpha = objectsAlpha,
                 TextSpriteFont = Contents.Fonts.PanelContentText,
                 ShowText = true,
                 TextColor = Color.White,
@@ -157,11 +162,11 @@ namespace GalaxyBlox.Rooms
             objToAdd = new GameObject(this) 
             {
                 Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
-                Size = new Vector2(leftPanelWidth, 40),
+                Size = new Vector2(leftPanelWidth, 35),
                 LayerDepth = 0.5f,
                 BackgroundImage = Contents.Textures.Pix,
                 BaseColor = Contents.Colors.PanelHeaderBackgroundColor,
-                Alpha = 0.6f,
+                Alpha = objectsAlpha,
                 TextAlignment = TextAlignment.Center,
                 TextSpriteFont = Contents.Fonts.PanelHeaderText,
                 ShowText = true,
@@ -175,12 +180,12 @@ namespace GalaxyBlox.Rooms
             levelBoard = new GameObject(this)
             {
                 Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
-                Size = new Vector2(leftPanelWidth, 65),
+                Size = new Vector2(leftPanelWidth, 55),
                 LayerDepth = 0.5f,
                 TextAlignment = TextAlignment.Center,
                 BackgroundImage = Contents.Textures.Pix,
                 BaseColor = Contents.Colors.PanelContentBackgroundColor,
-                Alpha = 0.3f,
+                Alpha = objectsAlpha,
                 TextSpriteFont = Contents.Fonts.PanelContentText,
                 ShowText = true,
                 TextColor = Color.White,
@@ -188,16 +193,56 @@ namespace GalaxyBlox.Rooms
             };
             objects.Add(levelBoard);
 
-            //// ADDING LABEL BONUS
+            //// NEXT ACTOR LABEL
             leftPanelPosY += (int)(padding + levelBoard.Size.Y);
             objToAdd = new GameObject(this)
             {
                 Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
-                Size = new Vector2(leftPanelWidth, 40),
+                Size = new Vector2(leftPanelWidth, 35),
                 LayerDepth = 0.5f,
                 BackgroundImage = Contents.Textures.Pix,
                 BaseColor = Contents.Colors.PanelHeaderBackgroundColor,
-                Alpha = 0.6f,
+                Alpha = objectsAlpha,
+                TextAlignment = TextAlignment.Center,
+                TextSpriteFont = Contents.Fonts.PanelHeaderText,
+                ShowText = true,
+                TextColor = Color.White,
+                Text = "Další"
+            };
+            objects.Add(objToAdd);
+
+            //// NEXT ACTOR BOARD
+            leftPanelPosY += (int)objToAdd.Size.Y;
+            nextActor = new ActorViewer(this, new Vector2(leftPanelWidth, leftPanelWidth), Contents.Colors.PanelContentBackgroundColor * 0f, arena.CubeSize)
+            {
+                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
+                LayerDepth = 0.5f,
+                Alpha = 1f
+            };
+            objects.Add(nextActor);
+
+            //// ADDING BACKGROUND FOR ACTOR BOARD
+            objToAdd = new GameObject(this)
+            {
+                Size = new Vector2(leftPanelWidth, leftPanelWidth),
+                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
+                BaseColor = Contents.Colors.PanelContentBackgroundColor,
+                BackgroundImage = Contents.Textures.Pix,
+                LayerDepth = 0.49f,
+                Alpha = objectsAlpha,
+            };
+            objects.Add(objToAdd);
+
+            //// ADDING LABEL BONUS
+            leftPanelPosY += (int)(padding + nextActor.Size.Y);
+            objToAdd = new GameObject(this)
+            {
+                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
+                Size = new Vector2(leftPanelWidth, 35),
+                LayerDepth = 0.5f,
+                BackgroundImage = Contents.Textures.Pix,
+                BaseColor = Contents.Colors.PanelHeaderBackgroundColor,
+                Alpha = objectsAlpha,
                 TextAlignment = TextAlignment.Center,
                 TextSpriteFont = Contents.Fonts.PanelHeaderText,
                 ShowText = true,
@@ -211,14 +256,19 @@ namespace GalaxyBlox.Rooms
             objToAdd = new GameObject(this)
             {
                 Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
-                Size = new Vector2(leftPanelWidth, 65),
+                Size = new Vector2(leftPanelWidth, leftPanelWidth),
                 LayerDepth = 0.5f,
-                TextAlignment = TextAlignment.Center,
                 BackgroundImage = Contents.Textures.Pix,
                 BaseColor = Contents.Colors.PanelContentBackgroundColor,
-                Alpha = 0.3f
+                Alpha = objectsAlpha,
             };
             objects.Add(objToAdd);
+        }
+
+        private void Arena_ActorsQueueChanged(object sender, EventArgs e)
+        {
+            var args = (e as QueueChangeEventArgs);
+            nextActor.SetActor(args.NewActor, args.NewActorsColor);
         }
 
         private void Arena_ScoreChanged(object sender, EventArgs e)

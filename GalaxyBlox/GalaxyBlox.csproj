@@ -73,6 +73,7 @@
     <Compile Include="Buttons\MenuButton.cs" />
     <Compile Include="EventArgsClasses\EventArgsClasses.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Models\ActorViewer.cs" />
     <Compile Include="Models\Button.cs" />
     <Compile Include="Models\GameObject.cs" />
     <Compile Include="Models\PlayingArena.cs" />

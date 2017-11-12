@@ -7,11 +7,22 @@ using GalaxyBlox.Static;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Android.Util;
+using GalaxyBlox.EventArgsClasses;
 
 namespace GalaxyBlox.Models
 {
     class PlayingArena : GameObject
     {
+        public event EventHandler ActorsQueueChanged;
+        protected virtual void OnActorsQueueChange(QueueChangeEventArgs e)
+        {
+            EventHandler handler = ActorsQueueChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
         public event EventHandler ScoreChanged;
         protected virtual void OnScoreChange(EventArgs e)
         {
@@ -39,12 +50,16 @@ namespace GalaxyBlox.Models
         private bool[,] actor;
         private Color actorColor;
         private Point actorPosition;
+        private List<Tuple<bool[,], Color>> actorsQueue;
+        private int actorsQueueSize = 2;
 
         private int[,] playground;
         private Color?[,] playgroundEffectsArray;
         private int playgroundInnerPadding;
         private int playgroundCubeSize;
+        public int CubeSize { get { return playgroundCubeSize; } }
         private int playgroundCubeMargin;
+        public int CubeMargin { get { return playgroundCubeMargin; } }
 
         private int gameSpeed; // move actor in 1000 ms (= 1 s)
         private int gameTimeElapsed = 0;
@@ -92,6 +107,7 @@ namespace GalaxyBlox.Models
             
             renderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)Size.X, (int)Size.Y);
             BackgroundImage = renderTarget;
+            actorsQueue = new List<Tuple<bool[,], Color>>();
 
             StartNewGame();
         }
@@ -151,6 +167,7 @@ namespace GalaxyBlox.Models
             playground = new int[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height];
             playgroundEffectsArray = new Color?[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height];
             Score = 0;
+            actorsQueue = new List<Tuple<bool[,], Color>>();
             CreateNewActor();
         }
 
@@ -378,11 +395,28 @@ namespace GalaxyBlox.Models
 
         private void CreateNewActor()
         {
-            actor = Contents.Shapes.GetRandomShape();
-            actor = RotateActor(actor, Game1.Random.Next(0, 3)); // rotate actor randomly for variation and funzies
-            actorColor = Contents.Colors.GameCubesColors[Game1.Random.Next(1, Contents.Colors.GameCubesColors.Count)];
+            if (actorsQueue.Count < actorsQueueSize)
+            {
+                var actorsToFullQueue = actorsQueueSize - actorsQueue.Count;
+                for (int i = 0; i < actorsToFullQueue; i++)
+                {
+                    var nextActor = Contents.Shapes.GetRandomShape();
+                    nextActor = RotateActor(nextActor, Game1.Random.Next(0, 3));
+                    actorsQueue.Add(new Tuple<bool[,], Color>(nextActor, Contents.Colors.GameCubesColors[Game1.Random.Next(1, Contents.Colors.GameCubesColors.Count)]));
+                }
+            }
+
+            //actor = Contents.Shapes.GetRandomShape();
+            //actor = RotateActor(actor, Game1.Random.Next(0, 3)); // rotate actor randomly for variation and funzies
+            //actorColor = Contents.Colors.GameCubesColors[Game1.Random.Next(1, Contents.Colors.GameCubesColors.Count)];
+
+            var actorFromQueue= actorsQueue.First();
+            actor = actorFromQueue.Item1;
+            actorColor = actorFromQueue.Item2;
             actorPosition = new Point(Game1.Random.Next(0, playground.GetLength(0) - actor.GetLength(0) + 1), 0);
-            
+            actorsQueue.Remove(actorFromQueue);
+            OnActorsQueueChange(new QueueChangeEventArgs(actorsQueue.FirstOrDefault()?.Item1, actorsQueue.FirstOrDefault() != null ? actorsQueue.FirstOrDefault().Item2 : Color.White));
+
             gameTimeElapsed = 0;
             actorFalling = false;
             SetGameSpeed(SettingOptions.GameSpeed.Normal);

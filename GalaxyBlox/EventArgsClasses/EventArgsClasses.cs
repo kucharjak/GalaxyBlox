@@ -10,6 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using GalaxyBlox.Models;
+using Microsoft.Xna.Framework;
 
 namespace GalaxyBlox.EventArgsClasses
 {
@@ -22,6 +23,18 @@ namespace GalaxyBlox.EventArgsClasses
         {
             ActiveRoom = activeRoom;
             OtherRoom = noLongerActiveRoom;
+        }
+    }
+
+    class QueueChangeEventArgs : EventArgs
+    {
+        public bool[,] NewActor;
+        public Color NewActorsColor;
+
+        public QueueChangeEventArgs(bool[,] newActor, Color newActorsColor)
+        {
+            NewActor = newActor;
+            NewActorsColor = newActorsColor;
         }
     }
 }
