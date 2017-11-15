@@ -227,10 +227,18 @@ namespace GalaxyBlox.Models
 
         // Private methods
 
-        private bool[,] RotateActor(bool[,] actorArray, int nTimes)
+        private bool[,] RotateActor(bool[,] actorArray, int nTimes, bool randomlyFlip = false)
         {
             var resultActor = new bool[actorArray.GetLength(0), actorArray.GetLength(1)];
             Array.Copy(actorArray, resultActor, actorArray.GetLength(0) * actorArray.GetLength(1));
+
+            if (randomlyFlip)
+            {
+                if (Game1.Random.Next(1, 100) % 2 == 0)
+                {
+                    resultActor = FlipActorVertically(resultActor);
+                }
+            }
 
             for (int times = 0; times < nTimes; times++)
             {
@@ -238,6 +246,38 @@ namespace GalaxyBlox.Models
             }
 
             return resultActor;
+        }
+
+        private bool[,] FlipActorVertically(bool[,] actorArray)
+        {
+            var resultArray = new bool[actorArray.GetLength(0), actorArray.GetLength(1)];
+            var actorArrayHeight = actorArray.GetLength(1) - 1;
+
+            for (int x = 0; x < actorArray.GetLength(0); x++)
+            {
+                for (int y = 0; y < actorArray.GetLength(1); y++)
+                {
+                    resultArray[x, y] = actorArray[x, actorArrayHeight - y];
+                }
+            }
+
+            return resultArray;
+        }
+
+        private bool[,] FlipActorHorizontally(bool[,] actorArray)
+        {
+            var resultArray = new bool[actorArray.GetLength(0), actorArray.GetLength(1)];
+            var actorArrayWidth = actorArray.GetLength(0) - 1;
+
+            for (int x = 0; x < actorArray.GetLength(0); x++)
+            {
+                for (int y = 0; y < actorArray.GetLength(1); y++)
+                {
+                    resultArray[x, y] = actorArray[actorArrayWidth - x, y];
+                }
+            }
+
+            return resultArray;
         }
 
         private bool[,] RotateActor(bool[,] actorArray)
@@ -410,7 +450,7 @@ namespace GalaxyBlox.Models
                 for (int i = 0; i < actorsToFullQueue; i++)
                 {
                     var nextActor = Contents.Shapes.GetRandomShape();
-                    nextActor = RotateActor(nextActor, Game1.Random.Next(0, 3));
+                    nextActor = RotateActor(nextActor, Game1.Random.Next(0, 3), true);
                     actorsQueue.Add(new Tuple<bool[,], Color>(nextActor, Contents.Colors.GameCubesColors[Game1.Random.Next(1, Contents.Colors.GameCubesColors.Count)]));
                 }
             }

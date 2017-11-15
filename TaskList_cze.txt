@@ -4,7 +4,6 @@ Zmìny
 	- zkusit ovìøit jak moc je problematický pøeklikávání pokud pøejíždím po tlaèítkách, než si nìjaký vyberu a zavést to, že se odklikne jen a pouze to na které jsem pùvdnì klik
 
 Rozšíøení 
-	- mít vždycky jen jeden tvar a náhodnì ho rotovat + pøevracet
 	- pøidat finální obrazovku (poèítat všechny kostky za hru a možná udìlat nìco jako výpis na konci)
 	- po vytvoøení actora vypnout na pùl +- vteøinky zrychlení, aby nedošlo k pøeklikávání
 	- vytvoøit swipovací objekty, který bude schopný zachyvávat swipovací eventy 
@@ -12,7 +11,6 @@ Rozšíøení
 	- pøidat na delší držení tlaèítek do stran zrychlený a nìkolikanásobný posun na danou stranu
 	- pøidat bonusy a vymyslet elegantnší zpùsob, jak je získávat (mít v pozadí padající hvìzdu a pokud by na ní hráè stihl kliknout, tak by získal bonusobou krabièku/truhlu)
 	- rozšíøit nastavení (settings) o nastavení hry pro hráèe (je potøeba vytvoøit okno na nastavení i s objekty, které to budou ovládat)
-	- vybalancovanej zpùsob vytváøení actorù do hry (aby se mi neustále nevytváøeli buï jeden druh tvaru, nebo se jeden urèitý nevytvoøil delší dobu) - asi by staèilo trochu upravit randomizér
 	- zkusit vymyslet zpùsob, kterým bych mohl definovat objekty pouze jednou a pak je jen vytvoøil a definoval si pouze místo, velikost a eventy
 	- vytvoøit "Color schemes", kdy budu schopný mít color scheme na tlaèítko a ten si jen podám do toho tlaèítka, pøidávání barev postupnì v kontruktoru a nebudu si díky tomu muset držet v pamìti tøi barvy, ale jen jednu referenci "noice"
 	- vymyslet jiný tvary, než ty základní - pøidat pozdìji
@@ -35,7 +33,8 @@ Nápady
 --------------HOTOVO--------------
 ----------------------------------
 
-
+- mít vždycky jen jeden tvar a náhodnì ho rotovat + pøevracet
+- vybalancovanej zpùsob vytváøení actorù do hry (aby se mi neustále nevytváøeli buï jeden druh tvaru, nebo se jeden urèitý nevytvoøil delší dobu) - asi by staèilo trochu upravit randomizér - snad vyøešeno
 - vymyslet a pøidat frontu na další kostièkový objekty 
 - když se musí odstranit více lajn, tak se to obèas všechno neposune
 - pøidat eventy na zmìnu skóre a pøípadnou smrt

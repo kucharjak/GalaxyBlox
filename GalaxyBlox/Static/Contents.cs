@@ -88,12 +88,6 @@ namespace GalaxyBlox.Static
                 },
                 new bool[,]
                 {
-                    {false, true },
-                    {false, true },
-                    {true, true }
-                },
-                new bool[,]
-                {
                     {true, true },
                     {true, true }
                 },
@@ -103,17 +97,13 @@ namespace GalaxyBlox.Static
                     {true, true },
                     {true, false }
                 },
-                new bool[,]
-                {
-                    {true, false },
-                    {true, true },
-                    {false, true }
-                }
             };
 
             public static bool[,] GetRandomShape()
             {
-                return ShapeBank[Game1.Random.Next(0, ShapeBank.Count() - 1)];
+                var maxCount = ShapeBank.Count();
+                return ShapeBank[Game1.Random.Next(0, maxCount)];
+                //return ShapeBank[(Game1.Random.Next(0, maxCount * 100) % maxCount)];
             }
         }
     }
