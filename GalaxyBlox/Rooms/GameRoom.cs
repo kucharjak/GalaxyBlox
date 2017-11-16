@@ -57,7 +57,8 @@ namespace GalaxyBlox.Rooms
                 BackgroundImage = Contents.Textures.ControlButton_left,
                 LayerDepth = 0.5f
             };
-            (objToAdd as Button).Click += btnLeft_Click;
+            (objToAdd as Button).Hover += btnLeft_Hover;
+            (objToAdd as Button).Release += btnLeft_Release;
             objects.Add(objToAdd);
 
             objToAdd = new ControlButton(this) // DOWN BUTTON
@@ -89,7 +90,8 @@ namespace GalaxyBlox.Rooms
                 BackgroundImage = Contents.Textures.ControlButton_right,
                 LayerDepth = 0.5f
             };
-            (objToAdd as Button).Click += btnRight_Click;
+            (objToAdd as Button).Hover += btnRight_Hover;
+            (objToAdd as Button).Release += btnRight_Release;
             objects.Add(objToAdd);
 
             var plyArnPosY = padding + 65;
@@ -295,11 +297,6 @@ namespace GalaxyBlox.Rooms
             ParentRoomManager.ChangeRooms(args: "pause");
         }
 
-        private void btnRight_Click(object sender, EventArgs e)
-        {
-            arena.MoveRight();
-        }
-
         private void btnRotate_Click(object sender, EventArgs e)
         {
             arena.Rotate();
@@ -322,9 +319,24 @@ namespace GalaxyBlox.Rooms
             arena.SlowDownActor();
         }
 
-        private void btnLeft_Click(object sender, EventArgs e)
+        private void btnRight_Hover(object sender, EventArgs e)
+        {
+            arena.MoveRight();
+        }
+
+        private void btnLeft_Hover(object sender, EventArgs e)
         {
             arena.MoveLeft();
+        }
+
+        private void btnRight_Release(object sender, EventArgs e)
+        {
+            arena.StopMovingRight();
+        }
+
+        private void btnLeft_Release(object sender, EventArgs e)
+        {
+            arena.StopMovingLeft();
         }
     }
 }

@@ -60,10 +60,16 @@ namespace GalaxyBlox.Models
         public int CubeSize { get { return playgroundCubeSize; } }
         private int playgroundCubeMargin;
         public int CubeMargin { get { return playgroundCubeMargin; } }
-
+        
         private int gameSpeed; // move actor in 1000 ms (= 1 s)
         private int gameTimeElapsed = 0;
         private bool actorFalling;
+        private int fallingPause = 0; // to avoid miss clicks
+
+        private int moveTimer = 0;
+        private int moveTimerSpeed = 0;
+        private int moveTimerFastest = 50;
+        private int moveTimerSlowest = 150;
 
         private Color BackgroundColor;
         private Color BorderColor;
@@ -115,6 +121,18 @@ namespace GalaxyBlox.Models
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            if (fallingPause > 0)
+                fallingPause -= gameTime.ElapsedGameTime.Milliseconds;
+
+            if (fallingPause < 0)
+                fallingPause = 0;
+
+            if (moveTimer > 0)
+                moveTimer -= gameTime.ElapsedGameTime.Milliseconds;
+
+            if (moveTimer < 0)
+                moveTimer = 0;
 
             if (actor != null)
             {
@@ -181,7 +199,7 @@ namespace GalaxyBlox.Models
 
         public void MakeActorSpeedup()
         {
-            if (actorFalling)
+            if (actorFalling || fallingPause > 0)
                 return;
 
             SetGameSpeed(SettingOptions.GameSpeed.Speedup);
@@ -189,26 +207,71 @@ namespace GalaxyBlox.Models
 
         public void MakeActorFall()
         {
+            if (fallingPause > 0)
+                return;
+
             actorFalling = true;
             SetGameSpeed(SettingOptions.GameSpeed.Falling);
+            fallingPause = 150;
         }
 
         public void MoveRight()
         {
+            if (moveTimer > 0)
+                return;
+
             var newPosition = new Point(actorPosition.X + 1, actorPosition.Y);
             if (ActorCollide(newPosition, actor))
                 return;
 
             actorPosition = newPosition;
+            if (moveTimerSpeed == 0)
+            {
+                moveTimer = moveTimerSlowest;
+                moveTimerSpeed = moveTimerSlowest;
+            }
+            else
+            {
+                var newSpeed = moveTimerSpeed - ((moveTimerSlowest - moveTimerFastest) / 4);
+                moveTimer = newSpeed > moveTimerFastest ? newSpeed : moveTimerSpeed;
+                moveTimerSpeed = newSpeed > moveTimerFastest ? newSpeed : moveTimerSpeed;
+            }
+            
+        }
+
+        public void StopMovingRight()
+        {
+            moveTimer = 0;
+            moveTimerSpeed = 0;
         }
 
         public void MoveLeft()
         {
+            if (moveTimer > 0)
+                return;
+
             var newPosition = new Point(actorPosition.X - 1, actorPosition.Y);
             if (ActorCollide(newPosition, actor))
                 return;
 
             actorPosition = newPosition;
+            if (moveTimerSpeed == 0)
+            {
+                moveTimer = moveTimerSlowest;
+                moveTimerSpeed = moveTimerSlowest;
+            }
+            else
+            {
+                var newSpeed = moveTimerSpeed - ((moveTimerSlowest - moveTimerFastest) / 4);
+                moveTimer = newSpeed > moveTimerFastest ? newSpeed : moveTimerSpeed;
+                moveTimerSpeed = newSpeed > moveTimerFastest ? newSpeed : moveTimerSpeed;
+            }
+        }
+
+        public void StopMovingLeft()
+        {
+            moveTimer = 0;
+            moveTimerSpeed = 0;
         }
 
         public void Rotate()
@@ -373,6 +436,9 @@ namespace GalaxyBlox.Models
                     for(int x = 0; x < playground.GetLength(0); x++)
                     {
                         playground[x, playgroundPosY] = playground[x, y];
+
+                        if (y != playgroundPosY) // i want to relocate cube, not to remove it
+                            playground[x, y] = 0;
                     }
 
                     playgroundPosY--;

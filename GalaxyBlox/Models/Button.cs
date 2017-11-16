@@ -75,7 +75,7 @@ namespace GalaxyBlox.Models
 
         public void RaiseHover(EventArgs e)
         {
-            if (Enabled && State != ButtonState.Hovered)
+            if (Enabled /*&& State != ButtonState.Hovered*/)
             {
                 State = ButtonState.Hovered;
                 Hovered();
