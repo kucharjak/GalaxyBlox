@@ -99,10 +99,22 @@ namespace GalaxyBlox.Static
                 },
             };
 
+            private static List<int> ReturnedRandomShapes = new List<int>();
+
             public static bool[,] GetRandomShape()
             {
                 var maxCount = ShapeBank.Count();
-                return ShapeBank[Game1.Random.Next(0, maxCount)];
+                var nextShape = Game1.Random.Next(0, maxCount);
+                while (ReturnedRandomShapes.Where(shp => shp == nextShape).Count() >= 2) // if are last 2 shapes same generate new shape
+                {
+                    nextShape = Game1.Random.Next(0, maxCount);
+                }
+
+                ReturnedRandomShapes.Add(nextShape);
+                if (ReturnedRandomShapes.Count > 2) // max 2 last shapes to remember
+                    ReturnedRandomShapes.RemoveAt(0);
+
+                return ShapeBank[nextShape];
                 //return ShapeBank[(Game1.Random.Next(0, maxCount * 100) % maxCount)];
             }
         }

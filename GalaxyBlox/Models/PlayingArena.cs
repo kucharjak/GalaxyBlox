@@ -194,7 +194,7 @@ namespace GalaxyBlox.Models
             if (actorFalling)
                 return;
 
-            SetGameSpeed(SettingOptions.GameSpeed.Normal);
+            SetGameSpeed(GameSpeed.Normal);
         }
 
         public void MakeActorSpeedup()
@@ -202,7 +202,7 @@ namespace GalaxyBlox.Models
             if (actorFalling || fallingPause > 0)
                 return;
 
-            SetGameSpeed(SettingOptions.GameSpeed.Speedup);
+            SetGameSpeed(GameSpeed.Speedup);
         }
 
         public void MakeActorFall()
@@ -211,8 +211,7 @@ namespace GalaxyBlox.Models
                 return;
 
             actorFalling = true;
-            SetGameSpeed(SettingOptions.GameSpeed.Falling);
-            fallingPause = 150;
+            SetGameSpeed(GameSpeed.Falling);
         }
 
         public void MoveRight()
@@ -534,7 +533,8 @@ namespace GalaxyBlox.Models
 
             gameTimeElapsed = 0;
             actorFalling = false;
-            SetGameSpeed(SettingOptions.GameSpeed.Normal);
+            SetGameSpeed(GameSpeed.Normal);
+            fallingPause = 150;
         }
 
         private void UpdateLevel()
@@ -552,19 +552,19 @@ namespace GalaxyBlox.Models
         /// <summary>
         /// Game speed is defined by game score
         /// </summary>
-        private void SetGameSpeed(SettingOptions.GameSpeed gameSpeedSetting)
+        private void SetGameSpeed(GameSpeed gameSpeedSetting)
         {
             var maxFallingSpeed = 250;
             switch(gameSpeedSetting)
             {
-                case SettingOptions.GameSpeed.Normal:
+                case GameSpeed.Normal:
                     gameSpeed = (int)(1000 - Math.Pow(Level, 2)); // TODO test more speeds
                     if (gameSpeed < maxFallingSpeed)
                         gameSpeed = maxFallingSpeed;
                     break;
-                case SettingOptions.GameSpeed.Speedup:
+                case GameSpeed.Speedup:
                     gameSpeed = 50; break;
-                case SettingOptions.GameSpeed.Falling:
+                case GameSpeed.Falling:
                     gameSpeed = 1; break;
             }
         }
@@ -658,6 +658,13 @@ namespace GalaxyBlox.Models
                 result = playgroundEffectsArray[posX, posY].Value;
 
             return result;
+        }
+        
+        public enum GameSpeed
+        {
+            Normal,
+            Speedup,
+            Falling
         }
     }
 }
