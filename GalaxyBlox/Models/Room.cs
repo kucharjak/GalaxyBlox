@@ -7,6 +7,7 @@ using Android.Util;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Input;
+using GalaxyBlox.Objects;
 
 namespace GalaxyBlox.Models
 {

@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using GalaxyBlox.Models;
-using Microsoft.Xna.Framework;
 using GalaxyBlox.Static;
 
-namespace GalaxyBlox.Buttons
+namespace GalaxyBlox.Objects
 {
     class PauseButton : Button
     {

@@ -5,7 +5,7 @@ using GalaxyBlox.Models;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using GalaxyBlox.Buttons;
+using GalaxyBlox.Objects;
 using GalaxyBlox.Static;
 using GalaxyBlox.Utils;
 using GalaxyBlox.EventArgsClasses;

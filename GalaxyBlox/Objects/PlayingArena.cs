@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
 using GalaxyBlox.Static;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Android.Util;
 using GalaxyBlox.EventArgsClasses;
+using GalaxyBlox.Models;
 
-namespace GalaxyBlox.Models
+namespace GalaxyBlox.Objects
 {
     class PlayingArena : GameObject
     {
