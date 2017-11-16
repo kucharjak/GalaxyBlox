@@ -4,7 +4,7 @@ using GalaxyBlox.Models;
 
 namespace GalaxyBlox.Objects
 {
-    class Button : GameObject
+    public class Button : GameObject
     {
         public bool IsTouched;
         public Color SelectedBackgroundColor;

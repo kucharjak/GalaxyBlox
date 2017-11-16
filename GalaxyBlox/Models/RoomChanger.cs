@@ -15,7 +15,7 @@ using GalaxyBlox.EventArgsClasses;
 
 namespace GalaxyBlox.Models
 {
-    class RoomChanger
+    public class RoomChanger
     {
         public event EventHandler AfterChange;
         protected virtual void OnAfterChange(ChangerEventArgs e)

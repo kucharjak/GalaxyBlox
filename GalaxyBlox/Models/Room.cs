@@ -11,7 +11,7 @@ using GalaxyBlox.Objects;
 
 namespace GalaxyBlox.Models
 {
-    class Room
+    public class Room
     {
         public RoomManager ParentRoomManager;
         protected List<GameObject> objects = new List<GameObject>();

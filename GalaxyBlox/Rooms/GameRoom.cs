@@ -50,46 +50,34 @@ namespace GalaxyBlox.Rooms
             objects.Add(objToAdd);
 
             ///// ADDING CONTROL BUTTONS //////
-            objToAdd = new ControlButton(this) // LEFT BUTTON
-            {
-                Size = btnSize,
-                Position = new Vector2(btnPartSize * 0 + padding + ((btnPartSize - btnSize.X) / 2f), RoomSize.Height - padding - btnSize.Y),
-                BackgroundImage = Contents.Textures.ControlButton_left,
-                LayerDepth = 0.5f
-            };
+            objToAdd = Bank.Buttons.GetControlButton(this); // LEFT BUTTON
+                objToAdd.Size = btnSize;
+                objToAdd.Position = new Vector2(btnPartSize * 0 + padding + ((btnPartSize - btnSize.X) / 2f), RoomSize.Height - padding - btnSize.Y);
+                objToAdd.BackgroundImage = Contents.Textures.ControlButton_left;
             (objToAdd as Button).Hover += btnLeft_Hover;
             (objToAdd as Button).Release += btnLeft_Release;
             objects.Add(objToAdd);
 
-            objToAdd = new ControlButton(this) // DOWN BUTTON
-            {
-                Size = btnSize,
-                Position = new Vector2(btnPartSize * 1 + padding + ((btnPartSize - btnSize.X) / 2f), RoomSize.Height - padding - btnSize.Y),
-                BackgroundImage = Contents.Textures.ControlButton_down,
-                LayerDepth = 0.5f
-            };
+            objToAdd = Bank.Buttons.GetControlButton(this); // DOWN BUTTON
+                objToAdd.Size = btnSize;
+                objToAdd.Position = new Vector2(btnPartSize * 1 + padding + ((btnPartSize - btnSize.X) / 2f), RoomSize.Height - padding - btnSize.Y);
+                objToAdd.BackgroundImage = Contents.Textures.ControlButton_down;
             (objToAdd as Button).Click += btnDown_Click;
             (objToAdd as Button).Hover += btnDown_Hover;
             (objToAdd as Button).Release += btnDown_Release;
             objects.Add(objToAdd);
 
-            objToAdd = new ControlButton(this) // ROTATE BUTTON
-            {
-                Size = btnSize,
-                Position = new Vector2(btnPartSize * 2 + padding + ((btnPartSize - btnSize.X) / 2f), RoomSize.Height - padding - btnSize.Y),
-                BackgroundImage = Contents.Textures.ControlButton_rotate,
-                LayerDepth = 0.5f
-            };
+            objToAdd = Bank.Buttons.GetControlButton(this); // ROTATE BUTTON
+                objToAdd.Size = btnSize;
+                objToAdd.Position = new Vector2(btnPartSize * 2 + padding + ((btnPartSize - btnSize.X) / 2f), RoomSize.Height - padding - btnSize.Y);
+                objToAdd.BackgroundImage = Contents.Textures.ControlButton_rotate;
             (objToAdd as Button).Click += btnRotate_Click;
             objects.Add(objToAdd);
 
-            objToAdd = new ControlButton(this) // RIGHT BUTTON
-            {
-                Size = btnSize,
-                Position = new Vector2(btnPartSize * 3 + padding + ((btnPartSize - btnSize.X) / 2f), RoomSize.Height - padding - btnSize.Y),
-                BackgroundImage = Contents.Textures.ControlButton_right,
-                LayerDepth = 0.5f
-            };
+            objToAdd = Bank.Buttons.GetControlButton(this); // RIGHT BUTTON
+                objToAdd.Size = btnSize;
+                objToAdd.Position = new Vector2(btnPartSize * 3 + padding + ((btnPartSize - btnSize.X) / 2f), RoomSize.Height - padding - btnSize.Y);
+                objToAdd.BackgroundImage = Contents.Textures.ControlButton_right;
             (objToAdd as Button).Hover += btnRight_Hover;
             (objToAdd as Button).Release += btnRight_Release;
             objects.Add(objToAdd);
@@ -113,104 +101,56 @@ namespace GalaxyBlox.Rooms
             ///// ADDING PAUSE BUTTON //////
             leftPanelWidth = (int)(RoomSize.Width - arena.Size.X - 2 * padding);
             var leftPanelPosY = (int)arena.Position.Y;
-            objToAdd = new PauseButton(this)
-            {
-                Size = new Vector2(leftPanelWidth, leftPanelWidth),
-                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
-                BackgroundImage = Contents.Textures.ControlButton_pause,
-                LayerDepth = 0.5f
-            };
-            (objToAdd as Button).Click += btnPause_Click;
+            objToAdd = Bank.Buttons.GetPauseButton(this);
+                objToAdd.Size = new Vector2(leftPanelWidth, leftPanelWidth);
+                objToAdd.Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY);
+                objToAdd.LayerDepth = 0.5f;
+                (objToAdd as Button).Click += btnPause_Click;
             objects.Add(objToAdd);
 
             //// ADDING LABEL FOR SCORE
             leftPanelPosY += (int)(padding + objToAdd.Size.Y);
-            objToAdd = new GameObject(this) // label for Score
-            {
-                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
-                Size = new Vector2(leftPanelWidth, 35),
-                LayerDepth = 0.5f,
-                BackgroundImage = Contents.Textures.Pix,
-                BaseColor = Contents.Colors.PanelHeaderBackgroundColor,
-                Alpha = objectsAlpha,
-                TextAlignment = TextAlignment.Center,
-                TextSpriteFont = Contents.Fonts.PanelHeaderText,
-                ShowText = true,
-                TextColor = Color.White,
-                Text = "Skore"
-            };
+            objToAdd = Bank.Visuals.GetPanelLabel(this);
+                objToAdd.Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY);
+                objToAdd.Size = new Vector2(leftPanelWidth, 35);
+                objToAdd.Alpha = objectsAlpha;
+                objToAdd.Text = "Skore";
             objects.Add(objToAdd);
 
             //// ADDING SCORE BOARD
             leftPanelPosY += (int)objToAdd.Size.Y;
-            scoreBoard = new GameObject(this)
-            {
-                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
-                Size = new Vector2(leftPanelWidth, 55),
-                LayerDepth = 0.5f,
-                TextAlignment = TextAlignment.Center,
-                BackgroundImage = Contents.Textures.Pix,
-                BaseColor = Contents.Colors.PanelContentBackgroundColor,
-                Alpha = objectsAlpha,
-                TextSpriteFont = Contents.Fonts.PanelContentText,
-                ShowText = true,
-                TextColor = Color.White,
-                Text = arena.Score.ToString()
-            };
+                scoreBoard = Bank.Visuals.GetPanelBoard(this);
+                scoreBoard.Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY);
+                scoreBoard.Size = new Vector2(leftPanelWidth, 55);
+                scoreBoard.Alpha = objectsAlpha;
+                scoreBoard.Text = arena.Score.ToString();
             objects.Add(scoreBoard);
 
             //// ADDING LABEL FOR LEVEL
             leftPanelPosY += (int)(padding + scoreBoard.Size.Y);
-            objToAdd = new GameObject(this) 
-            {
-                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
-                Size = new Vector2(leftPanelWidth, 35),
-                LayerDepth = 0.5f,
-                BackgroundImage = Contents.Textures.Pix,
-                BaseColor = Contents.Colors.PanelHeaderBackgroundColor,
-                Alpha = objectsAlpha,
-                TextAlignment = TextAlignment.Center,
-                TextSpriteFont = Contents.Fonts.PanelHeaderText,
-                ShowText = true,
-                TextColor = Color.White,
-                Text = "Level"
-            };
+                objToAdd = Bank.Visuals.GetPanelLabel(this);
+                objToAdd.Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY);
+                objToAdd.Size = new Vector2(leftPanelWidth, 35);
+                objToAdd.Alpha = objectsAlpha;
+                objToAdd.Text = "Level";
             objects.Add(objToAdd);
 
             //// ADDING LEVEL BOARD
             leftPanelPosY += (int)objToAdd.Size.Y;
-            levelBoard = new GameObject(this)
-            {
-                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
-                Size = new Vector2(leftPanelWidth, 55),
-                LayerDepth = 0.5f,
-                TextAlignment = TextAlignment.Center,
-                BackgroundImage = Contents.Textures.Pix,
-                BaseColor = Contents.Colors.PanelContentBackgroundColor,
-                Alpha = objectsAlpha,
-                TextSpriteFont = Contents.Fonts.PanelContentText,
-                ShowText = true,
-                TextColor = Color.White,
-                Text = arena.Level.ToString()
-            };
+            levelBoard = Bank.Visuals.GetPanelBoard(this);
+                levelBoard.Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY);
+                levelBoard.Size = new Vector2(leftPanelWidth, 55);
+                levelBoard.Alpha = objectsAlpha;
+                levelBoard.Text = arena.Level.ToString();
             objects.Add(levelBoard);
 
             //// NEXT ACTOR LABEL
             leftPanelPosY += (int)(padding + levelBoard.Size.Y);
-            objToAdd = new GameObject(this)
-            {
-                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
-                Size = new Vector2(leftPanelWidth, 35),
-                LayerDepth = 0.5f,
-                BackgroundImage = Contents.Textures.Pix,
-                BaseColor = Contents.Colors.PanelHeaderBackgroundColor,
-                Alpha = objectsAlpha,
-                TextAlignment = TextAlignment.Center,
-                TextSpriteFont = Contents.Fonts.PanelHeaderText,
-                ShowText = true,
-                TextColor = Color.White,
-                Text = "Další"
-            };
+                objToAdd = Bank.Visuals.GetPanelLabel(this);
+                objToAdd.Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY);
+                objToAdd.Size = new Vector2(leftPanelWidth, 35);
+                objToAdd.Alpha = objectsAlpha;
+                objToAdd.Text = "Další";
             objects.Add(objToAdd);
 
             //// NEXT ACTOR BOARD
@@ -224,46 +164,28 @@ namespace GalaxyBlox.Rooms
             objects.Add(nextActor);
 
             //// ADDING BACKGROUND FOR ACTOR BOARD
-            objToAdd = new GameObject(this)
-            {
-                Size = new Vector2(leftPanelWidth, leftPanelWidth),
-                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
-                BaseColor = Contents.Colors.PanelContentBackgroundColor,
-                BackgroundImage = Contents.Textures.Pix,
-                LayerDepth = 0.49f,
-                Alpha = objectsAlpha,
-            };
+            objToAdd = Bank.Visuals.GetPanelBoard(this);
+                objToAdd.Size = new Vector2(leftPanelWidth, leftPanelWidth);
+                objToAdd.Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY);
+                objToAdd.LayerDepth = 0.49f;
+                objToAdd.Alpha = objectsAlpha;
             objects.Add(objToAdd);
 
             //// ADDING LABEL BONUS
             leftPanelPosY += (int)(padding + nextActor.Size.Y);
-            objToAdd = new GameObject(this)
-            {
-                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
-                Size = new Vector2(leftPanelWidth, 35),
-                LayerDepth = 0.5f,
-                BackgroundImage = Contents.Textures.Pix,
-                BaseColor = Contents.Colors.PanelHeaderBackgroundColor,
-                Alpha = objectsAlpha,
-                TextAlignment = TextAlignment.Center,
-                TextSpriteFont = Contents.Fonts.PanelHeaderText,
-                ShowText = true,
-                TextColor = Color.White,
-                Text = "Bonus"
-            };
+            objToAdd = objToAdd = Bank.Visuals.GetPanelLabel(this);
+                objToAdd.Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY);
+                objToAdd.Size = new Vector2(leftPanelWidth, 35);
+                objToAdd.Alpha = objectsAlpha;
+                objToAdd.Text = "Bonus";
             objects.Add(objToAdd);
 
             //// ADDING BONUS BTN
             leftPanelPosY += (int)objToAdd.Size.Y;
-            objToAdd = new GameObject(this)
-            {
-                Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
-                Size = new Vector2(leftPanelWidth, leftPanelWidth),
-                LayerDepth = 0.5f,
-                BackgroundImage = Contents.Textures.Pix,
-                BaseColor = Contents.Colors.PanelContentBackgroundColor,
-                Alpha = objectsAlpha,
-            };
+                objToAdd = Bank.Visuals.GetPanelBoard(this);
+                objToAdd.Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY);
+                objToAdd.Size = new Vector2(leftPanelWidth, leftPanelWidth);
+                objToAdd.Alpha = objectsAlpha;
             objects.Add(objToAdd);
         }
 

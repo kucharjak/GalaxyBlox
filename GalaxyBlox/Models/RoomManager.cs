@@ -16,7 +16,7 @@ using GalaxyBlox.EventArgsClasses;
 
 namespace GalaxyBlox.Models
 {
-    class RoomManager
+    public class RoomManager
     {
         List<Room> rooms = new List<Room>();
         public Room ActiveRoom;

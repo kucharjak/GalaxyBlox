@@ -76,9 +76,7 @@
     <Compile Include="Models\RoomManager.cs" />
     <Compile Include="Objects\ActorViewer.cs" />
     <Compile Include="Objects\Button.cs" />
-    <Compile Include="Objects\ControlButton.cs" />
-    <Compile Include="Objects\MenuButton.cs" />
-    <Compile Include="Objects\PauseButton.cs" />
+    <Compile Include="Objects\Bank.cs" />
     <Compile Include="Objects\PlayingArena.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

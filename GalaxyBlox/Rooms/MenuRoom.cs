@@ -51,59 +51,39 @@ namespace GalaxyBlox.Rooms
             ResetHighScoreText();
 
             ////// ADDING BUTTONS //////
-            btnContinue = new MenuButton(this)
-            {
-                Size = btnSize,
-                Position = new Vector2(padding, btnStartPosY),
-                TextAlignment = TextAlignment.Center,
-                Text = "Pokračovat",
-                LayerDepth = 0.5f,
-                Enabled = false
-            };
+            btnContinue = Bank.Buttons.GetMenuButton(this);
+                btnContinue.Size = btnSize;
+                btnContinue.Position = new Vector2(padding, btnStartPosY);
+                btnContinue.Text = "Pokračovat";
+                btnContinue.Enabled = false;
             btnContinue.Click += btnContinue_Click;
             objects.Add(btnContinue);
 
-            objToAdd = new MenuButton(this)
-            {
-                Size = btnSize,
-                Position = new Vector2(padding, btnStartPosY + 65),
-                TextAlignment = TextAlignment.Center,
-                Text = "Nová hra",
-                LayerDepth = 0.5f   
-            };
+            objToAdd = Bank.Buttons.GetMenuButton(this);
+                objToAdd.Size = btnSize;
+                objToAdd.Position = new Vector2(padding, btnStartPosY + 65);
+                objToAdd.Text = "Nová hra";
             (objToAdd as Button).Click += btnNewGame_Click;
             objects.Add(objToAdd);
 
-            objToAdd = new MenuButton(this)
-            {
-                Size = btnSize,
-                Position = new Vector2(padding, btnStartPosY + 65 * 2),
-                TextAlignment = TextAlignment.Center,
-                Text = "Ovládání",
-                LayerDepth = 0.5f
-            };
+            objToAdd = Bank.Buttons.GetMenuButton(this);
+                objToAdd.Size = btnSize;
+                objToAdd.Position = new Vector2(padding, btnStartPosY + 65 * 2);
+                objToAdd.Text = "Ovládání";
             (objToAdd as Button).Click += btnControls_Click;
             objects.Add(objToAdd);
 
-            objToAdd = new MenuButton(this)
-            {
-                Size = btnSize,
-                Position = new Vector2(padding, btnStartPosY + 65 * 3),
-                TextAlignment = TextAlignment.Center,
-                Text = "Nastavení",
-                LayerDepth = 0.5f
-            };
+            objToAdd = Bank.Buttons.GetMenuButton(this);
+                objToAdd.Size = btnSize;
+                objToAdd.Position = new Vector2(padding, btnStartPosY + 65 * 3);
+                objToAdd.Text = "Nastavení";
             (objToAdd as Button).Click += btnSettings_Click;
             objects.Add(objToAdd);
 
-            objToAdd = new MenuButton(this)
-            {
-                Size = btnSize,
-                Position = new Vector2(padding, btnStartPosY + 65 * 4),
-                TextAlignment = TextAlignment.Center,
-                Text = "Konec",
-                LayerDepth = 0.5f
-            };
+            objToAdd = Bank.Buttons.GetMenuButton(this);
+                objToAdd.Size = btnSize;
+                objToAdd.Position = new Vector2(padding, btnStartPosY + 65 * 4);
+                objToAdd.Text = "Konec";
             (objToAdd as Button).Click += btnFinish_Click;
             objects.Add(objToAdd);
         }

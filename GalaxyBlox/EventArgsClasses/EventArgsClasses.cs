@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework;
 
 namespace GalaxyBlox.EventArgsClasses
 {
-    class ChangerEventArgs : EventArgs
+    public class ChangerEventArgs : EventArgs
     {
         public Room ActiveRoom;
         public Room OtherRoom;

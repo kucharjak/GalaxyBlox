@@ -1,7 +1,6 @@
 Zmìny 
 	- pøekopat systém místností tak, abych byl kdykoliv schopný vytvoøit si požadovanou místnost a pak si jí jednoduše otevøít i s požadovanou animací
 	- zkusit ušetøit FPS - zaèal bych tím, že bych v playingArena overridnul draw metodu a sám si vykresloval background a k nìmu dokresloval aktivního actora (tzn. že by se mi pozadí pøekreslovalo pouze v pøípadì insertování nìjakého objektu dozadu)
-	- zkusit ovìøit jak moc je problematický pøeklikávání pokud pøejíždím po tlaèítkách, než si nìjaký vyberu a zavést to, že se odklikne jen a pouze to na které jsem pùvdnì klik
 
 Rozšíøení 
 	- pøidat finální obrazovku (poèítat všechny kostky za hru a možná udìlat nìco jako výpis na konci)
@@ -9,7 +8,6 @@ Rozšíøení
 	- rozšíøit a pøidat další zpùsob ovládání (swipnutí dolù pošle dolù a kliknutí na daný místa playingAreny vykoná posunutí a rotaci)
 	- pøidat bonusy a vymyslet elegantnší zpùsob, jak je získávat (mít v pozadí padající hvìzdu a pokud by na ní hráè stihl kliknout, tak by získal bonusobou krabièku/truhlu)
 	- rozšíøit nastavení (settings) o nastavení hry pro hráèe (je potøeba vytvoøit okno na nastavení i s objekty, které to budou ovládat)
-	- zkusit vymyslet zpùsob, kterým bych mohl definovat objekty pouze jednou a pak je jen vytvoøil a definoval si pouze místo, velikost a eventy
 	- vytvoøit "Color schemes", kdy budu schopný mít color scheme na tlaèítko a ten si jen podám do toho tlaèítka, pøidávání barev postupnì v kontruktoru a nebudu si díky tomu muset držet v pamìti tøi barvy, ale jen jednu referenci "noice"
 	- vymyslet jiný tvary, než ty základní - pøidat pozdìji
  
@@ -34,6 +32,7 @@ Nápady
 --------------HOTOVO--------------
 ----------------------------------
 
+- zkusit vymyslet zpùsob, kterým bych mohl definovat objekty pouze jednou a pak je jen vytvoøil a definoval si pouze místo, velikost a eventy
 - pøidat na delší držení tlaèítek do stran zrychlený a nìkolikanásobný posun na danou stranu
 - opravena chyba mazání kostièek z plaground
 - po vytvoøení actora vypnout na pùl +- vteøinky zrychlení, aby nedošlo k pøeklikávání
@@ -54,3 +53,9 @@ Nápady
 - vymyslet chytøejší zpùsob, jak tlaèítkùm pøidat eventy
 - vymyslet pauzu hry
 - pøidat tlaèítka na ovládání hry
+
+-----------------------------------
+------------ODLOŽENO---------------
+-----------------------------------
+
+- zkusit ovìøit jak moc je problematický pøeklikávání pokud pøejíždím po tlaèítkách, než si nìjaký vyberu a zavést to, že se odklikne jen a pouze to na které jsem pùvdnì klik

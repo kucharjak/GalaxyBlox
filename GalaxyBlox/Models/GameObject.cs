@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GalaxyBlox.Models
 {
-    class GameObject
+    public class GameObject
     {
         public string Name = "";
         public string Type = "";
