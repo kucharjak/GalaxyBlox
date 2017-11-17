@@ -14,7 +14,7 @@ namespace GalaxyBlox.Utils
 {
     public static class Strings
     {
-        public static string ScoreToString(long score, int scoreLenght)
+        public static string ScoreToString(long score, int scoreLenght, bool separateWithSpace = false)
         {
             string scoreString = score.ToString();
             if (scoreString.Length <= scoreLenght)
@@ -39,7 +39,11 @@ namespace GalaxyBlox.Utils
                         if (rest.Replace("0", "").Count() > 0)
                             scoreString += "." + rest;
                     }
-                    scoreString += " " + suffixItem.Item2;
+
+                    if (separateWithSpace)
+                        scoreString += " ";
+
+                    scoreString += suffixItem.Item2;
                 }
             }
 

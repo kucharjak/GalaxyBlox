@@ -1,6 +1,6 @@
 Zmìny 
 	- pøekopat systém místností tak, abych byl kdykoliv schopný vytvoøit si požadovanou místnost a pak si jí jednoduše otevøít i s požadovanou animací
-	- zkusit ušetøit FPS - zaèal bych tím, že bych v playingArena overridnul draw metodu a sám si vykresloval background a k nìmu dokresloval aktivního actora (tzn. že by se mi pozadí pøekreslovalo pouze v pøípadì insertování nìjakého objektu dozadu)
+	- vyøešit, pokud pùjde pøekleslování pouze urèité èásti playingAreny
 
 Rozšíøení 
 	- pøidat finální obrazovku (poèítat všechny kostky za hru a možná udìlat nìco jako výpis na konci)
@@ -32,6 +32,7 @@ Nápady
 --------------HOTOVO--------------
 ----------------------------------
 
+- zkusit ušetøit FPS - zaèal bych tím, že bych v playingArena overridnul draw metodu a sám si vykresloval background a k nìmu dokresloval aktivního actora (tzn. že by se mi pozadí pøekreslovalo pouze v pøípadì insertování nìjakého objektu dozadu)
 - zkusit vymyslet zpùsob, kterým bych mohl definovat objekty pouze jednou a pak je jen vytvoøil a definoval si pouze místo, velikost a eventy
 - pøidat na delší držení tlaèítek do stran zrychlený a nìkolikanásobný posun na danou stranu
 - opravena chyba mazání kostièek z plaground
