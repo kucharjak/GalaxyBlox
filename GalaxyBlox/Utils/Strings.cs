@@ -39,7 +39,7 @@ namespace GalaxyBlox.Utils
                         if (rest.Replace("0", "").Count() > 0)
                             scoreString += "." + rest;
                     }
-                    scoreString += suffixItem.Item2;
+                    scoreString += " " + suffixItem.Item2;
                 }
             }
 

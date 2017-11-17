@@ -198,7 +198,7 @@ namespace GalaxyBlox.Rooms
         private void Arena_ScoreChanged(object sender, EventArgs e)
         {
             if (scoreBoard != null)
-                scoreBoard.Text = Strings.ScoreToString(arena.Score, 3); // TODO přepočítat na hodnoty, které nebudou mít více než 3 čísla a 1 znak (např.: 128K)
+                scoreBoard.Text = Strings.ScoreToString(arena.Score, 3); 
 
             if (levelBoard != null)
                 levelBoard.Text = arena.Level.ToString();

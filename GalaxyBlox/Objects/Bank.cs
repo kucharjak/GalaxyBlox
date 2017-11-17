@@ -105,6 +105,5 @@ namespace GalaxyBlox.Objects
                 return label;
             }
         }
-
     }
 }

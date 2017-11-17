@@ -37,17 +37,18 @@ namespace GalaxyBlox.Static
         {
             public static readonly List<Color> GameCubesColors = new List<Color>
             {
-                new Color(158, 194, 255) * 0.6f, // first possition reserved for neutral/ empty like color
-                Color.Red,
-                new Color(44, 244, 0), // better green shade
-                Color.Yellow,
-                Color.Blue
+                new Color(142, 141, 141, 30), // first possition reserved for neutral/ empty like color
+                new Color(76, 255, 0, 255), // Green
+                //Color.Red,
+                //Color.Yellow,
+                //new Color(42, 0, 255), // Blue
+                //new Color(255, 114, 0) // Orange
             };
 
-            public static Color IndicatorColor = Color.Purple * 0.2f;
+            public static Color IndicatorColor = Color.Red; // new Color(86, 86, 86) * 0.6f;
 
-            public static Color PlaygroundColor = new Color(73, 127, 216) * 0.75f;
-            public static Color PlaygroundBorderColor = new Color(248, 255, 175);
+            public static Color PlaygroundColor = new Color(0, 74, 135, 58);
+            public static Color PlaygroundBorderColor = PlaygroundColor;
 
             public static Color MenuButtonBackgroundColor = new Color(121, 140, 170);
             public static Color MenuButtonSelectedColor = new Color(153, 189, 247);

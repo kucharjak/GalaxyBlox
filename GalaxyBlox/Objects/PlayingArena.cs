@@ -53,7 +53,7 @@ namespace GalaxyBlox.Objects
         private int actorsQueueSize = 2;
 
         private int[,] playground;
-        private Color?[,] playgroundEffectsArray;
+        private List<Tuple<int, int, Color>> playgroundEffectsList = new List<Tuple<int, int, Color>>();
         private int playgroundInnerPadding;
         private int playgroundCubeSize;
         public int CubeSize { get { return playgroundCubeSize; } }
@@ -70,9 +70,14 @@ namespace GalaxyBlox.Objects
         private int moveTimerFastest = 50;
         private int moveTimerSlowest = 150;
 
+        //private List<Point> playgroundChanges = new List<Point>();
+
+        private bool backgroundChanged;
+        private bool backgroundFirstDraw;
         private Color BackgroundColor;
         private Color BorderColor;
-        private RenderTarget2D renderTarget;
+        private RenderTarget2D backgroundRenderTarget;
+        private RenderTarget2D mainRenderTarget;
 
         /// <summary>
         /// Constructor
@@ -83,7 +88,7 @@ namespace GalaxyBlox.Objects
         public PlayingArena(Room parentRoom, Vector2 size, Vector2 position) : base(parentRoom)
         {
             BackgroundColor = Contents.Colors.PlaygroundColor;
-            BorderColor = Contents.Colors.PlaygroundColor;
+            BorderColor = Contents.Colors.PlaygroundBorderColor;
             Alpha = 1f;
             
             playgroundInnerPadding = 4;
@@ -110,8 +115,10 @@ namespace GalaxyBlox.Objects
                 0, //(size.X - Size.X) / 2,
                 (position.Y + size.Y) - Size.Y);
             
-            renderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)Size.X, (int)Size.Y);
-            BackgroundImage = renderTarget;
+            mainRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)Size.X, (int)Size.Y);
+            backgroundRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)Size.X, (int)Size.Y);
+            BackgroundImage = mainRenderTarget;
+
             actorsQueue = new List<Tuple<bool[,], Color>>();
 
             StartNewGame();
@@ -148,41 +155,124 @@ namespace GalaxyBlox.Objects
 
         public override void Prepare(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
-            graphicsDevice.SetRenderTarget(renderTarget);
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+            if (backgroundChanged)
+            {
+                graphicsDevice.SetRenderTarget(backgroundRenderTarget);
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+                graphicsDevice.DepthStencilState = new DepthStencilState() { DepthBufferEnable = true };
+                graphicsDevice.Clear(BorderColor);
 
-            graphicsDevice.DepthStencilState = new DepthStencilState() { DepthBufferEnable = true };
-            graphicsDevice.Clear(BorderColor);
+                spriteBatch.Draw(
+                    Contents.Textures.Pix,
+                    new Rectangle(playgroundInnerPadding - 2 * playgroundCubeMargin, playgroundInnerPadding - 2 * playgroundCubeMargin, (int)Size.X - 2 * (playgroundInnerPadding - 2 * playgroundCubeMargin), (int)Size.Y - 2 * (playgroundInnerPadding - 2 * playgroundCubeMargin)),
+                    BackgroundColor);
+
+                for (int x = 0; x < playground.GetLength(0); x++)
+                {
+                    for (int y = 0; y < playground.GetLength(1); y++)
+                    {
+                        spriteBatch.Draw(
+                            Contents.Textures.Pix,
+                            new Rectangle(playgroundInnerPadding + x * (playgroundCubeSize + playgroundCubeMargin), playgroundInnerPadding + y * (playgroundCubeSize + playgroundCubeMargin), playgroundCubeSize, playgroundCubeSize),
+                            GetCubeColor(x, y));
+                    }
+                }
+
+                spriteBatch.End();
+                graphicsDevice.SetRenderTarget(null);
+                backgroundChanged = false;
+            }
+
+            //    if (backgroundFirstDraw || backgroundRenderTarget.IsContentLost)
+            //    {
+            //        graphicsDevice.SetRenderTarget(backgroundRenderTarget);
+            //        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+            //        graphicsDevice.DepthStencilState = new DepthStencilState() { DepthBufferEnable = true };
+            //        graphicsDevice.Clear(BorderColor);
+
+            //        spriteBatch.Draw(
+            //            Contents.Textures.Pix,
+            //            new Rectangle(playgroundInnerPadding - 2 * playgroundCubeMargin, playgroundInnerPadding - 2 * playgroundCubeMargin, (int)Size.X - 2 * (playgroundInnerPadding - 2 * playgroundCubeMargin), (int)Size.Y - 2 * (playgroundInnerPadding - 2 * playgroundCubeMargin)),
+            //            BackgroundColor);
+
+            //        for (int x = 0; x < playground.GetLength(0); x++)
+            //        {
+            //            for (int y = 0; y < playground.GetLength(1); y++)
+            //            {
+            //                spriteBatch.Draw(
+            //                    Contents.Textures.Pix,
+            //                    new Rectangle(playgroundInnerPadding + x * (playgroundCubeSize + playgroundCubeMargin), playgroundInnerPadding + y * (playgroundCubeSize + playgroundCubeMargin), playgroundCubeSize, playgroundCubeSize),
+            //                    GetCubeColor(x, y));
+            //            }
+            //        }
+
+            //        spriteBatch.End();
+            //        graphicsDevice.SetRenderTarget(null);
+            //        backgroundChanged = false;
+
+            //        backgroundFirstDraw = false;
+            //    }
+            //    else
+            //    {
+            //        using (var tempRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)Size.X, (int)Size.Y))
+            //        {
+            //            graphicsDevice.SetRenderTarget(tempRenderTarget);
+            //            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+            //            spriteBatch.Draw(backgroundRenderTarget, new Rectangle(0, 0, (int)Size.X, (int)Size.Y), null, Color.White);
+            //            spriteBatch.End();
+
+            //            graphicsDevice.SetRenderTarget(backgroundRenderTarget);
+            //            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque); //, BlendState.AlphaBlend
+
+            //            spriteBatch.Draw(tempRenderTarget, new Rectangle(0, 0, (int)Size.X, (int)Size.Y), Color.White);
+
+            //            foreach (var change in playgroundChanges)
+            //            { 
+            //                    spriteBatch.Draw(
+            //                        Contents.Textures.Pix,
+            //                        new Rectangle(playgroundInnerPadding + change.X * (playgroundCubeSize + playgroundCubeMargin) - playgroundCubeMargin, playgroundInnerPadding + change.Y * (playgroundCubeSize + playgroundCubeMargin) - playgroundCubeMargin, playgroundCubeSize + 2* playgroundCubeMargin, playgroundCubeSize + 2 * playgroundCubeMargin),
+            //                        BackgroundColor);
+            //                    spriteBatch.Draw(
+            //                        Contents.Textures.Pix,
+            //                        new Rectangle(playgroundInnerPadding + change.X * (playgroundCubeSize + playgroundCubeMargin), playgroundInnerPadding + change.Y * (playgroundCubeSize + playgroundCubeMargin), playgroundCubeSize, playgroundCubeSize),
+            //                        Contents.Colors.GameCubesColors[playground[change.X, change.Y]]);
+            //            }
+            //            playgroundChanges.Clear();
+
+            //            spriteBatch.End();
+            //            graphicsDevice.SetRenderTarget(null);
+            //            backgroundChanged = false;
+            //        }
+            //    }
+            //}
+
+            graphicsDevice.SetRenderTarget(mainRenderTarget);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+            graphicsDevice.Clear(Color.Transparent);
 
             spriteBatch.Draw(
-                Contents.Textures.Pix,
-                new Rectangle(playgroundInnerPadding - 2 * playgroundCubeMargin, playgroundInnerPadding - 2 * playgroundCubeMargin, (int)Size.X  - 2 * (playgroundInnerPadding - 2 * playgroundCubeMargin), (int)Size.Y - 2 * (playgroundInnerPadding - 2 * playgroundCubeMargin)),
-                BackgroundColor);
+                        backgroundRenderTarget,
+                        new Rectangle(0, 0, (int)Size.X, (int)Size.Y),
+                        Color.White);
 
-            for (int x = 0; x < playground.GetLength(0); x++)
+            foreach (var effect in playgroundEffectsList)
             {
-                for (int y = 0; y < playground.GetLength(1); y++)
-                {
-                    spriteBatch.Draw(
+                spriteBatch.Draw(
                         Contents.Textures.Pix,
-                        new Rectangle(playgroundInnerPadding + x * (playgroundCubeSize + playgroundCubeMargin), playgroundInnerPadding + y * (playgroundCubeSize + playgroundCubeMargin), playgroundCubeSize, playgroundCubeSize), 
-                        GetCubeColor(x,y));
-                }
+                        new Rectangle(playgroundInnerPadding + effect.Item1 * (playgroundCubeSize + playgroundCubeMargin), playgroundInnerPadding + effect.Item2 * (playgroundCubeSize + playgroundCubeMargin), playgroundCubeSize, playgroundCubeSize),
+                        effect.Item3);
             }
 
             spriteBatch.End();
             graphicsDevice.SetRenderTarget(null);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-        }
-
         public void StartNewGame()
         {
+            backgroundChanged = true;
+            backgroundFirstDraw = true;
             playground = new int[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height];
-            playgroundEffectsArray = new Color?[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height];
+            playgroundEffectsList.Clear();
             Score = 0;
             actorsQueue = new List<Tuple<bool[,], Color>>();
             CreateNewActor();
@@ -414,6 +504,7 @@ namespace GalaxyBlox.Objects
 
             if (fullLines.Count > 0)
             {
+                //var oldPlayground = (int[,])playground.Clone();
                 // count score
                 Score += (long)(Math.Pow(fullLines.Count, 3) * playground.GetLength(0)); // TODO: Test speed of score growt and decide which would be the best
 
@@ -441,8 +532,22 @@ namespace GalaxyBlox.Objects
 
                     playgroundPosY--;
                 }
+                backgroundChanged = true; // need to indicate, that i changed backgrou, so game will redraw it
+                //LogPlaygroundChanges(oldPlayground, playground);
             }
         }
+
+        //private void LogPlaygroundChanges(int[,] oldPlayground, int[,] newPlayground)
+        //{
+        //    for (int x = 0; x < oldPlayground.GetLength(0); x++)
+        //    {
+        //        for (int y = 0; y < oldPlayground.GetLength(1); y++)
+        //        {
+        //            if (oldPlayground[x, y] != newPlayground[x, y])
+        //                playgroundChanges.Add(new Point(x, y));
+        //        }
+        //    }
+        //}
 
         private void InsertActorToPlayground()
         {
@@ -477,10 +582,12 @@ namespace GalaxyBlox.Objects
                         if (boxPosition.X < playground.GetLength(0) && boxPosition.Y < playground.GetLength(1) && boxPosition.X >= 0 && boxPosition.Y >= 0) 
                         { 
                             playground[boxPosition.X, boxPosition.Y] = boxesArray[x, y];
+                            //playgroundChanges.Add(new Point(boxPosition.X, boxPosition.Y)); // log change for redraw
                         }
                     }
                 }
             }
+            backgroundChanged = true; // indicating for background redraw
         }
         
         private bool ActorCollide(Point actorPosition, bool[,] actorArray)
@@ -570,7 +677,8 @@ namespace GalaxyBlox.Objects
 
         private void UpdateEffectsArray()
         {
-            playgroundEffectsArray = new Color?[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height]; // create new effects array
+            //playgroundEffectsArray = new Color?[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height]; // create new effects array
+            playgroundEffectsList.Clear();
 
             if (Settings.Indicator != SettingOptions.Indicator.None) // draw indicator if set
                 DrawIndicator();
@@ -586,7 +694,8 @@ namespace GalaxyBlox.Objects
                 {
                     if (actorToDraw[x, y])
                     {
-                        playgroundEffectsArray[positionToDraw.X + x, positionToDraw.Y + y] = colorToDraw;
+                        playgroundEffectsList.Add(new Tuple<int, int, Color>(positionToDraw.X + x, positionToDraw.Y + y, colorToDraw));
+                        //playgroundEffectsArray[positionToDraw.X + x, positionToDraw.Y + y] = colorToDraw;
                     }
                 }
             }
@@ -618,10 +727,13 @@ namespace GalaxyBlox.Objects
                             if (startPosition.Y == actorPosition.Y)
                                 startPosition.Y = actorPosition.Y + actor.GetLength(1);
 
-                            for (int y = startPosition.Y; y < playgroundEffectsArray.GetLength(1); y++)
+                            for (int y = startPosition.Y; y < playground.GetLength(1); y++)
                             {
                                 if (playground[startPosition.X, y] == 0)
-                                    playgroundEffectsArray[startPosition.X, y] = Contents.Colors.IndicatorColor;
+                                {
+                                    playgroundEffectsList.Add(new Tuple<int, int, Color>(startPosition.X, y, Contents.Colors.IndicatorColor));
+                                    //playgroundEffectsArray[startPosition.X, y] = Contents.Colors.IndicatorColor;
+                                }
                                 else
                                     break;
                             }
@@ -650,12 +762,6 @@ namespace GalaxyBlox.Objects
         private Color GetCubeColor(int posX, int posY)
         {
             var result = Contents.Colors.GameCubesColors[playground[posX, posY]];
-            //if (playground[posX, posY] == 0)
-            //    result *= 0.5f;
-
-            if (playgroundEffectsArray != null && playgroundEffectsArray[posX, posY].HasValue)
-                result = playgroundEffectsArray[posX, posY].Value;
-
             return result;
         }
         
