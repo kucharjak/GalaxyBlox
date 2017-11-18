@@ -49,11 +49,11 @@ namespace GalaxyBlox.Models
 
         public virtual void Update(GameTime gameTime)
         {
-            if (MenuGameRoomChanger != null)
-                MenuGameRoomChanger.Update(gameTime);
-
             if (ActiveRoom != null)
                 ActiveRoom.Update(gameTime);
+
+            if (MenuGameRoomChanger != null)
+                MenuGameRoomChanger.Update(gameTime);
         }
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)

@@ -47,7 +47,7 @@ namespace GalaxyBlox.Models
                 InGameOffsetY = (int)((RealSize.Height - (GameSize.Height * Scale)) / 2);
             }
 
-            Position = new Vector2(200);
+            Position = new Vector2();
         }
 
         public virtual void Update(GameTime gameTime)
@@ -56,8 +56,7 @@ namespace GalaxyBlox.Models
                 return;
 
             var input = TouchPanel.GetState().Where(tch => tch.State != TouchLocationState.Invalid).FirstOrDefault();
-            if (input != null)
-                HandleInput(input);
+            HandleInput(input);
 
             foreach (var obj in objects)
                 obj.Update(gameTime);
@@ -96,6 +95,12 @@ namespace GalaxyBlox.Models
 
         protected virtual void HandleInput(TouchLocation input)
         {
+            if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.Back))
+                HandleBackButton();
+
+            if (input == null || input.State == TouchLocationState.Invalid)
+                return;
+
             var vectInput = input.Position; //UnScaleVector(input.Position);
             var rectInput = new Rectangle((int)vectInput.X, (int)vectInput.Y, 1, 1);
             var buttons = objects.Where(btn => btn.Type == "button").ToArray();
@@ -128,10 +133,10 @@ namespace GalaxyBlox.Models
                 foreach (var btn in releasedButtons)
                     (btn as Button).RaiseRelease(new EventArgs());
             }
+        }
 
-            if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.Back))
-                ParentRoomManager.ChangeRooms();
-                //Game1.InMenu = true;
+        protected virtual void HandleBackButton()
+        {
         }
 
         private Vector2 UnScaleVector(Vector2 vect)

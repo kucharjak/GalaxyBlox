@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework;
 using GalaxyBlox.Objects;
 using System.Linq;
 using GalaxyBlox.Static;
+using Microsoft.Xna.Framework.Input.Touch;
+using Microsoft.Xna.Framework.Input;
 
 namespace GalaxyBlox.Rooms
 {

@@ -9,6 +9,7 @@ using GalaxyBlox.Objects;
 using GalaxyBlox.Static;
 using GalaxyBlox.Utils;
 using GalaxyBlox.EventArgsClasses;
+using Microsoft.Xna.Framework.Input;
 
 namespace GalaxyBlox.Rooms
 {
@@ -212,6 +213,11 @@ namespace GalaxyBlox.Rooms
             {
                 arena.StartNewGame();
             }
+        }
+
+        protected override void HandleBackButton()
+        {
+            ParentRoomManager.ChangeRooms();
         }
 
         private void btnPause_Click(object sender, EventArgs e)
