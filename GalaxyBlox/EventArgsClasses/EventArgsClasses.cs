@@ -16,13 +16,11 @@ namespace GalaxyBlox.EventArgsClasses
 {
     public class ChangerEventArgs : EventArgs
     {
-        public Room ActiveRoom;
-        public Room OtherRoom;
+        public Room ChangedRoom;
 
-        public ChangerEventArgs(Room activeRoom, Room noLongerActiveRoom)
+        public ChangerEventArgs(Room room)
         {
-            ActiveRoom = activeRoom;
-            OtherRoom = noLongerActiveRoom;
+            ChangedRoom = room;
         }
     }
 

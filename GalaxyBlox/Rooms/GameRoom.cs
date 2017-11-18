@@ -20,7 +20,11 @@ namespace GalaxyBlox.Rooms
         private GameObject levelBoard;
         private ActorViewer nextActor;
 
-        public GameRoom(RoomManager parent, string name, Size realSize, Size gameSize) : base(parent, name, realSize, gameSize)
+        public GameRoom(Room parent, string name, Size realSize, Size gameSize) : base(parent, name, realSize, gameSize)
+        {
+        }
+
+        public GameRoom(string name, Size realSize, Size gameSize) : base(name, realSize, gameSize)
         {
         }
 
@@ -30,8 +34,9 @@ namespace GalaxyBlox.Rooms
             Background = content.Load<Texture2D>("Backgrounds/game");
         }
 
-        protected override void AddObjects()
+        protected override void Initialize()
         {
+            LayerDepth = 0.2f;
             GameObject objToAdd;
             var leftPanelWidth = 60;
             var padding = 15;
@@ -46,9 +51,9 @@ namespace GalaxyBlox.Rooms
                 Position = new Vector2(-5, RoomSize.Height - btnSize.Y - 2 * padding),
                 BaseColor = Contents.Colors.BackgroundControlsColor,
                 BackgroundImage = Contents.Textures.Pix,
-                LayerDepth = 0.3f
+                LayerDepth = 0.03f
             };
-            objects.Add(objToAdd);
+            Objects.Add(objToAdd);
 
             ///// ADDING CONTROL BUTTONS //////
             objToAdd = Bank.Buttons.GetControlButton(this); // LEFT BUTTON
@@ -57,7 +62,7 @@ namespace GalaxyBlox.Rooms
                 objToAdd.BackgroundImage = Contents.Textures.ControlButton_left;
             (objToAdd as Button).Hover += btnLeft_Hover;
             (objToAdd as Button).Release += btnLeft_Release;
-            objects.Add(objToAdd);
+            Objects.Add(objToAdd);
 
             objToAdd = Bank.Buttons.GetControlButton(this); // DOWN BUTTON
                 objToAdd.Size = btnSize;
@@ -66,14 +71,14 @@ namespace GalaxyBlox.Rooms
             (objToAdd as Button).Click += btnDown_Click;
             (objToAdd as Button).Hover += btnDown_Hover;
             (objToAdd as Button).Release += btnDown_Release;
-            objects.Add(objToAdd);
+            Objects.Add(objToAdd);
 
             objToAdd = Bank.Buttons.GetControlButton(this); // ROTATE BUTTON
                 objToAdd.Size = btnSize;
                 objToAdd.Position = new Vector2(btnPartSize * 2 + padding + ((btnPartSize - btnSize.X) / 2f), RoomSize.Height - padding - btnSize.Y);
                 objToAdd.BackgroundImage = Contents.Textures.ControlButton_rotate;
             (objToAdd as Button).Click += btnRotate_Click;
-            objects.Add(objToAdd);
+            Objects.Add(objToAdd);
 
             objToAdd = Bank.Buttons.GetControlButton(this); // RIGHT BUTTON
                 objToAdd.Size = btnSize;
@@ -81,7 +86,7 @@ namespace GalaxyBlox.Rooms
                 objToAdd.BackgroundImage = Contents.Textures.ControlButton_right;
             (objToAdd as Button).Hover += btnRight_Hover;
             (objToAdd as Button).Release += btnRight_Release;
-            objects.Add(objToAdd);
+            Objects.Add(objToAdd);
 
             var plyArnPosY = padding + 65;
             
@@ -90,11 +95,11 @@ namespace GalaxyBlox.Rooms
                 new Vector2(0, plyArnPosY))
             {
                 Name = "main_playground",
-                LayerDepth = 0.5f
+                LayerDepth = 0.05f
             };
             arena.ScoreChanged += Arena_ScoreChanged;
             arena.ActorsQueueChanged += Arena_ActorsQueueChanged;
-            objects.Add(arena);
+            Objects.Add(arena);
 
             // ADDING LEFT PANEL
             var objectsAlpha = 0.6f;
@@ -105,9 +110,9 @@ namespace GalaxyBlox.Rooms
             objToAdd = Bank.Buttons.GetPauseButton(this);
                 objToAdd.Size = new Vector2(leftPanelWidth, leftPanelWidth);
                 objToAdd.Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY);
-                objToAdd.LayerDepth = 0.5f;
+                objToAdd.LayerDepth = 0.05f;
                 (objToAdd as Button).Click += btnPause_Click;
-            objects.Add(objToAdd);
+            Objects.Add(objToAdd);
 
             //// ADDING LABEL FOR SCORE
             leftPanelPosY += (int)(padding + objToAdd.Size.Y);
@@ -116,7 +121,7 @@ namespace GalaxyBlox.Rooms
                 objToAdd.Size = new Vector2(leftPanelWidth, 35);
                 objToAdd.Alpha = objectsAlpha;
                 objToAdd.Text = "Skore";
-            objects.Add(objToAdd);
+            Objects.Add(objToAdd);
 
             //// ADDING SCORE BOARD
             leftPanelPosY += (int)objToAdd.Size.Y;
@@ -125,7 +130,7 @@ namespace GalaxyBlox.Rooms
                 scoreBoard.Size = new Vector2(leftPanelWidth, 55);
                 scoreBoard.Alpha = objectsAlpha;
                 scoreBoard.Text = arena.Score.ToString();
-            objects.Add(scoreBoard);
+            Objects.Add(scoreBoard);
 
             //// ADDING LABEL FOR LEVEL
             leftPanelPosY += (int)(padding + scoreBoard.Size.Y);
@@ -134,7 +139,7 @@ namespace GalaxyBlox.Rooms
                 objToAdd.Size = new Vector2(leftPanelWidth, 35);
                 objToAdd.Alpha = objectsAlpha;
                 objToAdd.Text = "Level";
-            objects.Add(objToAdd);
+            Objects.Add(objToAdd);
 
             //// ADDING LEVEL BOARD
             leftPanelPosY += (int)objToAdd.Size.Y;
@@ -143,7 +148,7 @@ namespace GalaxyBlox.Rooms
                 levelBoard.Size = new Vector2(leftPanelWidth, 55);
                 levelBoard.Alpha = objectsAlpha;
                 levelBoard.Text = arena.Level.ToString();
-            objects.Add(levelBoard);
+            Objects.Add(levelBoard);
 
             //// NEXT ACTOR LABEL
             leftPanelPosY += (int)(padding + levelBoard.Size.Y);
@@ -152,25 +157,25 @@ namespace GalaxyBlox.Rooms
                 objToAdd.Size = new Vector2(leftPanelWidth, 35);
                 objToAdd.Alpha = objectsAlpha;
                 objToAdd.Text = "Další";
-            objects.Add(objToAdd);
+            Objects.Add(objToAdd);
 
             //// NEXT ACTOR BOARD
             leftPanelPosY += (int)objToAdd.Size.Y;
             nextActor = new ActorViewer(this, new Vector2(leftPanelWidth, leftPanelWidth), Contents.Colors.PanelContentBackgroundColor * 0f, arena.CubeSize)
             {
                 Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY),
-                LayerDepth = 0.5f,
+                LayerDepth = 0.05f,
                 Alpha = 1f
             };
-            objects.Add(nextActor);
+            Objects.Add(nextActor);
 
             //// ADDING BACKGROUND FOR ACTOR BOARD
             objToAdd = Bank.Visuals.GetPanelBoard(this);
                 objToAdd.Size = new Vector2(leftPanelWidth, leftPanelWidth);
                 objToAdd.Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY);
-                objToAdd.LayerDepth = 0.49f;
+                objToAdd.LayerDepth = 0.049f;
                 objToAdd.Alpha = objectsAlpha;
-            objects.Add(objToAdd);
+            Objects.Add(objToAdd);
 
             //// ADDING LABEL BONUS
             leftPanelPosY += (int)(padding + nextActor.Size.Y);
@@ -179,7 +184,7 @@ namespace GalaxyBlox.Rooms
                 objToAdd.Size = new Vector2(leftPanelWidth, 35);
                 objToAdd.Alpha = objectsAlpha;
                 objToAdd.Text = "Bonus";
-            objects.Add(objToAdd);
+            Objects.Add(objToAdd);
 
             //// ADDING BONUS BTN
             leftPanelPosY += (int)objToAdd.Size.Y;
@@ -187,7 +192,7 @@ namespace GalaxyBlox.Rooms
                 objToAdd.Position = new Vector2(RoomSize.Width - leftPanelWidth - padding, leftPanelPosY);
                 objToAdd.Size = new Vector2(leftPanelWidth, leftPanelWidth);
                 objToAdd.Alpha = objectsAlpha;
-            objects.Add(objToAdd);
+            Objects.Add(objToAdd);
         }
 
         private void Arena_ActorsQueueChanged(object sender, EventArgs e)
@@ -205,24 +210,15 @@ namespace GalaxyBlox.Rooms
                 levelBoard.Text = arena.Level.ToString();
         }
 
-        public override void AfterChangeEvent(string args)
-        {
-            base.AfterChangeEvent(args);
-
-            if (args == "newGame")
-            {
-                arena.StartNewGame();
-            }
-        }
-
         protected override void HandleBackButton()
         {
-            ParentRoomManager.ChangeRooms();
+            btnPause_Click(this, new EventArgs());
         }
 
         private void btnPause_Click(object sender, EventArgs e)
         {
-            ParentRoomManager.ChangeRooms(args: "pause");
+            //ParentRoomManager.ChangeRooms(args: "pause");
+            Close();
         }
 
         private void btnRotate_Click(object sender, EventArgs e)

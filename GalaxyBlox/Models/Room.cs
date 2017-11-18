@@ -13,10 +13,12 @@ namespace GalaxyBlox.Models
 {
     public class Room
     {
-        public RoomManager ParentRoomManager;
-        protected List<GameObject> objects = new List<GameObject>();
+        public Room Parent { get; private set; }
+
+        protected List<GameObject> Objects { get; set; } = new List<GameObject>();
         public Texture2D Background;
         public Size RoomSize;
+        public Size RealSize;
 
         public bool IsPaused = false;
         public bool IsVisible = false;
@@ -27,27 +29,56 @@ namespace GalaxyBlox.Models
         public float InGameOffsetY = 0f;
 
         public string Name = "";
-
+        public float LayerDepth = 0f;
         //protected int padding = 20;
 
-        public Room(RoomManager parent, string name, Size RealSize, Size GameSize)
+        public Room(Room parent, string name, Size realSize, Size gameSize) : this(name, realSize, gameSize)
         {
-            ParentRoomManager = parent;
-            Name = name;
-            RoomSize = GameSize;
+            Parent = parent;
+        }
 
-            if (RealSize.Width - GameSize.Width > RealSize.Height - GameSize.Height)
+        public Room(string name, Size realSize, Size gameSize)
+        {
+            Name = name;
+            RoomSize = gameSize;
+            RealSize = realSize;
+
+            if (realSize.Width - gameSize.Width > realSize.Height - gameSize.Height)
             { // HEIGHT + X offset
-                Scale = RealSize.Height / (GameSize.Height * 1f);
-                InGameOffsetX = (int)((RealSize.Width - (GameSize.Width * Scale)) / 2);
+                Scale = realSize.Height / (gameSize.Height * 1f);
+                InGameOffsetX = (int)((realSize.Width - (gameSize.Width * Scale)) / 2);
             }
             else
             { // WIDTH  + Y offset
-                Scale = RealSize.Width / (GameSize.Width * 1f);
-                InGameOffsetY = (int)((RealSize.Height - (GameSize.Height * Scale)) / 2);
+                Scale = realSize.Width / (gameSize.Width * 1f);
+                InGameOffsetY = (int)((realSize.Height - (gameSize.Height * Scale)) / 2);
             }
 
             Position = new Vector2();
+
+            LoadContent(Game1.GameContent);
+        }
+
+        public void Show()
+        {
+            IsVisible = true;
+            RoomManager.ShowRoom(this);
+        }
+
+        public void Close()
+        {
+            Hide();
+            RoomManager.CloseRoom(this);
+        }
+
+        public void End()
+        {
+            RoomManager.EndRoom(this);
+        }
+
+        public void Hide()
+        {
+            IsVisible = false;
         }
 
         public virtual void Update(GameTime gameTime)
@@ -58,38 +89,35 @@ namespace GalaxyBlox.Models
             var input = TouchPanel.GetState().Where(tch => tch.State != TouchLocationState.Invalid).FirstOrDefault();
             HandleInput(input);
 
-            foreach (var obj in objects)
+            foreach (var obj in Objects)
                 obj.Update(gameTime);
         }
 
         public virtual void Prepare(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
-            foreach (var obj in objects)
+            foreach (var obj in Objects)
                 obj.Prepare(spriteBatch, graphicsDevice);
         }
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            if (!IsVisible)
-                return;
-
             if (Background != null)
-                spriteBatch.Draw(Background, new Rectangle((int)Position.X, (int)Position.Y, spriteBatch.GraphicsDevice.Viewport.Width, spriteBatch.GraphicsDevice.Viewport.Height), null, Color.White, 0, new Vector2(), SpriteEffects.None, 0f);
+                spriteBatch.Draw(Background, new Rectangle((int)Position.X, (int)Position.Y, spriteBatch.GraphicsDevice.Viewport.Width, spriteBatch.GraphicsDevice.Viewport.Height), null, Color.White, 0, new Vector2(), SpriteEffects.None, LayerDepth);
 
-            foreach (var obj in objects)
+            foreach (var obj in Objects)
                 obj.Draw(spriteBatch);
         }
 
         public virtual void LoadContent(ContentManager content)
         {
-            AddObjects();
+            Initialize();
         }
         
-        public virtual void AfterChangeEvent(string args)
+        public virtual void AfterChangeEvent()
         {
         }
 
-        protected virtual void AddObjects()
+        protected virtual void Initialize()
         {
         }
 
@@ -103,7 +131,7 @@ namespace GalaxyBlox.Models
 
             var vectInput = input.Position; //UnScaleVector(input.Position);
             var rectInput = new Rectangle((int)vectInput.X, (int)vectInput.Y, 1, 1);
-            var buttons = objects.Where(btn => btn.Type == "button").ToArray();
+            var buttons = Objects.Where(btn => btn.Type == "button").ToArray();
             if (buttons.Count() > 0)
             {
                 Button touchedButton = null;

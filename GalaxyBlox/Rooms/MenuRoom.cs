@@ -7,17 +7,20 @@ using Microsoft.Xna.Framework;
 using GalaxyBlox.Objects;
 using System.Linq;
 using GalaxyBlox.Static;
-using Microsoft.Xna.Framework.Input.Touch;
-using Microsoft.Xna.Framework.Input;
 
 namespace GalaxyBlox.Rooms
 {
     class MenuRoom : Room
     {
+        GameRoom mainGame = null;
         Button btnContinue;
         GameObject highScore;
 
-        public MenuRoom(RoomManager parent, string name, Size realSize, Size gameSize) : base(parent, name, realSize, gameSize)
+        public MenuRoom(Room parent, string name, Size realSize, Size gameSize) : base(parent, name, realSize, gameSize)
+        {
+        }
+
+        public MenuRoom(string name, Size realSize, Size gameSize) : base(name, realSize, gameSize)
         {
         }
 
@@ -27,13 +30,14 @@ namespace GalaxyBlox.Rooms
             Background = content.Load<Texture2D>("Backgrounds/menu");
         }
 
-        protected override void AddObjects()
+        protected override void Initialize()
         {
-            GameObject objToAdd;
+            LayerDepth = 0.1f;
 
+            GameObject objToAdd;
             var padding = 30;
             var btnSize = new Vector2(RoomSize.Width - 2 * padding, 50);
-            var btnCount = 5;
+            var btnCount = 4;
             var btnStartPosY = (RoomSize.Height - (50 * btnCount + 10 * (btnCount - 1))) / 2;
 
             // Adding HighScore
@@ -42,14 +46,14 @@ namespace GalaxyBlox.Rooms
             {
                 Position = new Vector2(padding, btnStartPosY - 35),
                 Size = new Vector2(btnSize.X, 35),
-                LayerDepth = 0.5f,
+                LayerDepth = 0.05f,
                 Alpha = 1f,
                 TextAlignment = TextAlignment.Left,
                 TextSpriteFont = Contents.Fonts.MenuButtonText,
                 ShowText = true,
                 TextColor = Color.White
             };
-            objects.Add(highScore);
+            Objects.Add(highScore);
             ResetHighScoreText();
 
             ////// ADDING BUTTONS //////
@@ -59,46 +63,41 @@ namespace GalaxyBlox.Rooms
                 btnContinue.Text = "Pokračovat";
                 btnContinue.Enabled = false;
             btnContinue.Click += btnContinue_Click;
-            objects.Add(btnContinue);
+            Objects.Add(btnContinue);
 
             objToAdd = Bank.Buttons.GetMenuButton(this);
                 objToAdd.Size = btnSize;
                 objToAdd.Position = new Vector2(padding, btnStartPosY + 65);
                 objToAdd.Text = "Nová hra";
             (objToAdd as Button).Click += btnNewGame_Click;
-            objects.Add(objToAdd);
+            Objects.Add(objToAdd);
+
+            //objToAdd = Bank.Buttons.GetMenuButton(this);
+            //    objToAdd.Size = btnSize;
+            //    objToAdd.Position = new Vector2(padding, btnStartPosY + 65 * 2);
+            //    objToAdd.Text = "Ovládání";
+            //(objToAdd as Button).Click += btnControls_Click;
+            //Objects.Add(objToAdd);
 
             objToAdd = Bank.Buttons.GetMenuButton(this);
                 objToAdd.Size = btnSize;
                 objToAdd.Position = new Vector2(padding, btnStartPosY + 65 * 2);
-                objToAdd.Text = "Ovládání";
-            (objToAdd as Button).Click += btnControls_Click;
-            objects.Add(objToAdd);
+                objToAdd.Text = "Nastavení";
+            (objToAdd as Button).Click += btnSettings_Click;
+            Objects.Add(objToAdd);
 
             objToAdd = Bank.Buttons.GetMenuButton(this);
                 objToAdd.Size = btnSize;
                 objToAdd.Position = new Vector2(padding, btnStartPosY + 65 * 3);
-                objToAdd.Text = "Nastavení";
-            (objToAdd as Button).Click += btnSettings_Click;
-            objects.Add(objToAdd);
-
-            objToAdd = Bank.Buttons.GetMenuButton(this);
-                objToAdd.Size = btnSize;
-                objToAdd.Position = new Vector2(padding, btnStartPosY + 65 * 4);
                 objToAdd.Text = "Konec";
             (objToAdd as Button).Click += btnFinish_Click;
-            objects.Add(objToAdd);
+            Objects.Add(objToAdd);
         }
 
-        public override void AfterChangeEvent(string args)
+        public override void AfterChangeEvent()
         {
-            base.AfterChangeEvent(args);
-
-            if (args == "newGame")
-            {
+            if (mainGame != null)
                 btnContinue.Enabled = true;
-            }
-
             ResetHighScoreText();
         }
 
@@ -122,12 +121,17 @@ namespace GalaxyBlox.Rooms
 
         private void btnContinue_Click(object sender, EventArgs e)
         {
-            ParentRoomManager.ChangeRooms(args: "continue");
+            if (mainGame != null)
+                mainGame.Show();
         }
 
         private void btnNewGame_Click(object sender, EventArgs e)
         {
-            ParentRoomManager.ChangeRooms(args: "newGame");
+            if (mainGame != null)
+                mainGame.End();
+
+            mainGame = new GameRoom(this, "Room_Game", RealSize, Settings.GameSize);
+            mainGame.Show();
         }
     }
 }

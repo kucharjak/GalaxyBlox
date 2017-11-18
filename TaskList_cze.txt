@@ -1,8 +1,8 @@
 Zmìny 
-	- pøekopat systém místností tak, abych byl kdykoliv schopný vytvoøit si požadovanou místnost a pak si jí jednoduše otevøít i s požadovanou animací
-	- vyøešit, pokud pùjde pøekleslování pouze urèité èásti playingAreny
+	- pokud to pùjde - zmìnit pøekleslování na konkrétní èásti playingAreny
 
 Rozšíøení 
+	- rozmyslet si design a podle toho pokraèovat dál ve vývoji (bude potøeba vìdìt napø u )
 	- pøidat finální obrazovku (poèítat všechny kostky za hru a možná udìlat nìco jako výpis na konci)
 	- vytvoøit swipovací objekty, který bude schopný zachyvávat swipovací eventy 
 	- rozšíøit a pøidat další zpùsob ovládání (swipnutí dolù pošle dolù a kliknutí na daný místa playingAreny vykoná posunutí a rotaci)
@@ -15,6 +15,7 @@ Gameplay
 	- pøidat násobení skóre (podpoøit tak rychlost hraní)
  
 Features
+	- pøidat animace na místnosti
 	- zmìnit background (upravit pùvodní - vymazat hvìzdy, upravit barvy) a pøidat hvìzdy jako jiný objekty i s animací + pøidat padající "komety" za náhodnou dobu
 	- pøidat animaci pro znièení kostièek (dùležitý) - rychlou animaci, aby nenarušovala flow hry
 	- pøidat zpùsob na animování objektù (šlo by asi o to, že by se udìlal sytém animací, který by byly schopný mìnit buï aktuálnì zobrazenou texturu/sprite, barvu, scale objektu) a po ukonèení animace by se vykonal nìjaký event
@@ -32,6 +33,7 @@ Nápady
 --------------HOTOVO--------------
 ----------------------------------
 
+- pøekopat systém místností tak, abych byl kdykoliv schopný vytvoøit si požadovanou místnost a pak si jí jednoduše otevøít i s požadovanou animací
 - zkusit ušetøit FPS - zaèal bych tím, že bych v playingArena overridnul draw metodu a sám si vykresloval background a k nìmu dokresloval aktivního actora (tzn. že by se mi pozadí pøekreslovalo pouze v pøípadì insertování nìjakého objektu dozadu)
 - zkusit vymyslet zpùsob, kterým bych mohl definovat objekty pouze jednou a pak je jen vytvoøil a definoval si pouze místo, velikost a eventy
 - pøidat na delší držení tlaèítek do stran zrychlený a nìkolikanásobný posun na danou stranu

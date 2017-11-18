@@ -19,8 +19,6 @@ namespace GalaxyBlox
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
-        RoomManager RoomManager;
         
         public Game1()
         {
@@ -47,7 +45,9 @@ namespace GalaxyBlox
 
             GameContent = Content;
             Random = new Random(unchecked((int)DateTime.Now.Ticks));
-            RoomManager = new RoomManager(GraphicsDevice);
+
+            var menu = new Rooms.MenuRoom("Room_Menu", new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Static.Settings.GameSize);
+            menu.Show();
         }
 
         /// <summary>

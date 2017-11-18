@@ -21,7 +21,7 @@ namespace GalaxyBlox.Objects
                     ShowText = false,
                     TextSpriteFont = Contents.Fonts.MenuButtonText,
                     TextColor = Contents.Colors.MenuButtonTextColor,
-                    LayerDepth = 0.5f
+                    LayerDepth = 0.05f
                 };
 
                 return button;
@@ -39,7 +39,7 @@ namespace GalaxyBlox.Objects
                     ShowText = false,
                     TextSpriteFont = Contents.Fonts.MenuButtonText,
                     TextColor = Contents.Colors.MenuButtonTextColor,
-                    LayerDepth = 0.5f
+                    LayerDepth = 0.05f
                 };
 
                 return button;
@@ -60,7 +60,7 @@ namespace GalaxyBlox.Objects
                     Text = "",
                     ShowText = true,
                     TextAlignment = TextAlignment.Center,
-                    LayerDepth = 0.5f
+                    LayerDepth = 0.05f
                 };
 
                 return button;
@@ -73,7 +73,7 @@ namespace GalaxyBlox.Objects
             {
                 var label = new GameObject(parentRoom)
                 {
-                    LayerDepth = 0.5f,
+                    LayerDepth = 0.05f,
                     BackgroundImage = Contents.Textures.Pix,
                     BaseColor = Contents.Colors.PanelHeaderBackgroundColor,
                     Alpha = 1f,
@@ -91,7 +91,7 @@ namespace GalaxyBlox.Objects
             {
                 var label = new GameObject(parentRoom)
                 {
-                    LayerDepth = 0.5f,
+                    LayerDepth = 0.05f,
                     TextAlignment = TextAlignment.Center,
                     BackgroundImage = Contents.Textures.Pix,
                     BaseColor = Contents.Colors.PanelContentBackgroundColor,
