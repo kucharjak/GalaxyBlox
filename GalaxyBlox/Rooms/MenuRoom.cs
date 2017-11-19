@@ -102,8 +102,16 @@ namespace GalaxyBlox.Rooms
         }
 
         private void ResetHighScoreText()
-        {
-            highScore.Text = $"Highscore: { Settings.SettingsClass.HighScore.ToString() }";
+        { 
+            if (Settings.Game.User.HighScores.Count != 0)
+            {
+                var best = Settings.Game.User.HighScores.First().Value.FirstOrDefault();
+                highScore.Text = $"Highscore: { best.ToString() }";
+            }
+            else
+            {
+                highScore.Text = "Highscore: 0";
+            }
         }
 
         private void btnFinish_Click(object sender, EventArgs e)
@@ -113,6 +121,7 @@ namespace GalaxyBlox.Rooms
 
         private void btnSettings_Click(object sender, EventArgs e)
         {
+            //var settingsRoom = new SettingsRoom(this, "Settings_Room", )
         }
 
         private void btnControls_Click(object sender, EventArgs e)
@@ -130,7 +139,7 @@ namespace GalaxyBlox.Rooms
             if (mainGame != null)
                 mainGame.End();
 
-            mainGame = new GameRoom(this, "Room_Game", RealSize, Settings.GameSize);
+            mainGame = new GameRoom(this, "Room_Game", RealSize, Settings.Game.WindowSize);
             mainGame.Show();
         }
     }

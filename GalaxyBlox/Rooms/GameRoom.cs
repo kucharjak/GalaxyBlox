@@ -217,7 +217,6 @@ namespace GalaxyBlox.Rooms
 
         private void btnPause_Click(object sender, EventArgs e)
         {
-            //ParentRoomManager.ChangeRooms(args: "pause");
             Close();
         }
 

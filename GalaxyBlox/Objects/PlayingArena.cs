@@ -32,6 +32,9 @@ namespace GalaxyBlox.Objects
             }
         }
 
+        private Size arenaSize;
+        private string gameMode;
+
         private long score = 0;
         public long Score
         {
@@ -87,6 +90,9 @@ namespace GalaxyBlox.Objects
         /// <param name="position"></param>
         public PlayingArena(Room parentRoom, Vector2 size, Vector2 position) : base(parentRoom)
         {
+            gameMode = "Test";
+            arenaSize = Settings.Game.ArenaSize;
+
             BackgroundColor = Contents.Colors.PlaygroundColor;
             BorderColor = Contents.Colors.PlaygroundBorderColor;
             Alpha = 1f;
@@ -95,21 +101,21 @@ namespace GalaxyBlox.Objects
             playgroundCubeMargin = 1;
             
             var spaceLeftForCubes = new Size(
-                (int)(size.X - 2 * playgroundInnerPadding - (Settings.GameArenaSize.Width - 1) * playgroundCubeMargin),
-                (int)(size.Y - 2 * playgroundInnerPadding - (Settings.GameArenaSize.Height - 1) * playgroundCubeMargin));
+                (int)(size.X - 2 * playgroundInnerPadding - (arenaSize.Width - 1) * playgroundCubeMargin),
+                (int)(size.Y - 2 * playgroundInnerPadding - (arenaSize.Height - 1) * playgroundCubeMargin));
 
-            if (spaceLeftForCubes.Width / (float)Settings.GameArenaSize.Width < spaceLeftForCubes.Height / (float)Settings.GameArenaSize.Height)
+            if (spaceLeftForCubes.Width / (float)arenaSize.Width < spaceLeftForCubes.Height / (float)arenaSize.Height)
             { // WIDTH
-                playgroundCubeSize = spaceLeftForCubes.Width / Settings.GameArenaSize.Width;
+                playgroundCubeSize = spaceLeftForCubes.Width / arenaSize.Width;
             }
             else
             { // HEIGHT
-                playgroundCubeSize = spaceLeftForCubes.Height / Settings.GameArenaSize.Height;
+                playgroundCubeSize = spaceLeftForCubes.Height / arenaSize.Height;
             }
 
             Size = new Vector2(
-                (Settings.GameArenaSize.Width - 1) * (playgroundCubeSize + playgroundCubeMargin) + playgroundCubeSize + 2 * playgroundInnerPadding,
-                (Settings.GameArenaSize.Height - 1) * (playgroundCubeSize + playgroundCubeMargin) + playgroundCubeSize + 2 * playgroundInnerPadding);
+                (arenaSize.Width - 1) * (playgroundCubeSize + playgroundCubeMargin) + playgroundCubeSize + 2 * playgroundInnerPadding,
+                (arenaSize.Height - 1) * (playgroundCubeSize + playgroundCubeMargin) + playgroundCubeSize + 2 * playgroundInnerPadding);
 
             Position = new Vector2(
                 0, //(size.X - Size.X) / 2,
@@ -271,7 +277,7 @@ namespace GalaxyBlox.Objects
         {
             backgroundChanged = true;
             backgroundFirstDraw = true;
-            playground = new int[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height];
+            playground = new int[arenaSize.Width, arenaSize.Height];
             playgroundEffectsList.Clear();
             Score = 0;
             actorsQueue = new List<Tuple<bool[,], Color>>();
@@ -477,9 +483,27 @@ namespace GalaxyBlox.Objects
 
         private void GameOver()
         {
-            if (Score > Settings.SettingsClass.HighScore)
-                Settings.SaveHighScore(Score);
-
+            if (!Settings.Game.User.HighScores.ContainsKey(gameMode))
+            {
+                Settings.Game.User.SaveHighScore(gameMode, new List<long>() { score });
+                Settings.Game.SaveUser();
+            }
+            else
+            {
+                var highscores = Settings.Game.User.HighScores[gameMode];
+                if (highscores.Any(scr => scr < score))
+                {
+                    highscores.Add(score);
+                    highscores = highscores.OrderByDescending(scr => scr).ToList();
+                    
+                    while(highscores.Count > Settings.Game.MaxHighscoresPerGameMod)
+                    {
+                        highscores.RemoveAt(highscores.Count - 1);
+                    }
+                    Settings.Game.User.SaveHighScore(gameMode, highscores);
+                    Settings.Game.SaveUser();
+                }
+            }
             StartNewGame();
         }
 
@@ -680,7 +704,7 @@ namespace GalaxyBlox.Objects
             //playgroundEffectsArray = new Color?[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height]; // create new effects array
             playgroundEffectsList.Clear();
 
-            if (Settings.Indicator != SettingOptions.Indicator.None) // draw indicator if set
+            if (Settings.Game.User.Indicator != SettingOptions.Indicator.None) // draw indicator if set
                 DrawIndicator();
 
             DrawActor(actor, actorPosition, actorColor);
@@ -703,7 +727,7 @@ namespace GalaxyBlox.Objects
 
         private void DrawIndicator()
         {
-            switch(Settings.Indicator)
+            switch(Settings.Game.User.Indicator)
             {
                 case SettingOptions.Indicator.Shadow:
                     {

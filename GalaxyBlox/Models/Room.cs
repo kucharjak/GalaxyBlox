@@ -17,6 +17,9 @@ namespace GalaxyBlox.Models
 
         protected List<GameObject> Objects { get; set; } = new List<GameObject>();
         public Texture2D Background;
+        public Color BackgroundColor { get { return BaseColor * Alpha; } }
+        public Color BaseColor = Color.White;
+        public float Alpha = 1f;
         public Size RoomSize;
         public Size RealSize;
 
@@ -102,7 +105,7 @@ namespace GalaxyBlox.Models
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (Background != null)
-                spriteBatch.Draw(Background, new Rectangle((int)Position.X, (int)Position.Y, spriteBatch.GraphicsDevice.Viewport.Width, spriteBatch.GraphicsDevice.Viewport.Height), null, Color.White, 0, new Vector2(), SpriteEffects.None, LayerDepth);
+                spriteBatch.Draw(Background, new Rectangle((int)Position.X, (int)Position.Y, spriteBatch.GraphicsDevice.Viewport.Width, spriteBatch.GraphicsDevice.Viewport.Height), null, BackgroundColor, 0, new Vector2(), SpriteEffects.None, LayerDepth);
 
             foreach (var obj in Objects)
                 obj.Draw(spriteBatch);

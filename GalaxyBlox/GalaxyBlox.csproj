@@ -85,6 +85,7 @@
     <Compile Include="Static\Contents.cs" />
     <Compile Include="Static\SettingOptions.cs" />
     <Compile Include="Static\Settings.cs" />
+    <Compile Include="Utils\SerializableDictionary.cs" />
     <Compile Include="Utils\Strings.cs" />
   </ItemGroup>
   <ItemGroup>

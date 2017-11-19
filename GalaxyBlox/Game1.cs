@@ -41,12 +41,12 @@ namespace GalaxyBlox
         {
             base.Initialize();
 
-            Static.Settings.LoadSettings();
+            Static.Settings.Game.LoadUser();
 
             GameContent = Content;
             Random = new Random(unchecked((int)DateTime.Now.Ticks));
 
-            var menu = new Rooms.MenuRoom("Room_Menu", new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Static.Settings.GameSize);
+            var menu = new Rooms.MenuRoom("Room_Menu", new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Static.Settings.Game.WindowSize);
             menu.Show();
         }
 
