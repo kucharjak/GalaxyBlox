@@ -86,7 +86,7 @@ namespace GalaxyBlox.Models
                 spriteBatch.Draw(BackgroundImage, DisplayRectWithScaleAndRoomPosition(), null, Color * baseAlpha, 0, new Vector2(), SpriteEffects.None, ParentRoom.LayerDepth + LayerDepth);
 
             if (ShowText && TextSpriteFont != null)
-                spriteBatch.DrawString(TextSpriteFont, Text, DisplayTextPositionWithScale() + ParentRoom.Position, TextColor * baseAlpha, 0f, new Vector2(), Scale, SpriteEffects.None, ParentRoom.LayerDepth + LayerDepth + 0.01f);
+                spriteBatch.DrawString(TextSpriteFont, Text, DisplayTextPositionWithScaleAndRoomPos(), TextColor * baseAlpha, 0f, new Vector2(), Scale, SpriteEffects.None, ParentRoom.LayerDepth + LayerDepth + 0.01f);
         }
 
         private void UpdateTextPosition()
@@ -107,6 +107,17 @@ namespace GalaxyBlox.Models
             var resultVect = new Vector2(
                 TextPosition.X * ParentRoom.Scale + ParentRoom.InGameOffsetX - offsetX,
                 TextPosition.Y * ParentRoom.Scale + ParentRoom.InGameOffsetY - offsetY);
+            return resultVect;
+        }
+
+        public Vector2 DisplayTextPositionWithScaleAndRoomPos()
+        {
+            var offsetX = Origin.X * (textSize.X * Scale - textSize.X);
+            var offsetY = Origin.Y * (textSize.Y * Scale - textSize.Y);
+
+            var resultVect = new Vector2(
+                (TextPosition.X + ParentRoom.Position.X) * ParentRoom.Scale + ParentRoom.InGameOffsetX - offsetX,
+                (TextPosition.Y + ParentRoom.Position.Y) * ParentRoom.Scale + ParentRoom.InGameOffsetY - offsetY);
             return resultVect;
         }
 
@@ -141,8 +152,8 @@ namespace GalaxyBlox.Models
             var offsetY = Origin.Y * (Size.Y * Scale - Size.Y);
 
             var resultRect = new Rectangle(
-                (int)(Position.X * ParentRoom.Scale + ParentRoom.InGameOffsetX - offsetX + ParentRoom.Position.X),
-                (int)(Position.Y * ParentRoom.Scale + ParentRoom.InGameOffsetY - offsetY + ParentRoom.Position.Y),
+                (int)((Position.X + ParentRoom.Position.X) * ParentRoom.Scale + ParentRoom.InGameOffsetX - offsetX),
+                (int)((Position.Y + ParentRoom.Position.Y) * ParentRoom.Scale + ParentRoom.InGameOffsetY - offsetY),
                 (int)(Size.X * ParentRoom.Scale * Scale),
                 (int)(Size.Y * ParentRoom.Scale * Scale)
                 );

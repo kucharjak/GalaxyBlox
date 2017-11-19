@@ -46,7 +46,7 @@ namespace GalaxyBlox
             GameContent = Content;
             Random = new Random(unchecked((int)DateTime.Now.Ticks));
 
-            var menu = new Rooms.MenuRoom("Room_Menu", new Size(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Static.Settings.Game.WindowSize);
+            var menu = new Rooms.MenuRoom("Room_Menu", Static.Settings.Game.WindowSize, new Vector2());
             menu.Show();
         }
 
@@ -68,6 +68,8 @@ namespace GalaxyBlox
             Static.Contents.Textures.ControlButton_right = Content.Load<Texture2D>("Sprites/ControlButton_right");
             Static.Contents.Textures.ControlButton_rotate = Content.Load<Texture2D>("Sprites/ControlButton_rotate");
             Static.Contents.Textures.ControlButton_pause = Content.Load<Texture2D>("Sprites/ControlButton_pause");
+            Static.Contents.Textures.BackgroundGame = Content.Load<Texture2D>("Backgrounds/game");
+            Static.Contents.Textures.BackgroundMenu = Content.Load<Texture2D>("Backgrounds/menu");
         }
 
         /// <summary>

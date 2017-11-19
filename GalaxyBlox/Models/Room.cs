@@ -19,51 +19,51 @@ namespace GalaxyBlox.Models
         public Texture2D Background;
         public Color BackgroundColor { get { return BaseColor * Alpha; } }
         public Color BaseColor = Color.White;
+        public bool FullScreen = false;
         public float Alpha = 1f;
-        public Size RoomSize;
-        public Size RealSize;
+        public Size Size;
 
         public bool IsPaused = false;
         public bool IsVisible = false;
 
-        public Vector2 Position = new Vector2();
+        public Vector2 Position;
         public float Scale = 1f;
         public float InGameOffsetX = 0f;
         public float InGameOffsetY = 0f;
 
         public string Name = "";
-        public float LayerDepth = 0f;
-        //protected int padding = 20;
+        public float LayerDepth = 0.1f;
 
-        public Room(Room parent, string name, Size realSize, Size gameSize) : this(name, realSize, gameSize)
+        public Room(Room parent, string name, Size size, Vector2 position) : this(name, size, position)
         {
             Parent = parent;
         }
 
-        public Room(string name, Size realSize, Size gameSize)
+        public Room(string name, Size size, Vector2 position)
         {
+            Position = position;
             Name = name;
-            RoomSize = gameSize;
-            RealSize = realSize;
+            Size = size;
 
-            if (realSize.Width - gameSize.Width > realSize.Height - gameSize.Height)
+            var realSize = new Size(Game1.ActiveGame.GraphicsDevice.Viewport.Width, Game1.ActiveGame.GraphicsDevice.Viewport.Height);
+            var windowSize = Static.Settings.Game.WindowSize;
+            if (realSize.Width - windowSize.Width > realSize.Height - windowSize.Height)
             { // HEIGHT + X offset
-                Scale = realSize.Height / (gameSize.Height * 1f);
-                InGameOffsetX = (int)((realSize.Width - (gameSize.Width * Scale)) / 2);
+                Scale = realSize.Height / (windowSize.Height * 1f);
+                InGameOffsetX = (int)((realSize.Width - (windowSize.Width * Scale)) / 2);
             }
             else
             { // WIDTH  + Y offset
-                Scale = realSize.Width / (gameSize.Width * 1f);
-                InGameOffsetY = (int)((realSize.Height - (gameSize.Height * Scale)) / 2);
+                Scale = realSize.Width / (windowSize.Width * 1f);
+                InGameOffsetY = (int)((realSize.Height - (windowSize.Height * Scale)) / 2);
             }
 
-            Position = new Vector2();
-
-            LoadContent(Game1.GameContent);
+            Initialize();
         }
 
         public void Show()
         {
+            LayerDepth = 0.9f;
             IsVisible = true;
             RoomManager.ShowRoom(this);
         }
@@ -81,6 +81,7 @@ namespace GalaxyBlox.Models
 
         public void Hide()
         {
+            LayerDepth = 0.1f;
             IsVisible = false;
         }
 
@@ -105,15 +106,15 @@ namespace GalaxyBlox.Models
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (Background != null)
-                spriteBatch.Draw(Background, new Rectangle((int)Position.X, (int)Position.Y, spriteBatch.GraphicsDevice.Viewport.Width, spriteBatch.GraphicsDevice.Viewport.Height), null, BackgroundColor, 0, new Vector2(), SpriteEffects.None, LayerDepth);
+            {
+                if (FullScreen)
+                    spriteBatch.Draw(Background, new Rectangle(0, 0, Game1.ActiveGame.GraphicsDevice.Viewport.Width, Game1.ActiveGame.GraphicsDevice.Viewport.Height), null, BackgroundColor, 0, new Vector2(), SpriteEffects.None, LayerDepth);
+                else
+                    spriteBatch.Draw(Background, DisplayRectWithScale(), null, BackgroundColor, 0, new Vector2(), SpriteEffects.None, LayerDepth);
+            }
 
             foreach (var obj in Objects)
                 obj.Draw(spriteBatch);
-        }
-
-        public virtual void LoadContent(ContentManager content)
-        {
-            Initialize();
         }
         
         public virtual void AfterChangeEvent()
@@ -168,6 +169,16 @@ namespace GalaxyBlox.Models
 
         protected virtual void HandleBackButton()
         {
+        }
+
+        public Rectangle DisplayRectWithScale()
+        {
+            var resultRect = new Rectangle(
+                (int)(Position.X * Scale + InGameOffsetX),
+                (int)(Position.Y * Scale + InGameOffsetY),
+                (int)(Size.Width * Scale),
+                (int)(Size.Height * Scale));
+            return resultRect;
         }
 
         private Vector2 UnScaleVector(Vector2 vect)

@@ -53,6 +53,9 @@ namespace GalaxyBlox.Models
                 room.Draw(gameTime, spriteBatch);
             }
 
+            // draw separation
+            spriteBatch.Draw(Static.Contents.Textures.Pix, new Rectangle(0, 0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height), null, Static.Contents.Colors.RoomsSeparateColor, 0f, new Vector2(), SpriteEffects.None, 0.8f);
+
             spriteBatch.End();
         }
         
@@ -64,6 +67,7 @@ namespace GalaxyBlox.Models
             if (ActiveRoom == null)
             {
                 ActiveRoom = room;
+                ActiveRoom.LayerDepth = 0.9f;
             }
             else
             {
@@ -108,6 +112,12 @@ namespace GalaxyBlox.Models
         private static void RoomChanger_ChangeEnded(object sender, EventArgs e)
         {
             (e as ChangerEventArgs).ChangedRoom.AfterChangeEvent();
+
+            foreach (var room in rooms)
+                room.LayerDepth = 0.1f;
+
+            ActiveRoom.LayerDepth = 0.9f;
+
         }
     }
 }

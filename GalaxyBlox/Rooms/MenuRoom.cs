@@ -16,29 +16,24 @@ namespace GalaxyBlox.Rooms
         Button btnContinue;
         GameObject highScore;
 
-        public MenuRoom(Room parent, string name, Size realSize, Size gameSize) : base(parent, name, realSize, gameSize)
+        public MenuRoom(Room parent, string name, Size size, Vector2 position) : base(parent, name, size, position)
         {
         }
 
-        public MenuRoom(string name, Size realSize, Size gameSize) : base(name, realSize, gameSize)
+        public MenuRoom(string name, Size size, Vector2 position) : base(name, size, position)
         {
-        }
-
-        public override void LoadContent(ContentManager content)
-        {
-            base.LoadContent(content);
-            Background = content.Load<Texture2D>("Backgrounds/menu");
         }
 
         protected override void Initialize()
         {
-            LayerDepth = 0.1f;
+            FullScreen = true;
+            Background = Contents.Textures.BackgroundMenu;
 
             GameObject objToAdd;
             var padding = 30;
-            var btnSize = new Vector2(RoomSize.Width - 2 * padding, 50);
+            var btnSize = new Vector2(Size.Width - 2 * padding, 50);
             var btnCount = 4;
-            var btnStartPosY = (RoomSize.Height - (50 * btnCount + 10 * (btnCount - 1))) / 2;
+            var btnStartPosY = (Size.Height - (50 * btnCount + 10 * (btnCount - 1))) / 2;
 
             // Adding HighScore
             //// ADDING LABEL FOR SCORE
@@ -121,7 +116,9 @@ namespace GalaxyBlox.Rooms
 
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            //var settingsRoom = new SettingsRoom(this, "Settings_Room", )
+            var size = new Size(400, 300);
+            var settingsRoom = new SettingsRoom(this, "Settings_Room", size, new Vector2((Size.Width - size.Width) / 2, (Size.Height - size.Height) / 2));
+            settingsRoom.Show();
         }
 
         private void btnControls_Click(object sender, EventArgs e)
@@ -139,7 +136,7 @@ namespace GalaxyBlox.Rooms
             if (mainGame != null)
                 mainGame.End();
 
-            mainGame = new GameRoom(this, "Room_Game", RealSize, Settings.Game.WindowSize);
+            mainGame = new GameRoom(this, "Room_Game", Settings.Game.WindowSize, new Vector2());
             mainGame.Show();
         }
     }

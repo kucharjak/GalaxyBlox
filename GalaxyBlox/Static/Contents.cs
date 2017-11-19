@@ -24,6 +24,9 @@ namespace GalaxyBlox.Static
             public static Texture2D ControlButton_left;
             public static Texture2D ControlButton_right;
             public static Texture2D ControlButton_pause;
+
+            public static Texture2D BackgroundGame;
+            public static Texture2D BackgroundMenu;
         }
 
         public static class Fonts
@@ -35,7 +38,7 @@ namespace GalaxyBlox.Static
 
         public static class Colors
         {
-            public static readonly List<Color> GameCubesColors = new List<Color>
+            public static List<Color> GameCubesColors = new List<Color>
             {
                 new Color(142, 141, 141, 30), // first possition reserved for neutral/ empty like color
                 new Color(76, 255, 0, 255), // Green
@@ -65,6 +68,8 @@ namespace GalaxyBlox.Static
 
             public static Color PanelHeaderBackgroundColor = new Color(121, 140, 170);
             public static Color PanelContentBackgroundColor = new Color(100, 118, 147);
+
+            public static Color RoomsSeparateColor = new Color(0, 0, 0, 95);
         }
 
         public static class Shapes
