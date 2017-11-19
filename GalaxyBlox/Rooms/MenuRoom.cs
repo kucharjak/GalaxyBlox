@@ -101,7 +101,7 @@ namespace GalaxyBlox.Rooms
             if (Settings.Game.User.HighScores.Count != 0)
             {
                 var best = Settings.Game.User.HighScores.First().Value.FirstOrDefault();
-                highScore.Text = $"Highscore: { best.ToString() }";
+                highScore.Text = $"Highscore: { Utils.Strings.ScoreToLongString(best) }";
             }
             else
             {
@@ -134,8 +134,12 @@ namespace GalaxyBlox.Rooms
         private void btnNewGame_Click(object sender, EventArgs e)
         {
             if (mainGame != null)
+            {
                 mainGame.End();
+                mainGame = null;
+            }
 
+            
             mainGame = new GameRoom(this, "Room_Game", Settings.Game.WindowSize, new Vector2());
             mainGame.Show();
         }

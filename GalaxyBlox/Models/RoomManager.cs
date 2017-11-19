@@ -68,6 +68,7 @@ namespace GalaxyBlox.Models
             {
                 ActiveRoom = room;
                 ActiveRoom.LayerDepth = 0.9f;
+                ActiveRoom.IsVisible = true;
             }
             else
             {
@@ -80,7 +81,7 @@ namespace GalaxyBlox.Models
         {
             if (ActiveRoom == room)
             {
-                if (ActiveRoom.Parent != null)
+                if (room.Parent != null)
                 {
                     RoomChanger = new RoomChanger(room.Parent);
                     RoomChanger.ChangeEnded += RoomChanger_ChangeEnded;
@@ -90,6 +91,8 @@ namespace GalaxyBlox.Models
                     ActiveRoom = null;
                 }
             }
+            room.IsVisible = false;
+            room.LayerDepth = 0.1f;
         }
 
         public static void EndRoom(Room room)
@@ -106,7 +109,9 @@ namespace GalaxyBlox.Models
         private static void DeleteRoom(Room room)
         {
             if (rooms.Contains(room))
+            {
                 rooms.Remove(room);
+            }
         }
         
         private static void RoomChanger_ChangeEnded(object sender, EventArgs e)
@@ -117,7 +122,7 @@ namespace GalaxyBlox.Models
                 room.LayerDepth = 0.1f;
 
             ActiveRoom.LayerDepth = 0.9f;
-
+            ActiveRoom.IsVisible = true;
         }
     }
 }

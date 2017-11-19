@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Android.Util;
 using GalaxyBlox.EventArgsClasses;
 using GalaxyBlox.Models;
+using GalaxyBlox.Rooms;
 
 namespace GalaxyBlox.Objects
 {
@@ -504,6 +505,15 @@ namespace GalaxyBlox.Objects
                     Settings.Game.SaveUser();
                 }
             }
+
+            var size = new Size(400, 250);
+            var gameOverRoom = new GameOverRoom(ParentRoom, "Gameover_Room", size, new Vector2((ParentRoom.Size.Width - size.Width) / 2, (ParentRoom.Size.Height - size.Height) / 2), score);
+            gameOverRoom.Show();
+            gameOverRoom.Closed += GameOverRoom_Closed;
+        }
+
+        private void GameOverRoom_Closed(object sender, EventArgs e)
+        {
             StartNewGame();
         }
 

@@ -86,6 +86,27 @@ namespace GalaxyBlox.Objects
 
                 return button;
             }
+
+            public static Button GetGameOverButton(Room parentRoom)
+            {
+                var button = new Button(parentRoom)
+                {
+                    BackgroundImage = Contents.Textures.Pix,
+                    Alpha = 0.5f,
+                    BaseColor = Contents.Colors.MenuButtonBackgroundColor,
+                    DefaultBackgroundColor = Contents.Colors.MenuButtonBackgroundColor,
+                    SelectedBackgroundColor = Contents.Colors.MenuButtonSelectedColor,
+                    PressBackgroundColor = Contents.Colors.MenuButtonPressColor,
+                    TextColor = Contents.Colors.MenuButtonTextColor,
+                    TextSpriteFont = Contents.Fonts.MenuButtonText,
+                    Text = "",
+                    ShowText = true,
+                    TextAlignment = TextAlignment.Center,
+                    LayerDepth = 0.05f
+                };
+
+                return button;
+            }
         }
 
         public static class Visuals
@@ -133,7 +154,23 @@ namespace GalaxyBlox.Objects
                     LayerDepth = 0.05f,
                     Alpha = 1f,
                     TextAlignment = TextAlignment.Left,
-                    TextSpriteFont = Contents.Fonts.PanelHeaderText,
+                    TextSpriteFont = Contents.Fonts.MenuButtonText,
+                    Text = "",
+                    ShowText = true,
+                    TextColor = Color.White,
+                };
+
+                return label;
+            }
+
+            public static GameObject GetGameOverLabel(Room parentRoom)
+            {
+                var label = new GameObject(parentRoom)
+                {
+                    LayerDepth = 0.05f,
+                    Alpha = 1f,
+                    TextAlignment = TextAlignment.Center,
+                    TextSpriteFont = Contents.Fonts.MenuButtonText,
                     Text = "",
                     ShowText = true,
                     TextColor = Color.White,

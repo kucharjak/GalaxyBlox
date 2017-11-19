@@ -13,6 +13,16 @@ namespace GalaxyBlox.Models
 {
     public class Room
     {
+        public event EventHandler Closed;
+        protected virtual void OnClosed(EventArgs e)
+        {
+            EventHandler handler = Closed;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
         public Room Parent { get; private set; }
 
         protected List<GameObject> Objects { get; set; } = new List<GameObject>();
@@ -70,19 +80,14 @@ namespace GalaxyBlox.Models
 
         public void Close()
         {
-            Hide();
             RoomManager.CloseRoom(this);
+            OnClosed(new EventArgs());
         }
 
         public void End()
         {
             RoomManager.EndRoom(this);
-        }
-
-        public void Hide()
-        {
-            LayerDepth = 0.1f;
-            IsVisible = false;
+            OnClosed(new EventArgs());
         }
 
         public virtual void Update(GameTime gameTime)

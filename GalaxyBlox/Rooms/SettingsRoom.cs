@@ -28,10 +28,6 @@ namespace GalaxyBlox.Rooms
         {
         }
 
-        public SettingsRoom(string name, Size size, Vector2 position) : base(name, size, position)
-        {
-        }
-
         protected override void Initialize()
         {
             Background = Contents.Textures.Pix;

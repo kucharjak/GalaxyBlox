@@ -14,6 +14,11 @@ namespace GalaxyBlox.Utils
 {
     public static class Strings
     {
+        public static string ScoreToLongString(long score) // TODO: FORMATING
+        {
+            return score.ToString();
+        }
+
         public static string ScoreToString(long score, int scoreLenght, bool separateWithSpace = false)
         {
             string scoreString = score.ToString();
