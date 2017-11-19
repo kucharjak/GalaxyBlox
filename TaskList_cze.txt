@@ -24,7 +24,7 @@ Kontrola / Bugy
 	- ovìøit chování textu na jiných obrazovkách - pøípadnì opravit
 
 Nápady
-	- klasický mód - zjistit jak se choval pøesnì pùvodní tetris i s poèítáním skóre a pøidat
+	- klasický mód - zjistit jak se choval pøesnì pùvodní tetris i s poèítáním skóre
 	- novej mód - mód, kdy padá na zemi více objektù najednou rùznì rychle a je potøeba mezi nimi pøepínat a postupnì je ovládat
 
 Možná 
