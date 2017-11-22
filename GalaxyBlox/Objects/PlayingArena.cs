@@ -8,6 +8,7 @@ using Android.Util;
 using GalaxyBlox.EventArgsClasses;
 using GalaxyBlox.Models;
 using GalaxyBlox.Rooms;
+using static GalaxyBlox.Static.Settings;
 
 namespace GalaxyBlox.Objects
 {
@@ -34,7 +35,7 @@ namespace GalaxyBlox.Objects
         }
 
         private Size arenaSize;
-        private string gameMode;
+        private SettingOptions.GameMode gameMode;
 
         private long score = 0;
         public long Score
@@ -89,9 +90,9 @@ namespace GalaxyBlox.Objects
         /// <param name="parentRoom"></param>
         /// <param name="size"></param>
         /// <param name="position"></param>
-        public PlayingArena(Room parentRoom, Vector2 size, Vector2 position) : base(parentRoom)
+        public PlayingArena(Room parentRoom, Vector2 size, Vector2 position, SettingOptions.GameMode gameMode) : base(parentRoom)
         {
-            gameMode = "Test";
+            this.gameMode = gameMode;
             arenaSize = Settings.Game.ArenaSize;
 
             BackgroundColor = Contents.Colors.PlaygroundColor;
@@ -127,7 +128,6 @@ namespace GalaxyBlox.Objects
             BackgroundImage = mainRenderTarget;
 
             actorsQueue = new List<Tuple<bool[,], Color>>();
-
             StartNewGame();
         }
 
@@ -486,14 +486,14 @@ namespace GalaxyBlox.Objects
         {
             if (!Settings.Game.Highscores.Items.ContainsKey(gameMode))
             {
-                Settings.Game.Highscores.SaveHighScore(gameMode, new List<long>() { score });
+                Settings.Game.Highscores.SaveHighScore(gameMode, new List<Score>() { new Score("Test", score) });
             }
             else
             {
                 var highscores = Settings.Game.Highscores.Items[gameMode];
-                if (highscores.Any(scr => scr < score))
+                if (highscores.Any(scr => scr.Value < score))
                 {
-                    highscores.Add(score);
+                    highscores.Add(new Score("Test", score));
                     highscores = highscores.OrderByDescending(scr => scr).ToList();
                     
                     while(highscores.Count > Settings.Game.MaxHighscoresPerGameMod)

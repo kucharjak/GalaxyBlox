@@ -3,7 +3,6 @@ Zmìny
 
 Rozšíøení 
 	- podpora více herních módù
-	- rozdìlit nastavení a highscore (highscore rozšíøit o možnost zadat jméno - test automaticky vyplní test)
 	- vytvoøit swipovací objekty, který bude schopný zachyvávat swipovací eventy
 	- upravit ovládání, tak aby se to dobøe hrálo - design se tomu pøispùsobí
 	- rozšíøit a pøidat další zpùsob ovládání (swipnutí dolù pošle dolù a kliknutí na daný místa playingAreny vykoná posunutí a rotaci)
@@ -38,6 +37,7 @@ Nápady
 --------------HOTOVO--------------
 ----------------------------------
 
+- rozdìlit nastavení a highscore (highscore rozšíøit o možnost zadat jméno - test automaticky vyplní test)
 - pøekopat systém místností a domyslet
 - pøidat finální obrazovku (poèítat všechny kostky za hru a možná udìlat nìco jako výpis na konci)
 - rozšíøit nastavení (settings) o nastavení hry pro hráèe (je potøeba vytvoøit okno na nastavení i s objekty, které to budou ovládat)

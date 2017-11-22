@@ -25,5 +25,18 @@ namespace GalaxyBlox.Static
             [XmlEnum("shape")]
             Shape
         }
+
+        [Serializable]
+        public enum GameMode
+        {
+            [XmlEnum("vanilla")]
+            Vanilla,
+            [XmlEnum("normal")]
+            Normal,
+            [XmlEnum("extreme")]
+            Extreme,
+            [XmlEnum("test")]
+            Test
+        }
     }
 }

@@ -114,7 +114,7 @@ namespace GalaxyBlox.Rooms
             if (Settings.Game.Highscores.Items.Count != 0)
             {
                 var best = Settings.Game.Highscores.Items.First().Value.FirstOrDefault();
-                highScore.Text = $"Highscore: { Utils.Strings.ScoreToLongString(best) }";
+                highScore.Text = $"Highscore: { Utils.Strings.ScoreToLongString(best.Value) }";
             }
             else
             {
@@ -130,7 +130,7 @@ namespace GalaxyBlox.Rooms
         private void btnSettings_Click(object sender, EventArgs e)
         {
             var size = new Size(400, 300);
-            var settingsRoom = new SettingsRoom(this, "Room_Settins", size, new Vector2((Size.Width - size.Width) / 2, (Size.Height - size.Height) / 2));
+            var settingsRoom = new SettingsRoom(this, "Room_Settings", size, new Vector2((Size.Width - size.Width) / 2, (Size.Height - size.Height) / 2));
             settingsRoom.Show();
         }
 

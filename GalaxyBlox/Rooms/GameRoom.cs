@@ -19,6 +19,7 @@ namespace GalaxyBlox.Rooms
         private GameObject scoreBoard;
         private GameObject levelBoard;
         private ActorViewer nextActor;
+        private SettingOptions.GameMode gameMode;
 
         public GameRoom(Room parent, string name, Size size, Vector2 position) : base(parent, name, size, position)
         {
@@ -30,6 +31,7 @@ namespace GalaxyBlox.Rooms
 
         protected override void Initialize()
         {
+            gameMode = Settings.Game.Mode;
             FullScreen = true;
             Background = Contents.Textures.BackgroundGame;
             GameObject objToAdd;
@@ -87,7 +89,8 @@ namespace GalaxyBlox.Rooms
             
             arena = new PlayingArena(this,
                 new Vector2(Size.Width - leftPanelWidth - 2 * padding, Size.Height - plyArnPosY - (btnSize.Y + 2 * padding)),
-                new Vector2(0, plyArnPosY))
+                new Vector2(0, plyArnPosY),
+                gameMode)
             {
                 Name = "main_playground",
                 LayerDepth = 0.05f

@@ -24,6 +24,8 @@ namespace GalaxyBlox.Static
             public static readonly Size WindowSize = new Size(480, 800); // new Size(720, 1200);
             public static readonly Size ArenaSize = new Size(12, 20);
 
+            public static SettingOptions.GameMode Mode = SettingOptions.GameMode.Test;
+
             public static UserSettings UserSettings;
             public static Highscores Highscores;
 
@@ -72,13 +74,13 @@ namespace GalaxyBlox.Static
         public class Highscores
         {
             [XmlElement]
-            public SerializableDictionary<string, List<long>> Items = new SerializableDictionary<string, List<long>>();
+            public SerializableDictionary<SettingOptions.GameMode, List<Score>> Items = new SerializableDictionary<SettingOptions.GameMode, List<Score>>();
 
             // METHODS
-            public void SaveHighScore(string gameMode, List<long> scores)
+            public void SaveHighScore(SettingOptions.GameMode gameMode, List<Score> scores)
             {
                 if (Items == null)
-                    Items = new SerializableDictionary<string, List<long>>();
+                    Items = new SerializableDictionary<SettingOptions.GameMode, List<Score>>();
 
                 if (Items.ContainsKey(gameMode))
                     Items[gameMode] = scores;
@@ -86,6 +88,20 @@ namespace GalaxyBlox.Static
                     Items.Add(gameMode, scores);
             }
         }
+
+        [Serializable]
+        public struct Score
+        {
+            public string Name { get; set; }
+            public long Value { get; set; }
+
+            public Score(string name, long value)
+            {
+                Name = name;
+                Value = value;
+            }
+        }
+
 
         [XmlRoot]
         public class UserSettings
