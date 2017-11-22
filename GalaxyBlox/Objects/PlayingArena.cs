@@ -506,14 +506,14 @@ namespace GalaxyBlox.Objects
             Settings.Game.SaveHighscores();
 
             var size = new Size(400, 250);
-            var gameOverRoom = new GameOverRoom(ParentRoom, "Gameover_Room", size, new Vector2((ParentRoom.Size.Width - size.Width) / 2, (ParentRoom.Size.Height - size.Height) / 2), score);
+            var gameOverRoom = new GameOverRoom(ParentRoom, "Room_GameOver", size, new Vector2((ParentRoom.Size.Width - size.Width) / 2, (ParentRoom.Size.Height - size.Height) / 2), score);
             gameOverRoom.Show();
             gameOverRoom.Closed += GameOverRoom_Closed;
         }
 
         private void GameOverRoom_Closed(object sender, EventArgs e)
         {
-            StartNewGame();
+            ParentRoom.End();
         }
 
         private void CheckPlaygroundForFullLines()

@@ -72,7 +72,6 @@
     <Compile Include="Game1.cs" />
     <Compile Include="Models\GameObject.cs" />
     <Compile Include="Models\Room.cs" />
-    <Compile Include="Models\RoomChanger.cs" />
     <Compile Include="Models\RoomManager.cs" />
     <Compile Include="Objects\ActorViewer.cs" />
     <Compile Include="Objects\Button.cs" />

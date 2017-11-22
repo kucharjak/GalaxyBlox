@@ -12,7 +12,17 @@ namespace GalaxyBlox.Rooms
 {
     class MenuRoom : Room
     {
-        GameRoom mainGame = null;
+        GameRoom mainGame
+        {
+            get
+            {
+                var rooms = RoomManager.Rooms.Where(rm => rm.Name == "Room_Game");
+                if (rooms.Count() == 0)
+                    return null;
+                else
+                    return (GameRoom)rooms.First();
+            }
+        }
         Button btnContinue;
         GameObject highScore;
 
@@ -93,6 +103,9 @@ namespace GalaxyBlox.Rooms
         {
             if (mainGame != null)
                 btnContinue.Enabled = true;
+            else
+                btnContinue.Enabled = false;
+
             ResetHighscoreText();
         }
 
@@ -117,7 +130,7 @@ namespace GalaxyBlox.Rooms
         private void btnSettings_Click(object sender, EventArgs e)
         {
             var size = new Size(400, 300);
-            var settingsRoom = new SettingsRoom(this, "Settings_Room", size, new Vector2((Size.Width - size.Width) / 2, (Size.Height - size.Height) / 2));
+            var settingsRoom = new SettingsRoom(this, "Room_Settins", size, new Vector2((Size.Width - size.Width) / 2, (Size.Height - size.Height) / 2));
             settingsRoom.Show();
         }
 
@@ -134,14 +147,9 @@ namespace GalaxyBlox.Rooms
         private void btnNewGame_Click(object sender, EventArgs e)
         {
             if (mainGame != null)
-            {
                 mainGame.End();
-                mainGame = null;
-            }
 
-            
-            mainGame = new GameRoom(this, "Room_Game", Settings.Game.WindowSize, new Vector2());
-            mainGame.Show();
+            new GameRoom(this, "Room_Game", Settings.Game.WindowSize, new Vector2()).Show();
         }
     }
 }

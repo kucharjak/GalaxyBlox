@@ -19,14 +19,11 @@ namespace GalaxyBlox.Models
     public static class RoomManager
     {
         private static List<Room> rooms = new List<Room>();
+        public static List<Room> Rooms { get { return rooms; } }
         public static Room ActiveRoom;
-        private static RoomChanger RoomChanger = null;
 
         public static void Update(GameTime gameTime)
         {
-            if (RoomChanger != null)
-                RoomChanger.Update(gameTime);
-
             if (ActiveRoom != null)
                 ActiveRoom.Update(gameTime);
         }
@@ -64,41 +61,75 @@ namespace GalaxyBlox.Models
             if (!rooms.Contains(room))
                 AddRoom(room);
 
-            if (ActiveRoom == null)
-            {
-                ActiveRoom = room;
-                ActiveRoom.LayerDepth = 0.9f;
-                ActiveRoom.IsVisible = true;
-            }
-            else
-            {
-                RoomChanger = new RoomChanger(room);
-                RoomChanger.ChangeEnded += RoomChanger_ChangeEnded;
-            }
+            if (ActiveRoom != null)
+                ActiveRoom.LayerDepth = 0.8f;
+            
+            ActiveRoom = room;
+            ActiveRoom.LayerDepth = 0.9f;
+            RecalculateRoomDepth();
+
+            ActiveRoom.IsVisible = true;
+            ActiveRoom.AfterChangeEvent();
         }
 
-        public static void CloseRoom(Room room)
+        public static void CloseRoom(Room room, bool endRoom = false)
         {
             if (ActiveRoom == room)
             {
                 if (room.Parent != null)
                 {
-                    RoomChanger = new RoomChanger(room.Parent);
-                    RoomChanger.ChangeEnded += RoomChanger_ChangeEnded;
+                    room.LayerDepth = 0.8f;
+                    room.IsVisible = false;
+                    ActiveRoom = room.Parent;
+                    if (endRoom)
+                        DeleteRoom(room);
+
+                    ActiveRoom.AfterChangeEvent();
+                    ActiveRoom.LayerDepth = 0.9f;
+                    ActiveRoom.IsVisible = true;
                 }
                 else
                 {
-                    ActiveRoom = null;
+                    var newRoom = rooms.Where(rm => rm != room && rm.IsVisible); // try to find new room
+                    if (newRoom.Count() != 0)
+                    {
+                        ActiveRoom = newRoom.First();
+                        if (endRoom)
+                            DeleteRoom(room);
+
+                        ActiveRoom.AfterChangeEvent();
+                    }
+                    else
+                        throw new Exception("Active room can't be null");
                 }
             }
-            room.IsVisible = false;
-            room.LayerDepth = 0.1f;
+            else
+            {
+                if (endRoom)
+                {
+                    DeleteRoom(room);
+                }
+                else
+                {
+                    room.IsVisible = false;
+                }
+            }
+            RecalculateRoomDepth();
         }
 
         public static void EndRoom(Room room)
         {
-            CloseRoom(room);
-            DeleteRoom(room);
+            CloseRoom(room, true);
+        }
+
+        private static void RecalculateRoomDepth()
+        {
+            var layerDepth = 0.0f;
+            foreach (var rm in rooms.OrderBy(rum => rum.LayerDepth))
+            {
+                layerDepth += 0.1f;
+                rm.LayerDepth = layerDepth;
+            }
         }
 
         private static void AddRoom(Room room)
@@ -112,17 +143,6 @@ namespace GalaxyBlox.Models
             {
                 rooms.Remove(room);
             }
-        }
-        
-        private static void RoomChanger_ChangeEnded(object sender, EventArgs e)
-        {
-            (e as ChangerEventArgs).ChangedRoom.AfterChangeEvent();
-
-            foreach (var room in rooms)
-                room.LayerDepth = 0.1f;
-
-            ActiveRoom.LayerDepth = 0.9f;
-            ActiveRoom.IsVisible = true;
         }
     }
 }
