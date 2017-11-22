@@ -484,14 +484,13 @@ namespace GalaxyBlox.Objects
 
         private void GameOver()
         {
-            if (!Settings.Game.User.HighScores.ContainsKey(gameMode))
+            if (!Settings.Game.Highscores.Items.ContainsKey(gameMode))
             {
-                Settings.Game.User.SaveHighScore(gameMode, new List<long>() { score });
-                Settings.Game.SaveUser();
+                Settings.Game.Highscores.SaveHighScore(gameMode, new List<long>() { score });
             }
             else
             {
-                var highscores = Settings.Game.User.HighScores[gameMode];
+                var highscores = Settings.Game.Highscores.Items[gameMode];
                 if (highscores.Any(scr => scr < score))
                 {
                     highscores.Add(score);
@@ -501,10 +500,10 @@ namespace GalaxyBlox.Objects
                     {
                         highscores.RemoveAt(highscores.Count - 1);
                     }
-                    Settings.Game.User.SaveHighScore(gameMode, highscores);
-                    Settings.Game.SaveUser();
+                    Settings.Game.Highscores.SaveHighScore(gameMode, highscores);
                 }
             }
+            Settings.Game.SaveHighscores();
 
             var size = new Size(400, 250);
             var gameOverRoom = new GameOverRoom(ParentRoom, "Gameover_Room", size, new Vector2((ParentRoom.Size.Width - size.Width) / 2, (ParentRoom.Size.Height - size.Height) / 2), score);
@@ -714,7 +713,7 @@ namespace GalaxyBlox.Objects
             //playgroundEffectsArray = new Color?[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height]; // create new effects array
             playgroundEffectsList.Clear();
 
-            if (Settings.Game.User.Indicator != SettingOptions.Indicator.None) // draw indicator if set
+            if (Settings.Game.UserSettings.Indicator != SettingOptions.Indicator.None) // draw indicator if set
                 DrawIndicator();
 
             DrawActor(actor, actorPosition, actorColor);
@@ -737,7 +736,7 @@ namespace GalaxyBlox.Objects
 
         private void DrawIndicator()
         {
-            switch(Settings.Game.User.Indicator)
+            switch(Settings.Game.UserSettings.Indicator)
             {
                 case SettingOptions.Indicator.Shadow:
                     {

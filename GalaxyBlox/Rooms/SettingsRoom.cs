@@ -32,7 +32,7 @@ namespace GalaxyBlox.Rooms
         {
             Background = Contents.Textures.Pix;
             BaseColor = Color.DarkBlue;
-            newIndicator = Settings.Game.User.Indicator;
+            newIndicator = Settings.Game.UserSettings.Indicator;
 
             var margin = 40;
             var padding = 20;
@@ -75,8 +75,8 @@ namespace GalaxyBlox.Rooms
 
         private void BtnOK_Click(object sender, EventArgs e)
         {
-            Settings.Game.User.Indicator = newIndicator;
-            Settings.Game.SaveUser();
+            Settings.Game.UserSettings.Indicator = newIndicator;
+            Settings.Game.SaveUserSettings();
             End();
         }
 

@@ -21,10 +21,12 @@ namespace GalaxyBlox.Rooms
     {
         private long highscore;
         Button btnOK;
+        GameObject score;
 
         public GameOverRoom(Room parent, string name, Size size, Vector2 position, long highscore) : base(parent, name, size, position)
         {
             this.highscore = highscore;
+            score.Text = $"Skóre: { Utils.Strings.ScoreToLongString(highscore) }";
         }
 
         protected override void Initialize()
@@ -41,11 +43,10 @@ namespace GalaxyBlox.Rooms
             Objects.Add(obj);
 
             posY += margin;
-            obj = Bank.Visuals.GetGameOverLabel(this);
-            obj.Text = $"Highscore: { Utils.Strings.ScoreToLongString(highscore) }";
-            obj.Size = new Vector2(Size.Width, 45);
-            obj.Position = new Vector2(0, posY);
-            Objects.Add(obj);
+            score = Bank.Visuals.GetGameOverLabel(this);
+            score.Size = new Vector2(Size.Width, 45);
+            score.Position = new Vector2(0, posY);
+            Objects.Add(score);
 
             btnOK = Bank.Buttons.GetSettingsButton(this);
             btnOK.Size = new Vector2(100, 45);

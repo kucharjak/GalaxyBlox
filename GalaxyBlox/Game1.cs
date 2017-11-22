@@ -41,7 +41,7 @@ namespace GalaxyBlox
         {
             base.Initialize();
 
-            Static.Settings.Game.LoadUser();
+            Static.Settings.Game.LoadAll();
 
             GameContent = Content;
             Random = new Random(unchecked((int)DateTime.Now.Ticks));

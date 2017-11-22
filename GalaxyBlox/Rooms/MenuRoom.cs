@@ -49,7 +49,7 @@ namespace GalaxyBlox.Rooms
                 TextColor = Color.White
             };
             Objects.Add(highScore);
-            ResetHighScoreText();
+            ResetHighscoreText();
 
             ////// ADDING BUTTONS //////
             btnContinue = Bank.Buttons.GetMenuButton(this);
@@ -93,19 +93,19 @@ namespace GalaxyBlox.Rooms
         {
             if (mainGame != null)
                 btnContinue.Enabled = true;
-            ResetHighScoreText();
+            ResetHighscoreText();
         }
 
-        private void ResetHighScoreText()
+        private void ResetHighscoreText()
         { 
-            if (Settings.Game.User.HighScores.Count != 0)
+            if (Settings.Game.Highscores.Items.Count != 0)
             {
-                var best = Settings.Game.User.HighScores.First().Value.FirstOrDefault();
+                var best = Settings.Game.Highscores.Items.First().Value.FirstOrDefault();
                 highScore.Text = $"Highscore: { Utils.Strings.ScoreToLongString(best) }";
             }
             else
             {
-                highScore.Text = "Highscore: 0";
+                highScore.Text = "Highscore: -----";
             }
         }
 

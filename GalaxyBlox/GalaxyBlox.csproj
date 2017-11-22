@@ -89,6 +89,7 @@
     <Compile Include="Static\Settings.cs" />
     <Compile Include="Utils\SerializableDictionary.cs" />
     <Compile Include="Utils\Strings.cs" />
+    <Compile Include="Utils\Xml.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Fonts\ButtonText.spritefont" />
