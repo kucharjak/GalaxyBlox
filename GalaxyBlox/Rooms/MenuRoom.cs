@@ -101,6 +101,9 @@ namespace GalaxyBlox.Rooms
 
         public override void AfterChangeEvent()
         {
+            if (btnContinue == null)
+                return;
+
             if (mainGame != null)
                 btnContinue.Enabled = true;
             else
@@ -130,8 +133,7 @@ namespace GalaxyBlox.Rooms
         private void btnSettings_Click(object sender, EventArgs e)
         {
             var size = new Size(400, 300);
-            var settingsRoom = new SettingsRoom(this, "Room_Settings", size, new Vector2((Size.Width - size.Width) / 2, (Size.Height - size.Height) / 2));
-            settingsRoom.Show();
+            new SettingsRoom(this, "Room_Settings", size, new Vector2((Size.Width - size.Width) / 2, (Size.Height - size.Height) / 2)).Show();
         }
 
         private void btnControls_Click(object sender, EventArgs e)

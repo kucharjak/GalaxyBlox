@@ -73,8 +73,6 @@ namespace GalaxyBlox.Models
 
         public void Show()
         {
-            LayerDepth = 0.9f;
-            IsVisible = true;
             RoomManager.ShowRoom(this);
         }
 
@@ -95,8 +93,9 @@ namespace GalaxyBlox.Models
             if (IsPaused || !IsVisible)
                 return;
 
-            var input = TouchPanel.GetState().Where(tch => tch.State != TouchLocationState.Invalid).FirstOrDefault();
-            HandleInput(input);
+            var input = TouchPanel.GetState().Where(tch => tch.State != TouchLocationState.Invalid);
+            if (input.Count() > 0)
+                HandleInput(input.FirstOrDefault());
 
             foreach (var obj in Objects)
                 obj.Update(gameTime);
@@ -135,37 +134,54 @@ namespace GalaxyBlox.Models
             if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.Back))
                 HandleBackButton();
 
-            if (input == null || input.State == TouchLocationState.Invalid)
-                return;
+            var rectInput = new Rectangle((int)input.Position.X, (int)input.Position.Y, 1, 1);
+            var swipe = Objects.Where(area => area.Type == "swipe_area").ToArray();
+            bool swiped = false;
+            if (swipe.Count() > 0)
+            {
+                if (input.State == TouchLocationState.Pressed || input.State == TouchLocationState.Released)
+                {
+                    var touch = swipe.Where(btn => btn.DisplayRectWithScaleAndRoomPosition().Intersects(rectInput));
+                    foreach (var area in touch)
+                    {
+                        if (input.State == TouchLocationState.Pressed)
+                            (area as SwipeArea).StartSwipe(input.Position);
+                        else
+                            if ((area as SwipeArea).FinishSwipe(input.Position))
+                                swiped = true;
+                    }
+                }
+            }
 
-            var vectInput = input.Position; //UnScaleVector(input.Position);
-            var rectInput = new Rectangle((int)vectInput.X, (int)vectInput.Y, 1, 1);
             var buttons = Objects.Where(btn => btn.Type == "button").ToArray();
             if (buttons.Count() > 0)
             {
                 Button touchedButton = null;
-                switch (input.State)
-                {
-                    case TouchLocationState.Moved:
-                    case TouchLocationState.Pressed:
-                        {
-                            var touch = buttons.Where(btn => btn.DisplayRectWithScaleAndRoomPosition().Intersects(rectInput)).FirstOrDefault();
-                            if (touch != null)
-                            {
-                                touchedButton = (touch as Button);
-                                touchedButton.RaiseHover(new EventArgs());
-                            }
-                        }
-                        break;
-                    case TouchLocationState.Released:
-                        {
-                            var pressedButton = buttons.Where(btn => btn.DisplayRectWithScaleAndRoomPosition().Intersects(rectInput)).FirstOrDefault();
-                            if (pressedButton != null)
-                                (pressedButton as Button).RaiseClick(new EventArgs());
-                        }
-                        break;
-                }
 
+                if (!swiped)
+                {
+                    switch (input.State)
+                    {
+                        case TouchLocationState.Moved:
+                        case TouchLocationState.Pressed:
+                            {
+                                var touch = buttons.Where(btn => btn.DisplayRectWithScaleAndRoomPosition().Intersects(rectInput)).FirstOrDefault();
+                                if (touch != null)
+                                {
+                                    touchedButton = (touch as Button);
+                                    touchedButton.RaiseHover(new EventArgs());
+                                }
+                            }
+                            break;
+                        case TouchLocationState.Released:
+                            {
+                                var pressedButton = buttons.Where(btn => btn.DisplayRectWithScaleAndRoomPosition().Intersects(rectInput)).FirstOrDefault();
+                                if (pressedButton != null)
+                                    (pressedButton as Button).RaiseClick(new EventArgs());
+                            }
+                            break;
+                    }
+                }
                 var releasedButtons = buttons.Where(btn => btn != touchedButton);
                 foreach (var btn in releasedButtons)
                     (btn as Button).RaiseRelease(new EventArgs());

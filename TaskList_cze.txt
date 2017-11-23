@@ -3,11 +3,10 @@ Zmìny
 
 Rozšíøení 
 	- podpora více herních módù
-	- vytvoøit swipovací objekty, který bude schopný zachyvávat swipovací eventy
-	- upravit ovládání, tak aby se to dobøe hrálo - design se tomu pøispùsobí
-	- rozšíøit a pøidat další zpùsob ovládání (swipnutí dolù pošle dolù a kliknutí na daný místa playingAreny vykoná posunutí a rotaci)
 	- rozmyslet si design a podle toho pokraèovat dál ve vývoji
 	- upravit slovník pro Indicator Name, aby byl univerzálnìjší a možný použít i na jiných místech projektu
+	- upravit ovládání, tak aby se to dobøe hrálo - design se tomu pøispùsobí
+	- rozšíøit a pøidat další zpùsob ovládání (swipnutí dolù pošle dolù a kliknutí na daný místa playingAreny vykoná posunutí a rotaci)
 	- pøidat bonusy a vymyslet elegantnší zpùsob, jak je získávat (mít v pozadí padající hvìzdu a pokud by na ní hráè stihl kliknout, tak by získal bonusobou krabièku/truhlu)
 	- vyhodit ze hry room changer - animace øešit tím, že se vytvoøí "Místnost" která bude dìlat animaci sama o sobì (nebudou swipovací, ale nejspíše jenom fade animace)
 	- vymyslet jiný tvary, než ty základní - pøidat pozdìji (bude potøeba odladit)
@@ -37,6 +36,7 @@ Nápady
 --------------HOTOVO--------------
 ----------------------------------
 
+- vytvoøit swipovací objekty, který bude schopný zachyvávat swipovací eventy
 - rozdìlit nastavení a highscore (highscore rozšíøit o možnost zadat jméno - test automaticky vyplní test)
 - pøekopat systém místností a domyslet
 - pøidat finální obrazovku (poèítat všechny kostky za hru a možná udìlat nìco jako výpis na konci)

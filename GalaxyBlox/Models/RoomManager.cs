@@ -125,7 +125,7 @@ namespace GalaxyBlox.Models
         private static void RecalculateRoomDepth()
         {
             var layerDepth = 0.0f;
-            foreach (var rm in rooms.OrderBy(rum => rum.LayerDepth))
+            foreach (var rm in rooms.Where(rum => rum != ActiveRoom).OrderBy(rum => rum.LayerDepth))
             {
                 layerDepth += 0.1f;
                 rm.LayerDepth = layerDepth;

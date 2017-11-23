@@ -34,6 +34,16 @@ namespace GalaxyBlox.Objects
             }
         }
 
+        public event EventHandler GameEnded;
+        protected virtual void OnGameEnd(EventArgs e)
+        {
+            EventHandler handler = GameEnded;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
         private Size arenaSize;
         private SettingOptions.GameMode gameMode;
 
@@ -120,8 +130,8 @@ namespace GalaxyBlox.Objects
                 (arenaSize.Height - 1) * (playgroundCubeSize + playgroundCubeMargin) + playgroundCubeSize + 2 * playgroundInnerPadding);
 
             Position = new Vector2(
-                0, //(size.X - Size.X) / 2,
-                (position.Y + size.Y) - Size.Y);
+                position.X + ((size.X - Size.X) / 2),
+                position.Y + ((size.Y - Size.Y) / 2));  //(position.Y + size.Y) - Size.Y);
             
             mainRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)Size.X, (int)Size.Y);
             backgroundRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)Size.X, (int)Size.Y);
@@ -513,7 +523,7 @@ namespace GalaxyBlox.Objects
 
         private void GameOverRoom_Closed(object sender, EventArgs e)
         {
-            ParentRoom.End();
+            OnGameEnd(new EventArgs());
         }
 
         private void CheckPlaygroundForFullLines()

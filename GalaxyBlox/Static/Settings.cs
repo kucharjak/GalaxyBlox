@@ -22,7 +22,7 @@ namespace GalaxyBlox.Static
             public const int MaxHighscoresPerGameMod = 1;
 
             public static readonly Size WindowSize = new Size(480, 800); // new Size(720, 1200);
-            public static readonly Size ArenaSize = new Size(12, 20);
+            public static readonly Size ArenaSize = new Size(12, 24);
 
             public static SettingOptions.GameMode Mode = SettingOptions.GameMode.Test;
 

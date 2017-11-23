@@ -11,6 +11,7 @@ using Android.Views;
 using Android.Widget;
 using GalaxyBlox.Models;
 using Microsoft.Xna.Framework;
+using static GalaxyBlox.Objects.SwipeArea;
 
 namespace GalaxyBlox.EventArgsClasses
 {
@@ -33,6 +34,18 @@ namespace GalaxyBlox.EventArgsClasses
         {
             NewActor = newActor;
             NewActorsColor = newActorsColor;
+        }
+    }
+
+    class SwipeEventArgs : EventArgs
+    {
+        public SwipeDirection Direction;
+        public float Force;
+
+        public SwipeEventArgs(SwipeDirection direction, float force)
+        {
+            Direction = direction;
+            Force = force;
         }
     }
 }
