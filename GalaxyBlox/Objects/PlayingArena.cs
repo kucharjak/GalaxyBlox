@@ -494,7 +494,7 @@ namespace GalaxyBlox.Objects
                 if (highscores.Any(scr => scr.Value < score))
                 {
                     highscores.Add(new Score("Test", score));
-                    highscores = highscores.OrderByDescending(scr => scr).ToList();
+                    highscores = highscores.OrderByDescending(scr => scr.Value).ToList();
                     
                     while(highscores.Count > Settings.Game.MaxHighscoresPerGameMod)
                     {
