@@ -132,7 +132,7 @@ namespace GalaxyBlox.Objects
             Position = new Vector2(
                 position.X + ((size.X - Size.X) / 2),
                 position.Y + ((size.Y - Size.Y) / 2));  //(position.Y + size.Y) - Size.Y);
-            
+
             mainRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)Size.X, (int)Size.Y);
             backgroundRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)Size.X, (int)Size.Y);
             BackgroundImage = mainRenderTarget;
@@ -515,8 +515,8 @@ namespace GalaxyBlox.Objects
             }
             Settings.Game.SaveHighscores();
 
-            var size = new Vector2(400, 250);
-            var gameOverRoom = new GameOverRoom(ParentRoom, "Room_GameOver", size, new Vector2((ParentRoom.Size.X - Size.X) / 2, (ParentRoom.Size.Y - Size.Y) / 2), score);
+            var size = new Vector2(600, 350);
+            var gameOverRoom = new GameOverRoom(ParentRoom, "Room_GameOver", size, new Vector2((ParentRoom.Size.X - size.X) / 2, (ParentRoom.Size.Y - size.Y) / 2), score);
             gameOverRoom.Show();
             gameOverRoom.Closed += GameOverRoom_Closed;
         }

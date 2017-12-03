@@ -2,6 +2,8 @@ Zmìny
 	- pokud to pùjde - zmìnit pøekleslování na konkrétní èásti playingAreny
 
 Rozšíøení 
+	- oprava meníèek
+	- upravit velikost rozlišení PlayingAreny pro zlepšení visualu na rùzných zaøízeních
 	- podpora více herních módù
 	- dát dohromady grafický styl hry
 	- upravit slovník pro Indicator Name, aby byl univerzálnìjší a možný použít i na jiných místech projektu

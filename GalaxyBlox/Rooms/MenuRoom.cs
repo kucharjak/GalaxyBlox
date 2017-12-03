@@ -126,8 +126,8 @@ namespace GalaxyBlox.Rooms
 
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            var size = new Vector2(400, 300);
-            new SettingsRoom(this, "Room_Settings", size, new Vector2((Size.X - Size.X) / 2, (Size.Y - Size.Y) / 2)).Show();
+            var size = new Vector2(600, 350);
+            new SettingsRoom(this, "Room_Settings", size, new Vector2((Size.X - size.X) / 2, (Size.Y - size.Y) / 2)).Show();
         }
 
         private void btnControls_Click(object sender, EventArgs e)

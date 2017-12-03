@@ -256,6 +256,7 @@ namespace GalaxyBlox.Rooms
             arena.ActorsQueueChanged += Arena_ActorsQueueChanged;
             arena.ScoreChanged += Arena_ScoreChanged;
             arena.GameEnded += Arena_GameEnded;
+            arena.StartNewGame();
             Objects.Add(arena);
         }
 
@@ -266,8 +267,6 @@ namespace GalaxyBlox.Rooms
             else
             {
                 arena.StartNewGame();
-                lblLevel.Text = "Level";
-                lblScore.Text = "Skóre";
             }
         }
 
@@ -289,10 +288,20 @@ namespace GalaxyBlox.Rooms
         private void Arena_ScoreChanged(object sender, EventArgs e)
         {
             if (lblScore != null)
-                lblScore.Text = Strings.ScoreToLongString(arena.Score); //Strings.ScoreToString(arena.Score, 3); 
+            {
+                if (arena.Score > 0)
+                    lblScore.Text = Strings.ScoreToLongString(arena.Score); //Strings.ScoreToString(arena.Score, 3); 
+                else
+                    lblScore.Text = "Skóre";
+            }
 
             if (lblLevel != null)
-                lblLevel.Text = arena.Level.ToString();
+            {
+                if (arena.Level > 0)
+                    lblLevel.Text = arena.Level.ToString();
+                else
+                    lblLevel.Text = "Level";
+            }
         }
 
         protected override void HandleBackButton()
