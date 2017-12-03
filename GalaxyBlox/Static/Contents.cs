@@ -25,6 +25,8 @@ namespace GalaxyBlox.Static
             public static Texture2D ControlButton_right;
             public static Texture2D ControlButton_pause;
 
+            public static Texture2D BorderedButtonBackground;
+
             public static Texture2D BackgroundGame;
             public static Texture2D BackgroundMenu;
         }
@@ -42,18 +44,18 @@ namespace GalaxyBlox.Static
             {
                 new Color(255, 255, 255) * 0.3f, // first possition reserved for neutral/ empty like color
                 new Color(76, 255, 0, 255), // Green
-                //Color.Red,
-                //Color.Yellow,
-                //new Color(42, 0, 255), // Blue
+                Color.Red,
+                Color.Yellow,
+                new Color(42, 0, 255), // Blue
                 //new Color(255, 114, 0) // Orange
             };
 
-            public static Color IndicatorColor = Color.Red; // new Color(86, 86, 86) * 0.6f;
+            public static Color IndicatorColor = new Color(255, 255, 255) * 0.7f; // new Color(86, 86, 86) * 0.6f;
 
             public static Color PlaygroundColor = Color.TransparentBlack;
             public static Color PlaygroundBorderColor = new Color(255, 255, 255) * 0.3f;
 
-            public static Color ActorViewerBackgroundColor = new Color(198, 215, 255);
+            public static Color ActorViewerBackgroundColor = Color.Transparent;
 
             public static Color MenuButtonBackgroundColor = new Color(121, 140, 170);
             public static Color MenuButtonSelectedColor = new Color(153, 189, 247);

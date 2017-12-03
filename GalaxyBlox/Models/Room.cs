@@ -141,7 +141,7 @@ namespace GalaxyBlox.Models
             {
                 if (input.State == TouchLocationState.Pressed || input.State == TouchLocationState.Released)
                 {
-                    var touch = swipe.Where(btn => btn.DisplayRectWithScaleAndRoomPosition().Intersects(rectInput));
+                    var touch = swipe.Where(btn => btn.DisplayRect().Intersects(rectInput));
                     foreach (var area in touch)
                     {
                         if (input.State == TouchLocationState.Pressed)
@@ -165,7 +165,7 @@ namespace GalaxyBlox.Models
                         case TouchLocationState.Moved:
                         case TouchLocationState.Pressed:
                             {
-                                var touch = buttons.Where(btn => btn.DisplayRectWithScaleAndRoomPosition().Intersects(rectInput)).FirstOrDefault();
+                                var touch = buttons.Where(btn => btn.DisplayRect().Intersects(rectInput)).FirstOrDefault();
                                 if (touch != null)
                                 {
                                     touchedButton = (touch as Button);
@@ -175,7 +175,7 @@ namespace GalaxyBlox.Models
                             break;
                         case TouchLocationState.Released:
                             {
-                                var pressedButton = buttons.Where(btn => btn.DisplayRectWithScaleAndRoomPosition().Intersects(rectInput)).FirstOrDefault();
+                                var pressedButton = buttons.Where(btn => btn.DisplayRect().Intersects(rectInput)).FirstOrDefault();
                                 if (pressedButton != null)
                                     (pressedButton as Button).RaiseClick(new EventArgs());
                             }

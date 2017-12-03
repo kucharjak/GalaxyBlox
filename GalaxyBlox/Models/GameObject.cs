@@ -83,10 +83,10 @@ namespace GalaxyBlox.Models
             var baseAlpha = Enabled ? 1f : .25f;
 
             if (BackgroundImage != null)
-                spriteBatch.Draw(BackgroundImage, DisplayRectWithScaleAndRoomPosition(), null, Color * baseAlpha, 0, new Vector2(), SpriteEffects.None, ParentRoom.LayerDepth + LayerDepth);
+                spriteBatch.Draw(BackgroundImage, DisplayRect(), null, Color * baseAlpha, 0, new Vector2(), SpriteEffects.None, ParentRoom.LayerDepth + LayerDepth);
 
             if (ShowText && TextSpriteFont != null)
-                spriteBatch.DrawString(TextSpriteFont, Text, DisplayTextPositionWithScaleAndRoomPos(), TextColor * baseAlpha, 0f, new Vector2(), Scale, SpriteEffects.None, ParentRoom.LayerDepth + LayerDepth + 0.01f);
+                spriteBatch.DrawString(TextSpriteFont, Text, DisplayText(), TextColor * baseAlpha, 0f, new Vector2(), Scale, SpriteEffects.None, ParentRoom.LayerDepth + LayerDepth + 0.01f);
         }
 
         private void UpdateTextPosition()
@@ -99,18 +99,7 @@ namespace GalaxyBlox.Models
             }
         }
 
-        public Vector2 DisplayTextPositionWithScale()
-        {
-            var offsetX = Origin.X * (textSize.X * Scale - textSize.X);
-            var offsetY = Origin.Y * (textSize.Y * Scale - textSize.Y);
-
-            var resultVect = new Vector2(
-                TextPosition.X * ParentRoom.Scale + ParentRoom.InGameOffsetX - offsetX,
-                TextPosition.Y * ParentRoom.Scale + ParentRoom.InGameOffsetY - offsetY);
-            return resultVect;
-        }
-
-        public Vector2 DisplayTextPositionWithScaleAndRoomPos()
+        public Vector2 DisplayText()
         {
             var offsetX = Origin.X * (textSize.X * Scale - textSize.X);
             var offsetY = Origin.Y * (textSize.Y * Scale - textSize.Y);
@@ -122,31 +111,6 @@ namespace GalaxyBlox.Models
         }
 
         public Rectangle DisplayRect()
-        {
-            var resultRect = new Rectangle(
-                (int)(Position.X * ParentRoom.Scale + ParentRoom.InGameOffsetX),
-                (int)(Position.Y * ParentRoom.Scale + ParentRoom.InGameOffsetY),
-                (int)(Size.X * ParentRoom.Scale),
-                (int)(Size.Y * ParentRoom.Scale)
-                );
-            return resultRect;
-        }
-
-        public Rectangle DisplayRectWithScale()
-        {
-            var offsetX = Origin.X * (Size.X * Scale - Size.X);
-            var offsetY = Origin.Y * (Size.Y * Scale - Size.Y);
-
-            var resultRect = new Rectangle(
-                (int)(Position.X * ParentRoom.Scale + ParentRoom.InGameOffsetX - offsetX),
-                (int)(Position.Y * ParentRoom.Scale + ParentRoom.InGameOffsetY - offsetY),
-                (int)(Size.X * ParentRoom.Scale * Scale),
-                (int)(Size.Y * ParentRoom.Scale * Scale)
-                );
-            return resultRect;
-        }
-
-        public Rectangle DisplayRectWithScaleAndRoomPosition()
         {
             var offsetX = Origin.X * (Size.X * Scale - Size.X);
             var offsetY = Origin.Y * (Size.Y * Scale - Size.Y);

@@ -69,7 +69,8 @@ namespace GalaxyBlox
             Static.Contents.Textures.ControlButton_rotate = Content.Load<Texture2D>("Sprites/ControlButton_rotate");
             Static.Contents.Textures.ControlButton_pause = Content.Load<Texture2D>("Sprites/ControlButton_pause");
             Static.Contents.Textures.BackgroundGame = Content.Load<Texture2D>("Backgrounds/Background");
-            Static.Contents.Textures.BackgroundMenu = Static.Contents.Textures.BackgroundGame; //Content.Load<Texture2D>("Backgrounds/menu");
+            Static.Contents.Textures.BackgroundMenu = Static.Contents.Textures.BackgroundGame; 
+            Static.Contents.Textures.BorderedButtonBackground = Content.Load<Texture2D>("Sprites/BorderedButtonBackground");
         }
 
         /// <summary>
@@ -79,6 +80,24 @@ namespace GalaxyBlox
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+            Static.Contents.Textures.Pix.Dispose();
+            Static.Contents.Textures.Pix = null;
+            Static.Contents.Textures.ControlButton_fall.Dispose();
+            Static.Contents.Textures.ControlButton_fall = null;
+            Static.Contents.Textures.ControlButton_left.Dispose();
+            Static.Contents.Textures.ControlButton_left = null;
+            Static.Contents.Textures.ControlButton_right.Dispose();
+            Static.Contents.Textures.ControlButton_right = null;
+            Static.Contents.Textures.ControlButton_rotate.Dispose();
+            Static.Contents.Textures.ControlButton_rotate = null;
+            Static.Contents.Textures.ControlButton_pause.Dispose();
+            Static.Contents.Textures.ControlButton_pause = null;
+            Static.Contents.Textures.BackgroundGame.Dispose();
+            Static.Contents.Textures.BackgroundGame = null;
+            Static.Contents.Textures.BackgroundMenu.Dispose();
+            Static.Contents.Textures.BackgroundMenu = null;
+            Static.Contents.Textures.BorderedButtonBackground.Dispose();
+            Static.Contents.Textures.BorderedButtonBackground = null;
         }
 
         /// <summary>

@@ -41,7 +41,7 @@ namespace GalaxyBlox.Objects
             this.Position = position;
             this.Size = size;
 
-            var realSize = DisplayRectWithScaleAndRoomPosition();
+            var realSize = DisplayRect();
             widthSwipeTolerance = realSize.Width * 0.10f;
             heightSwipeTolerance = realSize.Height * 0.10f;
         }

@@ -52,8 +52,8 @@ namespace GalaxyBlox.Rooms
 
             // ADDING FIRST PANEL
             // SETTINGS 
-            var viewerSize = 120;
-            var viewerPadding = 10;
+            var viewerSize = 110;
+            var viewerPadding = 15;
             var btnPauseSize = 100;
             var lblScoreSize = new Vector2(Size.Width, 55);
             var lblLevelSize = new Vector2(Size.Width, 45);
@@ -72,6 +72,13 @@ namespace GalaxyBlox.Rooms
             var playingArenaStart = lastObj.Position.Y + lastObj.Size.Y + 5;
 
             // ACTOR VIEWER
+            Objects.Add(new GameObject(this)
+            {
+                BackgroundImage = Contents.Textures.BorderedButtonBackground,
+                Size = new Vector2(viewerSize, viewerSize),
+                Position = new Vector2(viewerPadding, viewerPadding),
+                LayerDepth = 0.045f
+            });
             actorViewer = new ActorViewer(this, new Vector2(viewerSize, viewerSize), Contents.Colors.ActorViewerBackgroundColor)
             {
                 Position = new Vector2(viewerPadding, viewerPadding),
@@ -210,10 +217,10 @@ namespace GalaxyBlox.Rooms
                 {
                     Size = new Vector2(btnBonusSize),
                     Position = new Vector2(btnBonusLeftPadding + (btnBonusMargin + btnBonusSize) * 0, lastObj.Position.Y + btnBonusPadding),
-                    BackgroundImage = Contents.Textures.Pix,
-                    BaseColor = Contents.Colors.BonusButtonBackgroundColor,
-                    DefaultBackgroundColor = Contents.Colors.BonusButtonBackgroundColor,
-                    SelectedBackgroundColor = Contents.Colors.BonusButtonSelectedColor,
+                    BackgroundImage =  Contents.Textures.BorderedButtonBackground,
+                    BaseColor = Color.White,
+                    DefaultBackgroundColor = Color.White,
+                    SelectedBackgroundColor = Color.White,
                     LayerDepth = 0.05f
                 };
                 Objects.Add(btnBonus1);
@@ -222,10 +229,10 @@ namespace GalaxyBlox.Rooms
                 {
                     Size = new Vector2(btnBonusSize),
                     Position = new Vector2(btnBonusLeftPadding + (btnBonusMargin + btnBonusSize) * 1, lastObj.Position.Y + btnBonusPadding),
-                    BackgroundImage = Contents.Textures.Pix,
-                    BaseColor = Contents.Colors.BonusButtonBackgroundColor,
-                    DefaultBackgroundColor = Contents.Colors.BonusButtonBackgroundColor,
-                    SelectedBackgroundColor = Contents.Colors.BonusButtonSelectedColor,
+                    BackgroundImage = Contents.Textures.BorderedButtonBackground,
+                    BaseColor = Color.White,
+                    DefaultBackgroundColor = Color.White,
+                    SelectedBackgroundColor = Color.White,
                     LayerDepth = 0.05f
                 };
                 Objects.Add(btnBonus2);
@@ -234,10 +241,10 @@ namespace GalaxyBlox.Rooms
                 {
                     Size = new Vector2(btnBonusSize),
                     Position = new Vector2(btnBonusLeftPadding + (btnBonusMargin + btnBonusSize) * 2, lastObj.Position.Y + btnBonusPadding),
-                    BackgroundImage = Contents.Textures.Pix,
-                    BaseColor = Contents.Colors.BonusButtonBackgroundColor,
-                    DefaultBackgroundColor = Contents.Colors.BonusButtonBackgroundColor,
-                    SelectedBackgroundColor = Contents.Colors.BonusButtonSelectedColor,
+                    BackgroundImage = Contents.Textures.BorderedButtonBackground,
+                    BaseColor = Color.White,
+                    DefaultBackgroundColor = Color.White,
+                    SelectedBackgroundColor = Color.White,
                     LayerDepth = 0.05f
                 };
                 Objects.Add(btnBonus3);
