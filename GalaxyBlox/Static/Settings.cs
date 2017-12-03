@@ -21,8 +21,8 @@ namespace GalaxyBlox.Static
             private const string highscoresPath = "highscores.xml";
             public const int MaxHighscoresPerGameMod = 1;
 
-            public static readonly Size WindowSize = new Size(480, 800); // new Size(720, 1200);
-            public static readonly Size ArenaSize = new Size(12, 24);
+            public static readonly Size WindowSize = new Size(720, 1208);
+            public static readonly Size ArenaSize = new Size(12, 20);
 
             public static SettingOptions.GameMode Mode = SettingOptions.GameMode.Test;
 

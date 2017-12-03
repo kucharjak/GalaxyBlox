@@ -3,10 +3,8 @@ Zmìny
 
 Rozšíøení 
 	- podpora více herních módù
-	- rozmyslet si design a podle toho pokraèovat dál ve vývoji
+	- dát dohromady grafický styl hry
 	- upravit slovník pro Indicator Name, aby byl univerzálnìjší a možný použít i na jiných místech projektu
-	- upravit ovládání, tak aby se to dobøe hrálo - design se tomu pøispùsobí
-	- rozšíøit a pøidat další zpùsob ovládání (swipnutí dolù pošle dolù a kliknutí na daný místa playingAreny vykoná posunutí a rotaci)
 	- pøidat bonusy a vymyslet elegantnší zpùsob, jak je získávat (mít v pozadí padající hvìzdu a pokud by na ní hráè stihl kliknout, tak by získal bonusobou krabièku/truhlu)
 	- vyhodit ze hry room changer - animace øešit tím, že se vytvoøí "Místnost" která bude dìlat animaci sama o sobì (nebudou swipovací, ale nejspíše jenom fade animace)
 	- vymyslet jiný tvary, než ty základní - pøidat pozdìji (bude potøeba odladit)
@@ -23,8 +21,8 @@ Features
 	- pøidat animace na tlaèítka (když na nìm hoveruju, tak bude pulzovat a když na nìj kliknu, tak se zmáèkne)
  
 Kontrola / Bugy
+	- velikost písma musí respektovat velikost okna a rozlišení
 	- sjednotit používané membery po celém øešení
-	- pøemyslet a pøepsat zobrazování na více obrazovek
 	- ovìøit chování textu na jiných obrazovkách - pøípadnì opravit
 
 Nápady
@@ -36,6 +34,9 @@ Nápady
 --------------HOTOVO--------------
 ----------------------------------
 
+- pøemyslet a pøepsat zobrazování na více obrazovek
+- upravit ovládání, tak aby se to dobøe hrálo - design se tomu pøispùsobí
+- rozmyslet si design a podle toho pokraèovat dál ve vývoji
 - vytvoøit swipovací objekty, který bude schopný zachyvávat swipovací eventy
 - rozdìlit nastavení a highscore (highscore rozšíøit o možnost zadat jméno - test automaticky vyplní test)
 - pøekopat systém místností a domyslet
@@ -69,4 +70,5 @@ Nápady
 ------------ODLOŽENO---------------
 -----------------------------------
 
+- rozšíøit a pøidat další zpùsob ovládání (swipnutí dolù pošle dolù a kliknutí na daný místa playingAreny vykoná posunutí a rotaci)
 - zkusit ovìøit jak moc je problematický pøeklikávání pokud pøejíždím po tlaèítkách, než si nìjaký vyberu a zavést to, že se odklikne jen a pouze to na které jsem pùvdnì klik

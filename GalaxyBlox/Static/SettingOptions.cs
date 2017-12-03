@@ -30,7 +30,7 @@ namespace GalaxyBlox.Static
         public enum GameMode
         {
             [XmlEnum("vanilla")]
-            Vanilla,
+            Classic,
             [XmlEnum("normal")]
             Normal,
             [XmlEnum("extreme")]

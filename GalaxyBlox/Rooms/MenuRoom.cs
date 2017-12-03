@@ -41,9 +41,10 @@ namespace GalaxyBlox.Rooms
 
             GameObject objToAdd;
             var padding = 30;
-            var btnSize = new Vector2(Size.Width - 2 * padding, 50);
+            var btnSize = new Vector2(Size.Width - 2 * padding, 75);
+            var btnPadding = 35;
             var btnCount = 4;
-            var btnStartPosY = (Size.Height - (50 * btnCount + 10 * (btnCount - 1))) / 2;
+            var btnStartPosY = (Size.Height - ((btnCount * btnSize.Y) + ((btnCount - 1) * btnPadding))) / 2;
 
             // Adding HighScore
             //// ADDING LABEL FOR SCORE
@@ -72,28 +73,21 @@ namespace GalaxyBlox.Rooms
 
             objToAdd = Bank.Buttons.GetMenuButton(this);
                 objToAdd.Size = btnSize;
-                objToAdd.Position = new Vector2(padding, btnStartPosY + 65);
+                objToAdd.Position = new Vector2(padding, btnStartPosY + (btnSize.Y + btnPadding));
                 objToAdd.Text = "Nová hra";
             (objToAdd as Button).Click += btnNewGame_Click;
             Objects.Add(objToAdd);
 
-            //objToAdd = Bank.Buttons.GetMenuButton(this);
-            //    objToAdd.Size = btnSize;
-            //    objToAdd.Position = new Vector2(padding, btnStartPosY + 65 * 2);
-            //    objToAdd.Text = "Ovládání";
-            //(objToAdd as Button).Click += btnControls_Click;
-            //Objects.Add(objToAdd);
-
             objToAdd = Bank.Buttons.GetMenuButton(this);
                 objToAdd.Size = btnSize;
-                objToAdd.Position = new Vector2(padding, btnStartPosY + 65 * 2);
+                objToAdd.Position = new Vector2(padding, btnStartPosY + (btnSize.Y + btnPadding) * 2);
                 objToAdd.Text = "Nastavení";
             (objToAdd as Button).Click += btnSettings_Click;
             Objects.Add(objToAdd);
 
             objToAdd = Bank.Buttons.GetMenuButton(this);
                 objToAdd.Size = btnSize;
-                objToAdd.Position = new Vector2(padding, btnStartPosY + 65 * 3);
+                objToAdd.Position = new Vector2(padding, btnStartPosY + (btnSize.Y + btnPadding) * 3);
                 objToAdd.Text = "Konec";
             (objToAdd as Button).Click += btnFinish_Click;
             Objects.Add(objToAdd);

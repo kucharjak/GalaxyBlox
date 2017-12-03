@@ -23,7 +23,7 @@ namespace GalaxyBlox.Models
             }
         }
 
-        public Room Parent { get; private set; }
+        public Room Parent { get; protected set; }
 
         protected List<GameObject> Objects { get; set; } = new List<GameObject>();
         public Texture2D Background;

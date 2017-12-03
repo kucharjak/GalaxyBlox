@@ -46,8 +46,8 @@ namespace GalaxyBlox
             GameContent = Content;
             Random = new Random(unchecked((int)DateTime.Now.Ticks));
 
-            new Rooms.MenuRoom("Room_Menu", Static.Settings.Game.WindowSize, new Vector2()).Show();
-            //new Rooms.GameRoom("Room_Game", Static.Settings.Game.WindowSize, new Vector2()).Show();
+            //new Rooms.MenuRoom("Room_Menu", Static.Settings.Game.WindowSize, new Vector2()).Show();
+            new Rooms.GameRoom("Room_Game", Static.Settings.Game.WindowSize, new Vector2()).Show();
         }
 
         /// <summary>
@@ -63,13 +63,13 @@ namespace GalaxyBlox
             Static.Contents.Fonts.MenuButtonText = Content.Load<SpriteFont>("Fonts/ButtonText");
             Static.Contents.Fonts.PanelContentText = Content.Load<SpriteFont>("Fonts/PanelContentText");
             Static.Contents.Fonts.PanelHeaderText = Content.Load<SpriteFont>("Fonts/PanelHeaderText");
-            Static.Contents.Textures.ControlButton_down = Content.Load<Texture2D>("Sprites/ControlButton_down");
+            Static.Contents.Textures.ControlButton_fall = Content.Load<Texture2D>("Sprites/ControlButton_down");
             Static.Contents.Textures.ControlButton_left = Content.Load<Texture2D>("Sprites/ControlButton_left");
             Static.Contents.Textures.ControlButton_right = Content.Load<Texture2D>("Sprites/ControlButton_right");
             Static.Contents.Textures.ControlButton_rotate = Content.Load<Texture2D>("Sprites/ControlButton_rotate");
             Static.Contents.Textures.ControlButton_pause = Content.Load<Texture2D>("Sprites/ControlButton_pause");
-            Static.Contents.Textures.BackgroundGame = Content.Load<Texture2D>("Backgrounds/game");
-            Static.Contents.Textures.BackgroundMenu = Content.Load<Texture2D>("Backgrounds/menu");
+            Static.Contents.Textures.BackgroundGame = Content.Load<Texture2D>("Backgrounds/Background");
+            Static.Contents.Textures.BackgroundMenu = Static.Contents.Textures.BackgroundGame; //Content.Load<Texture2D>("Backgrounds/menu");
         }
 
         /// <summary>

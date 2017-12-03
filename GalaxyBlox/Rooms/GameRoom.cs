@@ -16,9 +16,22 @@ namespace GalaxyBlox.Rooms
     class GameRoom : Room
     {
         private PlayingArena arena;
-        private GameObject scoreBoard;
-        private GameObject levelBoard;
-        private ActorViewer nextActor;
+
+        private GameObject lblScore;
+        private GameObject lblLevel;
+
+        private ActorViewer actorViewer;
+
+        private Button btnPause;
+        private Button btnControlLeft;
+        private Button btnControlRight;
+        private Button btnControlFall;
+        private Button btnControlRotate;
+
+        private Button btnBonus1;
+        private Button btnBonus2;
+        private Button btnBonus3;
+
         private SettingOptions.GameMode gameMode;
 
         public GameRoom(Room parent, string name, Size size, Vector2 position) : base(parent, name, size, position)
@@ -34,179 +47,209 @@ namespace GalaxyBlox.Rooms
             gameMode = Settings.Game.Mode;
             FullScreen = true;
             Background = Contents.Textures.BackgroundGame;
-            GameObject objToAdd;
-            var padding = 15;
 
-            objToAdd = new SwipeArea(this, Position = new Vector2(0, 0), new Vector2(Size.Width, Size.Height)) // label for Score
-            {
-                LayerDepth = 0.05f,
-                Alpha = 1f
-            };
-            (objToAdd as SwipeArea).Swipe += GameRoom_Swipe;
-            Objects.Add(objToAdd);
+            GameObject lastObj;
 
-            var btnSize = new Vector2(75); //new Vector2(RoomSize.Width / 4 - 5);
-            var btnCount = 4;
-            var btnPartSize = (Size.Width - 2f * padding) / btnCount;
-            ///// ADDING BACKGROUNDS AND FRAMES /////
-            objToAdd = new GameObject(this)
+            // ADDING FIRST PANEL
+            // SETTINGS 
+            var viewerSize = 120;
+            var viewerPadding = 10;
+            var btnPauseSize = 100;
+            var lblScoreSize = new Vector2(Size.Width, 55);
+            var lblLevelSize = new Vector2(Size.Width, 45);
+            var scoreLineSize = new Vector2(220, 3);
+
+            // PANEL BACKGROUND
+            Objects.Add(new GameObject(this)
             {
-                Size = new Vector2(Size.Width + 10, btnSize.Y + 2 * padding + 5), // +5 correction
-                Position = new Vector2(-5, Size.Height - btnSize.Y - 2 * padding),
-                BaseColor = Contents.Colors.BackgroundControlsColor,
+                Size = new Vector2(Size.Width, viewerSize + 2 * viewerPadding),
+                Position = new Vector2(0, 0),
                 BackgroundImage = Contents.Textures.Pix,
-                LayerDepth = 0.03f
-            };
-            Objects.Add(objToAdd);
+                BaseColor = Contents.Colors.ScorePanelBackgroundColor,
+                LayerDepth = 0.01f
+            });
+            lastObj = Objects.Last();
+            var playingArenaStart = lastObj.Position.Y + lastObj.Size.Y + 5;
 
-            ///// ADDING CONTROL BUTTONS //////
-            objToAdd = Bank.Buttons.GetControlButton(this); // LEFT BUTTON
-            objToAdd.Size = btnSize;
-            objToAdd.Position = new Vector2(btnPartSize * 0 + padding + ((btnPartSize - btnSize.X) / 2f), Size.Height - padding - btnSize.Y);
-            objToAdd.BackgroundImage = Contents.Textures.ControlButton_left;
-            (objToAdd as Button).Hover += btnLeft_Hover;
-            (objToAdd as Button).Release += btnLeft_Release;
-            Objects.Add(objToAdd);
-
-            objToAdd = Bank.Buttons.GetControlButton(this); // DOWN BUTTON
-            objToAdd.Size = btnSize;
-            objToAdd.Position = new Vector2(btnPartSize * 1 + padding + ((btnPartSize - btnSize.X) / 2f), Size.Height - padding - btnSize.Y);
-            objToAdd.BackgroundImage = Contents.Textures.ControlButton_down;
-            (objToAdd as Button).Click += btnDown_Click;
-            (objToAdd as Button).Hover += btnDown_Hover;
-            (objToAdd as Button).Release += btnDown_Release;
-            Objects.Add(objToAdd);
-
-            objToAdd = Bank.Buttons.GetControlButton(this); // ROTATE BUTTON
-            objToAdd.Size = btnSize;
-            objToAdd.Position = new Vector2(btnPartSize * 2 + padding + ((btnPartSize - btnSize.X) / 2f), Size.Height - padding - btnSize.Y);
-            objToAdd.BackgroundImage = Contents.Textures.ControlButton_rotate;
-            (objToAdd as Button).Click += btnRotate_Click;
-            Objects.Add(objToAdd);
-
-            objToAdd = Bank.Buttons.GetControlButton(this); // RIGHT BUTTON
-            objToAdd.Size = btnSize;
-            objToAdd.Position = new Vector2(btnPartSize * 3 + padding + ((btnPartSize - btnSize.X) / 2f), Size.Height - padding - btnSize.Y);
-            objToAdd.BackgroundImage = Contents.Textures.ControlButton_right;
-            (objToAdd as Button).Hover += btnRight_Hover;
-            (objToAdd as Button).Release += btnRight_Release;
-            Objects.Add(objToAdd);
-
-            var plyArnPosY = padding + 85;
-            arena = new PlayingArena(this,
-                new Vector2(380, 600),
-                new Vector2(50, plyArnPosY),
-                gameMode)
+            // ACTOR VIEWER
+            actorViewer = new ActorViewer(this, new Vector2(viewerSize, viewerSize), Contents.Colors.ActorViewerBackgroundColor)
             {
-                Name = "main_playground",
+                Position = new Vector2(viewerPadding, viewerPadding),
                 LayerDepth = 0.05f
             };
-            arena.GameEnded += Arena_GameEnded;
-            arena.ScoreChanged += Arena_ScoreChanged;
-            arena.ActorsQueueChanged += Arena_ActorsQueueChanged;
-            Objects.Add(arena);
-            
-            var objectsAlpha = 0.6f;
+            Objects.Add(actorViewer);
 
-            //// ADDING SCORE BOARD
-            scoreBoard = Bank.Visuals.GetPanelBoard(this);
-            scoreBoard.Size = new Vector2(arena.Size.X, 30);
-            scoreBoard.Position = new Vector2(arena.Position.X, plyArnPosY - scoreBoard.Size.Y - 5);
-            scoreBoard.Alpha = objectsAlpha;
-            scoreBoard.Text = arena.Score.ToString();
-            Objects.Add(scoreBoard);
+            // PAUSE BUTTON
+            btnPause = Bank.Buttons.GetPauseButton(this);
+            btnPause.Size = new Vector2(btnPauseSize, btnPauseSize);
+            btnPause.Position = new Vector2(Size.Width - btnPauseSize - viewerPadding, ((viewerSize + 2 * viewerPadding) - btnPauseSize) / 2);
+            btnPause.Click += btnPause_Click;
+            Objects.Add(btnPause);
 
-            //// ADDING LABEL FOR SCORE
-            objToAdd = Bank.Visuals.GetPanelLabel(this);
-            objToAdd.Size = new Vector2(arena.Size.X, 25);
-            objToAdd.Position = new Vector2(arena.Position.X, plyArnPosY - objToAdd.Size.Y - scoreBoard.Size.Y - 5);
-            objToAdd.Alpha = objectsAlpha;
-            objToAdd.Text = "Skore";
-            Objects.Add(objToAdd);
-
-            // ADDING RIGH PANEL
-            var rightPanelWidth = Size.Width - (arena.Position.X + arena.Size.X) - 10;
-            var rightPanelPosX = arena.Position.X + arena.Size.X + 5;
-            var rightPanelPosY = arena.Position.Y;
-
-            ///// ADDING PAUSE BUTTON //////
-
-            objToAdd = Bank.Buttons.GetPauseButton(this);
-            objToAdd.Size = new Vector2(rightPanelWidth, rightPanelWidth);
-            objToAdd.Position = new Vector2(rightPanelPosX, rightPanelPosY);
-            objToAdd.LayerDepth = 0.05f;
-            //objToAdd.Enabled = Parent != null;
-            (objToAdd as Button).Click += btnPause_Click;
-            Objects.Add(objToAdd);
-            rightPanelPosY += (int)(padding + objToAdd.Size.Y);
-
-            //// ADDING LABEL BONUS
-            objToAdd = objToAdd = Bank.Visuals.GetPanelLabel(this);
-            objToAdd.Size = new Vector2(rightPanelWidth, 35);
-            objToAdd.Position = new Vector2(rightPanelPosX, rightPanelPosY);
-            objToAdd.Alpha = objectsAlpha;
-            objToAdd.Text = "Bonus";
-            Objects.Add(objToAdd);
-            rightPanelPosY += (int)objToAdd.Size.Y;
-
-            //// ADDING BONUS BTN
-            objToAdd = Bank.Visuals.GetPanelBoard(this);
-            objToAdd.Position = new Vector2(rightPanelPosX, rightPanelPosY);
-            objToAdd.Size = new Vector2(rightPanelWidth, rightPanelWidth);
-            objToAdd.Alpha = objectsAlpha;
-            Objects.Add(objToAdd);
-            rightPanelPosY += (int)(padding + objToAdd.Size.Y);
-
-
-            ///// ADDING LEFT PANEL
-            var leftPanelWidth = Size.Width - (arena.Position.X + arena.Size.X) - 10;
-            var leftPanelPosX = 5;
-            var leftPanelPosY = arena.Position.Y;
-            
-            //// ADDING LABEL FOR LEVEL
-            objToAdd = Bank.Visuals.GetPanelLabel(this);
-            objToAdd.Position = new Vector2(leftPanelPosX, leftPanelPosY);
-            objToAdd.Size = new Vector2(leftPanelWidth, 35);
-            objToAdd.Alpha = objectsAlpha;
-            objToAdd.Text = "Level";
-            Objects.Add(objToAdd);
-            leftPanelPosY += (int)objToAdd.Size.Y;
-
-            //// ADDING LEVEL BOARD
-            levelBoard = Bank.Visuals.GetPanelBoard(this);
-            levelBoard.Position = new Vector2(leftPanelPosX, leftPanelPosY);
-            levelBoard.Size = new Vector2(rightPanelWidth, 55);
-            levelBoard.Alpha = objectsAlpha;
-            levelBoard.Text = arena.Level.ToString();
-            Objects.Add(levelBoard);
-            leftPanelPosY += (int)(padding + levelBoard.Size.Y);
-
-            //// NEXT ACTOR LABEL
-            objToAdd = Bank.Visuals.GetPanelLabel(this);
-            objToAdd.Position = new Vector2(leftPanelPosX, leftPanelPosY);
-            objToAdd.Size = new Vector2(leftPanelWidth, 35);
-            objToAdd.Alpha = objectsAlpha;
-            objToAdd.Text = "Další";
-            Objects.Add(objToAdd);
-            leftPanelPosY += (int)objToAdd.Size.Y;
-
-            //// NEXT ACTOR BOARD
-            nextActor = new ActorViewer(this, new Vector2(leftPanelWidth, leftPanelWidth), Contents.Colors.PanelContentBackgroundColor * 0f, arena.CubeSize)
+            var scoreStartPosY = ((viewerSize + 2 * viewerPadding) - (lblScoreSize.Y + lblLevelSize.Y + scoreLineSize.Y)) / 2;
+            // SCORE
+            lblScore = new GameObject(this)
             {
-                Position = new Vector2(leftPanelPosX, leftPanelPosY),
+                Size = lblScoreSize,
+                Position = new Vector2(0, scoreStartPosY),
+                TextSpriteFont = Contents.Fonts.PanelContentText,
+                Text = "Skóre",
+                TextAlignment = TextAlignment.Center,
+                TextColor = Color.Black,
+                ShowText = true,
                 LayerDepth = 0.05f,
-                Alpha = 1f
+                Scale = 1.05f,
+                Origin = new Vector2(0.5f, 1)
             };
-            Objects.Add(nextActor);
+            Objects.Add(lblScore);
 
-            //// ADDING BACKGROUND FOR ACTOR BOARD
-            objToAdd = Bank.Visuals.GetPanelBoard(this);
-            objToAdd.Size = new Vector2(leftPanelWidth, leftPanelWidth);
-            objToAdd.Position = new Vector2(leftPanelPosX, leftPanelPosY);
-            objToAdd.LayerDepth = 0.049f;
-            objToAdd.Alpha = objectsAlpha;
-            Objects.Add(objToAdd);
-            leftPanelPosY += (int)objToAdd.Size.Y;
+            // LINE BETWEEN SCORE AND LEVEL
+            Objects.Add(new GameObject(this)
+            {
+                BackgroundImage = Contents.Textures.Pix,
+                BaseColor = Color.Black,
+                Size = scoreLineSize,
+                Position = new Vector2((Size.Width - scoreLineSize.X) / 2, scoreStartPosY + lblScoreSize.Y),
+                LayerDepth = 0.05f
+            });
+
+            // LEVEL
+            lblLevel = new GameObject(this)
+            {
+                Size = lblLevelSize,
+                Position = new Vector2(0, scoreStartPosY +  lblScoreSize.Y + scoreLineSize.Y),
+                TextSpriteFont = Contents.Fonts.PanelContentText,
+                Text = "Level",
+                TextAlignment = TextAlignment.Center,
+                TextColor = Color.Black,
+                ShowText = true,
+                LayerDepth = 0.05f,
+                Scale = 0.85f,
+                Origin = new Vector2(0.5f, 0)
+            };
+            Objects.Add(lblLevel);
+
+            // ADDING SECOND PANEL
+            // SETTINGS
+            var btnSize = 130;
+            var btnPadding = 20;
+            var btnCount = 4;
+            var btnMargin = ((Size.Width - 2 * btnPadding) - (btnSize * btnCount)) / (btnCount - 1);
+
+            // PANEL BACKGROUND
+            Objects.Add(new GameObject(this)
+            {
+                Size = new Vector2(Size.Width, btnSize + 2 * btnPadding),
+                Position = new Vector2(0, Size.Height - (btnSize + 2 * btnPadding)),
+                BackgroundImage = Contents.Textures.Pix,
+                BaseColor = Contents.Colors.ControlPanelBackgroundColor,
+                LayerDepth = 0.01f
+            });
+            lastObj = Objects.Last();
+            var playingArenaEnd = lastObj.Position.Y - 5;
+
+            // CONTROL BUTTON LEFT
+            btnControlLeft = Bank.Buttons.GetControlButton(this);
+            btnControlLeft.BackgroundImage = Contents.Textures.ControlButton_left;
+            btnControlLeft.Size = new Vector2(btnSize, btnSize);
+            btnControlLeft.Position = new Vector2(btnPadding, lastObj.Position.Y + btnPadding);
+            btnControlLeft.Release += btnLeft_Release;
+            btnControlLeft.Hover += btnLeft_Hover;
+            Objects.Add(btnControlLeft);
+
+            // CONTROL BUTTON FALL
+            btnControlFall = Bank.Buttons.GetControlButton(this);
+            btnControlFall.BackgroundImage = Contents.Textures.ControlButton_fall;
+            btnControlFall.Size = new Vector2(btnSize, btnSize);
+            btnControlFall.Position = new Vector2(btnPadding + (btnSize + btnMargin) * 1, lastObj.Position.Y + btnPadding);
+            btnControlFall.Click += btnDown_Click;
+            btnControlFall.Hover += btnDown_Hover;
+            btnControlFall.Release += btnDown_Release;
+            Objects.Add(btnControlFall);
+
+            // CONTROL BUTTON ROTATE
+            btnControlRotate = Bank.Buttons.GetControlButton(this);
+            btnControlRotate.BackgroundImage = Contents.Textures.ControlButton_rotate;
+            btnControlRotate.Size = new Vector2(btnSize, btnSize);
+            btnControlRotate.Position = new Vector2(btnPadding + (btnSize + btnMargin) * 2, lastObj.Position.Y + btnPadding);
+            btnControlRotate.Click += btnRotate_Click;
+            Objects.Add(btnControlRotate);
+
+            // CONTROL BUTTON RIGHT
+            btnControlRight = Bank.Buttons.GetControlButton(this);
+            btnControlRight.BackgroundImage = Contents.Textures.ControlButton_right;
+            btnControlRight.Size = new Vector2(btnSize, btnSize);
+            btnControlRight.Position = new Vector2(btnPadding + (btnSize + btnMargin) * 3, lastObj.Position.Y + btnPadding);
+            btnControlRight.Release += btnRight_Release;
+            btnControlRight.Hover += btnRight_Hover;
+            Objects.Add(btnControlRight);
+
+            if (gameMode != SettingOptions.GameMode.Classic)
+            {
+                // ADDING BONUS
+                // SETTINGS
+                var btnBonusSize = 80;
+                var btnBonusCount = 3;
+                var btnBonusPadding = 10;
+                var btnBonusLeftPadding = 120;
+                var btnBonusMargin = ((Size.Width - 2 * btnBonusLeftPadding ) - (btnBonusCount * btnBonusSize)) / (btnBonusCount - 1);
+
+                // ADDING BONUS PANEL
+                Objects.Add(new GameObject(this)
+                {
+                    Size = new Vector2(Size.Width, btnBonusSize + 2 * btnBonusPadding),
+                    Position = new Vector2(0, Size.Height - (btnSize + 2 * btnPadding) - (btnBonusSize + 2 * btnBonusPadding)),
+                    BackgroundImage = Contents.Textures.Pix,
+                    BaseColor = Contents.Colors.BonusPanelBackgroundColor,
+                    LayerDepth = 0.01f
+                });
+                lastObj = Objects.Last();
+                playingArenaEnd = lastObj.Position.Y - 5;
+
+                btnBonus1 = new Button(this)
+                {
+                    Size = new Vector2(btnBonusSize),
+                    Position = new Vector2(btnBonusLeftPadding + (btnBonusMargin + btnBonusSize) * 0, lastObj.Position.Y + btnBonusPadding),
+                    BackgroundImage = Contents.Textures.Pix,
+                    BaseColor = Contents.Colors.BonusButtonBackgroundColor,
+                    DefaultBackgroundColor = Contents.Colors.BonusButtonBackgroundColor,
+                    SelectedBackgroundColor = Contents.Colors.BonusButtonSelectedColor,
+                    LayerDepth = 0.05f
+                };
+                Objects.Add(btnBonus1);
+
+                btnBonus2 = new Button(this)
+                {
+                    Size = new Vector2(btnBonusSize),
+                    Position = new Vector2(btnBonusLeftPadding + (btnBonusMargin + btnBonusSize) * 1, lastObj.Position.Y + btnBonusPadding),
+                    BackgroundImage = Contents.Textures.Pix,
+                    BaseColor = Contents.Colors.BonusButtonBackgroundColor,
+                    DefaultBackgroundColor = Contents.Colors.BonusButtonBackgroundColor,
+                    SelectedBackgroundColor = Contents.Colors.BonusButtonSelectedColor,
+                    LayerDepth = 0.05f
+                };
+                Objects.Add(btnBonus2);
+
+                btnBonus3 = new Button(this)
+                {
+                    Size = new Vector2(btnBonusSize),
+                    Position = new Vector2(btnBonusLeftPadding + (btnBonusMargin + btnBonusSize) * 2, lastObj.Position.Y + btnBonusPadding),
+                    BackgroundImage = Contents.Textures.Pix,
+                    BaseColor = Contents.Colors.BonusButtonBackgroundColor,
+                    DefaultBackgroundColor = Contents.Colors.BonusButtonBackgroundColor,
+                    SelectedBackgroundColor = Contents.Colors.BonusButtonSelectedColor,
+                    LayerDepth = 0.05f
+                };
+                Objects.Add(btnBonus3);
+            }
+
+            // ADDING PLAYING ARENA
+            arena = new PlayingArena(this, new Vector2(Size.Width, playingArenaEnd - playingArenaStart), new Vector2(0, playingArenaStart), SettingOptions.GameMode.Test);
+            arena.LayerDepth = 0.05f;
+            arena.ActorsQueueChanged += Arena_ActorsQueueChanged;
+            arena.ScoreChanged += Arena_ScoreChanged;
+            arena.GameEnded += Arena_GameEnded;
+            Objects.Add(arena);
         }
 
         private void Arena_GameEnded(object sender, EventArgs e)
@@ -214,7 +257,11 @@ namespace GalaxyBlox.Rooms
             if (Parent != null)
                 this.End();
             else
+            {
                 arena.StartNewGame();
+                lblLevel.Text = "Level";
+                lblScore.Text = "Skóre";
+            }
         }
 
         private void GameRoom_Swipe(object sender, EventArgs e)
@@ -229,16 +276,16 @@ namespace GalaxyBlox.Rooms
         private void Arena_ActorsQueueChanged(object sender, EventArgs e)
         {
             var args = (e as QueueChangeEventArgs);
-            nextActor.SetActor(args.NewActor, args.NewActorsColor);
+            actorViewer.SetActor(args.NewActor, args.NewActorsColor);
         }
 
         private void Arena_ScoreChanged(object sender, EventArgs e)
         {
-            if (scoreBoard != null)
-                scoreBoard.Text = Strings.ScoreToLongString(arena.Score); //Strings.ScoreToString(arena.Score, 3); 
+            if (lblScore != null)
+                lblScore.Text = Strings.ScoreToLongString(arena.Score); //Strings.ScoreToString(arena.Score, 3); 
 
-            if (levelBoard != null)
-                levelBoard.Text = arena.Level.ToString();
+            if (lblLevel != null)
+                lblLevel.Text = arena.Level.ToString();
         }
 
         protected override void HandleBackButton()
