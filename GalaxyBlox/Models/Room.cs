@@ -31,7 +31,7 @@ namespace GalaxyBlox.Models
         public Color BaseColor = Color.White;
         public bool FullScreen = false;
         public float Alpha = 1f;
-        public Size Size;
+        public Vector2 Size;
 
         public bool IsPaused = false;
         public bool IsVisible = false;
@@ -44,28 +44,28 @@ namespace GalaxyBlox.Models
         public string Name = "";
         public float LayerDepth = 0.1f;
 
-        public Room(Room parent, string name, Size size, Vector2 position) : this(name, size, position)
+        public Room(Room parent, string name, Vector2 size, Vector2 position) : this(name, size, position)
         {
             Parent = parent;
         }
 
-        public Room(string name, Size size, Vector2 position)
+        public Room(string name, Vector2 size, Vector2 position)
         {
             Position = position;
             Name = name;
             Size = size;
 
-            var realSize = new Size(Game1.ActiveGame.GraphicsDevice.Viewport.Width, Game1.ActiveGame.GraphicsDevice.Viewport.Height);
+            var realSize = new Vector2(Game1.ActiveGame.GraphicsDevice.Viewport.Width, Game1.ActiveGame.GraphicsDevice.Viewport.Height);
             var windowSize = Static.Settings.Game.WindowSize;
-            if (realSize.Width - windowSize.Width > realSize.Height - windowSize.Height)
+            if (realSize.X - windowSize.X > realSize.Y - windowSize.Y)
             { // HEIGHT + X offset
-                Scale = realSize.Height / (windowSize.Height * 1f);
-                InGameOffsetX = (int)((realSize.Width - (windowSize.Width * Scale)) / 2);
+                Scale = realSize.Y / (windowSize.Y * 1f);
+                InGameOffsetX = (int)((realSize.X - (windowSize.X * Scale)) / 2);
             }
             else
             { // WIDTH  + Y offset
-                Scale = realSize.Width / (windowSize.Width * 1f);
-                InGameOffsetY = (int)((realSize.Height - (windowSize.Height * Scale)) / 2);
+                Scale = realSize.X / (windowSize.X * 1f);
+                InGameOffsetY = (int)((realSize.Y - (windowSize.Y * Scale)) / 2);
             }
 
             Initialize();
@@ -197,8 +197,8 @@ namespace GalaxyBlox.Models
             var resultRect = new Rectangle(
                 (int)(Position.X * Scale + InGameOffsetX),
                 (int)(Position.Y * Scale + InGameOffsetY),
-                (int)(Size.Width * Scale),
-                (int)(Size.Height * Scale));
+                (int)(Size.X * Scale),
+                (int)(Size.Y * Scale));
             return resultRect;
         }
 

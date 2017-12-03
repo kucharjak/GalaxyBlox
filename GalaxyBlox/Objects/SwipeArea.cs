@@ -42,8 +42,8 @@ namespace GalaxyBlox.Objects
             this.Size = size;
 
             var realSize = DisplayRect();
-            widthSwipeTolerance = realSize.Width * 0.10f;
-            heightSwipeTolerance = realSize.Height * 0.10f;
+            widthSwipeTolerance = realSize.X * 0.10f;
+            heightSwipeTolerance = realSize.Y * 0.10f;
         }
 
         public void StartSwipe(Vector2 pressLocation)

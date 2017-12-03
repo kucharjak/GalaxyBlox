@@ -44,7 +44,7 @@ namespace GalaxyBlox.Objects
             }
         }
 
-        private Size arenaSize;
+        private Vector2 arenaSize;
         private SettingOptions.GameMode gameMode;
 
         private long score = 0;
@@ -112,22 +112,22 @@ namespace GalaxyBlox.Objects
             playgroundInnerPadding = 4;
             playgroundCubeMargin = 1;
             
-            var spaceLeftForCubes = new Size(
-                (int)(size.X - 2 * playgroundInnerPadding - (arenaSize.Width - 1) * playgroundCubeMargin),
-                (int)(size.Y - 2 * playgroundInnerPadding - (arenaSize.Height - 1) * playgroundCubeMargin));
+            var spaceLeftForCubes = new Vector2(
+                (int)(size.X - 2 * playgroundInnerPadding - (arenaSize.X - 1) * playgroundCubeMargin),
+                (int)(size.Y - 2 * playgroundInnerPadding - (arenaSize.Y - 1) * playgroundCubeMargin));
 
-            if (spaceLeftForCubes.Width / (float)arenaSize.Width < spaceLeftForCubes.Height / (float)arenaSize.Height)
+            if (spaceLeftForCubes.X / arenaSize.X < spaceLeftForCubes.Y / arenaSize.Y)
             { // WIDTH
-                playgroundCubeSize = spaceLeftForCubes.Width / arenaSize.Width;
+                playgroundCubeSize = (int)(spaceLeftForCubes.X / arenaSize.X);
             }
             else
             { // HEIGHT
-                playgroundCubeSize = spaceLeftForCubes.Height / arenaSize.Height;
+                playgroundCubeSize = (int)(spaceLeftForCubes.Y / arenaSize.Y);
             }
 
             Size = new Vector2(
-                (arenaSize.Width - 1) * (playgroundCubeSize + playgroundCubeMargin) + playgroundCubeSize + 2 * playgroundInnerPadding,
-                (arenaSize.Height - 1) * (playgroundCubeSize + playgroundCubeMargin) + playgroundCubeSize + 2 * playgroundInnerPadding);
+                (arenaSize.X - 1) * (playgroundCubeSize + playgroundCubeMargin) + playgroundCubeSize + 2 * playgroundInnerPadding,
+                (arenaSize.Y - 1) * (playgroundCubeSize + playgroundCubeMargin) + playgroundCubeSize + 2 * playgroundInnerPadding);
 
             Position = new Vector2(
                 position.X + ((size.X - Size.X) / 2),
@@ -288,7 +288,7 @@ namespace GalaxyBlox.Objects
         {
             backgroundChanged = true;
             backgroundFirstDraw = true;
-            playground = new int[arenaSize.Width, arenaSize.Height];
+            playground = new int[(int)arenaSize.X, (int)arenaSize.Y];
             playgroundEffectsList.Clear();
             Score = 0;
             actorsQueue = new List<Tuple<bool[,], Color>>();
@@ -515,8 +515,8 @@ namespace GalaxyBlox.Objects
             }
             Settings.Game.SaveHighscores();
 
-            var size = new Size(400, 250);
-            var gameOverRoom = new GameOverRoom(ParentRoom, "Room_GameOver", size, new Vector2((ParentRoom.Size.Width - size.Width) / 2, (ParentRoom.Size.Height - size.Height) / 2), score);
+            var size = new Vector2(400, 250);
+            var gameOverRoom = new GameOverRoom(ParentRoom, "Room_GameOver", size, new Vector2((ParentRoom.Size.X - Size.X) / 2, (ParentRoom.Size.Y - Size.Y) / 2), score);
             gameOverRoom.Show();
             gameOverRoom.Closed += GameOverRoom_Closed;
         }
@@ -720,7 +720,7 @@ namespace GalaxyBlox.Objects
 
         private void UpdateEffectsArray()
         {
-            //playgroundEffectsArray = new Color?[Settings.GameArenaSize.Width, Settings.GameArenaSize.Height]; // create new effects array
+            //playgroundEffectsArray = new Color?[Settings.GameArenaSize.X, Settings.GameArenaSize.Y]; // create new effects array
             playgroundEffectsList.Clear();
 
             if (Settings.Game.UserSettings.Indicator != SettingOptions.Indicator.None) // draw indicator if set

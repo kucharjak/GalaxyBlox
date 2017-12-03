@@ -26,11 +26,11 @@ namespace GalaxyBlox.Rooms
         Button btnContinue;
         GameObject highScore;
 
-        public MenuRoom(Room parent, string name, Size size, Vector2 position) : base(parent, name, size, position)
+        public MenuRoom(Room parent, string name, Vector2 size, Vector2 position) : base(parent, name, size, position)
         {
         }
 
-        public MenuRoom(string name, Size size, Vector2 position) : base(name, size, position)
+        public MenuRoom(string name, Vector2 size, Vector2 position) : base(name, size, position)
         {
         }
 
@@ -41,10 +41,10 @@ namespace GalaxyBlox.Rooms
 
             GameObject objToAdd;
             var padding = 30;
-            var btnSize = new Vector2(Size.Width - 2 * padding, 75);
+            var btnSize = new Vector2(Size.X - 2 * padding, 75);
             var btnPadding = 35;
             var btnCount = 4;
-            var btnStartPosY = (Size.Height - ((btnCount * btnSize.Y) + ((btnCount - 1) * btnPadding))) / 2;
+            var btnStartPosY = (Size.Y - ((btnCount * btnSize.Y) + ((btnCount - 1) * btnPadding))) / 2;
 
             // Adding HighScore
             //// ADDING LABEL FOR SCORE
@@ -126,8 +126,8 @@ namespace GalaxyBlox.Rooms
 
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            var size = new Size(400, 300);
-            new SettingsRoom(this, "Room_Settings", size, new Vector2((Size.Width - size.Width) / 2, (Size.Height - size.Height) / 2)).Show();
+            var size = new Vector2(400, 300);
+            new SettingsRoom(this, "Room_Settings", size, new Vector2((Size.X - Size.X) / 2, (Size.Y - Size.Y) / 2)).Show();
         }
 
         private void btnControls_Click(object sender, EventArgs e)

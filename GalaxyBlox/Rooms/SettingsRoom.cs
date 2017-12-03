@@ -24,7 +24,7 @@ namespace GalaxyBlox.Rooms
         Button btnOK;
         Button btnCancel;
 
-        public SettingsRoom(Room parent, string name, Size size, Vector2 position) : base(parent, name, size, position)
+        public SettingsRoom(Room parent, string name, Vector2 size, Vector2 position) : base(parent, name, size, position)
         {
         }
 
@@ -45,7 +45,7 @@ namespace GalaxyBlox.Rooms
 
             btnIndicator = Bank.Buttons.GetSettingsButton(this);
             btnIndicator.Size = new Vector2(100, 45);
-            btnIndicator.Position = new Vector2(Size.Width - btnIndicator.Size.X - margin, posY);
+            btnIndicator.Position = new Vector2(Size.X - btnIndicator.Size.X - margin, posY);
             btnIndicator.Click += BtnSetIndicator_Click;
             Objects.Add(btnIndicator);
             SetBtnIndicatorText();
@@ -62,10 +62,10 @@ namespace GalaxyBlox.Rooms
             btnCancel.Click += BtnCancel_Click;
             Objects.Add(btnCancel);
 
-            var btnPosX = (Size.Width - (btnOK.Size.X + btnCancel.Size.X + padding)) / 2;
-            btnOK.Position = new Vector2(btnPosX, Size.Height - btnOK.Size.Y - margin);
+            var btnPosX = (Size.X - (btnOK.Size.X + btnCancel.Size.X + padding)) / 2;
+            btnOK.Position = new Vector2(btnPosX, Size.Y - btnOK.Size.Y - margin);
             btnPosX += btnOK.Size.X + padding;
-            btnCancel.Position = new Vector2(btnPosX, Size.Height - btnCancel.Size.Y - margin);
+            btnCancel.Position = new Vector2(btnPosX, Size.Y - btnCancel.Size.Y - margin);
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)

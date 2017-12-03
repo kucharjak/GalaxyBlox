@@ -46,8 +46,8 @@ namespace GalaxyBlox
             GameContent = Content;
             Random = new Random(unchecked((int)DateTime.Now.Ticks));
 
-            //new Rooms.MenuRoom("Room_Menu", Static.Settings.Game.WindowSize, new Vector2()).Show();
-            new Rooms.GameRoom("Room_Game", Static.Settings.Game.WindowSize, new Vector2()).Show();
+            new Rooms.MenuRoom("Room_Menu", Static.Settings.Game.WindowSize, new Vector2()).Show();
+            //new Rooms.GameRoom("Room_Game", Static.Settings.Game.WindowSize, new Vector2()).Show();
         }
 
         /// <summary>

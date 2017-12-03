@@ -34,11 +34,11 @@ namespace GalaxyBlox.Rooms
 
         private SettingOptions.GameMode gameMode;
 
-        public GameRoom(Room parent, string name, Size size, Vector2 position) : base(parent, name, size, position)
+        public GameRoom(Room parent, string name, Vector2 size, Vector2 position) : base(parent, name, size, position)
         {
         }
 
-        public GameRoom(string name, Size size, Vector2 position) : base(name, size, position)
+        public GameRoom(string name, Vector2 size, Vector2 position) : base(name, size, position)
         {
         }
 
@@ -55,14 +55,14 @@ namespace GalaxyBlox.Rooms
             var viewerSize = 110;
             var viewerPadding = 15;
             var btnPauseSize = 100;
-            var lblScoreSize = new Vector2(Size.Width, 55);
-            var lblLevelSize = new Vector2(Size.Width, 45);
+            var lblScoreSize = new Vector2(Size.X, 55);
+            var lblLevelSize = new Vector2(Size.X, 45);
             var scoreLineSize = new Vector2(220, 3);
 
             // PANEL BACKGROUND
             Objects.Add(new GameObject(this)
             {
-                Size = new Vector2(Size.Width, viewerSize + 2 * viewerPadding),
+                Size = new Vector2(Size.X, viewerSize + 2 * viewerPadding),
                 Position = new Vector2(0, 0),
                 BackgroundImage = Contents.Textures.Pix,
                 BaseColor = Contents.Colors.ScorePanelBackgroundColor,
@@ -89,7 +89,7 @@ namespace GalaxyBlox.Rooms
             // PAUSE BUTTON
             btnPause = Bank.Buttons.GetPauseButton(this);
             btnPause.Size = new Vector2(btnPauseSize, btnPauseSize);
-            btnPause.Position = new Vector2(Size.Width - btnPauseSize - viewerPadding, ((viewerSize + 2 * viewerPadding) - btnPauseSize) / 2);
+            btnPause.Position = new Vector2(Size.X - btnPauseSize - viewerPadding, ((viewerSize + 2 * viewerPadding) - btnPauseSize) / 2);
             btnPause.Click += btnPause_Click;
             Objects.Add(btnPause);
 
@@ -116,7 +116,7 @@ namespace GalaxyBlox.Rooms
                 BackgroundImage = Contents.Textures.Pix,
                 BaseColor = Color.Black,
                 Size = scoreLineSize,
-                Position = new Vector2((Size.Width - scoreLineSize.X) / 2, scoreStartPosY + lblScoreSize.Y),
+                Position = new Vector2((Size.X - scoreLineSize.X) / 2, scoreStartPosY + lblScoreSize.Y),
                 LayerDepth = 0.05f
             });
 
@@ -141,13 +141,13 @@ namespace GalaxyBlox.Rooms
             var btnSize = 130;
             var btnPadding = 20;
             var btnCount = 4;
-            var btnMargin = ((Size.Width - 2 * btnPadding) - (btnSize * btnCount)) / (btnCount - 1);
+            var btnMargin = ((Size.X - 2 * btnPadding) - (btnSize * btnCount)) / (btnCount - 1);
 
             // PANEL BACKGROUND
             Objects.Add(new GameObject(this)
             {
-                Size = new Vector2(Size.Width, btnSize + 2 * btnPadding),
-                Position = new Vector2(0, Size.Height - (btnSize + 2 * btnPadding)),
+                Size = new Vector2(Size.X, btnSize + 2 * btnPadding),
+                Position = new Vector2(0, Size.Y - (btnSize + 2 * btnPadding)),
                 BackgroundImage = Contents.Textures.Pix,
                 BaseColor = Contents.Colors.ControlPanelBackgroundColor,
                 LayerDepth = 0.01f
@@ -199,13 +199,13 @@ namespace GalaxyBlox.Rooms
                 var btnBonusCount = 3;
                 var btnBonusPadding = 10;
                 var btnBonusLeftPadding = 120;
-                var btnBonusMargin = ((Size.Width - 2 * btnBonusLeftPadding ) - (btnBonusCount * btnBonusSize)) / (btnBonusCount - 1);
+                var btnBonusMargin = ((Size.X - 2 * btnBonusLeftPadding ) - (btnBonusCount * btnBonusSize)) / (btnBonusCount - 1);
 
                 // ADDING BONUS PANEL
                 Objects.Add(new GameObject(this)
                 {
-                    Size = new Vector2(Size.Width, btnBonusSize + 2 * btnBonusPadding),
-                    Position = new Vector2(0, Size.Height - (btnSize + 2 * btnPadding) - (btnBonusSize + 2 * btnBonusPadding)),
+                    Size = new Vector2(Size.X, btnBonusSize + 2 * btnBonusPadding),
+                    Position = new Vector2(0, Size.Y - (btnSize + 2 * btnPadding) - (btnBonusSize + 2 * btnBonusPadding)),
                     BackgroundImage = Contents.Textures.Pix,
                     BaseColor = Contents.Colors.BonusPanelBackgroundColor,
                     LayerDepth = 0.01f
@@ -251,7 +251,7 @@ namespace GalaxyBlox.Rooms
             }
 
             // ADDING PLAYING ARENA
-            arena = new PlayingArena(this, new Vector2(Size.Width, playingArenaEnd - playingArenaStart), new Vector2(0, playingArenaStart), SettingOptions.GameMode.Test);
+            arena = new PlayingArena(this, new Vector2(Size.X, playingArenaEnd - playingArenaStart), new Vector2(0, playingArenaStart), SettingOptions.GameMode.Test);
             arena.LayerDepth = 0.05f;
             arena.ActorsQueueChanged += Arena_ActorsQueueChanged;
             arena.ScoreChanged += Arena_ScoreChanged;
