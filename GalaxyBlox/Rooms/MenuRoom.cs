@@ -42,6 +42,7 @@ namespace GalaxyBlox.Rooms
             GameObject objToAdd;
             var padding = 30;
             var btnSize = new Vector2(Size.X - 2 * padding, 75);
+            var btnTextSize = (int)(btnSize.Y * 0.45f);
             var btnPadding = 35;
             var btnCount = 4;
             var btnStartPosY = (Size.Y - ((btnCount * btnSize.Y) + ((btnCount - 1) * btnPadding))) / 2;
@@ -54,8 +55,9 @@ namespace GalaxyBlox.Rooms
                 Size = new Vector2(btnSize.X, 35),
                 LayerDepth = 0.05f,
                 Alpha = 1f,
+                TextSpriteFont = Contents.Fonts.PlainTextFont,
                 TextAlignment = TextAlignment.Left,
-                TextSpriteFont = Contents.Fonts.MenuButtonText,
+                TextHeight = 35,
                 ShowText = true,
                 TextColor = Color.White
             };
@@ -64,31 +66,35 @@ namespace GalaxyBlox.Rooms
 
             ////// ADDING BUTTONS //////
             btnContinue = Bank.Buttons.GetMenuButton(this);
-                btnContinue.Size = btnSize;
-                btnContinue.Position = new Vector2(padding, btnStartPosY);
-                btnContinue.Text = "Pokračovat";
-                btnContinue.Enabled = false;
+            btnContinue.Size = btnSize;
+            btnContinue.Position = new Vector2(padding, btnStartPosY);
+            btnContinue.Text = "Pokračovat";
+            btnContinue.TextHeight = btnTextSize;
+            btnContinue.Enabled = false;
             btnContinue.Click += btnContinue_Click;
             Objects.Add(btnContinue);
 
             objToAdd = Bank.Buttons.GetMenuButton(this);
-                objToAdd.Size = btnSize;
-                objToAdd.Position = new Vector2(padding, btnStartPosY + (btnSize.Y + btnPadding));
-                objToAdd.Text = "Nová hra";
+            objToAdd.Size = btnSize;
+            objToAdd.Position = new Vector2(padding, btnStartPosY + (btnSize.Y + btnPadding));
+            objToAdd.Text = "Nová hra";
+            objToAdd.TextHeight = btnTextSize;
             (objToAdd as Button).Click += btnNewGame_Click;
             Objects.Add(objToAdd);
 
             objToAdd = Bank.Buttons.GetMenuButton(this);
-                objToAdd.Size = btnSize;
-                objToAdd.Position = new Vector2(padding, btnStartPosY + (btnSize.Y + btnPadding) * 2);
-                objToAdd.Text = "Nastavení";
+            objToAdd.Size = btnSize;
+            objToAdd.Position = new Vector2(padding, btnStartPosY + (btnSize.Y + btnPadding) * 2);
+            objToAdd.Text = "Nastavení";
+            objToAdd.TextHeight = btnTextSize;
             (objToAdd as Button).Click += btnSettings_Click;
             Objects.Add(objToAdd);
 
             objToAdd = Bank.Buttons.GetMenuButton(this);
-                objToAdd.Size = btnSize;
-                objToAdd.Position = new Vector2(padding, btnStartPosY + (btnSize.Y + btnPadding) * 3);
-                objToAdd.Text = "Konec";
+            objToAdd.Size = btnSize;
+            objToAdd.Position = new Vector2(padding, btnStartPosY + (btnSize.Y + btnPadding) * 3);
+            objToAdd.Text = "Konec";
+            objToAdd.TextHeight = btnTextSize;
             (objToAdd as Button).Click += btnFinish_Click;
             Objects.Add(objToAdd);
         }

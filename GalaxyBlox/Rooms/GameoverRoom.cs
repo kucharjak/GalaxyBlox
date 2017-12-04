@@ -34,24 +34,29 @@ namespace GalaxyBlox.Rooms
             Background = Contents.Textures.Pix;
             BaseColor = Color.DarkBlue;
 
-            var margin = 40;
-            var posY = margin;
+            var margin = 20;
+            var posY = margin + 30;
+            var itemsHeight = 45;
+            var itemsTextHeight = itemsHeight;
             GameObject obj = Bank.Visuals.GetGameOverLabel(this);
             obj.Text = "- Konec hry -";
-            obj.Size = new Vector2(Size.X, 45);
+            obj.TextHeight = itemsTextHeight;
+            obj.Size = new Vector2(Size.X, itemsHeight);
             obj.Position = new Vector2(0, posY);
             Objects.Add(obj);
 
-            posY += margin;
+            posY += (int)obj.Size.Y + margin;
             score = Bank.Visuals.GetGameOverLabel(this);
-            score.Size = new Vector2(Size.X, 45);
+            score.TextHeight = itemsTextHeight;
+            score.Size = new Vector2(Size.X, itemsHeight);
             score.Position = new Vector2(0, posY);
             Objects.Add(score);
 
             btnOK = Bank.Buttons.GetSettingsButton(this);
-            btnOK.Size = new Vector2(100, 45);
+            btnOK.Size = new Vector2(250, 120);
             btnOK.Position = new Vector2((Size.X - btnOK.Size.X) / 2, Size.Y - btnOK.Size.Y - margin);
             btnOK.Text = "OK";
+            btnOK.TextHeight = 60;
             btnOK.Click += BtnOK_Click;
             Objects.Add(btnOK);
         }

@@ -2,7 +2,6 @@ Zmìny
 	- pokud to pùjde - zmìnit pøekleslování na konkrétní èásti playingAreny
 
 Rozšíøení 
-	- oprava meníèek
 	- upravit velikost rozlišení PlayingAreny pro zlepšení visualu na rùzných zaøízeních
 	- podpora více herních módù
 	- dát dohromady grafický styl hry
@@ -23,9 +22,6 @@ Features
 	- pøidat animace na tlaèítka (když na nìm hoveruju, tak bude pulzovat a když na nìj kliknu, tak se zmáèkne)
  
 Kontrola / Bugy
-	- velikost písma musí respektovat velikost okna a rozlišení
-	- sjednotit používané membery po celém øešení
-	- ovìøit chování textu na jiných obrazovkách - pøípadnì opravit
 
 Nápady
 	- klasický mód "Vanila" - zjistit jak se choval pøesnì pùvodní tetris i s poèítáním skóre
@@ -36,6 +32,10 @@ Nápady
 --------------HOTOVO--------------
 ----------------------------------
 
+- oprava meníèek
+- velikost písma musí respektovat velikost okna a rozlišení
+- sjednotit používané membery po celém øešení
+- ovìøit chování textu na jiných obrazovkách - pøípadnì opravit
 - pøemyslet a pøepsat zobrazování na více obrazovek
 - upravit ovládání, tak aby se to dobøe hrálo - design se tomu pøispùsobí
 - rozmyslet si design a podle toho pokraèovat dál ve vývoji

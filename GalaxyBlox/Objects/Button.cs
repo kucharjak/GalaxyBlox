@@ -77,7 +77,7 @@ namespace GalaxyBlox.Objects
         public Button(Room parentRoom) : base (parentRoom)
         {
             Type = "button";
-            Origin = new Vector2(0.5f);
+            Origin = new Vector2(.5f);
             HoverTime = 0;
         }
 

@@ -60,9 +60,7 @@ namespace GalaxyBlox
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             Static.Contents.Textures.Pix = Content.Load<Texture2D>("Sprites/pixel");
-            Static.Contents.Fonts.MenuButtonText = Content.Load<SpriteFont>("Fonts/ButtonText");
-            Static.Contents.Fonts.PanelContentText = Content.Load<SpriteFont>("Fonts/PanelContentText");
-            Static.Contents.Fonts.PanelHeaderText = Content.Load<SpriteFont>("Fonts/PanelHeaderText");
+            Static.Contents.Fonts.PlainTextFont = Content.Load<SpriteFont>("Fonts/PlainText");
             Static.Contents.Textures.ControlButton_fall = Content.Load<Texture2D>("Sprites/ControlButton_down");
             Static.Contents.Textures.ControlButton_left = Content.Load<Texture2D>("Sprites/ControlButton_left");
             Static.Contents.Textures.ControlButton_right = Content.Load<Texture2D>("Sprites/ControlButton_right");

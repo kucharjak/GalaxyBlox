@@ -13,45 +13,48 @@ namespace GalaxyBlox.Models
         public Vector2 Size
         {
             get { return size; }
-            set
-            {
-                size = value;
-                if (text != "")
-                    UpdateTextPosition();
-            }
+            set { size = value; UpdateTextPosition(); }
         }
         public Vector2 Position;
         public Vector2 Origin;
         public float Scale = 1f; // scale for drawing - for example when i need bigger object for a second (animation, or just to stand out like hovered button)
 
+        private string text;
         public string Text
         {
             get { return text; }
-            set
-            {
-                text = value;
-                textSize = TextSpriteFont.MeasureString(text);
-                UpdateTextPosition();
-            }
+            set { text = value; UpdateTextPosition(); }
         }
-        private string text;
+        public Vector2 TextPosition { get { return new Vector2(Position.X + textOffset.X, Position.Y + textOffset.Y); } }
         private TextAlignment textAlignment;
         public TextAlignment TextAlignment
         {
             get { return textAlignment; }
-            set
-            {
-                textAlignment = value;
-                UpdateTextPosition();
-            }
+            set { textAlignment = value; UpdateTextPosition(); }
         } 
         public bool ShowText = false;
         public Color TextColor = Color.Black;
-        public Point TextOffset = new Point();
-        protected Vector2 textSize = new Vector2();
-        public SpriteFont TextSpriteFont = null;
-        public Vector2 TextPosition { get { return new Vector2(Position.X + TextOffset.X, Position.Y + TextOffset.Y); } }
-        public float TextScale = 1f;
+        private Point textOffset = new Point();
+
+        private SpriteFont textSpriteFont = null;
+        public SpriteFont TextSpriteFont
+        {
+            get { return textSpriteFont; }
+            set { textSpriteFont = value; TextHeight = 10; }
+        }
+
+        private int textHeight;
+        public int TextHeight
+        {
+            get { return textHeight; }
+            set { textHeight = value; CalculateTextScale(); UpdateTextPosition(); }
+        }
+        private float textScale = 1f;
+
+        private void CalculateTextScale()
+        {
+            textScale = textHeight / (float)textSpriteFont.LineSpacing;
+        }
 
         public Texture2D BackgroundImage = null;
         public Color Color { get { return BaseColor * Alpha; } }
@@ -86,27 +89,36 @@ namespace GalaxyBlox.Models
                 spriteBatch.Draw(BackgroundImage, DisplayRect(), null, Color * baseAlpha, 0, new Vector2(), SpriteEffects.None, ParentRoom.LayerDepth + LayerDepth);
 
             if (ShowText && TextSpriteFont != null)
-                spriteBatch.DrawString(TextSpriteFont, Text, DisplayText(), TextColor * baseAlpha, 0f, new Vector2(), Scale, SpriteEffects.None, ParentRoom.LayerDepth + LayerDepth + 0.01f);
+                spriteBatch.DrawString(TextSpriteFont, Text, DisplayTextPosition(), TextColor * baseAlpha, 0f, new Vector2(), Scale * textScale * ParentRoom.Scale, SpriteEffects.None, ParentRoom.LayerDepth + LayerDepth + 0.01f);
         }
 
         private void UpdateTextPosition()
         {
+            if (string.IsNullOrEmpty(text))
+                return;
+
+            var textSize = textSpriteFont.MeasureString(text);
+            textSize = new Vector2(textSize.X * textScale, textSize.Y * textScale);
+
             switch(TextAlignment)
             {
-                case TextAlignment.Left: TextOffset = new Point(0, (int)((Size.Y - textSize.Y / ParentRoom.Scale) / 2)); break;
-                case TextAlignment.Right: TextOffset = new Point((int)((Size.X - textSize.X / ParentRoom.Scale)), (int)((Size.Y - textSize.Y / ParentRoom.Scale) / 2)); break;
-                case TextAlignment.Center: TextOffset = new Point((int)((Size.X - textSize.X / ParentRoom.Scale) / 2), (int)((Size.Y - textSize.Y / ParentRoom.Scale) / 2)); break;
+                case TextAlignment.Left: textOffset = new Point(0, (int)((Size.Y - textSize.Y ) / 2)); break;
+                case TextAlignment.Right: textOffset = new Point((int)((Size.X - textSize.X)), (int)((Size.Y - textSize.Y) / 2)); break;
+                case TextAlignment.Center: textOffset = new Point((int)((Size.X - textSize.X) / 2), (int)((Size.Y - textSize.Y) / 2)); break;
             }
         }
 
-        public Vector2 DisplayText()
+        public Vector2 DisplayTextPosition()
         {
+            var textSize = textSpriteFont.MeasureString(text);
+            textSize = new Vector2(textSize.X * textScale, textSize.Y * textScale);
+
             var offsetX = Origin.X * (textSize.X * Scale - textSize.X);
             var offsetY = Origin.Y * (textSize.Y * Scale - textSize.Y);
 
             var resultVect = new Vector2(
-                (TextPosition.X + ParentRoom.Position.X) * ParentRoom.Scale + ParentRoom.InGameOffsetX - offsetX,
-                (TextPosition.Y + ParentRoom.Position.Y) * ParentRoom.Scale + ParentRoom.InGameOffsetY - offsetY);
+                (TextPosition.X + ParentRoom.Position.X - offsetX) * ParentRoom.Scale + ParentRoom.InGameOffsetX,
+                (TextPosition.Y + ParentRoom.Position.Y - offsetY) * ParentRoom.Scale + ParentRoom.InGameOffsetY);
             return resultVect;
         }
 
@@ -116,11 +128,10 @@ namespace GalaxyBlox.Models
             var offsetY = Origin.Y * (Size.Y * Scale - Size.Y);
 
             var resultRect = new Rectangle(
-                (int)((Position.X + ParentRoom.Position.X) * ParentRoom.Scale + ParentRoom.InGameOffsetX - offsetX),
-                (int)((Position.Y + ParentRoom.Position.Y) * ParentRoom.Scale + ParentRoom.InGameOffsetY - offsetY),
+                (int)((Position.X + ParentRoom.Position.X - offsetX) * ParentRoom.Scale + ParentRoom.InGameOffsetX),
+                (int)((Position.Y + ParentRoom.Position.Y - offsetY) * ParentRoom.Scale + ParentRoom.InGameOffsetY),
                 (int)(Size.X * ParentRoom.Scale * Scale),
-                (int)(Size.Y * ParentRoom.Scale * Scale)
-                );
+                (int)(Size.Y * ParentRoom.Scale * Scale));
             return resultRect;
         }
     }

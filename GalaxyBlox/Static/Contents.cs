@@ -33,9 +33,7 @@ namespace GalaxyBlox.Static
 
         public static class Fonts
         {
-            public static SpriteFont MenuButtonText;
-            public static SpriteFont PanelHeaderText;
-            public static SpriteFont PanelContentText;
+            public static SpriteFont PlainTextFont;
         }
 
         public static class Colors

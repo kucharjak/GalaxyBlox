@@ -37,28 +37,39 @@ namespace GalaxyBlox.Rooms
             var margin = 40;
             var padding = 20;
             var posY = margin;
+
+            var settingsItemmSize = new Vector2(150, 85);
+            var settingsItemTextHeight = (int)(settingsItemmSize.Y * 0.5f);
+
+            var btnDialogSize = new Vector2(250, 100);
+            var btnDialogTextHeight = (int)(btnDialogSize.Y * 0.5f);
+
             GameObject obj = Bank.Visuals.GetSettingsLabel(this);
             obj.Text = "Zaměřovač:";
-            obj.Size = new Vector2(100, 45);
+            obj.Size = settingsItemmSize;
+            obj.TextHeight = settingsItemTextHeight;
             obj.Position = new Vector2(margin, posY);
             Objects.Add(obj);
 
             btnIndicator = Bank.Buttons.GetSettingsButton(this);
-            btnIndicator.Size = new Vector2(100, 45);
+            btnIndicator.Size = settingsItemmSize;
+            btnIndicator.TextHeight = settingsItemTextHeight;
             btnIndicator.Position = new Vector2(Size.X - btnIndicator.Size.X - margin, posY);
             btnIndicator.Click += BtnSetIndicator_Click;
             Objects.Add(btnIndicator);
             SetBtnIndicatorText();
 
             btnOK = Bank.Buttons.GetSettingsButton(this);
-            btnOK.Size = new Vector2(150, 45);
+            btnOK.Size = btnDialogSize;
             btnOK.Text = "Uložit";
+            btnOK.TextHeight = btnDialogTextHeight;
             btnOK.Click += BtnOK_Click;
             Objects.Add(btnOK);
 
             btnCancel = Bank.Buttons.GetSettingsButton(this);
-            btnCancel.Size = new Vector2(150, 45);
+            btnCancel.Size = btnDialogSize;
             btnCancel.Text = "Zrušit";
+            btnCancel.TextHeight = btnDialogTextHeight;
             btnCancel.Click += BtnCancel_Click;
             Objects.Add(btnCancel);
 

@@ -55,8 +55,8 @@ namespace GalaxyBlox.Rooms
             var viewerSize = 110;
             var viewerPadding = 15;
             var btnPauseSize = 100;
-            var lblScoreSize = new Vector2(Size.X, 55);
-            var lblLevelSize = new Vector2(Size.X, 45);
+            var lblScoreSize = new Vector2(Size.X, 45);
+            var lblLevelSize = new Vector2(Size.X, 35);
             var scoreLineSize = new Vector2(220, 3);
 
             // PANEL BACKGROUND
@@ -99,14 +99,13 @@ namespace GalaxyBlox.Rooms
             {
                 Size = lblScoreSize,
                 Position = new Vector2(0, scoreStartPosY),
-                TextSpriteFont = Contents.Fonts.PanelContentText,
+                TextSpriteFont = Contents.Fonts.PlainTextFont,
                 Text = "Skóre",
+                TextHeight = (int)lblScoreSize.Y,
                 TextAlignment = TextAlignment.Center,
                 TextColor = Color.Black,
                 ShowText = true,
-                LayerDepth = 0.05f,
-                Scale = 1.05f,
-                Origin = new Vector2(0.5f, 1)
+                LayerDepth = 0.05f
             };
             Objects.Add(lblScore);
 
@@ -125,14 +124,13 @@ namespace GalaxyBlox.Rooms
             {
                 Size = lblLevelSize,
                 Position = new Vector2(0, scoreStartPosY +  lblScoreSize.Y + scoreLineSize.Y),
-                TextSpriteFont = Contents.Fonts.PanelContentText,
+                TextSpriteFont = Contents.Fonts.PlainTextFont,
                 Text = "Level",
+                TextHeight = (int)lblLevelSize.Y,
                 TextAlignment = TextAlignment.Center,
                 TextColor = Color.Black,
                 ShowText = true,
-                LayerDepth = 0.05f,
-                Scale = 0.85f,
-                Origin = new Vector2(0.5f, 0)
+                LayerDepth = 0.05f
             };
             Objects.Add(lblLevel);
 

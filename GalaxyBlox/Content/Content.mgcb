@@ -49,13 +49,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/pixel.png
 
-#begin Fonts/ButtonText.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Fonts/ButtonText.spritefont
-
 #begin Sprites/ControlButton_down.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -116,20 +109,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ControlButton_right.png
 
-#begin Fonts/PanelContentText.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Fonts/PanelContentText.spritefont
-
-#begin Fonts/PanelHeaderText.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Fonts/PanelHeaderText.spritefont
-
 #begin Backgrounds/Background.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -153,4 +132,11 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/BorderedButtonBackground.png
+
+#begin Fonts/PlainText.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/PlainText.spritefont
 
