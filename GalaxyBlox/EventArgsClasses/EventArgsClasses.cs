@@ -12,10 +12,21 @@ using Android.Widget;
 using GalaxyBlox.Models;
 using Microsoft.Xna.Framework;
 using static GalaxyBlox.Objects.SwipeArea;
+using static GalaxyBlox.Static.SettingOptions;
 
 namespace GalaxyBlox.EventArgsClasses
 {
-    public class ChangerEventArgs : EventArgs
+    class NewGameEventArgs : EventArgs
+    {
+        public GameMode GameMode;
+
+        public NewGameEventArgs(GameMode gameMode)
+        {
+            GameMode = gameMode;
+        }
+    }
+
+    class ChangerEventArgs : EventArgs
     {
         public Room ChangedRoom;
 

@@ -23,9 +23,9 @@ namespace GalaxyBlox.Static
             public const int MaxHighscoresPerGameMod = 1;
 
             public static readonly Vector2 WindowSize = new Vector2(720, 1208);
-            public static readonly Vector2 ArenaSize = new Vector2(12, 20);
 
             public static SettingOptions.GameMode Mode = SettingOptions.GameMode.Test;
+            public static Vector2 ArenaSize = new Vector2(12, 20);
 
             public static UserSettings UserSettings;
             public static Highscores Highscores;

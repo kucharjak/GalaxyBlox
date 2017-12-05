@@ -3,15 +3,16 @@ Zmìny
 
 Rozšíøení 
 	- upravit velikost rozlišení PlayingAreny pro zlepšení visualu na rùzných zaøízeních
-	- podpora více herních módù
 	- dát dohromady grafický styl hry
 	- upravit slovník pro Indicator Name, aby byl univerzálnìjší a možný použít i na jiných místech projektu
-	- pøidat bonusy a vymyslet elegantnší zpùsob, jak je získávat (mít v pozadí padající hvìzdu a pokud by na ní hráè stihl kliknout, tak by získal bonusobou krabièku/truhlu)
+	- pøidat bonusy a vymyslet elegantnší zpùsob, jak je získávat (po každých 4 lajnách dár jeden bonus, pokud je prázdná pozice na bonusy | mít v pozadí padající hvìzdu a pokud by na ní hráè stihl kliknout, tak by získal bonusobou krabièku/truhlu)
 	- vyhodit ze hry room changer - animace øešit tím, že se vytvoøí "Místnost" která bude dìlat animaci sama o sobì (nebudou swipovací, ale nejspíše jenom fade animace)
 	- vymyslet jiný tvary, než ty základní - pøidat pozdìji (bude potøeba odladit)
 	- pøidat do nastavení reset tlaèíko na score
+	- pokud kliknu mimo místnost (které nejsou fullscrenn a jsou aktivní), tak se zavøe (popø endne, záleží podle konkrétní místnosti)
  
 Gameplay
+	- zaèít postupnì vylaïovat konkrétní módy hry
 	- pøidat násobení skóre (podpoøit tak rychlost hraní)
  
 Features
@@ -32,6 +33,7 @@ Nápady
 --------------HOTOVO--------------
 ----------------------------------
 
+- podpora více herních módù
 - oprava meníèek
 - velikost písma musí respektovat velikost okna a rozlišení
 - sjednotit používané membery po celém øešení

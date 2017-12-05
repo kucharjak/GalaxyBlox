@@ -249,7 +249,7 @@ namespace GalaxyBlox.Rooms
             }
 
             // ADDING PLAYING ARENA
-            arena = new PlayingArena(this, new Vector2(Size.X, playingArenaEnd - playingArenaStart), new Vector2(0, playingArenaStart), SettingOptions.GameMode.Test);
+            arena = new PlayingArena(this, new Vector2(Size.X, playingArenaEnd - playingArenaStart), new Vector2(0, playingArenaStart), Settings.Game.Mode, Settings.Game.ArenaSize);
             arena.LayerDepth = 0.05f;
             arena.ActorsQueueChanged += Arena_ActorsQueueChanged;
             arena.ScoreChanged += Arena_ScoreChanged;

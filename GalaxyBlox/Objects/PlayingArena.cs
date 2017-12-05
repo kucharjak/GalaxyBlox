@@ -100,10 +100,10 @@ namespace GalaxyBlox.Objects
         /// <param name="parentRoom"></param>
         /// <param name="size"></param>
         /// <param name="position"></param>
-        public PlayingArena(Room parentRoom, Vector2 size, Vector2 position, SettingOptions.GameMode gameMode) : base(parentRoom)
+        public PlayingArena(Room parentRoom, Vector2 size, Vector2 position, SettingOptions.GameMode gameMode, Vector2 arenaSize) : base(parentRoom)
         {
             this.gameMode = gameMode;
-            arenaSize = Settings.Game.ArenaSize;
+            this.arenaSize = arenaSize;
 
             BackgroundColor = Contents.Colors.PlaygroundColor;
             BorderColor = Contents.Colors.PlaygroundBorderColor;
@@ -723,7 +723,7 @@ namespace GalaxyBlox.Objects
             //playgroundEffectsArray = new Color?[Settings.GameArenaSize.X, Settings.GameArenaSize.Y]; // create new effects array
             playgroundEffectsList.Clear();
 
-            if (Settings.Game.UserSettings.Indicator != SettingOptions.Indicator.None) // draw indicator if set
+            if (gameMode != SettingOptions.GameMode.Classic && Settings.Game.UserSettings.Indicator != SettingOptions.Indicator.None) // draw indicator if set
                 DrawIndicator();
 
             DrawActor(actor, actorPosition, actorColor);

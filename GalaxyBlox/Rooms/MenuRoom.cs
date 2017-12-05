@@ -151,7 +151,9 @@ namespace GalaxyBlox.Rooms
             if (mainGame != null)
                 mainGame.End();
 
-            new GameRoom(this, "Room_Game", Settings.Game.WindowSize, new Vector2()).Show();
+            var gameModeRoomSize = new Vector2(510, 400);
+            new GameModeSelectRoom(this, "Room_GameModeSelection", gameModeRoomSize, (Size - gameModeRoomSize) / 2).Show();
+            //new GameRoom(this, "Room_Game", Settings.Game.WindowSize, new Vector2()).Show();
         }
     }
 }
