@@ -48,6 +48,8 @@ namespace GalaxyBlox.Static
                 //new Color(255, 114, 0) // Orange
             };
 
+            public static float NonActiveColorFactor = 0.4f;
+
             public static Color IndicatorColor = Color.Red;// new Color(255, 255, 255) * 0.7f;
 
             public static Color PlaygroundColor = Color.TransparentBlack;

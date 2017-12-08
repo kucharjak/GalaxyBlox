@@ -38,5 +38,12 @@ namespace GalaxyBlox.Static
             [XmlEnum("test")]
             Test
         }
+
+        public enum GameSpeed
+        {
+            Normal,
+            Speedup,
+            Falling
+        }
     }
 }

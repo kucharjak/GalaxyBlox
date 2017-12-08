@@ -9,6 +9,7 @@ using GalaxyBlox.EventArgsClasses;
 using GalaxyBlox.Models;
 using GalaxyBlox.Rooms;
 using static GalaxyBlox.Static.Settings;
+using static GalaxyBlox.Static.SettingOptions;
 
 namespace GalaxyBlox.Objects
 {
@@ -61,23 +62,23 @@ namespace GalaxyBlox.Objects
 
         public int Level { get; set; } = 0;
 
-        private bool[,] actor;
-        private Color actorColor;
-        private Point actorPosition;
-        private List<Tuple<bool[,], Color>> actorsQueue;
+        private Actor activeActor = null;
+        private List<Actor> actors;
+        private int actorsMaxCount = 1;
+        private List<Actor> actorsQueue;
         private int actorsQueueSize = 2;
 
+        private int actorCreateTimer = 0;
+        private int actorCreatePeriod = 1500;
+
         private int[,] playground;
-        private List<Tuple<int, int, Color>> playgroundEffectsList = new List<Tuple<int, int, Color>>();
+        private HashSet<Tuple<int, int, Color>> playgroundEffectsList = new HashSet<Tuple<int, int, Color>>();
         private int playgroundInnerPadding;
         private int playgroundCubeSize;
         public int CubeSize { get { return playgroundCubeSize; } }
         private int playgroundCubeMargin;
         public int CubeMargin { get { return playgroundCubeMargin; } }
-        
-        private int gameSpeed; // move actor in 1000 ms (= 1 s)
-        private int gameTimeElapsed = 0;
-        private bool actorFalling;
+
         private int fallingPause = 0; // to avoid miss clicks
 
         private int moveTimer = 0;
@@ -108,10 +109,10 @@ namespace GalaxyBlox.Objects
             BackgroundColor = Contents.Colors.PlaygroundColor;
             BorderColor = Contents.Colors.PlaygroundBorderColor;
             Alpha = 1f;
-            
+
             playgroundInnerPadding = 4;
             playgroundCubeMargin = 1;
-            
+
             var spaceLeftForCubes = new Vector2(
                 (int)(size.X - 2 * playgroundInnerPadding - (arenaSize.X - 1) * playgroundCubeMargin),
                 (int)(size.Y - 2 * playgroundInnerPadding - (arenaSize.Y - 1) * playgroundCubeMargin));
@@ -137,8 +138,12 @@ namespace GalaxyBlox.Objects
             backgroundRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)Size.X, (int)Size.Y);
             BackgroundImage = mainRenderTarget;
 
-            actorsQueue = new List<Tuple<bool[,], Color>>();
+            actors = new List<Actor>();
+            actorsQueue = new List<Actor>();
             StartNewGame();
+
+            if (gameMode == GameMode.Extreme)
+                actorsMaxCount = 5;
         }
 
         public override void Update(GameTime gameTime)
@@ -157,14 +162,22 @@ namespace GalaxyBlox.Objects
             if (moveTimer < 0)
                 moveTimer = 0;
 
-            if (actor != null)
+            actorCreateTimer += gameTime.ElapsedGameTime.Milliseconds;
+
+            if (actorCreateTimer > actorCreatePeriod)
             {
-                gameTimeElapsed += gameTime.ElapsedGameTime.Milliseconds;
-                if (gameTimeElapsed > gameSpeed)
+                CreateNewActor();
+                actorCreateTimer = 0;
+            }
+
+            foreach(var actor in actors.ToArray())
+            {
+                actor.Timer += gameTime.ElapsedGameTime.Milliseconds;
+                if (actor.Timer > actor.FallingSpeed)
                 {
-                    MoveActorDown();
-                    gameTimeElapsed = 0;
-                } 
+                    MoveActorDown(actor);
+                    actor.Timer = 0;
+                }
             }
 
             UpdateEffectsArray();
@@ -291,45 +304,47 @@ namespace GalaxyBlox.Objects
             playground = new int[(int)arenaSize.X, (int)arenaSize.Y];
             playgroundEffectsList.Clear();
             Score = 0;
-            actorsQueue = new List<Tuple<bool[,], Color>>();
+            activeActor = null;
+            actors.Clear();
+            actorsQueue.Clear();
             CreateNewActor();
         }
 
         public void SlowDownActor()
         {
-            if (actorFalling)
+            if (activeActor == null || activeActor.IsFalling)
                 return;
 
-            SetGameSpeed(GameSpeed.Normal);
+            activeActor.FallingSpeed = GetGameSpeed(GameSpeed.Normal);
         }
 
         public void MakeActorSpeedup()
         {
-            if (actorFalling || fallingPause > 0)
+            if (activeActor == null || activeActor.IsFalling || fallingPause > 0)
                 return;
 
-            SetGameSpeed(GameSpeed.Speedup);
+            activeActor.FallingSpeed = GetGameSpeed(GameSpeed.Speedup);
         }
 
         public void MakeActorFall()
         {
-            if (fallingPause > 0)
+            if (activeActor == null || fallingPause > 0)
                 return;
 
-            actorFalling = true;
-            SetGameSpeed(GameSpeed.Falling);
+            activeActor.IsFalling = true;
+            activeActor.FallingSpeed = GetGameSpeed(GameSpeed.Falling);
         }
 
         public void MoveRight()
         {
-            if (moveTimer > 0)
+            if (activeActor == null || moveTimer > 0)
                 return;
 
-            var newPosition = new Point(actorPosition.X + 1, actorPosition.Y);
-            if (ActorCollide(newPosition, actor))
+            var newPosition = new Point(activeActor.Position.X + 1, activeActor.Position.Y);
+            if (ActorCollide(newPosition, activeActor.Shape))
                 return;
 
-            actorPosition = newPosition;
+            activeActor.Position = newPosition;
             if (moveTimerSpeed == 0)
             {
                 moveTimer = moveTimerSlowest;
@@ -341,7 +356,7 @@ namespace GalaxyBlox.Objects
                 moveTimer = newSpeed > moveTimerFastest ? newSpeed : moveTimerSpeed;
                 moveTimerSpeed = newSpeed > moveTimerFastest ? newSpeed : moveTimerSpeed;
             }
-            
+
         }
 
         public void StopMovingRight()
@@ -352,14 +367,14 @@ namespace GalaxyBlox.Objects
 
         public void MoveLeft()
         {
-            if (moveTimer > 0)
+            if (activeActor == null || moveTimer > 0)
                 return;
 
-            var newPosition = new Point(actorPosition.X - 1, actorPosition.Y);
-            if (ActorCollide(newPosition, actor))
+            var newPosition = new Point(activeActor.Position.X - 1, activeActor.Position.Y);
+            if (ActorCollide(newPosition, activeActor.Shape))
                 return;
 
-            actorPosition = newPosition;
+            activeActor.Position = newPosition;
             if (moveTimerSpeed == 0)
             {
                 moveTimer = moveTimerSlowest;
@@ -381,16 +396,19 @@ namespace GalaxyBlox.Objects
 
         public void Rotate()
         {
-            var newActor = RotateActor(actor);
-            var newPosition = actorPosition;
-            if (newActor.GetLength(0) + actorPosition.X > playground.GetLength(0))
-                newPosition.X = playground.GetLength(0) - newActor.GetLength(0);
-
-            if (ActorCollide(newPosition, newActor))
+            if (activeActor == null)
                 return;
 
-            actor = newActor;
-            actorPosition = newPosition;
+            var rotatedActorShape = RotateActor(activeActor.Shape);
+            var rotatedActorPosition = activeActor.Position;
+            if (rotatedActorShape.GetLength(0) + activeActor.Position.X > playground.GetLength(0))
+                rotatedActorPosition.X = playground.GetLength(0) - rotatedActorShape.GetLength(0);
+
+            if (ActorCollide(rotatedActorPosition, rotatedActorShape))
+                return;
+
+            activeActor.Shape = rotatedActorShape;
+            activeActor.Position = rotatedActorPosition;
         }
 
         // Private methods
@@ -463,20 +481,29 @@ namespace GalaxyBlox.Objects
             return resultArray;
         }
 
-        private void MoveActorDown()
+        private void MoveActorDown(Actor actor)
         {
-            var newPosition = new Point(actorPosition.X, actorPosition.Y + 1);
+            var newPosition = new Point(actor.Position.X, actor.Position.Y + 1);
 
-            if (!ActorCollide(newPosition, actor))
+            if (!ActorCollide(newPosition, actor.Shape))
             {
-                actorPosition = newPosition;
+                actor.Position = newPosition;
             }
             else
             {
-                InsertActorToPlayground();
+                InsertActorToPlayground(actor);
+                actors.Remove(actor);
+
+                if (actor == activeActor && actors.Count > 0)
+                    activeActor = actors.First();
+                else
+                    activeActor = null;
+
                 CheckGameOver();
                 CheckPlaygroundForFullLines();
-                CreateNewActor();
+
+                if (actors.Count == 0)
+                    CreateNewActor();
             }
         }
 
@@ -505,8 +532,8 @@ namespace GalaxyBlox.Objects
                 {
                     highscores.Add(new Score("Test", score));
                     highscores = highscores.OrderByDescending(scr => scr.Value).ToList();
-                    
-                    while(highscores.Count > Settings.Game.MaxHighscoresPerGameMod)
+
+                    while (highscores.Count > Settings.Game.MaxHighscoresPerGameMod)
                     {
                         highscores.RemoveAt(highscores.Count - 1);
                     }
@@ -565,7 +592,7 @@ namespace GalaxyBlox.Objects
                         continue;
                     }
 
-                    for(int x = 0; x < playground.GetLength(0); x++)
+                    for (int x = 0; x < playground.GetLength(0); x++)
                     {
                         playground[x, playgroundPosY] = playground[x, y];
 
@@ -592,25 +619,25 @@ namespace GalaxyBlox.Objects
         //    }
         //}
 
-        private void InsertActorToPlayground()
+        private void InsertActorToPlayground(Actor actor)
         {
-            var actorBoxes = new int[actor.GetLength(0), actor.GetLength(1)];
-            var actorColorPos = Contents.Colors.GameCubesColors.IndexOf(actorColor);
+            var actorBoxes = new int[actor.Shape.GetLength(0), actor.Shape.GetLength(1)];
+            var actorColorPos = Contents.Colors.GameCubesColors.IndexOf(actor.Color);
             if (actorColorPos < 1)
                 actorColorPos = 1;
 
-            for (int x = 0; x < actor.GetLength(0); x++)
+            for (int x = 0; x < actor.Shape.GetLength(0); x++)
             {
-                for (int y = 0; y < actor.GetLength(1); y++)
+                for (int y = 0; y < actor.Shape.GetLength(1); y++)
                 {
-                    if (actor[x, y])
+                    if (actor.Shape[x, y])
                     {
                         actorBoxes[x, y] = actorColorPos;
                     }
                 }
             }
 
-            InsertBoxesToPlayground(actorPosition, actorBoxes);
+            InsertBoxesToPlayground(actor.Position, actorBoxes);
         }
 
         private void InsertBoxesToPlayground(Point boxesPosition, int[,] boxesArray, bool insertZeros = false)
@@ -622,8 +649,8 @@ namespace GalaxyBlox.Objects
                     if (boxesArray[x, y] > 0 || insertZeros)
                     {
                         var boxPosition = new Point(boxesPosition.X + x, boxesPosition.Y + y);
-                        if (boxPosition.X < playground.GetLength(0) && boxPosition.Y < playground.GetLength(1) && boxPosition.X >= 0 && boxPosition.Y >= 0) 
-                        { 
+                        if (boxPosition.X < playground.GetLength(0) && boxPosition.Y < playground.GetLength(1) && boxPosition.X >= 0 && boxPosition.Y >= 0)
+                        {
                             playground[boxPosition.X, boxPosition.Y] = boxesArray[x, y];
                             //playgroundChanges.Add(new Point(boxPosition.X, boxPosition.Y)); // log change for redraw
                         }
@@ -632,7 +659,7 @@ namespace GalaxyBlox.Objects
             }
             backgroundChanged = true; // indicating for background redraw
         }
-        
+
         private bool ActorCollide(Point actorPosition, bool[,] actorArray)
         {
             for (int x = 0; x < actorArray.GetLength(0); x++)
@@ -642,8 +669,8 @@ namespace GalaxyBlox.Objects
                     if (actorArray[x, y])
                     {
                         var boxPosition = new Point(actorPosition.X + x, actorPosition.Y + y);
-                        if (boxPosition.X >= playground.GetLength(0) || 
-                            boxPosition.Y >= playground.GetLength(1) || 
+                        if (boxPosition.X >= playground.GetLength(0) ||
+                            boxPosition.Y >= playground.GetLength(1) ||
                             boxPosition.X < 0 ||
                             boxPosition.Y < 0 ||
                             playground[boxPosition.X, boxPosition.Y] > 0)
@@ -658,39 +685,42 @@ namespace GalaxyBlox.Objects
 
         private void CreateNewActor()
         {
+            if (actors.Count >= actorsMaxCount)
+                return;
+
             if (actorsQueue.Count < actorsQueueSize)
             {
                 var actorsToFullQueue = actorsQueueSize - actorsQueue.Count;
                 for (int i = 0; i < actorsToFullQueue; i++)
                 {
-                    var nextActor = Contents.Shapes.GetRandomShape();
-                    nextActor = RotateActor(nextActor, Game1.Random.Next(0, 3), true);
-                    actorsQueue.Add(new Tuple<bool[,], Color>(nextActor, Contents.Colors.GameCubesColors[Game1.Random.Next(1, Contents.Colors.GameCubesColors.Count)]));
+                    var newActorShape = Contents.Shapes.GetRandomShape();
+                    newActorShape = RotateActor(newActorShape, Game1.Random.Next(0, 3), true);
+                    actorsQueue.Add(new Actor(newActorShape, new Point(), Contents.Colors.GameCubesColors[Game1.Random.Next(1, Contents.Colors.GameCubesColors.Count)]));
                 }
             }
 
-            //actor = Contents.Shapes.GetRandomShape();
-            //actor = RotateActor(actor, Game1.Random.Next(0, 3)); // rotate actor randomly for variation and funzies
-            //actorColor = Contents.Colors.GameCubesColors[Game1.Random.Next(1, Contents.Colors.GameCubesColors.Count)];
-
-            var actorFromQueue= actorsQueue.First();
-            actor = actorFromQueue.Item1;
-            actorColor = actorFromQueue.Item2;
-            actorPosition = new Point(Game1.Random.Next(0, playground.GetLength(0) - actor.GetLength(0) + 1), 0);
-            actorsQueue.Remove(actorFromQueue);
-            OnActorsQueueChange(new QueueChangeEventArgs(actorsQueue.FirstOrDefault()?.Item1, actorsQueue.FirstOrDefault() != null ? actorsQueue.FirstOrDefault().Item2 : Color.White));
-
-            gameTimeElapsed = 0;
-            actorFalling = false;
-            SetGameSpeed(GameSpeed.Normal);
+            var actor = actorsQueue.First();
+            actorsQueue.Remove(actor); 
+            actor.Position = new Point(Game1.Random.Next(0, playground.GetLength(0) - actor.Shape.GetLength(0) + 1), 0);
+            actor.IsFalling = false;
+            actor.FallingSpeed = GetGameSpeed(GameSpeed.Normal);
+            actors.Add(actor);
             fallingPause = 150;
+            if (activeActor == null)
+                activeActor = actor;
+
+            var nextActorInQueue = actorsQueue.FirstOrDefault();
+            if (nextActorInQueue != null)
+                OnActorsQueueChange(new QueueChangeEventArgs(nextActorInQueue.Shape, nextActorInQueue.Color));
+            else
+                OnActorsQueueChange(new QueueChangeEventArgs(null, Color.White));
         }
 
         private void UpdateLevel()
         {
             var level = 0;
             var scoreCap = 0;
-            while (scoreCap  < Score)
+            while (scoreCap < Score)
             {
                 level++;
                 scoreCap += level * 50;
@@ -701,32 +731,42 @@ namespace GalaxyBlox.Objects
         /// <summary>
         /// Game speed is defined by game score
         /// </summary>
-        private void SetGameSpeed(GameSpeed gameSpeedSetting)
+        private int GetGameSpeed(GameSpeed gameSpeedSetting)
         {
             var maxFallingSpeed = 250;
-            switch(gameSpeedSetting)
+            var fallingSpeed = 1000;
+            switch (gameSpeedSetting)
             {
                 case GameSpeed.Normal:
-                    gameSpeed = (int)(1000 - Math.Pow(Level, 2)); // TODO test more speeds
-                    if (gameSpeed < maxFallingSpeed)
-                        gameSpeed = maxFallingSpeed;
+                    fallingSpeed = (int)(1000 - Math.Pow(Level, 2)); // TODO test more speeds
+                    if (fallingSpeed < maxFallingSpeed)
+                        fallingSpeed = maxFallingSpeed;
                     break;
                 case GameSpeed.Speedup:
-                    gameSpeed = 50; break;
+                    fallingSpeed = 50; break;
                 case GameSpeed.Falling:
-                    gameSpeed = 1; break;
+                    fallingSpeed = 1; break;
             }
+
+            return fallingSpeed;
         }
 
         private void UpdateEffectsArray()
         {
-            //playgroundEffectsArray = new Color?[Settings.GameArenaSize.X, Settings.GameArenaSize.Y]; // create new effects array
             playgroundEffectsList.Clear();
 
             if (gameMode != SettingOptions.GameMode.Classic && Settings.Game.UserSettings.Indicator != SettingOptions.Indicator.None) // draw indicator if set
                 DrawIndicator();
 
-            DrawActor(actor, actorPosition, actorColor);
+
+            foreach (var actor in actors)
+            {
+                if (actor != activeActor)
+                    DrawActor(actor.Shape, actor.Position, Color.Lerp(actor.Color, Color.Black, Contents.Colors.NonActiveColorFactor));
+            }
+
+            if (activeActor != null)
+                DrawActor(activeActor.Shape, activeActor.Position, activeActor.Color);
         }
 
         private void DrawActor(bool[,] actorToDraw, Point positionToDraw, Color colorToDraw)
@@ -738,7 +778,6 @@ namespace GalaxyBlox.Objects
                     if (actorToDraw[x, y])
                     {
                         playgroundEffectsList.Add(new Tuple<int, int, Color>(positionToDraw.X + x, positionToDraw.Y + y, colorToDraw));
-                        //playgroundEffectsArray[positionToDraw.X + x, positionToDraw.Y + y] = colorToDraw;
                     }
                 }
             }
@@ -746,29 +785,32 @@ namespace GalaxyBlox.Objects
 
         private void DrawIndicator()
         {
-            switch(Settings.Game.UserSettings.Indicator)
+            if (activeActor == null)
+                return;
+
+            switch (Settings.Game.UserSettings.Indicator)
             {
                 case SettingOptions.Indicator.Shadow:
                     {
-                        for (int actorX = 0; actorX < actor.GetLength(0); actorX++)
+                        for (int actorX = 0; actorX < activeActor.Shape.GetLength(0); actorX++)
                         {
-                            var startPosition = new Point(actorPosition.X + actorX, actorPosition.Y);
+                            var startPosition = new Point(activeActor.Position.X + actorX, activeActor.Position.Y);
 
                             bool foundActor = false;
-                            for (int actorY = actor.GetLength(1) - 1; actorY >= 0; actorY--)
+                            for (int actorY = activeActor.Shape.GetLength(1) - 1; actorY >= 0; actorY--)
                             {
-                                if (actor[actorX, actorY])
+                                if (activeActor.Shape[actorX, actorY])
                                 {
                                     foundActor = true;
-                                    startPosition.Y = actorPosition.Y + (actorY + 1);
+                                    startPosition.Y = activeActor.Position.Y + (actorY + 1);
                                     break;
                                 }
                             }
                             if (!foundActor)
                                 continue;
 
-                            if (startPosition.Y == actorPosition.Y)
-                                startPosition.Y = actorPosition.Y + actor.GetLength(1);
+                            if (startPosition.Y == activeActor.Position.Y)
+                                startPosition.Y = activeActor.Position.Y + activeActor.Shape.GetLength(1);
 
                             for (int y = startPosition.Y; y < playground.GetLength(1); y++)
                             {
@@ -784,19 +826,19 @@ namespace GalaxyBlox.Objects
                     } break;
                 case SettingOptions.Indicator.Shape:
                     {
-                        var shadowPosition = actorPosition;
+                        var shadowPosition = activeActor.Position;
 
                         for (int y = shadowPosition.Y; y < playground.GetLength(1); y++)
                         {
                             shadowPosition.Y = y;
-                            if (ActorCollide(shadowPosition, actor))
+                            if (ActorCollide(shadowPosition, activeActor.Shape))
                             {
                                 shadowPosition.Y--;
                                 break;
                             }
                         }
                         if (shadowPosition.Y >= 0)
-                            DrawActor(actor, shadowPosition, Contents.Colors.IndicatorColor);
+                            DrawActor(activeActor.Shape, shadowPosition, Contents.Colors.IndicatorColor);
 
                     } break;
             }
@@ -807,12 +849,25 @@ namespace GalaxyBlox.Objects
             var result = Contents.Colors.GameCubesColors[playground[posX, posY]];
             return result;
         }
-        
-        public enum GameSpeed
+    }
+
+    class Actor
+    {
+        public bool[,] Shape;
+        public Color Color;
+        public Point Position;
+
+        public int Timer;
+        public int FallingSpeed;
+        public bool IsFalling;
+
+        public Actor(bool [,] shape, Point position, Color color, int fallingSpeed = 0)
         {
-            Normal,
-            Speedup,
-            Falling
+            Shape = shape;
+            Position = position;
+            Color = color;
+            FallingSpeed = fallingSpeed;
+            Timer = 0;
         }
     }
 }
