@@ -17,6 +17,9 @@ namespace GalaxyBlox.Static
         /// </summary>
         public static class Game
         {
+            // DEBUG SETTINGS - TODO: Do it smarter
+            public static readonly bool ShowFPS = false;
+
             private static IsolatedStorageFile dataFile = IsolatedStorageFile.GetUserStoreForDomain();
             private const string settingsPath = "settings.xml";
             private const string highscoresPath = "highscores.xml";

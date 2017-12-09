@@ -22,16 +22,20 @@ namespace GalaxyBlox.Models
         public static List<Room> Rooms { get { return rooms; } }
         public static Room ActiveRoom;
 
+        private static FrameCounter fc = new FrameCounter();
+
         public static void Update(GameTime gameTime)
         {
             if (ActiveRoom != null)
                 ActiveRoom.Update(gameTime);
+
+            fc.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
         }
 
         public static void Draw(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
             graphicsDevice.Clear(Color.Purple);
-            
+
             foreach (var room in rooms)
             {
                 if (!room.IsVisible)
@@ -41,6 +45,12 @@ namespace GalaxyBlox.Models
             }
 
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+
+            if (Static.Settings.Game.ShowFPS)
+            {
+                spriteBatch.DrawString(Static.Contents.Fonts.PlainTextFont, "CUR: " + fc.CurrentFramesPerSecond, new Vector2(), Color.Red, 0f, new Vector2(), 1f, SpriteEffects.None, 1f);
+                spriteBatch.DrawString(Static.Contents.Fonts.PlainTextFont, "AVG: " + fc.AverageFramesPerSecond, new Vector2(0, Static.Contents.Fonts.PlainTextFont.LineSpacing), Color.Red, 0f, new Vector2(), 1f, SpriteEffects.None, 1f);
+            }
 
             foreach (var room in rooms)
             {

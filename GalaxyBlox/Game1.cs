@@ -105,9 +105,9 @@ namespace GalaxyBlox
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            RoomManager.Update(gameTime);
-
             base.Update(gameTime);
+
+            RoomManager.Update(gameTime);
         }
 
         /// <summary>

@@ -696,7 +696,7 @@ namespace GalaxyBlox.Objects
                     actorsQueue.Add(new Actor(newActorShape, new Point(), Contents.Colors.GameCubesColors[Game1.Random.Next(1, Contents.Colors.GameCubesColors.Count)]));
                 }
             }
-
+            
             var actor = actorsQueue.First();
             actorsQueue.Remove(actor); 
             actor.Position = new Point(Game1.Random.Next(0, playground.GetLength(0) - actor.Shape.GetLength(0) + 1), 0);
@@ -744,7 +744,7 @@ namespace GalaxyBlox.Objects
                 case GameSpeed.Speedup:
                     fallingSpeed = 50; break;
                 case GameSpeed.Falling:
-                    fallingSpeed = 1; break;
+                    fallingSpeed = 5; break;
             }
 
             return fallingSpeed;

@@ -72,6 +72,7 @@
     <Compile Include="Activity1.cs" />
     <Compile Include="EventArgsClasses\EventArgsClasses.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Models\FrameCounter.cs" />
     <Compile Include="Models\GameObject.cs" />
     <Compile Include="Models\Room.cs" />
     <Compile Include="Models\RoomManager.cs" />
