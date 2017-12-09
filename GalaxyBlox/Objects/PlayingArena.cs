@@ -494,11 +494,9 @@ namespace GalaxyBlox.Objects
                 InsertActorToPlayground(actor);
                 actors.Remove(actor);
 
-                if (actor == activeActor && actors.Count > 0)
-                    activeActor = actors.First();
-                else
-                    activeActor = null;
-
+                if (actor == activeActor)
+                    activeActor = actors.Count > 0 ? actors.First() : null;
+                
                 CheckGameOver();
                 CheckPlaygroundForFullLines();
 
@@ -706,6 +704,7 @@ namespace GalaxyBlox.Objects
             actor.FallingSpeed = GetGameSpeed(GameSpeed.Normal);
             actors.Add(actor);
             fallingPause = 150;
+
             if (activeActor == null)
                 activeActor = actor;
 
