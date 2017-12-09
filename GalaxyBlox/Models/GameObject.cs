@@ -19,7 +19,7 @@ namespace GalaxyBlox.Models
         public Vector2 Origin;
         public float Scale = 1f; // scale for drawing - for example when i need bigger object for a second (animation, or just to stand out like hovered button)
 
-        private string text;
+        private string text = "";
         public string Text
         {
             get { return text; }

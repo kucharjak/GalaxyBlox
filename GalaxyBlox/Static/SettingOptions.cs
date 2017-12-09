@@ -45,5 +45,14 @@ namespace GalaxyBlox.Static
             Speedup,
             Falling
         }
+
+        public enum GameBonus
+        {
+            None, // first place must be empty
+            TimeRewind,
+            TimeSlowdown,
+            CubesSwip,
+            Laser
+        }
     }
 }

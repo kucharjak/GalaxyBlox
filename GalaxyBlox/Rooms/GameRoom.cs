@@ -10,6 +10,8 @@ using GalaxyBlox.Static;
 using GalaxyBlox.Utils;
 using GalaxyBlox.EventArgsClasses;
 using Microsoft.Xna.Framework.Input;
+using static GalaxyBlox.Static.SettingOptions;
+using System.Collections.Generic;
 
 namespace GalaxyBlox.Rooms
 {
@@ -28,9 +30,8 @@ namespace GalaxyBlox.Rooms
         private Button btnControlFall;
         private Button btnControlRotate;
 
-        private Button btnBonus1;
-        private Button btnBonus2;
-        private Button btnBonus3;
+        private GameObject pnlBonusBtns;
+        private List<Button> bonusButtons;
 
         private SettingOptions.GameMode gameMode;
 
@@ -193,59 +194,22 @@ namespace GalaxyBlox.Rooms
             {
                 // ADDING BONUS
                 // SETTINGS
-                var btnBonusSize = 80;
-                var btnBonusCount = 3;
-                var btnBonusPadding = 10;
-                var btnBonusLeftPadding = 120;
-                var btnBonusMargin = ((Size.X - 2 * btnBonusLeftPadding ) - (btnBonusCount * btnBonusSize)) / (btnBonusCount - 1);
+                var panelHeight = 100;
 
                 // ADDING BONUS PANEL
-                Objects.Add(new GameObject(this)
+                pnlBonusBtns = new GameObject(this)
                 {
-                    Size = new Vector2(Size.X, btnBonusSize + 2 * btnBonusPadding),
-                    Position = new Vector2(0, Size.Y - (btnSize + 2 * btnPadding) - (btnBonusSize + 2 * btnBonusPadding)),
+                    Size = new Vector2(Size.X, panelHeight),
+                    Position = new Vector2(0, Size.Y - (btnSize + 2 * btnPadding) - panelHeight),
                     BackgroundImage = Contents.Textures.Pix,
                     BaseColor = Contents.Colors.BonusPanelBackgroundColor,
                     LayerDepth = 0.01f
-                });
+                };
+                Objects.Add(pnlBonusBtns);
                 lastObj = Objects.Last();
                 playingArenaEnd = lastObj.Position.Y - 5;
 
-                btnBonus1 = new Button(this)
-                {
-                    Size = new Vector2(btnBonusSize),
-                    Position = new Vector2(btnBonusLeftPadding + (btnBonusMargin + btnBonusSize) * 0, lastObj.Position.Y + btnBonusPadding),
-                    BackgroundImage =  Contents.Textures.BorderedButtonBackground,
-                    BaseColor = Color.White,
-                    DefaultBackgroundColor = Color.White,
-                    SelectedBackgroundColor = Color.White,
-                    LayerDepth = 0.05f
-                };
-                Objects.Add(btnBonus1);
-
-                btnBonus2 = new Button(this)
-                {
-                    Size = new Vector2(btnBonusSize),
-                    Position = new Vector2(btnBonusLeftPadding + (btnBonusMargin + btnBonusSize) * 1, lastObj.Position.Y + btnBonusPadding),
-                    BackgroundImage = Contents.Textures.BorderedButtonBackground,
-                    BaseColor = Color.White,
-                    DefaultBackgroundColor = Color.White,
-                    SelectedBackgroundColor = Color.White,
-                    LayerDepth = 0.05f
-                };
-                Objects.Add(btnBonus2);
-
-                btnBonus3 = new Button(this)
-                {
-                    Size = new Vector2(btnBonusSize),
-                    Position = new Vector2(btnBonusLeftPadding + (btnBonusMargin + btnBonusSize) * 2, lastObj.Position.Y + btnBonusPadding),
-                    BackgroundImage = Contents.Textures.BorderedButtonBackground,
-                    BaseColor = Color.White,
-                    DefaultBackgroundColor = Color.White,
-                    SelectedBackgroundColor = Color.White,
-                    LayerDepth = 0.05f
-                };
-                Objects.Add(btnBonus3);
+                bonusButtons = new List<Button>();
             }
 
             // ADDING PLAYING ARENA
@@ -254,8 +218,72 @@ namespace GalaxyBlox.Rooms
             arena.ActorsQueueChanged += Arena_ActorsQueueChanged;
             arena.ScoreChanged += Arena_ScoreChanged;
             arena.GameEnded += Arena_GameEnded;
+            arena.AvailableBonusesChanged += Arena_AvailableBonusesChanged;
             arena.StartNewGame();
             Objects.Add(arena);
+        }
+
+        private void Arena_AvailableBonusesChanged(object sender, EventArgs e)
+        {
+            var eventArgs = (AvailableBonusesChangeEventArgs)e;
+            RefreshBonusButtons(eventArgs.GameBonuses);
+        }
+
+        private void RefreshBonusButtons(List<GameBonus> newBonuses)
+        {
+            // remove old bonus buttons
+            foreach (var oldButton in bonusButtons)
+                Objects.Remove(oldButton);
+            bonusButtons.Clear();
+
+            // add new bonus buttons
+            var btnBonusPadding = 10;
+            var btnBonusSize = pnlBonusBtns.Size.Y - 2 * btnBonusPadding;
+            var btnBonusTextHeight = (int)(btnBonusSize * 0.45f);
+            var btnMargin = (pnlBonusBtns.Size.X - (newBonuses.Count * btnBonusSize)) / (newBonuses.Count + 1);
+
+            for (int i = 0; i < newBonuses.Count; i++)
+            {
+                var btn = new Button(this)
+                {
+                    Size = new Vector2(btnBonusSize),
+                    Position = new Vector2(btnMargin + i * (btnBonusSize + btnMargin), pnlBonusBtns.Position.Y + btnBonusPadding),
+                    BackgroundImage = Contents.Textures.BorderedButtonBackground,
+                    BaseColor = Color.White,
+                    DefaultBackgroundColor = Color.White,
+                    SelectedBackgroundColor = Color.White,
+                    LayerDepth = 0.05f,
+                    TextSpriteFont = Contents.Fonts.PlainTextFont,
+                    TextHeight = btnBonusTextHeight,
+                    ShowText = true,
+                    TextAlignment = TextAlignment.Center,
+                    Text = TranslateBonusToText(newBonuses[i]),
+                    Name = i.ToString()
+                };
+                btn.Click += Btn_Click;
+                Objects.Add(btn);
+                bonusButtons.Add(btn);
+            }
+        }
+
+        private void Btn_Click(object sender, EventArgs e)
+        {
+            var btn = (sender as Button);
+            if (btn != null)
+                arena.ActivateBonus(int.Parse(btn.Name));
+        }
+
+        private string TranslateBonusToText(GameBonus bonus)
+        {
+            string result = "!err";
+            switch(bonus)
+            {
+                case GameBonus.TimeRewind: result = "Rew"; break;
+                case GameBonus.TimeSlowdown: result = "Slo"; break;
+                case GameBonus.Laser: result = "Lsr"; break;
+                case GameBonus.CubesSwip: result = "Swp"; break;
+            }
+            return result;
         }
 
         private void Arena_GameEnded(object sender, EventArgs e)

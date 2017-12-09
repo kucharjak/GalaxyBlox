@@ -16,10 +16,18 @@ using static GalaxyBlox.Static.SettingOptions;
 
 namespace GalaxyBlox.EventArgsClasses
 {
+    class AvailableBonusesChangeEventArgs : EventArgs
+    {
+        public List<GameBonus> GameBonuses;
+        public AvailableBonusesChangeEventArgs(List<GameBonus> gameBonuses)
+        {
+            GameBonuses = gameBonuses;
+        }
+    }
+
     class NewGameEventArgs : EventArgs
     {
         public GameMode GameMode;
-
         public NewGameEventArgs(GameMode gameMode)
         {
             GameMode = gameMode;
@@ -29,7 +37,6 @@ namespace GalaxyBlox.EventArgsClasses
     class ChangerEventArgs : EventArgs
     {
         public Room ChangedRoom;
-
         public ChangerEventArgs(Room room)
         {
             ChangedRoom = room;

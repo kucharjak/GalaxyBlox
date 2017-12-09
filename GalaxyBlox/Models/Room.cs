@@ -97,7 +97,7 @@ namespace GalaxyBlox.Models
             if (input.Count() > 0)
                 HandleInput(input.FirstOrDefault());
 
-            foreach (var obj in Objects)
+            foreach (var obj in Objects.ToArray())
                 obj.Update(gameTime);
         }
 

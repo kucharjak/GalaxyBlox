@@ -5,7 +5,7 @@ Zmìny
 	- zmìnit vykreslování effectù na playing arenì
 
 Rozšíøení 
-	- pøidat bonusy a vymyslet elegantnší zpùsob, jak je získávat (po každých 4 lajnách dár jeden bonus, pokud je prázdná pozice na bonusy | mít v pozadí padající hvìzdu a pokud by na ní hráè stihl kliknout, tak by získal bonusobou krabièku/truhlu)
+	- vytvoøit 4 základní herní bonusy
 	- upravit slovník pro Indicator Name, aby byl univerzálnìjší a možný použít i na jiných místech projektu
 	- pøidat do nastavení reset tlaèíko na score
 	- pokud kliknu mimo místnost (které nejsou fullscrenn a jsou aktivní), tak se zavøe (popø endne, záleží podle konkrétní místnosti)
@@ -40,6 +40,7 @@ Možná
 --------------HOTOVO--------------
 ----------------------------------
 
+- pøidat bonusy a vymyslet elegantnší zpùsob, jak je získávat (po každých 4 lajnách dár jeden bonus, pokud je prázdná pozice na bonusy | mít v pozadí padající hvìzdu a pokud by na ní hráè stihl kliknout, tak by získal bonusobou krabièku/truhlu)
 - pøidat do "Extrémního" módu to, že bude padat najednou více kostek (zatím 3 max), bude možné mezi nimi pøeklikávat a oznaèená bude mít jinou barvu než oststaní
 - podpora více herních módù
 - oprava meníèek

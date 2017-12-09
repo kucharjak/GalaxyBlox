@@ -15,6 +15,16 @@ namespace GalaxyBlox.Objects
 {
     class PlayingArena : GameObject
     {
+        public event EventHandler AvailableBonusesChanged;
+        protected virtual void OnAvailableBonusesChange(AvailableBonusesChangeEventArgs e)
+        {
+            EventHandler handler = AvailableBonusesChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
         public event EventHandler ActorsQueueChanged;
         protected virtual void OnActorsQueueChange(QueueChangeEventArgs e)
         {
@@ -95,6 +105,11 @@ namespace GalaxyBlox.Objects
         private RenderTarget2D backgroundRenderTarget;
         private RenderTarget2D mainRenderTarget;
 
+        private List<GameBonus> gameBonuses;
+        private int maxBonuses = 3;
+        private int timeSinceLastBonus = 0;
+        private int timeUntilFreeBonus = 2000;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -140,10 +155,13 @@ namespace GalaxyBlox.Objects
 
             actors = new List<Actor>();
             actorsQueue = new List<Actor>();
-            StartNewGame();
+
+            gameBonuses = new List<GameBonus>();
 
             if (gameMode == GameMode.Extreme)
                 actorsMaxCount = 5;
+            
+            StartNewGame();
         }
 
         public override void Update(GameTime gameTime)
@@ -161,6 +179,18 @@ namespace GalaxyBlox.Objects
 
             if (moveTimer < 0)
                 moveTimer = 0;
+
+            if (gameMode != GameMode.Classic)
+            {
+                if (gameBonuses.Count  == 0) 
+                    timeSinceLastBonus += gameTime.ElapsedGameTime.Milliseconds;
+
+                if (timeSinceLastBonus >= timeUntilFreeBonus)
+                {
+                    AddBonus();
+                    timeUntilFreeBonus = 2000;
+                }
+            }
 
             actorCreateTimer += gameTime.ElapsedGameTime.Milliseconds;
 
@@ -602,6 +632,11 @@ namespace GalaxyBlox.Objects
                 }
                 backgroundChanged = true; // need to indicate, that i changed backgrou, so game will redraw it
                 //LogPlaygroundChanges(oldPlayground, playground);
+
+                if (fullLines.Count >= 4)
+                {
+                    AddBonus();
+                }
             }
         }
 
@@ -748,6 +783,23 @@ namespace GalaxyBlox.Objects
             }
 
             return fallingSpeed;
+        }
+
+        private void AddBonus()
+        {
+            if (gameBonuses.Count < maxBonuses)
+            {
+                var bonusIndex = Game1.Random.Next(1, Enum.GetValues(typeof(GameBonus)).Length);
+                gameBonuses.Add((GameBonus)bonusIndex);
+                timeSinceLastBonus = 0;
+                OnAvailableBonusesChange(new AvailableBonusesChangeEventArgs(gameBonuses));
+            }
+        }
+
+        public void ActivateBonus(int bonusPosition)
+        {
+            gameBonuses.RemoveAt(bonusPosition);
+            OnAvailableBonusesChange(new AvailableBonusesChangeEventArgs(gameBonuses));
         }
 
         private void UpdateEffectsArray()
