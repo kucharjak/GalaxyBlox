@@ -29,6 +29,8 @@ namespace GalaxyBlox.Static
 
             public static Texture2D BackgroundGame;
             public static Texture2D BackgroundMenu;
+
+            public static Texture2D SlowDownIndicator;
         }
 
         public static class Fonts

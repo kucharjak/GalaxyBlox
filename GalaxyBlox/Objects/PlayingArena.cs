@@ -110,6 +110,10 @@ namespace GalaxyBlox.Objects
         private int maxBonuses = 3;
         private int timeSinceLastBonus = 0;
         private int timeUntilFreeBonus = 2000;
+        private GameBonus activeGameBonus;
+
+        private int slowDownTimer;
+        private int slowDownMultiplier = 5;
 
         /// <summary>
         /// Constructor
@@ -190,6 +194,19 @@ namespace GalaxyBlox.Objects
                 {
                     AddBonus();
                     timeUntilFreeBonus = 2000;
+                }
+
+                switch (activeGameBonus)
+                {
+                    case GameBonus.TimeSlowdown:
+                        {
+                            slowDownTimer -= gameTime.ElapsedGameTime.Milliseconds;
+
+                            if (slowDownTimer <= 0)
+                                DeactivateBonus();
+                        }
+                        break;
+
                 }
             }
 
@@ -372,6 +389,11 @@ namespace GalaxyBlox.Objects
             RotateActor();
         }
 
+        public void Control_ActivateBonus_Click(int bonusPosition)
+        {
+            ActivateBonus(bonusPosition);
+        }
+
         public void StartNewGame()
         {
             backgroundChanged = true;
@@ -444,6 +466,36 @@ namespace GalaxyBlox.Objects
 
             activeActor.IsFalling = true;
             activeActor.FallingSpeed = GetGameSpeed(GameSpeed.Falling);
+        }
+
+        // private bonus activations
+
+        private void Bonus_SlowDown_Activate()
+        {
+            activeGameBonus = GameBonus.TimeSlowdown;
+            foreach (var actor in actors)
+            {
+                actor.FallingSpeed = actor.FallingSpeed * slowDownMultiplier; // make actor x times slower from their previous speed TODO: optimaze speed
+            }
+
+            slowDownTimer = 5000;
+
+            BorderColor = Color.Red;
+            backgroundChanged = true;
+        }
+
+        private void Bonus_SlowDown_Deactivate()
+        {
+            activeGameBonus = GameBonus.None;
+            foreach (var actor in actors)
+            {
+                if (!actor.IsFalling)
+                    actor.FallingSpeed = GetGameSpeed(GameSpeed.Normal);
+            }
+            slowDownTimer = 0;
+
+            BorderColor = Contents.Colors.PlaygroundBorderColor;
+            backgroundChanged = true;
         }
 
         // Private methods
@@ -872,6 +924,10 @@ namespace GalaxyBlox.Objects
                     fallingSpeed = (int)(1000 - Math.Pow(Level, 2)); // TODO test more speeds
                     if (fallingSpeed < maxFallingSpeed)
                         fallingSpeed = maxFallingSpeed;
+
+                    if (activeGameBonus == GameBonus.TimeSlowdown)
+                        fallingSpeed = fallingSpeed * slowDownMultiplier; // if is slowdown activated return slower speeds
+
                     break;
                 case GameSpeed.Speedup:
                     fallingSpeed = 50; break;
@@ -886,17 +942,46 @@ namespace GalaxyBlox.Objects
         {
             if (gameBonuses.Count < maxBonuses)
             {
-                var bonusIndex = Game1.Random.Next(1, Enum.GetValues(typeof(GameBonus)).Length);
-                gameBonuses.Add((GameBonus)bonusIndex);
+                //var bonusIndex = Game1.Random.Next(1, Enum.GetValues(typeof(GameBonus)).Length);
+                //gameBonuses.Add((GameBonus)bonusIndex);
+                gameBonuses.Add(GameBonus.TimeSlowdown);
                 timeSinceLastBonus = 0;
-                OnAvailableBonusesChange(new AvailableBonusesChangeEventArgs(gameBonuses));
+                RefreshBonuses();
             }
         }
 
-        public void ActivateBonus(int bonusPosition)
+        private void ActivateBonus(int bonusPosition)
         {
+            var bonus = gameBonuses[bonusPosition];
+
+            switch (bonus)
+            {
+                case GameBonus.TimeSlowdown:
+                    {
+                        Bonus_SlowDown_Activate();
+                    } break;
+            }
+
             gameBonuses.RemoveAt(bonusPosition);
-            OnAvailableBonusesChange(new AvailableBonusesChangeEventArgs(gameBonuses));
+            RefreshBonuses();
+        }
+
+        private void DeactivateBonus()
+        {
+            switch (activeGameBonus)
+            {
+                case GameBonus.TimeSlowdown:
+                    {
+                        Bonus_SlowDown_Deactivate();
+                    }
+                    break;
+            }
+            RefreshBonuses();
+        }
+
+        private void RefreshBonuses()
+        {
+            OnAvailableBonusesChange(new AvailableBonusesChangeEventArgs(gameBonuses, activeGameBonus == GameBonus.None));
         }
 
         private void UpdateEffectsArray()

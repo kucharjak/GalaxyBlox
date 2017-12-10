@@ -69,6 +69,7 @@ namespace GalaxyBlox
             Static.Contents.Textures.BackgroundGame = Content.Load<Texture2D>("Backgrounds/Background");
             Static.Contents.Textures.BackgroundMenu = Static.Contents.Textures.BackgroundGame;
             Static.Contents.Textures.BorderedButtonBackground = Content.Load<Texture2D>("Sprites/BorderedButtonBackground");
+            Static.Contents.Textures.SlowDownIndicator = Content.Load<Texture2D>("Sprites/SlowDownIndicator");
         }
 
         /// <summary>

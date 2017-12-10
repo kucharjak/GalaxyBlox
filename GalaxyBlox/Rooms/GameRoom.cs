@@ -226,10 +226,10 @@ namespace GalaxyBlox.Rooms
         private void Arena_AvailableBonusesChanged(object sender, EventArgs e)
         {
             var eventArgs = (AvailableBonusesChangeEventArgs)e;
-            RefreshBonusButtons(eventArgs.GameBonuses);
+            RefreshBonusButtons(eventArgs.GameBonuses, eventArgs.Enable);
         }
 
-        private void RefreshBonusButtons(List<GameBonus> newBonuses)
+        private void RefreshBonusButtons(List<GameBonus> newBonuses, bool enable)
         {
             // remove old bonus buttons
             foreach (var oldButton in bonusButtons)
@@ -256,6 +256,7 @@ namespace GalaxyBlox.Rooms
                     TextSpriteFont = Contents.Fonts.PlainTextFont,
                     TextHeight = btnBonusTextHeight,
                     ShowText = true,
+                    Enabled = enable,
                     TextAlignment = TextAlignment.Center,
                     Text = TranslateBonusToText(newBonuses[i]),
                     Name = i.ToString()
@@ -270,7 +271,7 @@ namespace GalaxyBlox.Rooms
         {
             var btn = (sender as Button);
             if (btn != null)
-                arena.ActivateBonus(int.Parse(btn.Name));
+                arena.Control_ActivateBonus_Click(int.Parse(btn.Name));
         }
 
         private string TranslateBonusToText(GameBonus bonus)
