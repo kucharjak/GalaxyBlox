@@ -73,6 +73,7 @@ namespace GalaxyBlox.Objects
         public int Level { get; set; } = 0;
 
         private Actor activeActor = null;
+        private ActorMovement activeActorMovement;
         private List<Actor> actors;
         private int actorsMaxCount = 1;
         private List<Actor> actorsQueue;
@@ -160,7 +161,7 @@ namespace GalaxyBlox.Objects
 
             if (gameMode == GameMode.Extreme)
                 actorsMaxCount = 5;
-            
+
             StartNewGame();
         }
 
@@ -182,7 +183,7 @@ namespace GalaxyBlox.Objects
 
             if (gameMode != GameMode.Classic)
             {
-                if (gameBonuses.Count  == 0) 
+                if (gameBonuses.Count == 0)
                     timeSinceLastBonus += gameTime.ElapsedGameTime.Milliseconds;
 
                 if (timeSinceLastBonus >= timeUntilFreeBonus)
@@ -200,7 +201,9 @@ namespace GalaxyBlox.Objects
                 actorCreateTimer = 0;
             }
 
-            foreach(var actor in actors.ToArray())
+            MoveActiveActorToSide();
+
+            foreach (var actor in actors.ToArray())
             {
                 actor.Timer += gameTime.ElapsedGameTime.Milliseconds;
                 if (actor.Timer > actor.FallingSpeed)
@@ -327,6 +330,48 @@ namespace GalaxyBlox.Objects
             graphicsDevice.SetRenderTarget(null);
         }
 
+        // Controls
+
+        public void ControlLeft_Down()
+        {
+            MoveActorLeft();
+        }
+
+        public void ControlLeft_Up()
+        {
+            StopMovingActor();
+        }
+
+        public void ControlRight_Down()
+        {
+            MoveActorRight();
+        }
+
+        public void ControlRight_Up()
+        {
+            StopMovingActor();
+        }
+
+        public void ControlDown_Click()
+        {
+            MakeActorFall();
+        }
+
+        public void ControlDown_Down()
+        {
+            MakeActorSpeedup();
+        }
+
+        public void ControlDown_Up()
+        {
+            SlowDownActor();
+        }
+
+        public void ControlRotate_Click()
+        {
+            RotateActor();
+        }
+
         public void StartNewGame()
         {
             backgroundChanged = true;
@@ -340,91 +385,26 @@ namespace GalaxyBlox.Objects
             CreateNewActor();
         }
 
-        public void SlowDownActor()
-        {
-            if (activeActor == null || activeActor.IsFalling)
-                return;
+        // Private actions
 
-            activeActor.FallingSpeed = GetGameSpeed(GameSpeed.Normal);
+        private void MoveActorRight()
+        {
+            activeActorMovement = ActorMovement.Right;
         }
 
-        public void MakeActorSpeedup()
+        private void MoveActorLeft()
         {
-            if (activeActor == null || activeActor.IsFalling || fallingPause > 0)
-                return;
-
-            activeActor.FallingSpeed = GetGameSpeed(GameSpeed.Speedup);
+            activeActorMovement = ActorMovement.Left;
         }
 
-        public void MakeActorFall()
+        private void StopMovingActor()
         {
-            if (activeActor == null || fallingPause > 0)
-                return;
-
-            activeActor.IsFalling = true;
-            activeActor.FallingSpeed = GetGameSpeed(GameSpeed.Falling);
-        }
-
-        public void MoveRight()
-        {
-            if (activeActor == null || moveTimer > 0)
-                return;
-
-            var newPosition = new Point(activeActor.Position.X + 1, activeActor.Position.Y);
-            if (ActorCollide(newPosition, activeActor.Shape))
-                return;
-
-            activeActor.Position = newPosition;
-            if (moveTimerSpeed == 0)
-            {
-                moveTimer = moveTimerSlowest;
-                moveTimerSpeed = moveTimerSlowest;
-            }
-            else
-            {
-                var newSpeed = moveTimerSpeed - ((moveTimerSlowest - moveTimerFastest) / 4);
-                moveTimer = newSpeed > moveTimerFastest ? newSpeed : moveTimerSpeed;
-                moveTimerSpeed = newSpeed > moveTimerFastest ? newSpeed : moveTimerSpeed;
-            }
-
-        }
-
-        public void StopMovingRight()
-        {
+            activeActorMovement = ActorMovement.None;
             moveTimer = 0;
             moveTimerSpeed = 0;
         }
-
-        public void MoveLeft()
-        {
-            if (activeActor == null || moveTimer > 0)
-                return;
-
-            var newPosition = new Point(activeActor.Position.X - 1, activeActor.Position.Y);
-            if (ActorCollide(newPosition, activeActor.Shape))
-                return;
-
-            activeActor.Position = newPosition;
-            if (moveTimerSpeed == 0)
-            {
-                moveTimer = moveTimerSlowest;
-                moveTimerSpeed = moveTimerSlowest;
-            }
-            else
-            {
-                var newSpeed = moveTimerSpeed - ((moveTimerSlowest - moveTimerFastest) / 4);
-                moveTimer = newSpeed > moveTimerFastest ? newSpeed : moveTimerSpeed;
-                moveTimerSpeed = newSpeed > moveTimerFastest ? newSpeed : moveTimerSpeed;
-            }
-        }
-
-        public void StopMovingLeft()
-        {
-            moveTimer = 0;
-            moveTimerSpeed = 0;
-        }
-
-        public void Rotate()
+        
+        private void RotateActor()
         {
             if (activeActor == null)
                 return;
@@ -439,6 +419,31 @@ namespace GalaxyBlox.Objects
 
             activeActor.Shape = rotatedActorShape;
             activeActor.Position = rotatedActorPosition;
+        }
+
+        private void MakeActorSpeedup()
+        {
+            if (activeActor == null || activeActor.IsFalling || fallingPause > 0)
+                return;
+
+            activeActor.FallingSpeed = GetGameSpeed(GameSpeed.Speedup);
+        }
+
+        private void SlowDownActor()
+        {
+            if (activeActor == null || activeActor.IsFalling)
+                return;
+
+            activeActor.FallingSpeed = GetGameSpeed(GameSpeed.Normal);
+        }
+
+        private void MakeActorFall()
+        {
+            if (activeActor == null || fallingPause > 0)
+                return;
+
+            activeActor.IsFalling = true;
+            activeActor.FallingSpeed = GetGameSpeed(GameSpeed.Falling);
         }
 
         // Private methods
@@ -509,6 +514,57 @@ namespace GalaxyBlox.Objects
             }
 
             return resultArray;
+        }
+
+        private void MoveActiveActorToSide()
+        {
+            if (activeActor == null || activeActorMovement == ActorMovement.None || moveTimer > 0)
+                return;
+
+            var newPos = activeActorMovement == ActorMovement.Left ? new Point(activeActor.Position.X - 1, activeActor.Position.Y) : new Point(activeActor.Position.X + 1, activeActor.Position.Y);
+            var tmpActor = new Actor(activeActor.Shape, newPos, Color.White);
+            if (ActorCollideWithPlayground(tmpActor))
+                return;
+
+            //var nonActiveActors = actors.Where(act => act != activeActor).ToList();
+            //Actor collidedActor;
+            //if (ActorsCollide(tmpActor, nonActiveActors, out collidedActor))
+            //{ // if collide - try to find new position for that actor
+            //    var tmpNonActiveActor = new Actor(activeActor.Shape, collidedActor.Position, Color.White);
+            //    var tmpActors = actors.Where(act => act != collidedActor).ToList();
+            //    bool found = false;
+
+            //    for (int x = 0; x < tmpActor.Shape.GetLength(0) + 1; x++)
+            //    {
+            //        if (activeActorMovement == ActorMovement.Left)
+            //            tmpNonActiveActor.Position.X = tmpActor.Position.X + x;
+            //        else
+            //            tmpNonActiveActor.Position.X = tmpActor.Position.X + tmpActor.Shape.GetLength(0) - tmpNonActiveActor.Shape.GetLength(0) - x;
+
+            //        if (!ActorsCollide(tmpNonActiveActor, tmpActors))
+            //        {
+            //            collidedActor.Position = tmpNonActiveActor.Position;
+            //            found = true;
+            //            break;
+            //        }
+            //    }
+
+            //    if (!found)
+            //        return;
+            //}
+
+            activeActor.Position = newPos;
+            if (moveTimerSpeed == 0)
+            {
+                moveTimer = moveTimerSlowest;
+                moveTimerSpeed = moveTimerSlowest;
+            }
+            else
+            {
+                var newSpeed = moveTimerSpeed - ((moveTimerSlowest - moveTimerFastest) / 4);
+                moveTimer = newSpeed > moveTimerFastest ? newSpeed : moveTimerSpeed;
+                moveTimerSpeed = newSpeed > moveTimerFastest ? newSpeed : moveTimerSpeed;
+            }
         }
 
         private void MoveActorDown(Actor actor)
@@ -693,6 +749,11 @@ namespace GalaxyBlox.Objects
             backgroundChanged = true; // indicating for background redraw
         }
 
+        private bool ActorCollideWithPlayground(Actor actor)
+        {
+            return ActorCollide(actor.Position, actor.Shape);
+        }
+
         private bool ActorCollide(Point actorPosition, bool[,] actorArray)
         {
             for (int x = 0; x < actorArray.GetLength(0); x++)
@@ -733,21 +794,57 @@ namespace GalaxyBlox.Objects
             }
             
             var actor = actorsQueue.First();
-            actorsQueue.Remove(actor); 
-            actor.Position = new Point(Game1.Random.Next(0, playground.GetLength(0) - actor.Shape.GetLength(0) + 1), 0);
-            actor.IsFalling = false;
-            actor.FallingSpeed = GetGameSpeed(GameSpeed.Normal);
-            actors.Add(actor);
-            fallingPause = 150;
 
-            if (activeActor == null)
-                activeActor = actor;
+            var positionsWithoutOtherActors = new List<Point>(); // i won't place new actor on other existing actor
+            for (int i = 0; i < playground.GetLength(0) + 1 - actor.Shape.GetLength(0); i++)
+            {
+                actor.Position = new Point(i, 0);
+                if (!ActorsCollide(actor, actors))
+                    positionsWithoutOtherActors.Add(actor.Position);
+            }
+            actor.Position = new Point();
 
-            var nextActorInQueue = actorsQueue.FirstOrDefault();
-            if (nextActorInQueue != null)
-                OnActorsQueueChange(new QueueChangeEventArgs(nextActorInQueue.Shape, nextActorInQueue.Color));
-            else
-                OnActorsQueueChange(new QueueChangeEventArgs(null, Color.White));
+            if (positionsWithoutOtherActors.Count > 0)
+            {
+                actorsQueue.Remove(actor);
+                actor.Position = positionsWithoutOtherActors[Game1.Random.Next(0, positionsWithoutOtherActors.Count - 1)];
+                actor.IsFalling = false;
+                actor.FallingSpeed = GetGameSpeed(GameSpeed.Normal);
+                actors.Add(actor);
+                fallingPause = 150;
+
+                if (activeActor == null)
+                    activeActor = actor;
+
+                var nextActorInQueue = actorsQueue.FirstOrDefault();
+                if (nextActorInQueue != null)
+                    OnActorsQueueChange(new QueueChangeEventArgs(nextActorInQueue.Shape, nextActorInQueue.Color));
+                else
+                    OnActorsQueueChange(new QueueChangeEventArgs(null, Color.White));
+            }
+        }
+
+        private bool ActorsCollide(Actor newActor, List<Actor> actorsList)
+        {
+            Actor tmpActor = null;
+            return ActorsCollide(newActor, actorsList, out tmpActor);
+        }
+
+        private bool ActorsCollide(Actor newActor, List<Actor> actorsList, out Actor collidedActor)
+        {
+            collidedActor = null;
+            var newRect = new Rectangle(newActor.Position, new Point(newActor.Shape.GetLength(1), newActor.Shape.GetLength(0)));
+            foreach (var actor in actorsList)
+            {
+                var rect = new Rectangle(actor.Position, new Point(actor.Shape.GetLength(1), actor.Shape.GetLength(0)));
+                if (newRect.Intersects(rect)) // easiest collision control - there is no reason for it to be much more complex
+                {
+                    collidedActor = actor;
+                    return true;
+                }
+                    
+            }
+            return false;
         }
 
         private void UpdateLevel()
@@ -899,6 +996,13 @@ namespace GalaxyBlox.Objects
         {
             var result = Contents.Colors.GameCubesColors[playground[posX, posY]];
             return result;
+        }
+
+        enum ActorMovement
+        {
+            None,
+            Right,
+            Left
         }
     }
 

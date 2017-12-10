@@ -298,11 +298,11 @@ namespace GalaxyBlox.Rooms
 
         private void GameRoom_Swipe(object sender, EventArgs e)
         {
-            var args = (e as SwipeEventArgs);
-            switch (args.Direction)
-            {
-                case SwipeArea.SwipeDirection.Down: arena.MakeActorFall(); break;
-            }
+            //var args = (e as SwipeEventArgs);
+            //switch (args.Direction)
+            //{
+            //    case SwipeArea.SwipeDirection.Down: arena.MakeActorFall(); break;
+            //}
         }
 
         private void Arena_ActorsQueueChanged(object sender, EventArgs e)
@@ -343,44 +343,44 @@ namespace GalaxyBlox.Rooms
 
         private void btnRotate_Click(object sender, EventArgs e)
         {
-            arena.Rotate();
+            arena.ControlRotate_Click();
         }
 
         private void btnDown_Click(object sender, EventArgs e)
         {
             var btn = (sender as Button);
             if (btn.HoverTime < 150)
-                arena.MakeActorFall();
+                arena.ControlDown_Click();
         }
 
         private void btnDown_Hover(object sender, EventArgs e)
         {
-            arena.MakeActorSpeedup();
+            arena.ControlDown_Down();
         }
 
         private void btnDown_Release(object sender, EventArgs e)
         {
-            arena.SlowDownActor();
+            arena.ControlDown_Up();
         }
 
         private void btnRight_Hover(object sender, EventArgs e)
         {
-            arena.MoveRight();
+            arena.ControlRight_Down();
         }
 
         private void btnLeft_Hover(object sender, EventArgs e)
         {
-            arena.MoveLeft();
+            arena.ControlLeft_Down();
         }
 
         private void btnRight_Release(object sender, EventArgs e)
         {
-            arena.StopMovingRight();
+            arena.ControlRight_Up();
         }
 
         private void btnLeft_Release(object sender, EventArgs e)
         {
-            arena.StopMovingLeft();
+            arena.ControlLeft_Up();
         }
     }
 }
