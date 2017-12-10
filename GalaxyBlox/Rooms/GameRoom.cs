@@ -259,7 +259,7 @@ namespace GalaxyBlox.Rooms
                     Enabled = enable,
                     TextAlignment = TextAlignment.Center,
                     Text = TranslateBonusToText(newBonuses[i]),
-                    Name = i.ToString()
+                    Data = newBonuses[i]
                 };
                 btn.Click += Btn_Click;
                 Objects.Add(btn);
@@ -271,7 +271,7 @@ namespace GalaxyBlox.Rooms
         {
             var btn = (sender as Button);
             if (btn != null)
-                arena.Control_ActivateBonus_Click(int.Parse(btn.Name));
+                arena.Control_ActivateBonus_Click((GameBonus)btn.Data);
         }
 
         private string TranslateBonusToText(GameBonus bonus)

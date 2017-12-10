@@ -389,9 +389,9 @@ namespace GalaxyBlox.Objects
             RotateActor();
         }
 
-        public void Control_ActivateBonus_Click(int bonusPosition)
+        public void Control_ActivateBonus_Click(GameBonus bonusToActivate)
         {
-            ActivateBonus(bonusPosition);
+            ActivateBonus(bonusToActivate);
         }
 
         public void StartNewGame()
@@ -944,17 +944,22 @@ namespace GalaxyBlox.Objects
             {
                 //var bonusIndex = Game1.Random.Next(1, Enum.GetValues(typeof(GameBonus)).Length);
                 //gameBonuses.Add((GameBonus)bonusIndex);
-                gameBonuses.Add(GameBonus.TimeSlowdown);
+                gameBonuses.Add(GameBonus.Laser);
                 timeSinceLastBonus = 0;
                 RefreshBonuses();
             }
         }
 
-        private void ActivateBonus(int bonusPosition)
+        private void ActivateBonus(GameBonus bonusToActivate)
         {
-            var bonus = gameBonuses[bonusPosition];
-
-            switch (bonus)
+            var bonus = gameBonuses.Where(bns => bns == bonusToActivate);
+            if (bonus.Count() == 0)
+            {
+                RefreshBonuses();
+                return;
+            }
+            
+            switch (bonusToActivate)
             {
                 case GameBonus.TimeSlowdown:
                     {
@@ -962,7 +967,7 @@ namespace GalaxyBlox.Objects
                     } break;
             }
 
-            gameBonuses.RemoveAt(bonusPosition);
+            gameBonuses.Remove(bonus.First());
             RefreshBonuses();
         }
 

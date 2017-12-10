@@ -64,6 +64,8 @@ namespace GalaxyBlox.Models
 
         public bool Enabled = true;
 
+        public object Data = null;
+
         public Rectangle Rectangle { get { return new Rectangle((int)(Position.X), (int)(Position.Y), (int)Size.X, (int)Size.Y); } }
 
         public GameObject(Room parentRoom)
