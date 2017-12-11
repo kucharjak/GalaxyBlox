@@ -534,7 +534,7 @@ namespace GalaxyBlox.Objects
             LaserPlayground();
             backgroundChanged = true;
 
-            Bonus_Laser_Deactivate();
+            DeactivateBonus();
         }
 
         private void Bonus_Laser_Deactivate()
