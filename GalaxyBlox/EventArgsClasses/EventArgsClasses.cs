@@ -16,14 +16,25 @@ using static GalaxyBlox.Static.SettingOptions;
 
 namespace GalaxyBlox.EventArgsClasses
 {
+    class ActiveBonusChangedEventArgs : EventArgs
+    {
+        public GameBonus ActiveBonus;
+
+        public ActiveBonusChangedEventArgs(GameBonus activeBonus)
+        {
+            ActiveBonus = activeBonus;
+        }
+    }
+
     class AvailableBonusesChangeEventArgs : EventArgs
     {
         public List<GameBonus> GameBonuses;
-        public bool Enable;
-        public AvailableBonusesChangeEventArgs(List<GameBonus> gameBonuses, bool enable = true)
+        public bool EnableBonusButtons;
+
+        public AvailableBonusesChangeEventArgs(List<GameBonus> gameBonuses, bool enableBonusButtons = true)
         {
             GameBonuses = gameBonuses;
-            Enable = enable;
+            EnableBonusButtons = enableBonusButtons;
         }
     }
 

@@ -15,6 +15,16 @@ namespace GalaxyBlox.Objects
 {
     class PlayingArena : GameObject
     {
+        public event EventHandler ActiveBonusChanged;
+        protected virtual void OnActiveBonusChange(ActiveBonusChangedEventArgs e)
+        {
+            EventHandler handler = ActiveBonusChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
         public event EventHandler AvailableBonusesChanged;
         protected virtual void OnAvailableBonusesChange(AvailableBonusesChangeEventArgs e)
         {
@@ -111,13 +121,22 @@ namespace GalaxyBlox.Objects
         private int timeSinceLastBonus = 0;
         private int timeUntilFreeBonus = freeBonusTimeLimit;
         private const int freeBonusTimeLimit = 1;
-        private GameBonus activeGameBonus;
+
+        private GameBonus activeBonus;
+        /// <summary>
+        /// Active bonus for game - assign value here if you wish to cause external change event
+        /// </summary>
+        public GameBonus ActiveBonus
+        {
+            get { return activeBonus; }
+            protected set { activeBonus = value; OnActiveBonusChange(new ActiveBonusChangedEventArgs(value)); }
+        }
 
         private int slowDownTimer;
         private int slowDownMultiplier = 5;
 
         private Point laserPosition;
-        private int laserWidth = 5;
+        private int laserWidth = 2;
         private Actor lastActiveActor;
 
         /// <summary>
@@ -192,7 +211,7 @@ namespace GalaxyBlox.Objects
 
             if (gameMode != GameMode.Classic)
             {
-                if (gameBonuses.Count == 0 && activeGameBonus == GameBonus.None)
+                if (gameBonuses.Count == 0 && ActiveBonus == GameBonus.None)
                     timeSinceLastBonus += gameTime.ElapsedGameTime.Milliseconds;
 
                 if (timeSinceLastBonus >= timeUntilFreeBonus)
@@ -201,7 +220,7 @@ namespace GalaxyBlox.Objects
                     timeUntilFreeBonus = freeBonusTimeLimit;
                 }
 
-                switch (activeGameBonus)
+                switch (ActiveBonus)
                 {
                     case GameBonus.TimeSlowdown:
                         {
@@ -215,7 +234,7 @@ namespace GalaxyBlox.Objects
                 }
             }
 
-            if (activeGameBonus == GameBonus.None || activeGameBonus == GameBonus.TimeSlowdown)
+            if (ActiveBonus == GameBonus.None || ActiveBonus == GameBonus.TimeSlowdown)
             {
                 actorCreateTimer += gameTime.ElapsedGameTime.Milliseconds;
 
@@ -238,7 +257,7 @@ namespace GalaxyBlox.Objects
                 }
             } else
             {
-                switch (activeGameBonus)
+                switch (ActiveBonus)
                 {
                     case GameBonus.Laser:
                         {
@@ -389,7 +408,7 @@ namespace GalaxyBlox.Objects
 
         public void ControlDown_Click()
         {
-            if (activeGameBonus != GameBonus.Laser)
+            if (ActiveBonus != GameBonus.Laser)
                 MakeActorFall();
             else
                 Bonus_Laser_MakeAction();
@@ -410,7 +429,7 @@ namespace GalaxyBlox.Objects
             RotateActor();
         }
 
-        public void Control_ActivateBonus_Click(GameBonus bonusToActivate)
+        public void Control_ActivateBonus(GameBonus bonusToActivate)
         {
             ActivateBonus(bonusToActivate);
         }
@@ -493,7 +512,7 @@ namespace GalaxyBlox.Objects
 
         private void Bonus_SlowDown_Activate()
         {
-            activeGameBonus = GameBonus.TimeSlowdown;
+            ActiveBonus = GameBonus.TimeSlowdown;
             foreach (var actor in actors)
             {
                 actor.FallingSpeed = actor.FallingSpeed * slowDownMultiplier; // make actor x times slower from their previous speed TODO: optimaze speed
@@ -507,7 +526,7 @@ namespace GalaxyBlox.Objects
 
         private void Bonus_SlowDown_Deactivate()
         {
-            activeGameBonus = GameBonus.None;
+            ActiveBonus = GameBonus.None;
             foreach (var actor in actors)
             {
                 if (!actor.IsFalling)
@@ -521,7 +540,7 @@ namespace GalaxyBlox.Objects
 
         private void Bonus_Laser_Activate()
         {
-            activeGameBonus = GameBonus.Laser;
+            ActiveBonus = GameBonus.Laser;
 
             laserPosition = new Point((playground.GetLength(0) - laserWidth) / 2, 0);
             lastActiveActor = activeActor;
@@ -539,7 +558,7 @@ namespace GalaxyBlox.Objects
 
         private void Bonus_Laser_Deactivate()
         {
-            activeGameBonus = GameBonus.None;
+            ActiveBonus = GameBonus.None;
 
             if (actors.Contains(lastActiveActor))
                 activeActor = lastActiveActor;
@@ -1066,7 +1085,7 @@ namespace GalaxyBlox.Objects
                     if (fallingSpeed < maxFallingSpeed)
                         fallingSpeed = maxFallingSpeed;
 
-                    if (activeGameBonus == GameBonus.TimeSlowdown)
+                    if (ActiveBonus == GameBonus.TimeSlowdown)
                         fallingSpeed = fallingSpeed * slowDownMultiplier; // if is slowdown activated return slower speeds
 
                     break;
@@ -1118,7 +1137,7 @@ namespace GalaxyBlox.Objects
 
         private void DeactivateBonus()
         {
-            switch (activeGameBonus)
+            switch (ActiveBonus)
             {
                 case GameBonus.TimeSlowdown:
                     {
@@ -1135,7 +1154,7 @@ namespace GalaxyBlox.Objects
 
         private void RefreshBonuses()
         {
-            OnAvailableBonusesChange(new AvailableBonusesChangeEventArgs(gameBonuses, activeGameBonus == GameBonus.None));
+            OnAvailableBonusesChange(new AvailableBonusesChangeEventArgs(gameBonuses, ActiveBonus == GameBonus.None));
         }
 
         private void UpdateEffectsArray()
@@ -1154,7 +1173,7 @@ namespace GalaxyBlox.Objects
             if (activeActor != null)
                 DrawActor(activeActor.Shape, activeActor.Position, activeActor.Color);
 
-            if (activeGameBonus == GameBonus.Laser)
+            if (ActiveBonus == GameBonus.Laser)
             {
                 for (int x = laserPosition.X; x < laserPosition.X + laserWidth; x++)
                 {

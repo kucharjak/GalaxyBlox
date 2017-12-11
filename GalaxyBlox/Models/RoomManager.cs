@@ -34,7 +34,7 @@ namespace GalaxyBlox.Models
 
         public static void Draw(GameTime gameTime, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
-            graphicsDevice.Clear(Color.Purple);
+            graphicsDevice.Clear(Color.Black);
 
             foreach (var room in rooms)
             {

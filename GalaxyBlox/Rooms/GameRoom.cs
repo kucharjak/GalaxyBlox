@@ -219,14 +219,21 @@ namespace GalaxyBlox.Rooms
             arena.ScoreChanged += Arena_ScoreChanged;
             arena.GameEnded += Arena_GameEnded;
             arena.AvailableBonusesChanged += Arena_AvailableBonusesChanged;
+            arena.ActiveBonusChanged += Arena_ActiveBonusChanged;
             arena.StartNewGame();
             Objects.Add(arena);
+        }
+
+        private void Arena_ActiveBonusChanged(object sender, EventArgs e)
+        {
+            var eventArgs = (ActiveBonusChangedEventArgs)e;
+            PrepareInterfaceForBonus(eventArgs.ActiveBonus);
         }
 
         private void Arena_AvailableBonusesChanged(object sender, EventArgs e)
         {
             var eventArgs = (AvailableBonusesChangeEventArgs)e;
-            RefreshBonusButtons(eventArgs.GameBonuses, eventArgs.Enable);
+            RefreshBonusButtons(eventArgs.GameBonuses, eventArgs.EnableBonusButtons);
         }
 
         private void RefreshBonusButtons(List<GameBonus> newBonuses, bool enable)
@@ -271,7 +278,31 @@ namespace GalaxyBlox.Rooms
         {
             var btn = (sender as Button);
             if (btn != null)
-                arena.Control_ActivateBonus_Click((GameBonus)btn.Data);
+            {
+                var bonus = (GameBonus)btn.Data;
+                PrepareInterfaceForBonus(bonus);
+                arena.Control_ActivateBonus(bonus);
+            }
+                
+        }
+
+        private void PrepareInterfaceForBonus(GameBonus bonus)
+        {
+            switch(bonus)
+            {
+                case GameBonus.None:
+                case GameBonus.TimeSlowdown:
+                    {
+                        btnControlLeft.Enabled = true;
+                        btnControlRight.Enabled = true;
+                        btnControlFall.Enabled = true;
+                        btnControlRotate.Enabled = true;
+                    } break;
+                case GameBonus.Laser:
+                    {
+                        btnControlRotate.Enabled = false;
+                    } break;
+            }
         }
 
         private string TranslateBonusToText(GameBonus bonus)
@@ -295,15 +326,6 @@ namespace GalaxyBlox.Rooms
             {
                 arena.StartNewGame();
             }
-        }
-
-        private void GameRoom_Swipe(object sender, EventArgs e)
-        {
-            //var args = (e as SwipeEventArgs);
-            //switch (args.Direction)
-            //{
-            //    case SwipeArea.SwipeDirection.Down: arena.MakeActorFall(); break;
-            //}
         }
 
         private void Arena_ActorsQueueChanged(object sender, EventArgs e)

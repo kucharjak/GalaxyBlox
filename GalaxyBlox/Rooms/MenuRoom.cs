@@ -127,6 +127,7 @@ namespace GalaxyBlox.Rooms
 
         private void btnFinish_Click(object sender, EventArgs e)
         {
+            RoomManager.Rooms.Clear();
             Game1.Activity.Finish();
         }
 

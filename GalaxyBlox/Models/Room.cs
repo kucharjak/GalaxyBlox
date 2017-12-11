@@ -190,6 +190,8 @@ namespace GalaxyBlox.Models
 
         protected virtual void HandleBackButton()
         {
+            if (Parent != null)
+                End();
         }
 
         public Rectangle DisplayRectWithScale()
