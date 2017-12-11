@@ -388,6 +388,12 @@ namespace GalaxyBlox.Objects
 
         public void ControlLeft_Down()
         {
+            if (activeBonus == GameBonus.SwipeCubes)
+            {
+                Bonus_Swipe_MakeAction(true);
+                return;
+            }
+
             MoveActorLeft();
         }
 
@@ -398,6 +404,12 @@ namespace GalaxyBlox.Objects
 
         public void ControlRight_Down()
         {
+            if (activeBonus == GameBonus.SwipeCubes)
+            {
+                Bonus_Swipe_MakeAction(false);
+                return;
+            }
+
             MoveActorRight();
         }
 
@@ -569,6 +581,64 @@ namespace GalaxyBlox.Objects
                 if (activeActor == null)
                     CreateNewActor();
             }
+        }
+
+        private void Bonus_Swipe_Activate()
+        {
+            ActiveBonus = GameBonus.SwipeCubes;
+            actorsQueue.InsertRange(0, actors);
+            OnActorsQueueChange(new QueueChangeEventArgs(actorsQueue.First()));
+            actors.Clear();
+            activeActor = null;
+        }
+
+        private void Bonus_Swipe_MakeAction(bool swipeLeft)
+        {
+            if (swipeLeft)
+            {
+                for (int y = 0; y < playground.GetLength(1); y++)
+                {
+                    var lastEmptyX = 0;
+                    for (int x = lastEmptyX; x < playground.GetLength(0); x++)
+                    {
+                        if (playground[x, y] > 0)
+                        {
+                            if (x != lastEmptyX)
+                            { 
+                                playground[lastEmptyX, y] = playground[x, y];
+                                playground[x, y] = 0;
+                            }
+                            lastEmptyX++;
+                        }
+                    }
+                }
+            } else
+            {
+                for (int y = 0; y < playground.GetLength(1); y++)
+                {
+                    var lastEmptyX = playground.GetLength(0) - 1;
+                    for (int x = lastEmptyX; x >= 0; x--)
+                    {
+                        if (playground[x, y] > 0)
+                        {
+                            if (x != lastEmptyX)
+                            {
+                                playground[lastEmptyX, y] = playground[x, y];
+                                playground[x, y] = 0;
+                            }
+                            lastEmptyX--;
+                        }
+                    }
+                }
+            }
+            backgroundChanged = true;
+            CreateNewActor();
+            DeactivateBonus();
+        }
+
+        private void Bonus_Swipe_Deactivate()
+        {
+            ActiveBonus = GameBonus.None;
         }
 
         // Private methods
@@ -1030,7 +1100,7 @@ namespace GalaxyBlox.Objects
 
                 var nextActorInQueue = actorsQueue.FirstOrDefault();
                 if (nextActorInQueue != null)
-                    OnActorsQueueChange(new QueueChangeEventArgs(nextActorInQueue.Shape, nextActorInQueue.Color));
+                    OnActorsQueueChange(new QueueChangeEventArgs(nextActorInQueue));
                 else
                     OnActorsQueueChange(new QueueChangeEventArgs(null, Color.White));
             }
@@ -1102,9 +1172,9 @@ namespace GalaxyBlox.Objects
         {
             if (gameBonuses.Count < maxBonuses)
             {
-                //var bonusIndex = Game1.Random.Next(1, Enum.GetValues(typeof(GameBonus)).Length);
-                //gameBonuses.Add((GameBonus)bonusIndex);
-                gameBonuses.Add(GameBonus.Laser);
+                var bonusIndex = Game1.Random.Next(1, Enum.GetValues(typeof(GameBonus)).Length);
+                gameBonuses.Add((GameBonus)bonusIndex);
+                //gameBonuses.Add(GameBonus.SwipeCubes);
                 timeSinceLastBonus = 0;
                 RefreshBonuses();
             }
@@ -1129,6 +1199,11 @@ namespace GalaxyBlox.Objects
                     {
                         Bonus_Laser_Activate();
                     } break;
+                case GameBonus.SwipeCubes:
+                    {
+                        Bonus_Swipe_Activate();
+                    } break;
+
             }
 
             gameBonuses.Remove(bonus.First());
@@ -1147,6 +1222,10 @@ namespace GalaxyBlox.Objects
                 case GameBonus.Laser:
                     {
                         Bonus_Laser_Deactivate();
+                    } break;
+                case GameBonus.SwipeCubes:
+                    {
+                        Bonus_Swipe_Deactivate();
                     } break;
             }
             RefreshBonuses();

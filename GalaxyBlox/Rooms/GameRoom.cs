@@ -302,6 +302,11 @@ namespace GalaxyBlox.Rooms
                     {
                         btnControlRotate.Enabled = false;
                     } break;
+                case GameBonus.SwipeCubes:
+                    {
+                        btnControlRotate.Enabled = false;
+                        btnControlFall.Enabled = false;
+                    } break;
             }
         }
 
@@ -310,10 +315,10 @@ namespace GalaxyBlox.Rooms
             string result = "!err";
             switch(bonus)
             {
-                case GameBonus.TimeRewind: result = "Rew"; break;
+                //case GameBonus.TimeRewind: result = "Rew"; break;
                 case GameBonus.TimeSlowdown: result = "Slo"; break;
                 case GameBonus.Laser: result = "Lsr"; break;
-                case GameBonus.CubesSwip: result = "Swp"; break;
+                case GameBonus.SwipeCubes: result = "Swp"; break;
             }
             return result;
         }

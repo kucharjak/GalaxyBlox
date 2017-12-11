@@ -1,16 +1,14 @@
 Zmìny 
-	- pokud to pùjde - zmìnit pøekleslování na konkrétní èásti playingAreny
 	- pøemyslet jak vykreslit PlayingArenu na zaèízeních s rùznım rozlišením pro zlepšní vzhledu hry
-	- pøidat nastavení módù hry pro všechny komponenty na jedno místo, a mám pøehled
-	- zmìnit vykreslování effectù na playing arenì
 
 Rozšíøení 
+	- pøidat tøídu bonusy - bude obsahovat základní 3 eventy na zpracování bonusù a referenci na playing ground - to se podìdí do konkrétních bonusù s konkrétním chováním 
+	- podìdit PlayingArenu na konkrétní herní módy - zde se bude definovat konkrétních logika (spíše pravidla), daného módu a tím pùjde líp vyladit gameplay
 	- vytvoøit 4 základní herní bonusy
 	- upravit slovník pro Indicator Name, aby byl univerzálnìjší a monı pouít i na jinıch místech projektu
-	- pøidat do nastavení reset tlaèíko na score
 	- pokud kliknu mimo místnost (které nejsou fullscrenn a jsou aktivní), tak se zavøe (popø endne, záleí podle konkrétní místnosti)
-	- zaèít implementovat monost 2 jazykù do hry
 	- dát dohromady grafickı styl hry
+	- pøidat do nastavení reset tlaèíko na score
  
 Gameplay
 	- zaèít postupnì vylaïovat konkrétní módy hry
@@ -24,6 +22,7 @@ Features
  
 Kontrola / Bugy
 	- uèesat kód hry
+	- pøi vytváøení "novıch" tvarù z oøíznutím tìch exsitujících zmìnit velikost všude, kde je potøeba a ne pouze jenom ze strany X
 
 Nápady
 	- klasickı mód "Vanila" - zjistit jak se choval pøesnì pùvodní tetris i s poèítáním skóre
@@ -31,6 +30,7 @@ Nápady
 	- vytvoøit "Color schemes", kdy budu schopnı mít color scheme na tlaèítko a ten si jen podám do toho tlaèítka, pøidávání barev postupnì v kontruktoru a nebudu si díky tomu muset dret v pamìti tøi barvy, ale jen jednu referenci "noice"
  
 Moná 
+	- zmìnit vykreslování effectù na playing arenì
 	- pøidat pøklikávání mezi aktivníma kostkama v extrémním módu
 	- pøidat animace na místnosti - viz vyhodit ze hry room changer
 	- vyhodit ze hry room changer - animace øešit tím, e se vytvoøí "Místnost" která bude dìlat animaci sama o sobì (nebudou swipovací, ale nejspíše jenom fade animace)
@@ -83,5 +83,7 @@ Moná
 ------------ODLOENO---------------
 -----------------------------------
 
+- pokud to pùjde - zmìnit pøekleslování na konkrétní èásti playingAreny (není potøeba, vıkon staèí)
+- zaèít implementovat monost 2 jazykù do hry
 - rozšíøit a pøidat další zpùsob ovládání (swipnutí dolù pošle dolù a kliknutí na danı místa playingAreny vykoná posunutí a rotaci)
 - zkusit ovìøit jak moc je problematickı pøeklikávání pokud pøejídím po tlaèítkách, ne si nìjakı vyberu a zavést to, e se odklikne jen a pouze to na které jsem pùvdnì klik

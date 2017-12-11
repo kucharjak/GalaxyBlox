@@ -49,9 +49,9 @@ namespace GalaxyBlox.Static
         public enum GameBonus
         {
             None, // first place must be empty
-            TimeRewind,
+            //TimeRewind,
             TimeSlowdown,
-            CubesSwip,
+            SwipeCubes,
             Laser
         }
     }

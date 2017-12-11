@@ -13,6 +13,7 @@ using GalaxyBlox.Models;
 using Microsoft.Xna.Framework;
 using static GalaxyBlox.Objects.SwipeArea;
 using static GalaxyBlox.Static.SettingOptions;
+using GalaxyBlox.Objects;
 
 namespace GalaxyBlox.EventArgsClasses
 {
@@ -60,6 +61,12 @@ namespace GalaxyBlox.EventArgsClasses
     {
         public bool[,] NewActor;
         public Color NewActorsColor;
+
+        public QueueChangeEventArgs(Actor actor)
+        {
+            NewActor = actor.Shape;
+            NewActorsColor = actor.Color;
+        }
 
         public QueueChangeEventArgs(bool[,] newActor, Color newActorsColor)
         {
