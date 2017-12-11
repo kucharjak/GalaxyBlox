@@ -109,11 +109,16 @@ namespace GalaxyBlox.Objects
         private List<GameBonus> gameBonuses;
         private int maxBonuses = 3;
         private int timeSinceLastBonus = 0;
-        private int timeUntilFreeBonus = 2000;
+        private int timeUntilFreeBonus = freeBonusTimeLimit;
+        private const int freeBonusTimeLimit = 1;
         private GameBonus activeGameBonus;
 
         private int slowDownTimer;
         private int slowDownMultiplier = 5;
+
+        private Point laserPosition;
+        private int laserWidth = 5;
+        private Actor lastActiveActor;
 
         /// <summary>
         /// Constructor
@@ -187,13 +192,13 @@ namespace GalaxyBlox.Objects
 
             if (gameMode != GameMode.Classic)
             {
-                if (gameBonuses.Count == 0)
+                if (gameBonuses.Count == 0 && activeGameBonus == GameBonus.None)
                     timeSinceLastBonus += gameTime.ElapsedGameTime.Milliseconds;
 
                 if (timeSinceLastBonus >= timeUntilFreeBonus)
                 {
                     AddBonus();
-                    timeUntilFreeBonus = 2000;
+                    timeUntilFreeBonus = freeBonusTimeLimit;
                 }
 
                 switch (activeGameBonus)
@@ -210,23 +215,36 @@ namespace GalaxyBlox.Objects
                 }
             }
 
-            actorCreateTimer += gameTime.ElapsedGameTime.Milliseconds;
-
-            if (actorCreateTimer > actorCreatePeriod)
+            if (activeGameBonus == GameBonus.None || activeGameBonus == GameBonus.TimeSlowdown)
             {
-                CreateNewActor();
-                actorCreateTimer = 0;
-            }
+                actorCreateTimer += gameTime.ElapsedGameTime.Milliseconds;
 
-            MoveActiveActorToSide();
-
-            foreach (var actor in actors.ToArray())
-            {
-                actor.Timer += gameTime.ElapsedGameTime.Milliseconds;
-                if (actor.Timer > actor.FallingSpeed)
+                if (actorCreateTimer > actorCreatePeriod)
                 {
-                    MoveActorDown(actor);
-                    actor.Timer = 0;
+                    CreateNewActor();
+                    actorCreateTimer = 0;
+                }
+
+                MoveActiveActorToSide();
+
+                foreach (var actor in actors.ToArray())
+                {
+                    actor.Timer += gameTime.ElapsedGameTime.Milliseconds;
+                    if (actor.Timer > actor.FallingSpeed)
+                    {
+                        MoveActorDown(actor);
+                        actor.Timer = 0;
+                    }
+                }
+            } else
+            {
+                switch (activeGameBonus)
+                {
+                    case GameBonus.Laser:
+                        {
+                            MoveLaser();
+                        }
+                        break;
                 }
             }
 
@@ -327,7 +345,7 @@ namespace GalaxyBlox.Objects
             //}
 
             graphicsDevice.SetRenderTarget(mainRenderTarget);
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
             graphicsDevice.Clear(Color.Transparent);
 
             spriteBatch.Draw(
@@ -371,7 +389,10 @@ namespace GalaxyBlox.Objects
 
         public void ControlDown_Click()
         {
-            MakeActorFall();
+            if (activeGameBonus != GameBonus.Laser)
+                MakeActorFall();
+            else
+                Bonus_Laser_MakeAction();
         }
 
         public void ControlDown_Down()
@@ -496,6 +517,39 @@ namespace GalaxyBlox.Objects
 
             BorderColor = Contents.Colors.PlaygroundBorderColor;
             backgroundChanged = true;
+        }
+
+        private void Bonus_Laser_Activate()
+        {
+            activeGameBonus = GameBonus.Laser;
+
+            laserPosition = new Point((playground.GetLength(0) - laserWidth) / 2, 0);
+            lastActiveActor = activeActor;
+            activeActor = null;
+        }
+
+        private void Bonus_Laser_MakeAction()
+        {
+            LaserActors();
+            LaserPlayground();
+            backgroundChanged = true;
+
+            Bonus_Laser_Deactivate();
+        }
+
+        private void Bonus_Laser_Deactivate()
+        {
+            activeGameBonus = GameBonus.None;
+
+            if (actors.Contains(lastActiveActor))
+                activeActor = lastActiveActor;
+            else
+            {
+                activeActor = actors.FirstOrDefault();
+
+                if (activeActor == null)
+                    CreateNewActor();
+            }
         }
 
         // Private methods
@@ -640,6 +694,93 @@ namespace GalaxyBlox.Objects
 
                 if (actors.Count == 0)
                     CreateNewActor();
+            }
+        }
+
+        private void MoveLaser()
+        {
+            if (activeActorMovement == ActorMovement.None ||  moveTimer > 0)
+                return;
+
+            if (activeActorMovement == ActorMovement.Left)
+            {
+                if (laserPosition.X - 1 >= 0)
+                    laserPosition.X--;
+            } else
+            {
+                if (laserPosition.X + laserWidth + 1 <= playground.GetLength(0))
+                    laserPosition.X++;
+            }
+
+            if (moveTimerSpeed == 0)
+            {
+                moveTimer = moveTimerSlowest;
+                moveTimerSpeed = moveTimerSlowest;
+            }
+            else
+            {
+                var newSpeed = moveTimerSpeed - ((moveTimerSlowest - moveTimerFastest) / 4);
+                moveTimer = newSpeed > moveTimerFastest ? newSpeed : moveTimerSpeed;
+                moveTimerSpeed = newSpeed > moveTimerFastest ? newSpeed : moveTimerSpeed;
+            }
+        }
+
+        private void LaserActors()
+        {
+            var laserRect = new Rectangle(laserPosition, new Point(laserWidth, playground.GetLength(1)));
+            foreach (var actor in actors.ToList())
+            {
+                var rect = new Rectangle(actor.Position, actor.Size);
+                if (rect.Intersects(laserRect))
+                {
+                    if (rect.X >= laserPosition.X)
+                    {
+                        var IsDestroyed = rect.X + rect.Width - laserPosition.X <= laserWidth;
+                        if (IsDestroyed)
+                        {
+                            actors.Remove(actor);
+                            continue;
+                        }
+                    }
+
+                    Point newSize;
+                    bool[,] newShape;
+                    Point startPosition;
+                    if (laserPosition.X > rect.X)
+                    {
+                        newSize = new Point(laserPosition.X - rect.X, rect.Height);
+                        startPosition = new Point(0, 0);
+                    }
+                    else
+                    {
+                        newSize = new Point((rect.X + rect.Width) - (laserPosition.X + laserWidth), rect.Height);
+                        startPosition = new Point(laserWidth - (rect.X - laserPosition.X), 0);
+                    }
+
+                    newShape = new bool[newSize.X, newSize.Y];
+                    for (int x = 0; x < newSize.X; x++)
+                    {
+                        for (int y = 0; y < newSize.Y; y++)
+                        {
+                            newShape[x, y] = actor.Shape[startPosition.X + x, startPosition.Y + y];
+                        }
+                    }
+
+                    actor.Position += startPosition;
+                    actor.Shape = newShape;
+                }
+            }
+        }
+
+        private void LaserPlayground()
+        {
+            var laserRect = new Rectangle(laserPosition, new Point(laserWidth, playground.GetLength(1)));
+            for (int x = laserRect.X; x < laserRect.X + laserRect.Width; x++)
+            {
+                for (int y = laserRect.Y; y < laserRect.Y + laserRect.Height; y++)
+                {
+                    playground[x, y] = 0;
+                }
             }
         }
 
@@ -965,6 +1106,10 @@ namespace GalaxyBlox.Objects
                     {
                         Bonus_SlowDown_Activate();
                     } break;
+                case GameBonus.Laser:
+                    {
+                        Bonus_Laser_Activate();
+                    } break;
             }
 
             gameBonuses.Remove(bonus.First());
@@ -980,6 +1125,10 @@ namespace GalaxyBlox.Objects
                         Bonus_SlowDown_Deactivate();
                     }
                     break;
+                case GameBonus.Laser:
+                    {
+                        Bonus_Laser_Deactivate();
+                    } break;
             }
             RefreshBonuses();
         }
@@ -996,7 +1145,6 @@ namespace GalaxyBlox.Objects
             if (gameMode != SettingOptions.GameMode.Classic && Settings.Game.UserSettings.Indicator != SettingOptions.Indicator.None) // draw indicator if set
                 DrawIndicator();
 
-
             foreach (var actor in actors)
             {
                 if (actor != activeActor)
@@ -1005,6 +1153,17 @@ namespace GalaxyBlox.Objects
 
             if (activeActor != null)
                 DrawActor(activeActor.Shape, activeActor.Position, activeActor.Color);
+
+            if (activeGameBonus == GameBonus.Laser)
+            {
+                for (int x = laserPosition.X; x < laserPosition.X + laserWidth; x++)
+                {
+                    for (int y = laserPosition.Y; y < playground.GetLength(1); y++)
+                    {
+                        playgroundEffectsList.Add(new Tuple<int, int, Color>(x, y, Color.Red * 0.35f));
+                    }
+                }
+            }
         }
 
         private void DrawActor(bool[,] actorToDraw, Point positionToDraw, Color colorToDraw)
@@ -1101,6 +1260,7 @@ namespace GalaxyBlox.Objects
         public bool[,] Shape;
         public Color Color;
         public Point Position;
+        public Point Size { get { return new Point(Shape.GetLength(0), Shape.GetLength(1)); } }
 
         public int Timer;
         public int FallingSpeed;
