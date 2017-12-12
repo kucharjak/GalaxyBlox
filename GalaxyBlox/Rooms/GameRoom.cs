@@ -233,10 +233,10 @@ namespace GalaxyBlox.Rooms
         private void Arena_AvailableBonusesChanged(object sender, EventArgs e)
         {
             var eventArgs = (AvailableBonusesChangeEventArgs)e;
-            RefreshBonusButtons(eventArgs.GameBonuses, eventArgs.EnableBonusButtons);
+            RefreshBonusButtons(eventArgs.GameBonuses, eventArgs.DisabledBonuses, eventArgs.EnableBonusButtons);
         }
 
-        private void RefreshBonusButtons(List<GameBonus> newBonuses, bool enable)
+        private void RefreshBonusButtons(List<GameBonus> newBonuses, List<GameBonus> disabledBonuses, bool enable)
         {
             // remove old bonus buttons
             foreach (var oldButton in bonusButtons)
@@ -251,6 +251,7 @@ namespace GalaxyBlox.Rooms
 
             for (int i = 0; i < newBonuses.Count; i++)
             {
+                var btnEnabled = enable && !disabledBonuses.Contains(newBonuses[i]);
                 var btn = new Button(this)
                 {
                     Size = new Vector2(btnBonusSize),
@@ -263,7 +264,7 @@ namespace GalaxyBlox.Rooms
                     TextSpriteFont = Contents.Fonts.PlainTextFont,
                     TextHeight = btnBonusTextHeight,
                     ShowText = true,
-                    Enabled = enable,
+                    Enabled = btnEnabled,
                     TextAlignment = TextAlignment.Center,
                     Text = TranslateBonusToText(newBonuses[i]),
                     Data = newBonuses[i]
@@ -319,6 +320,7 @@ namespace GalaxyBlox.Rooms
                 case GameBonus.TimeSlowdown: result = "Slo"; break;
                 case GameBonus.Laser: result = "Lsr"; break;
                 case GameBonus.SwipeCubes: result = "Swp"; break;
+                case GameBonus.CancelLastCube: result = "Cnl"; break;
             }
             return result;
         }

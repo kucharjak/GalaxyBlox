@@ -122,6 +122,8 @@ namespace GalaxyBlox.Objects
         private int timeUntilFreeBonus = freeBonusTimeLimit;
         private const int freeBonusTimeLimit = 1;
 
+        private List<GameBonus> availableBonuses = new List<GameBonus>() { GameBonus.CancelLastCube, GameBonus.Laser, GameBonus.SwipeCubes, GameBonus.TimeSlowdown };
+
         private GameBonus activeBonus;
         /// <summary>
         /// Active bonus for game - assign value here if you wish to cause external change event
@@ -138,6 +140,21 @@ namespace GalaxyBlox.Objects
         private Point laserPosition;
         private int laserWidth = 2;
         private Actor lastActiveActor;
+
+        private Actor lastPlayedActor;
+        public Actor LastPlayedActor
+        {
+            get { return lastPlayedActor; }
+            private set
+            {
+                var changed = (lastPlayedActor == null && value != null) || (lastPlayedActor != null && value == null);
+                lastPlayedActor = value;
+
+                if (changed)
+                    RefreshBonuses();
+            }
+        }
+
 
         /// <summary>
         /// Constructor
@@ -477,7 +494,7 @@ namespace GalaxyBlox.Objects
             moveTimer = 0;
             moveTimerSpeed = 0;
         }
-        
+
         private void RotateActor()
         {
             if (activeActor == null)
@@ -488,7 +505,7 @@ namespace GalaxyBlox.Objects
             if (rotatedActorShape.GetLength(0) + activeActor.Position.X > playground.GetLength(0))
                 rotatedActorPosition.X = playground.GetLength(0) - rotatedActorShape.GetLength(0);
 
-            if (ActorCollide(rotatedActorPosition, rotatedActorShape))
+            if (ActorCollideWithPlayground(rotatedActorPosition, rotatedActorShape))
                 return;
 
             activeActor.Shape = rotatedActorShape;
@@ -521,6 +538,21 @@ namespace GalaxyBlox.Objects
         }
 
         // private bonus activations
+
+        private void Bonus_CancelLastCube_Activate()
+        {
+            ActiveBonus = GameBonus.CancelLastCube;
+
+            if (LastPlayedActor != null)
+                RemoveActorFromPlayground(LastPlayedActor);
+
+            DeactivateBonus();
+        }
+
+        private void Bonus_CancelLastCube_Deactivate()
+        {
+            ActiveBonus = GameBonus.None;
+        }
 
         private void Bonus_SlowDown_Activate()
         {
@@ -604,7 +636,7 @@ namespace GalaxyBlox.Objects
                         if (playground[x, y] > 0)
                         {
                             if (x != lastEmptyX)
-                            { 
+                            {
                                 playground[lastEmptyX, y] = playground[x, y];
                                 playground[x, y] = 0;
                             }
@@ -766,7 +798,7 @@ namespace GalaxyBlox.Objects
         {
             var newPosition = new Point(actor.Position.X, actor.Position.Y + 1);
 
-            if (!ActorCollide(newPosition, actor.Shape))
+            if (!ActorCollideWithPlayground(newPosition, actor.Shape))
             {
                 actor.Position = newPosition;
             }
@@ -777,7 +809,7 @@ namespace GalaxyBlox.Objects
 
                 if (actor == activeActor)
                     activeActor = actors.Count > 0 ? actors.First() : null;
-                
+
                 CheckGameOver();
                 CheckPlaygroundForFullLines();
 
@@ -788,7 +820,7 @@ namespace GalaxyBlox.Objects
 
         private void MoveLaser()
         {
-            if (activeActorMovement == ActorMovement.None ||  moveTimer > 0)
+            if (activeActorMovement == ActorMovement.None || moveTimer > 0)
                 return;
 
             if (activeActorMovement == ActorMovement.Left)
@@ -975,6 +1007,8 @@ namespace GalaxyBlox.Objects
                 {
                     AddBonus();
                 }
+
+                LastPlayedActor = null;
             }
         }
 
@@ -990,25 +1024,53 @@ namespace GalaxyBlox.Objects
         //    }
         //}
 
-        private void InsertActorToPlayground(Actor actor)
+        private void RemoveActorFromPlayground(Actor actor)
         {
-            var actorBoxes = new int[actor.Shape.GetLength(0), actor.Shape.GetLength(1)];
-            var actorColorPos = Contents.Colors.GameCubesColors.IndexOf(actor.Color);
-            if (actorColorPos < 1)
-                actorColorPos = 1;
+            var actorCubes = new List<Tuple<int, int, int>>();
 
             for (int x = 0; x < actor.Shape.GetLength(0); x++)
             {
                 for (int y = 0; y < actor.Shape.GetLength(1); y++)
                 {
                     if (actor.Shape[x, y])
-                    {
-                        actorBoxes[x, y] = actorColorPos;
-                    }
+                        actorCubes.Add(new Tuple<int, int, int>(x + actor.Position.X, y + actor.Position.Y, 0));
                 }
             }
 
-            InsertBoxesToPlayground(actor.Position, actorBoxes);
+            InsertBoxesToPlayground(actorCubes);
+            LastPlayedActor = null;
+        }
+
+        private void InsertActorToPlayground(Actor actor)
+        {
+            var actorCubes = new List<Tuple<int, int, int>>();
+            var actorColorPos = Contents.Colors.GameCubesColors.IndexOf(actor.Color);
+
+            for (int x = 0; x < actor.Shape.GetLength(0); x++)
+            {
+                for (int y = 0; y < actor.Shape.GetLength(1); y++)
+                {
+                    if (actor.Shape[x, y])
+                        actorCubes.Add(new Tuple<int, int, int>(x + actor.Position.X, y + actor.Position.Y, actorColorPos));
+                }
+            }
+
+            InsertBoxesToPlayground(actorCubes);
+            LastPlayedActor = actor;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cubes">List of cubes defined in tuple where values are - posX, posY, colorIndex</param>
+        private void InsertBoxesToPlayground(List<Tuple<int, int, int>> cubes)
+        {
+            foreach (var cube in cubes)
+            {
+                if (cube.Item1 < playground.GetLength(0) && cube.Item2 < playground.GetLength(1))
+                    playground[cube.Item1, cube.Item2] = cube.Item3;
+            }
+            backgroundChanged = true;
         }
 
         private void InsertBoxesToPlayground(Point boxesPosition, int[,] boxesArray, bool insertZeros = false)
@@ -1033,10 +1095,10 @@ namespace GalaxyBlox.Objects
 
         private bool ActorCollideWithPlayground(Actor actor)
         {
-            return ActorCollide(actor.Position, actor.Shape);
+            return ActorCollideWithPlayground(actor.Position, actor.Shape);
         }
 
-        private bool ActorCollide(Point actorPosition, bool[,] actorArray)
+        private bool ActorCollideWithPlayground(Point actorPosition, bool[,] actorArray)
         {
             for (int x = 0; x < actorArray.GetLength(0); x++)
             {
@@ -1081,7 +1143,7 @@ namespace GalaxyBlox.Objects
             for (int i = 0; i < playground.GetLength(0) + 1 - actor.Shape.GetLength(0); i++)
             {
                 actor.Position = new Point(i, 0);
-                if (!ActorsCollide(actor, actors))
+                if (!ActorCollideActors(actor, actors))
                     positionsWithoutOtherActors.Add(actor.Position);
             }
             actor.Position = new Point();
@@ -1106,13 +1168,13 @@ namespace GalaxyBlox.Objects
             }
         }
 
-        private bool ActorsCollide(Actor newActor, List<Actor> actorsList)
+        private bool ActorCollideActors(Actor newActor, List<Actor> actorsList)
         {
             Actor tmpActor = null;
-            return ActorsCollide(newActor, actorsList, out tmpActor);
+            return ActorCollideActors(newActor, actorsList, out tmpActor);
         }
 
-        private bool ActorsCollide(Actor newActor, List<Actor> actorsList, out Actor collidedActor)
+        private bool ActorCollideActors(Actor newActor, List<Actor> actorsList, out Actor collidedActor)
         {
             collidedActor = null;
             var newRect = new Rectangle(newActor.Position, new Point(newActor.Shape.GetLength(1), newActor.Shape.GetLength(0)));
@@ -1172,9 +1234,8 @@ namespace GalaxyBlox.Objects
         {
             if (gameBonuses.Count < maxBonuses)
             {
-                var bonusIndex = Game1.Random.Next(1, Enum.GetValues(typeof(GameBonus)).Length);
-                gameBonuses.Add((GameBonus)bonusIndex);
-                //gameBonuses.Add(GameBonus.SwipeCubes);
+                var bonusIndex = Game1.Random.Next(0, availableBonuses.Count - 1);
+                gameBonuses.Add(availableBonuses[bonusIndex]);
                 timeSinceLastBonus = 0;
                 RefreshBonuses();
             }
@@ -1203,7 +1264,10 @@ namespace GalaxyBlox.Objects
                     {
                         Bonus_Swipe_Activate();
                     } break;
-
+                case GameBonus.CancelLastCube:
+                    {
+                        Bonus_CancelLastCube_Activate();
+                    } break;
             }
 
             gameBonuses.Remove(bonus.First());
@@ -1227,13 +1291,21 @@ namespace GalaxyBlox.Objects
                     {
                         Bonus_Swipe_Deactivate();
                     } break;
+                case GameBonus.CancelLastCube:
+                    {
+                        Bonus_CancelLastCube_Deactivate();
+                    } break;
             }
             RefreshBonuses();
         }
 
         private void RefreshBonuses()
         {
-            OnAvailableBonusesChange(new AvailableBonusesChangeEventArgs(gameBonuses, ActiveBonus == GameBonus.None));
+            var disabledBonuses = new List<GameBonus>();
+            if (LastPlayedActor == null)
+                disabledBonuses.Add(GameBonus.CancelLastCube);
+
+            OnAvailableBonusesChange(new AvailableBonusesChangeEventArgs(gameBonuses, disabledBonuses, ActiveBonus == GameBonus.None));
         }
 
         private void UpdateEffectsArray()
@@ -1326,7 +1398,7 @@ namespace GalaxyBlox.Objects
                         for (int y = shadowPosition.Y; y < playground.GetLength(1); y++)
                         {
                             shadowPosition.Y = y;
-                            if (ActorCollide(shadowPosition, activeActor.Shape))
+                            if (ActorCollideWithPlayground(shadowPosition, activeActor.Shape))
                             {
                                 shadowPosition.Y--;
                                 break;

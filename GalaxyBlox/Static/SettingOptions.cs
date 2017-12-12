@@ -50,6 +50,7 @@ namespace GalaxyBlox.Static
         {
             None, // first place must be empty
             //TimeRewind,
+            CancelLastCube,
             TimeSlowdown,
             SwipeCubes,
             Laser
