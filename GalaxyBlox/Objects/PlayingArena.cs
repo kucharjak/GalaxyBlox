@@ -122,7 +122,7 @@ namespace GalaxyBlox.Objects
         private int timeUntilFreeBonus = freeBonusTimeLimit;
         private const int freeBonusTimeLimit = 1;
 
-        private List<GameBonus> availableBonuses = new List<GameBonus>() { GameBonus.CancelLastCube, GameBonus.Laser, GameBonus.SwipeCubes, GameBonus.TimeSlowdown };
+        private List<GameBonus> availableBonuses = new List<GameBonus>() { GameBonus.CubesExplosion, GameBonus.CancelLastCube, GameBonus.Laser, GameBonus.SwipeCubes, GameBonus.TimeSlowdown };
 
         private GameBonus activeBonus;
         /// <summary>
@@ -155,6 +155,10 @@ namespace GalaxyBlox.Objects
             }
         }
 
+        private int cubesExplosionPower = 2;
+        private int cubesExplosionExtraPower = 4;
+        private int cubesExplosionExtraPowerProb = 100;
+        private int cubesExplosionSpeed = 50;
 
         /// <summary>
         /// Constructor
@@ -247,7 +251,6 @@ namespace GalaxyBlox.Objects
                                 DeactivateBonus();
                         }
                         break;
-
                 }
             }
 
@@ -281,6 +284,20 @@ namespace GalaxyBlox.Objects
                             MoveLaser();
                         }
                         break;
+                    case GameBonus.CubesExplosion:
+                        {
+                            if (activeActor == null)
+                                DeactivateBonus();
+                            else
+                            {
+                                activeActor.Timer += gameTime.ElapsedGameTime.Milliseconds;
+                                if (activeActor.Timer > activeActor.FallingSpeed)
+                                {
+                                    activeActor.Timer = 0;
+                                    MoveActorTowardsExplosion(activeActor);
+                                }
+                            }
+                        } break;
                 }
             }
 
@@ -673,6 +690,22 @@ namespace GalaxyBlox.Objects
             ActiveBonus = GameBonus.None;
         }
 
+        private void Bonus_CubesExplosion_Activate()
+        {
+            ActiveBonus = GameBonus.CubesExplosion;
+            activeActor.FallingSpeed = cubesExplosionSpeed;
+        }
+
+        private void Bonus_CubesExplosion_Deactivate()
+        {
+            ActiveBonus = GameBonus.None;
+
+            activeActor = actors.FirstOrDefault();
+
+            if (activeActor == null)
+                CreateNewActor();
+        }
+
         // Private methods
 
         private bool[,] RotateActor(bool[,] actorArray, int nTimes, bool randomlyFlip = false)
@@ -903,6 +936,50 @@ namespace GalaxyBlox.Objects
                     playground[x, y] = 0;
                 }
             }
+        }
+
+        private void MoveActorTowardsExplosion(Actor actor)
+        {
+            var newPosition = new Point(actor.Position.X, actor.Position.Y + 1);
+
+            if (!ActorCollideWithPlayground(newPosition, actor.Shape))
+            {
+                actor.Position = newPosition;
+            }
+            else
+            {
+                var extraPower = Game1.Random.Next(0, cubesExplosionExtraPowerProb) == cubesExplosionExtraPowerProb;
+                ExplodeActor(actor, !extraPower ? cubesExplosionPower : cubesExplosionExtraPower);
+
+                if (actor == activeActor)
+                    activeActor = null;
+                actors.Remove(actor);
+            }
+        }
+
+        private void ExplodeActor(Actor actor, int power)
+        {
+            var actorCubes = new List<Tuple<int, int, int>>();
+
+            for (int x = 0; x < actor.Shape.GetLength(0); x++)
+            {
+                for (int y = 0; y < actor.Shape.GetLength(1); y++)
+                {
+                    if (actor.Shape[x, y])
+                    {
+                        for (int expX = x - power; expX <= x + power; expX++)
+                        {
+                            for (int expY = y - power; expY <= y + power; expY++)
+                            {
+                                if (expX + actor.Position.X >= 0 && expX + actor.Position.X < playground.GetLength(0) && expY + actor.Position.Y >= 0 && expY + actor.Position.Y < playground.GetLength(1))
+                                    actorCubes.Add(new Tuple<int, int, int>(expX + actor.Position.X, expY + actor.Position.Y, 0));
+                            }
+                        }
+                    }
+                }
+            }
+            InsertBoxesToPlayground(actorCubes);
+            backgroundChanged = true;
         }
 
         private void CheckGameOver()
@@ -1209,11 +1286,11 @@ namespace GalaxyBlox.Objects
         private int GetGameSpeed(GameSpeed gameSpeedSetting)
         {
             var maxFallingSpeed = 250;
-            var fallingSpeed = 1000;
+            var fallingSpeed = 800;
             switch (gameSpeedSetting)
             {
                 case GameSpeed.Normal:
-                    fallingSpeed = (int)(1000 - Math.Pow(Level, 2)); // TODO test more speeds
+                    fallingSpeed = (int)(fallingSpeed - Math.Pow(Level, 2)); // TODO test more speeds
                     if (fallingSpeed < maxFallingSpeed)
                         fallingSpeed = maxFallingSpeed;
 
@@ -1268,6 +1345,10 @@ namespace GalaxyBlox.Objects
                     {
                         Bonus_CancelLastCube_Activate();
                     } break;
+                case GameBonus.CubesExplosion:
+                    {
+                        Bonus_CubesExplosion_Activate();
+                    } break;
             }
 
             gameBonuses.Remove(bonus.First());
@@ -1295,6 +1376,11 @@ namespace GalaxyBlox.Objects
                     {
                         Bonus_CancelLastCube_Deactivate();
                     } break;
+                case GameBonus.CubesExplosion:
+                    {
+                        Bonus_CubesExplosion_Deactivate();
+                    }
+                    break;
             }
             RefreshBonuses();
         }

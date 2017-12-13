@@ -53,7 +53,8 @@ namespace GalaxyBlox.Static
             CancelLastCube,
             TimeSlowdown,
             SwipeCubes,
-            Laser
+            Laser,
+            CubesExplosion
         }
     }
 }

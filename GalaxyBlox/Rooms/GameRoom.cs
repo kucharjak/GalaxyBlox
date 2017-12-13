@@ -321,6 +321,7 @@ namespace GalaxyBlox.Rooms
                 case GameBonus.Laser: result = "Lsr"; break;
                 case GameBonus.SwipeCubes: result = "Swp"; break;
                 case GameBonus.CancelLastCube: result = "Cnl"; break;
+                case GameBonus.CubesExplosion: result = "EXP"; break;
             }
             return result;
         }
