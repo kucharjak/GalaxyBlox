@@ -2,9 +2,8 @@ Zmìny
 	- pøemyslet jak vykreslit PlayingArenu na zaèízeních s rùzným rozlišením pro zlepšní vzhledu hry
 
 Rozšíøení 
-	- pøidat tøídu bonusy - bude obsahovat základní 3 eventy na zpracování bonusù a referenci na playing ground - to se podìdí do konkrétních bonusù s konkrétním chováním 
 	- podìdit PlayingArenu na konkrétní herní módy - zde se bude definovat konkrétních logika (spíše pravidla), daného módu a tím pùjde líp vyladit gameplay
-	- vytvoøit 4 základní herní bonusy
+	- pøidat tøídu bonusy - bude obsahovat základní 3 eventy na zpracování bonusù a referenci na playing ground - to se podìdí do konkrétních bonusù s konkrétním chováním 
 	- upravit slovník pro Indicator Name, aby byl univerzálnìjší a možný použít i na jiných místech projektu
 	- pokud kliknu mimo místnost (které nejsou fullscrenn a jsou aktivní), tak se zavøe (popø endne, záleží podle konkrétní místnosti)
 	- dát dohromady grafický styl hry
@@ -40,6 +39,7 @@ Možná
 --------------HOTOVO--------------
 ----------------------------------
 
+- vytvoøit 4 základní herní bonusy
 - pøidat bonusy a vymyslet elegantnší zpùsob, jak je získávat (po každých 4 lajnách dár jeden bonus, pokud je prázdná pozice na bonusy | mít v pozadí padající hvìzdu a pokud by na ní hráè stihl kliknout, tak by získal bonusobou krabièku/truhlu)
 - pøidat do "Extrémního" módu to, že bude padat najednou více kostek (zatím 3 max), bude možné mezi nimi pøeklikávat a oznaèená bude mít jinou barvu než oststaní
 - podpora více herních módù

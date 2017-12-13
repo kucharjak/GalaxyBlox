@@ -158,7 +158,7 @@ namespace GalaxyBlox.Objects
         private int cubesExplosionPower = 2;
         private int cubesExplosionExtraPower = 4;
         private int cubesExplosionExtraPowerProb = 100;
-        private int cubesExplosionSpeed = 50;
+        private int cubesExplosionSpeed = 6;
 
         /// <summary>
         /// Constructor

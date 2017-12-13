@@ -218,7 +218,8 @@ namespace GalaxyBlox.Rooms
             arena.ActorsQueueChanged += Arena_ActorsQueueChanged;
             arena.ScoreChanged += Arena_ScoreChanged;
             arena.GameEnded += Arena_GameEnded;
-            arena.AvailableBonusesChanged += Arena_AvailableBonusesChanged;
+            if (gameMode != GameMode.Classic)
+                arena.AvailableBonusesChanged += Arena_AvailableBonusesChanged;
             arena.ActiveBonusChanged += Arena_ActiveBonusChanged;
             arena.StartNewGame();
             Objects.Add(arena);
