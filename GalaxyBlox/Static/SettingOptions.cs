@@ -46,7 +46,7 @@ namespace GalaxyBlox.Static
             Falling
         }
 
-        public enum GameBonus
+        public enum BonusType
         {
             None, // first place must be empty
             //TimeRewind,

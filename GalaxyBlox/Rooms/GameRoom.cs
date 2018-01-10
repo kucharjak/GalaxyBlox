@@ -12,6 +12,7 @@ using GalaxyBlox.EventArgsClasses;
 using Microsoft.Xna.Framework.Input;
 using static GalaxyBlox.Static.SettingOptions;
 using System.Collections.Generic;
+using GalaxyBlox.Objects.PlayingArenas;
 
 namespace GalaxyBlox.Rooms
 {
@@ -213,14 +214,30 @@ namespace GalaxyBlox.Rooms
             }
 
             // ADDING PLAYING ARENA
-            arena = new PlayingArena(this, new Vector2(Size.X, playingArenaEnd - playingArenaStart), new Vector2(0, playingArenaStart), Settings.Game.Mode, Settings.Game.ArenaSize);
+            switch(gameMode)
+            {
+                case GameMode.Classic:
+                    {
+                        arena = new PlayingArena_Classic(this, new Vector2(Size.X, playingArenaEnd - playingArenaStart), new Vector2(0, playingArenaStart));
+                    } break;
+                case GameMode.Normal:
+                    {
+                        arena = new PlayingArena_Normal(this, new Vector2(Size.X, playingArenaEnd - playingArenaStart), new Vector2(0, playingArenaStart));
+                        (arena as PlayingArena_Normal).AvailableBonusesChanged += Arena_AvailableBonusesChanged;
+                        (arena as PlayingArena_Normal).ActiveBonusChanged += Arena_ActiveBonusChanged;
+                    } break;
+                case GameMode.Extreme:
+                    {
+                        arena = new PlayingArena_Extreme(this, new Vector2(Size.X, playingArenaEnd - playingArenaStart), new Vector2(0, playingArenaStart));
+                        (arena as PlayingArena_Extreme).AvailableBonusesChanged += Arena_AvailableBonusesChanged;
+                        (arena as PlayingArena_Extreme).ActiveBonusChanged += Arena_ActiveBonusChanged;
+                    } break;
+            }
+
             arena.LayerDepth = 0.05f;
             arena.ActorsQueueChanged += Arena_ActorsQueueChanged;
             arena.ScoreChanged += Arena_ScoreChanged;
             arena.GameEnded += Arena_GameEnded;
-            if (gameMode != GameMode.Classic)
-                arena.AvailableBonusesChanged += Arena_AvailableBonusesChanged;
-            arena.ActiveBonusChanged += Arena_ActiveBonusChanged;
             arena.StartNewGame();
             Objects.Add(arena);
         }
@@ -228,16 +245,17 @@ namespace GalaxyBlox.Rooms
         private void Arena_ActiveBonusChanged(object sender, EventArgs e)
         {
             var eventArgs = (ActiveBonusChangedEventArgs)e;
-            PrepareInterfaceForBonus(eventArgs.ActiveBonus);
+            if (eventArgs.ActiveBonus != null)
+                PrepareInterfaceForBonus(eventArgs.ActiveBonus.Type);
         }
 
         private void Arena_AvailableBonusesChanged(object sender, EventArgs e)
         {
             var eventArgs = (AvailableBonusesChangeEventArgs)e;
-            RefreshBonusButtons(eventArgs.GameBonuses, eventArgs.DisabledBonuses, eventArgs.EnableBonusButtons);
+            RefreshBonusButtons(eventArgs.GameBonuses);
         }
 
-        private void RefreshBonusButtons(List<GameBonus> newBonuses, List<GameBonus> disabledBonuses, bool enable)
+        private void RefreshBonusButtons(List<GameBonus> newBonuses)
         {
             // remove old bonus buttons
             foreach (var oldButton in bonusButtons)
@@ -250,9 +268,9 @@ namespace GalaxyBlox.Rooms
             var btnBonusTextHeight = (int)(btnBonusSize * 0.45f);
             var btnMargin = (pnlBonusBtns.Size.X - (newBonuses.Count * btnBonusSize)) / (newBonuses.Count + 1);
 
-            for (int i = 0; i < newBonuses.Count; i++)
+            var i = 0;
+            foreach (var bonus in newBonuses)
             {
-                var btnEnabled = enable && !disabledBonuses.Contains(newBonuses[i]);
                 var btn = new Button(this)
                 {
                     Size = new Vector2(btnBonusSize),
@@ -265,14 +283,16 @@ namespace GalaxyBlox.Rooms
                     TextSpriteFont = Contents.Fonts.PlainTextFont,
                     TextHeight = btnBonusTextHeight,
                     ShowText = true,
-                    Enabled = btnEnabled,
+                    Enabled = bonus.Enabled,
                     TextAlignment = TextAlignment.Center,
-                    Text = TranslateBonusToText(newBonuses[i]),
+                    Text = bonus.SpecialText,
                     Data = newBonuses[i]
                 };
                 btn.Click += Btn_Click;
                 Objects.Add(btn);
                 bonusButtons.Add(btn);
+
+                i++;
             }
         }
 
@@ -281,30 +301,30 @@ namespace GalaxyBlox.Rooms
             var btn = (sender as Button);
             if (btn != null)
             {
-                var bonus = (GameBonus)btn.Data;
-                PrepareInterfaceForBonus(bonus);
-                arena.Control_ActivateBonus(bonus);
+                var bonus = (btn.Data as GameBonus);
+                PrepareInterfaceForBonus(bonus.Type);
+                (arena as PlayingArena_Normal).Control_ActivateBonus(bonus);
             }
                 
         }
 
-        private void PrepareInterfaceForBonus(GameBonus bonus)
+        private void PrepareInterfaceForBonus(BonusType bonus)
         {
             switch(bonus)
             {
-                case GameBonus.None:
-                case GameBonus.TimeSlowdown:
+                case BonusType.None:
+                case BonusType.TimeSlowdown:
                     {
                         btnControlLeft.Enabled = true;
                         btnControlRight.Enabled = true;
                         btnControlFall.Enabled = true;
                         btnControlRotate.Enabled = true;
                     } break;
-                case GameBonus.Laser:
+                case BonusType.Laser:
                     {
                         btnControlRotate.Enabled = false;
                     } break;
-                case GameBonus.SwipeCubes:
+                case BonusType.SwipeCubes:
                     {
                         btnControlRotate.Enabled = false;
                         btnControlFall.Enabled = false;
@@ -312,17 +332,17 @@ namespace GalaxyBlox.Rooms
             }
         }
 
-        private string TranslateBonusToText(GameBonus bonus)
+        private string TranslateBonusToText(BonusType bonus)
         {
             string result = "!err";
             switch(bonus)
             {
                 //case GameBonus.TimeRewind: result = "Rew"; break;
-                case GameBonus.TimeSlowdown: result = "Slo"; break;
-                case GameBonus.Laser: result = "Lsr"; break;
-                case GameBonus.SwipeCubes: result = "Swp"; break;
-                case GameBonus.CancelLastCube: result = "Cnl"; break;
-                case GameBonus.CubesExplosion: result = "EXP"; break;
+                case BonusType.TimeSlowdown: result = "Slo"; break;
+                case BonusType.Laser: result = "Lsr"; break;
+                case BonusType.SwipeCubes: result = "Swp"; break;
+                case BonusType.CancelLastCube: result = "Cnl"; break;
+                case BonusType.CubesExplosion: result = "EXP"; break;
             }
             return result;
         }

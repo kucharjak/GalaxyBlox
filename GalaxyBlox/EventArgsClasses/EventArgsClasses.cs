@@ -30,14 +30,10 @@ namespace GalaxyBlox.EventArgsClasses
     class AvailableBonusesChangeEventArgs : EventArgs
     {
         public List<GameBonus> GameBonuses;
-        public bool EnableBonusButtons;
-        public List<GameBonus> DisabledBonuses;
 
-        public AvailableBonusesChangeEventArgs(List<GameBonus> gameBonuses, List<GameBonus> disabledBonuses = null, bool enableBonusButtons = true)
+        public AvailableBonusesChangeEventArgs(List<GameBonus> gameBonuses)
         {
             GameBonuses = gameBonuses;
-            EnableBonusButtons = enableBonusButtons;
-            DisabledBonuses = disabledBonuses;
         }
     }
 

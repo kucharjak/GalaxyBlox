@@ -79,7 +79,11 @@
     <Compile Include="Objects\ActorViewer.cs" />
     <Compile Include="Objects\Button.cs" />
     <Compile Include="Objects\Bank.cs" />
+    <Compile Include="Objects\GameBonus.cs" />
     <Compile Include="Objects\PlayingArena.cs" />
+    <Compile Include="Objects\PlayingArenas\PlayingArena_Classic.cs" />
+    <Compile Include="Objects\PlayingArenas\PlayingArena_Extreme.cs" />
+    <Compile Include="Objects\PlayingArenas\PlayingArena_Normal.cs" />
     <Compile Include="Objects\SwipeArea.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

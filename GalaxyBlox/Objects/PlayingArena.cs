@@ -15,25 +15,6 @@ namespace GalaxyBlox.Objects
 {
     class PlayingArena : GameObject
     {
-        public event EventHandler ActiveBonusChanged;
-        protected virtual void OnActiveBonusChange(ActiveBonusChangedEventArgs e)
-        {
-            EventHandler handler = ActiveBonusChanged;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
-        public event EventHandler AvailableBonusesChanged;
-        protected virtual void OnAvailableBonusesChange(AvailableBonusesChangeEventArgs e)
-        {
-            EventHandler handler = AvailableBonusesChanged;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
 
         public event EventHandler ActorsQueueChanged;
         protected virtual void OnActorsQueueChange(QueueChangeEventArgs e)
@@ -65,8 +46,8 @@ namespace GalaxyBlox.Objects
             }
         }
 
-        private Vector2 arenaSize;
-        private SettingOptions.GameMode gameMode;
+        protected Vector2 arenaSize;
+        protected SettingOptions.GameMode gameMode;
 
         private long score = 0;
         public long Score
@@ -80,85 +61,47 @@ namespace GalaxyBlox.Objects
             }
         }
 
-        public int Level { get; set; } = 0;
-
-        private Actor activeActor = null;
-        private ActorMovement activeActorMovement;
-        private List<Actor> actors;
-        private int actorsMaxCount = 1;
-        private List<Actor> actorsQueue;
-        private int actorsQueueSize = 2;
-
-        private int actorCreateTimer = 0;
-        private int actorCreatePeriod = 1500;
-
-        private int[,] playground;
-        private HashSet<Tuple<int, int, Color>> playgroundEffectsList = new HashSet<Tuple<int, int, Color>>();
-        private int playgroundInnerPadding;
-        private int playgroundCubeSize;
-        public int CubeSize { get { return playgroundCubeSize; } }
-        private int playgroundCubeMargin;
-        public int CubeMargin { get { return playgroundCubeMargin; } }
-
-        private int fallingPause = 0; // to avoid miss clicks
-
-        private int moveTimer = 0;
-        private int moveTimerSpeed = 0;
-        private int moveTimerFastest = 50;
-        private int moveTimerSlowest = 150;
-
-        //private List<Point> playgroundChanges = new List<Point>();
-
-        private bool backgroundChanged;
-        private bool backgroundFirstDraw;
-        private Color BackgroundColor;
-        private Color BorderColor;
-        private RenderTarget2D backgroundRenderTarget;
-        private RenderTarget2D mainRenderTarget;
-
-        private List<GameBonus> gameBonuses;
-        private int maxBonuses = 3;
-        private int timeSinceLastBonus = 0;
-        private int timeUntilFreeBonus = freeBonusTimeLimit;
-        private const int freeBonusTimeLimit = 1;
-
-        private List<GameBonus> availableBonuses = new List<GameBonus>() { GameBonus.CubesExplosion, GameBonus.CancelLastCube, GameBonus.Laser, GameBonus.SwipeCubes, GameBonus.TimeSlowdown };
-
-        private GameBonus activeBonus;
-        /// <summary>
-        /// Active bonus for game - assign value here if you wish to cause external change event
-        /// </summary>
-        public GameBonus ActiveBonus
+        private int level = 0;
+        public int Level
         {
-            get { return activeBonus; }
-            protected set { activeBonus = value; OnActiveBonusChange(new ActiveBonusChangedEventArgs(value)); }
-        }
-
-        private int slowDownTimer;
-        private int slowDownMultiplier = 5;
-
-        private Point laserPosition;
-        private int laserWidth = 2;
-        private Actor lastActiveActor;
-
-        private Actor lastPlayedActor;
-        public Actor LastPlayedActor
-        {
-            get { return lastPlayedActor; }
-            private set
+            get { return level; }
+            set
             {
-                var changed = (lastPlayedActor == null && value != null) || (lastPlayedActor != null && value == null);
-                lastPlayedActor = value;
-
-                if (changed)
-                    RefreshBonuses();
+                level = value;
+                OnScoreChange(new EventArgs());
             }
         }
 
-        private int cubesExplosionPower = 2;
-        private int cubesExplosionExtraPower = 4;
-        private int cubesExplosionExtraPowerProb = 100;
-        private int cubesExplosionSpeed = 6;
+        protected Actor activeActor = null;
+        protected ActorMovement activeActorMovement;
+        protected List<Actor> actors;
+        protected int actorsMaxCount = 1;
+        protected List<Actor> actorsQueue;
+        protected int actorsQueueSize = 2;
+
+        protected int[,] playground;
+        protected HashSet<Tuple<int, int, Color>> playgroundEffectsList = new HashSet<Tuple<int, int, Color>>();
+        protected int playgroundInnerPadding;
+        protected int playgroundCubeSize;
+        public int CubeSize { get { return playgroundCubeSize; } }
+        protected int playgroundCubeMargin;
+        public int CubeMargin { get { return playgroundCubeMargin; } }
+
+        protected int fallingPause = 0; // to avoid miss clicks
+
+        protected int moveTimer = 0;
+        protected int moveTimerSpeed = 0;
+        protected const int moveTimerFastest = 50;
+        protected const int moveTimerSlowest = 150;
+
+        //private List<Point> playgroundChanges = new List<Point>();
+
+        protected bool backgroundChanged;
+        protected bool backgroundFirstDraw;
+        protected Color BackgroundColor;
+        protected Color BorderColor;
+        protected RenderTarget2D backgroundRenderTarget;
+        protected RenderTarget2D mainRenderTarget;
 
         /// <summary>
         /// Constructor
@@ -166,10 +109,9 @@ namespace GalaxyBlox.Objects
         /// <param name="parentRoom"></param>
         /// <param name="size"></param>
         /// <param name="position"></param>
-        public PlayingArena(Room parentRoom, Vector2 size, Vector2 position, SettingOptions.GameMode gameMode, Vector2 arenaSize) : base(parentRoom)
+        public PlayingArena(Room parentRoom, Vector2 size, Vector2 position) : base(parentRoom)
         {
-            this.gameMode = gameMode;
-            this.arenaSize = arenaSize;
+            InitializeArenaSettings();
 
             BackgroundColor = Contents.Colors.PlaygroundColor;
             BorderColor = Contents.Colors.PlaygroundBorderColor;
@@ -205,13 +147,11 @@ namespace GalaxyBlox.Objects
 
             actors = new List<Actor>();
             actorsQueue = new List<Actor>();
+        }
 
-            gameBonuses = new List<GameBonus>();
-
-            if (gameMode == GameMode.Extreme)
-                actorsMaxCount = 5;
-
-            StartNewGame();
+        protected virtual void InitializeArenaSettings()
+        {
+            arenaSize = new Vector2(12, 20);
         }
 
         public override void Update(GameTime gameTime)
@@ -230,76 +170,7 @@ namespace GalaxyBlox.Objects
             if (moveTimer < 0)
                 moveTimer = 0;
 
-            if (gameMode != GameMode.Classic)
-            {
-                if (gameBonuses.Count == 0 && ActiveBonus == GameBonus.None)
-                    timeSinceLastBonus += gameTime.ElapsedGameTime.Milliseconds;
-
-                if (timeSinceLastBonus >= timeUntilFreeBonus)
-                {
-                    AddBonus();
-                    timeUntilFreeBonus = freeBonusTimeLimit;
-                }
-
-                switch (ActiveBonus)
-                {
-                    case GameBonus.TimeSlowdown:
-                        {
-                            slowDownTimer -= gameTime.ElapsedGameTime.Milliseconds;
-
-                            if (slowDownTimer <= 0)
-                                DeactivateBonus();
-                        }
-                        break;
-                }
-            }
-
-            if (ActiveBonus == GameBonus.None || ActiveBonus == GameBonus.TimeSlowdown)
-            {
-                actorCreateTimer += gameTime.ElapsedGameTime.Milliseconds;
-
-                if (actorCreateTimer > actorCreatePeriod)
-                {
-                    CreateNewActor();
-                    actorCreateTimer = 0;
-                }
-
-                MoveActiveActorToSide();
-
-                foreach (var actor in actors.ToArray())
-                {
-                    actor.Timer += gameTime.ElapsedGameTime.Milliseconds;
-                    if (actor.Timer > actor.FallingSpeed)
-                    {
-                        MoveActorDown(actor);
-                        actor.Timer = 0;
-                    }
-                }
-            } else
-            {
-                switch (ActiveBonus)
-                {
-                    case GameBonus.Laser:
-                        {
-                            MoveLaser();
-                        }
-                        break;
-                    case GameBonus.CubesExplosion:
-                        {
-                            if (activeActor == null)
-                                DeactivateBonus();
-                            else
-                            {
-                                activeActor.Timer += gameTime.ElapsedGameTime.Milliseconds;
-                                if (activeActor.Timer > activeActor.FallingSpeed)
-                                {
-                                    activeActor.Timer = 0;
-                                    MoveActorTowardsExplosion(activeActor);
-                                }
-                            }
-                        } break;
-                }
-            }
+            
 
             UpdateEffectsArray();
         }
@@ -418,66 +289,46 @@ namespace GalaxyBlox.Objects
             graphicsDevice.SetRenderTarget(null);
         }
 
-        // Controls
+        // Controls, events
 
-        public void ControlLeft_Down()
+        public virtual void ControlLeft_Down()
         {
-            if (activeBonus == GameBonus.SwipeCubes)
-            {
-                Bonus_Swipe_MakeAction(true);
-                return;
-            }
-
             MoveActorLeft();
         }
 
-        public void ControlLeft_Up()
+        public virtual void ControlLeft_Up()
         {
             StopMovingActor();
         }
 
-        public void ControlRight_Down()
+        public virtual void ControlRight_Down()
         {
-            if (activeBonus == GameBonus.SwipeCubes)
-            {
-                Bonus_Swipe_MakeAction(false);
-                return;
-            }
-
             MoveActorRight();
         }
 
-        public void ControlRight_Up()
+        public virtual void ControlRight_Up()
         {
             StopMovingActor();
         }
 
-        public void ControlDown_Click()
+        public virtual void ControlDown_Click()
         {
-            if (ActiveBonus != GameBonus.Laser)
-                MakeActorFall();
-            else
-                Bonus_Laser_MakeAction();
+            MakeActorFall();
         }
 
-        public void ControlDown_Down()
+        public virtual void ControlDown_Down()
         {
             MakeActorSpeedup();
         }
 
-        public void ControlDown_Up()
+        public virtual void ControlDown_Up()
         {
             SlowDownActor();
         }
 
-        public void ControlRotate_Click()
+        public virtual void ControlRotate_Click()
         {
             RotateActor();
-        }
-
-        public void Control_ActivateBonus(GameBonus bonusToActivate)
-        {
-            ActivateBonus(bonusToActivate);
         }
 
         public void StartNewGame()
@@ -493,26 +344,31 @@ namespace GalaxyBlox.Objects
             CreateNewActor();
         }
 
-        // Private actions
+        protected virtual void GameOverRoom_Closed(object sender, EventArgs e)
+        {
+            OnGameEnd(new EventArgs());
+        }
 
-        private void MoveActorRight()
+        // private/protected actions
+
+        protected virtual void MoveActorRight()
         {
             activeActorMovement = ActorMovement.Right;
         }
 
-        private void MoveActorLeft()
+        protected virtual void MoveActorLeft()
         {
             activeActorMovement = ActorMovement.Left;
         }
 
-        private void StopMovingActor()
+        protected virtual void StopMovingActor()
         {
             activeActorMovement = ActorMovement.None;
             moveTimer = 0;
             moveTimerSpeed = 0;
         }
 
-        private void RotateActor()
+        protected virtual void RotateActor()
         {
             if (activeActor == null)
                 return;
@@ -529,7 +385,7 @@ namespace GalaxyBlox.Objects
             activeActor.Position = rotatedActorPosition;
         }
 
-        private void MakeActorSpeedup()
+        protected virtual void MakeActorSpeedup()
         {
             if (activeActor == null || activeActor.IsFalling || fallingPause > 0)
                 return;
@@ -537,7 +393,7 @@ namespace GalaxyBlox.Objects
             activeActor.FallingSpeed = GetGameSpeed(GameSpeed.Speedup);
         }
 
-        private void SlowDownActor()
+        protected virtual void SlowDownActor()
         {
             if (activeActor == null || activeActor.IsFalling)
                 return;
@@ -545,7 +401,7 @@ namespace GalaxyBlox.Objects
             activeActor.FallingSpeed = GetGameSpeed(GameSpeed.Normal);
         }
 
-        private void MakeActorFall()
+        protected virtual void MakeActorFall()
         {
             if (activeActor == null || fallingPause > 0)
                 return;
@@ -554,161 +410,7 @@ namespace GalaxyBlox.Objects
             activeActor.FallingSpeed = GetGameSpeed(GameSpeed.Falling);
         }
 
-        // private bonus activations
-
-        private void Bonus_CancelLastCube_Activate()
-        {
-            ActiveBonus = GameBonus.CancelLastCube;
-
-            if (LastPlayedActor != null)
-                RemoveActorFromPlayground(LastPlayedActor);
-
-            DeactivateBonus();
-        }
-
-        private void Bonus_CancelLastCube_Deactivate()
-        {
-            ActiveBonus = GameBonus.None;
-        }
-
-        private void Bonus_SlowDown_Activate()
-        {
-            ActiveBonus = GameBonus.TimeSlowdown;
-            foreach (var actor in actors)
-            {
-                actor.FallingSpeed = actor.FallingSpeed * slowDownMultiplier; // make actor x times slower from their previous speed TODO: optimaze speed
-            }
-
-            slowDownTimer = 5000;
-
-            BorderColor = Color.Red;
-            backgroundChanged = true;
-        }
-
-        private void Bonus_SlowDown_Deactivate()
-        {
-            ActiveBonus = GameBonus.None;
-            foreach (var actor in actors)
-            {
-                if (!actor.IsFalling)
-                    actor.FallingSpeed = GetGameSpeed(GameSpeed.Normal);
-            }
-            slowDownTimer = 0;
-
-            BorderColor = Contents.Colors.PlaygroundBorderColor;
-            backgroundChanged = true;
-        }
-
-        private void Bonus_Laser_Activate()
-        {
-            ActiveBonus = GameBonus.Laser;
-
-            laserPosition = new Point((playground.GetLength(0) - laserWidth) / 2, 0);
-            lastActiveActor = activeActor;
-            activeActor = null;
-        }
-
-        private void Bonus_Laser_MakeAction()
-        {
-            LaserActors();
-            LaserPlayground();
-            backgroundChanged = true;
-
-            DeactivateBonus();
-        }
-
-        private void Bonus_Laser_Deactivate()
-        {
-            ActiveBonus = GameBonus.None;
-
-            if (actors.Contains(lastActiveActor))
-                activeActor = lastActiveActor;
-            else
-            {
-                activeActor = actors.FirstOrDefault();
-
-                if (activeActor == null)
-                    CreateNewActor();
-            }
-        }
-
-        private void Bonus_Swipe_Activate()
-        {
-            ActiveBonus = GameBonus.SwipeCubes;
-            actorsQueue.InsertRange(0, actors);
-            OnActorsQueueChange(new QueueChangeEventArgs(actorsQueue.First()));
-            actors.Clear();
-            activeActor = null;
-        }
-
-        private void Bonus_Swipe_MakeAction(bool swipeLeft)
-        {
-            if (swipeLeft)
-            {
-                for (int y = 0; y < playground.GetLength(1); y++)
-                {
-                    var lastEmptyX = 0;
-                    for (int x = lastEmptyX; x < playground.GetLength(0); x++)
-                    {
-                        if (playground[x, y] > 0)
-                        {
-                            if (x != lastEmptyX)
-                            {
-                                playground[lastEmptyX, y] = playground[x, y];
-                                playground[x, y] = 0;
-                            }
-                            lastEmptyX++;
-                        }
-                    }
-                }
-            } else
-            {
-                for (int y = 0; y < playground.GetLength(1); y++)
-                {
-                    var lastEmptyX = playground.GetLength(0) - 1;
-                    for (int x = lastEmptyX; x >= 0; x--)
-                    {
-                        if (playground[x, y] > 0)
-                        {
-                            if (x != lastEmptyX)
-                            {
-                                playground[lastEmptyX, y] = playground[x, y];
-                                playground[x, y] = 0;
-                            }
-                            lastEmptyX--;
-                        }
-                    }
-                }
-            }
-            backgroundChanged = true;
-            CreateNewActor();
-            DeactivateBonus();
-        }
-
-        private void Bonus_Swipe_Deactivate()
-        {
-            ActiveBonus = GameBonus.None;
-        }
-
-        private void Bonus_CubesExplosion_Activate()
-        {
-            ActiveBonus = GameBonus.CubesExplosion;
-            activeActor.FallingSpeed = cubesExplosionSpeed;
-        }
-
-        private void Bonus_CubesExplosion_Deactivate()
-        {
-            ActiveBonus = GameBonus.None;
-
-            activeActor = actors.FirstOrDefault();
-
-            if (activeActor == null)
-                CreateNewActor();
-        }
-
-        // Private methods
-
-        private bool[,] RotateActor(bool[,] actorArray, int nTimes, bool randomlyFlip = false)
+        protected virtual bool[,] RotateActor(bool[,] actorArray, int nTimes, bool randomlyFlip = false)
         {
             var resultActor = new bool[actorArray.GetLength(0), actorArray.GetLength(1)];
             Array.Copy(actorArray, resultActor, actorArray.GetLength(0) * actorArray.GetLength(1));
@@ -729,7 +431,7 @@ namespace GalaxyBlox.Objects
             return resultActor;
         }
 
-        private bool[,] FlipActorVertically(bool[,] actorArray)
+        protected virtual bool[,] FlipActorVertically(bool[,] actorArray)
         {
             var resultArray = new bool[actorArray.GetLength(0), actorArray.GetLength(1)];
             var actorArrayHeight = actorArray.GetLength(1) - 1;
@@ -745,7 +447,7 @@ namespace GalaxyBlox.Objects
             return resultArray;
         }
 
-        private bool[,] FlipActorHorizontally(bool[,] actorArray)
+        protected virtual bool[,] FlipActorHorizontally(bool[,] actorArray)
         {
             var resultArray = new bool[actorArray.GetLength(0), actorArray.GetLength(1)];
             var actorArrayWidth = actorArray.GetLength(0) - 1;
@@ -761,7 +463,7 @@ namespace GalaxyBlox.Objects
             return resultArray;
         }
 
-        private bool[,] RotateActor(bool[,] actorArray)
+        protected virtual bool[,] RotateActor(bool[,] actorArray)
         {
             var resultArray = new bool[actorArray.GetLength(1), actorArray.GetLength(0)];
 
@@ -776,7 +478,7 @@ namespace GalaxyBlox.Objects
             return resultArray;
         }
 
-        private void MoveActiveActorToSide()
+        protected virtual void MoveActiveActorToSide()
         {
             if (activeActor == null || activeActorMovement == ActorMovement.None || moveTimer > 0)
                 return;
@@ -785,33 +487,6 @@ namespace GalaxyBlox.Objects
             var tmpActor = new Actor(activeActor.Shape, newPos, Color.White);
             if (ActorCollideWithPlayground(tmpActor))
                 return;
-
-            //var nonActiveActors = actors.Where(act => act != activeActor).ToList();
-            //Actor collidedActor;
-            //if (ActorsCollide(tmpActor, nonActiveActors, out collidedActor))
-            //{ // if collide - try to find new position for that actor
-            //    var tmpNonActiveActor = new Actor(activeActor.Shape, collidedActor.Position, Color.White);
-            //    var tmpActors = actors.Where(act => act != collidedActor).ToList();
-            //    bool found = false;
-
-            //    for (int x = 0; x < tmpActor.Shape.GetLength(0) + 1; x++)
-            //    {
-            //        if (activeActorMovement == ActorMovement.Left)
-            //            tmpNonActiveActor.Position.X = tmpActor.Position.X + x;
-            //        else
-            //            tmpNonActiveActor.Position.X = tmpActor.Position.X + tmpActor.Shape.GetLength(0) - tmpNonActiveActor.Shape.GetLength(0) - x;
-
-            //        if (!ActorsCollide(tmpNonActiveActor, tmpActors))
-            //        {
-            //            collidedActor.Position = tmpNonActiveActor.Position;
-            //            found = true;
-            //            break;
-            //        }
-            //    }
-
-            //    if (!found)
-            //        return;
-            //}
 
             activeActor.Position = newPos;
             if (moveTimerSpeed == 0)
@@ -827,7 +502,7 @@ namespace GalaxyBlox.Objects
             }
         }
 
-        private void MoveActorDown(Actor actor)
+        protected virtual void MoveActorDown(Actor actor)
         {
             var newPosition = new Point(actor.Position.X, actor.Position.Y + 1);
 
@@ -844,145 +519,20 @@ namespace GalaxyBlox.Objects
                     activeActor = actors.Count > 0 ? actors.First() : null;
 
                 CheckGameOver();
-                CheckPlaygroundForFullLines();
+
+                int[] linesDestroyed;
+                if (CheckPlaygroundForFullLines(out linesDestroyed))
+                {
+                    DestroyFullLines(linesDestroyed);
+                    IncreaseScoreForLines(linesDestroyed.Count());
+                }
 
                 if (actors.Count == 0)
                     CreateNewActor();
             }
         }
 
-        private void MoveLaser()
-        {
-            if (activeActorMovement == ActorMovement.None || moveTimer > 0)
-                return;
-
-            if (activeActorMovement == ActorMovement.Left)
-            {
-                if (laserPosition.X - 1 >= 0)
-                    laserPosition.X--;
-            } else
-            {
-                if (laserPosition.X + laserWidth + 1 <= playground.GetLength(0))
-                    laserPosition.X++;
-            }
-
-            if (moveTimerSpeed == 0)
-            {
-                moveTimer = moveTimerSlowest;
-                moveTimerSpeed = moveTimerSlowest;
-            }
-            else
-            {
-                var newSpeed = moveTimerSpeed - ((moveTimerSlowest - moveTimerFastest) / 4);
-                moveTimer = newSpeed > moveTimerFastest ? newSpeed : moveTimerSpeed;
-                moveTimerSpeed = newSpeed > moveTimerFastest ? newSpeed : moveTimerSpeed;
-            }
-        }
-
-        private void LaserActors()
-        {
-            var laserRect = new Rectangle(laserPosition, new Point(laserWidth, playground.GetLength(1)));
-            foreach (var actor in actors.ToList())
-            {
-                var rect = new Rectangle(actor.Position, actor.Size);
-                if (rect.Intersects(laserRect))
-                {
-                    if (rect.X >= laserPosition.X)
-                    {
-                        var IsDestroyed = rect.X + rect.Width - laserPosition.X <= laserWidth;
-                        if (IsDestroyed)
-                        {
-                            actors.Remove(actor);
-                            continue;
-                        }
-                    }
-
-                    Point newSize;
-                    bool[,] newShape;
-                    Point startPosition;
-                    if (laserPosition.X > rect.X)
-                    {
-                        newSize = new Point(laserPosition.X - rect.X, rect.Height);
-                        startPosition = new Point(0, 0);
-                    }
-                    else
-                    {
-                        newSize = new Point((rect.X + rect.Width) - (laserPosition.X + laserWidth), rect.Height);
-                        startPosition = new Point(laserWidth - (rect.X - laserPosition.X), 0);
-                    }
-
-                    newShape = new bool[newSize.X, newSize.Y];
-                    for (int x = 0; x < newSize.X; x++)
-                    {
-                        for (int y = 0; y < newSize.Y; y++)
-                        {
-                            newShape[x, y] = actor.Shape[startPosition.X + x, startPosition.Y + y];
-                        }
-                    }
-
-                    actor.Position += startPosition;
-                    actor.Shape = newShape;
-                }
-            }
-        }
-
-        private void LaserPlayground()
-        {
-            var laserRect = new Rectangle(laserPosition, new Point(laserWidth, playground.GetLength(1)));
-            for (int x = laserRect.X; x < laserRect.X + laserRect.Width; x++)
-            {
-                for (int y = laserRect.Y; y < laserRect.Y + laserRect.Height; y++)
-                {
-                    playground[x, y] = 0;
-                }
-            }
-        }
-
-        private void MoveActorTowardsExplosion(Actor actor)
-        {
-            var newPosition = new Point(actor.Position.X, actor.Position.Y + 1);
-
-            if (!ActorCollideWithPlayground(newPosition, actor.Shape))
-            {
-                actor.Position = newPosition;
-            }
-            else
-            {
-                var extraPower = Game1.Random.Next(0, cubesExplosionExtraPowerProb) == cubesExplosionExtraPowerProb;
-                ExplodeActor(actor, !extraPower ? cubesExplosionPower : cubesExplosionExtraPower);
-
-                if (actor == activeActor)
-                    activeActor = null;
-                actors.Remove(actor);
-            }
-        }
-
-        private void ExplodeActor(Actor actor, int power)
-        {
-            var actorCubes = new List<Tuple<int, int, int>>();
-
-            for (int x = 0; x < actor.Shape.GetLength(0); x++)
-            {
-                for (int y = 0; y < actor.Shape.GetLength(1); y++)
-                {
-                    if (actor.Shape[x, y])
-                    {
-                        for (int expX = x - power; expX <= x + power; expX++)
-                        {
-                            for (int expY = y - power; expY <= y + power; expY++)
-                            {
-                                if (expX + actor.Position.X >= 0 && expX + actor.Position.X < playground.GetLength(0) && expY + actor.Position.Y >= 0 && expY + actor.Position.Y < playground.GetLength(1))
-                                    actorCubes.Add(new Tuple<int, int, int>(expX + actor.Position.X, expY + actor.Position.Y, 0));
-                            }
-                        }
-                    }
-                }
-            }
-            InsertBoxesToPlayground(actorCubes);
-            backgroundChanged = true;
-        }
-
-        private void CheckGameOver()
+        protected virtual void CheckGameOver()
         {
             for (int x = 0; x < playground.GetLength(0); x++)
             {
@@ -994,7 +544,7 @@ namespace GalaxyBlox.Objects
             }
         }
 
-        private void GameOver()
+        protected virtual void GameOver()
         {
             if (!Settings.Game.Highscores.Items.ContainsKey(gameMode))
             {
@@ -1023,14 +573,9 @@ namespace GalaxyBlox.Objects
             gameOverRoom.Closed += GameOverRoom_Closed;
         }
 
-        private void GameOverRoom_Closed(object sender, EventArgs e)
+        protected virtual bool CheckPlaygroundForFullLines(out int[] fullLines)
         {
-            OnGameEnd(new EventArgs());
-        }
-
-        private void CheckPlaygroundForFullLines()
-        {
-            var fullLines = new List<int>();
+            var tmpfullLines = new List<int>();
             for (int y = 0; y < playground.GetLength(1); y++)
             {
                 var fullLine = true;
@@ -1044,64 +589,62 @@ namespace GalaxyBlox.Objects
                 }
 
                 if (fullLine)
-                    fullLines.Add(y);
+                    tmpfullLines.Add(y);
             }
-
-            if (fullLines.Count > 0)
-            {
-                //var oldPlayground = (int[,])playground.Clone();
-                // count score
-                Score += (long)(Math.Pow(fullLines.Count, 3) * playground.GetLength(0)); // TODO: Test speed of score growt and decide which would be the best
-
-                // refil playground with-out fullLines
-                var playgroundPosY = playground.GetLength(1) - 1;
-                for (int y = playground.GetLength(1) - 1; y >= 0; y--)
-                {
-                    if (fullLines.Contains(y))
-                    {
-                        for (int x = 0; x < playground.GetLength(0); x++)
-                        {
-                            playground[x, y] = 0;
-                        }
-
-                        continue;
-                    }
-
-                    for (int x = 0; x < playground.GetLength(0); x++)
-                    {
-                        playground[x, playgroundPosY] = playground[x, y];
-
-                        if (y != playgroundPosY) // i want to relocate cube, not to remove it
-                            playground[x, y] = 0;
-                    }
-
-                    playgroundPosY--;
-                }
-                backgroundChanged = true; // need to indicate, that i changed backgrou, so game will redraw it
-                //LogPlaygroundChanges(oldPlayground, playground);
-
-                if (fullLines.Count >= 4)
-                {
-                    AddBonus();
-                }
-
-                LastPlayedActor = null;
-            }
+            fullLines = tmpfullLines.ToArray();
+            return fullLines.Count() > 0;
         }
 
-        //private void LogPlaygroundChanges(int[,] oldPlayground, int[,] newPlayground)
-        //{
-        //    for (int x = 0; x < oldPlayground.GetLength(0); x++)
-        //    {
-        //        for (int y = 0; y < oldPlayground.GetLength(1); y++)
-        //        {
-        //            if (oldPlayground[x, y] != newPlayground[x, y])
-        //                playgroundChanges.Add(new Point(x, y));
-        //        }
-        //    }
-        //}
+        protected virtual void DestroyFullLines(int[] fullLines)
+        {
+            // refil playground with-out fullLines
+            var playgroundPosY = playground.GetLength(1) - 1;
+            for (int y = playground.GetLength(1) - 1; y >= 0; y--)
+            {
+                if (fullLines.Contains(y))
+                {
+                    for (int x = 0; x < playground.GetLength(0); x++)
+                    {
+                        playground[x, y] = 0;
+                    }
 
-        private void RemoveActorFromPlayground(Actor actor)
+                    continue;
+                }
+
+                for (int x = 0; x < playground.GetLength(0); x++)
+                {
+                    playground[x, playgroundPosY] = playground[x, y];
+
+                    if (y != playgroundPosY) // i want to relocate cube, not to remove it
+                        playground[x, y] = 0;
+                }
+
+                playgroundPosY--;
+            }
+            backgroundChanged = true; // need to indicate, that i changed backgrou, so game will redraw it
+        }
+
+        protected virtual void IncreaseScoreForLines(int linesDestroyed)
+        {
+            //var oldPlayground = (int[,])playground.Clone();
+            // count score
+            Score += (long)(Math.Pow(linesDestroyed, 3) * playground.GetLength(0)); // TODO: Test speed of score growt and decide which would be the best
+
+            var newLevel = 0;
+            var scoreCap = 0;
+            while (scoreCap < Score)
+            {
+                newLevel++;
+                scoreCap += newLevel * 50;
+            }
+            Level = newLevel;
+        }
+
+        protected virtual void UpdateLevel()
+        {
+        }
+        
+        protected virtual void RemoveActorFromPlayground(Actor actor)
         {
             var actorCubes = new List<Tuple<int, int, int>>();
 
@@ -1115,10 +658,9 @@ namespace GalaxyBlox.Objects
             }
 
             InsertBoxesToPlayground(actorCubes);
-            LastPlayedActor = null;
         }
 
-        private void InsertActorToPlayground(Actor actor)
+        protected virtual void InsertActorToPlayground(Actor actor)
         {
             var actorCubes = new List<Tuple<int, int, int>>();
             var actorColorPos = Contents.Colors.GameCubesColors.IndexOf(actor.Color);
@@ -1133,14 +675,13 @@ namespace GalaxyBlox.Objects
             }
 
             InsertBoxesToPlayground(actorCubes);
-            LastPlayedActor = actor;
         }
 
         /// <summary>
-        /// 
+        /// Adds index, that represents color, to playground.
         /// </summary>
         /// <param name="cubes">List of cubes defined in tuple where values are - posX, posY, colorIndex</param>
-        private void InsertBoxesToPlayground(List<Tuple<int, int, int>> cubes)
+        protected virtual void InsertBoxesToPlayground(List<Tuple<int, int, int>> cubes)
         {
             foreach (var cube in cubes)
             {
@@ -1150,7 +691,7 @@ namespace GalaxyBlox.Objects
             backgroundChanged = true;
         }
 
-        private void InsertBoxesToPlayground(Point boxesPosition, int[,] boxesArray, bool insertZeros = false)
+        protected virtual void InsertBoxesToPlayground(Point boxesPosition, int[,] boxesArray, bool insertZeros = false)
         {
             for (int x = 0; x < boxesArray.GetLength(0); x++)
             {
@@ -1170,12 +711,12 @@ namespace GalaxyBlox.Objects
             backgroundChanged = true; // indicating for background redraw
         }
 
-        private bool ActorCollideWithPlayground(Actor actor)
+        protected virtual bool ActorCollideWithPlayground(Actor actor)
         {
             return ActorCollideWithPlayground(actor.Position, actor.Shape);
         }
 
-        private bool ActorCollideWithPlayground(Point actorPosition, bool[,] actorArray)
+        protected virtual bool ActorCollideWithPlayground(Point actorPosition, bool[,] actorArray)
         {
             for (int x = 0; x < actorArray.GetLength(0); x++)
             {
@@ -1198,7 +739,7 @@ namespace GalaxyBlox.Objects
             return false;
         }
 
-        private void CreateNewActor()
+        protected virtual void CreateNewActor()
         {
             if (actors.Count >= actorsMaxCount)
                 return;
@@ -1213,45 +754,38 @@ namespace GalaxyBlox.Objects
                     actorsQueue.Add(new Actor(newActorShape, new Point(), Contents.Colors.GameCubesColors[Game1.Random.Next(1, Contents.Colors.GameCubesColors.Count)]));
                 }
             }
-            
+
             var actor = actorsQueue.First();
 
-            var positionsWithoutOtherActors = new List<Point>(); // i won't place new actor on other existing actor
-            for (int i = 0; i < playground.GetLength(0) + 1 - actor.Shape.GetLength(0); i++)
-            {
-                actor.Position = new Point(i, 0);
-                if (!ActorCollideActors(actor, actors))
-                    positionsWithoutOtherActors.Add(actor.Position);
-            }
-            actor.Position = new Point();
+            actorsQueue.Remove(actor);
+            actor.Position = GetNewActorPosition(actor);
+            actor.IsFalling = false;
+            actor.FallingSpeed = GetGameSpeed(GameSpeed.Normal);
+            actors.Add(actor);
+            fallingPause = 150;
 
-            if (positionsWithoutOtherActors.Count > 0)
-            {
-                actorsQueue.Remove(actor);
-                actor.Position = positionsWithoutOtherActors[Game1.Random.Next(0, positionsWithoutOtherActors.Count - 1)];
-                actor.IsFalling = false;
-                actor.FallingSpeed = GetGameSpeed(GameSpeed.Normal);
-                actors.Add(actor);
-                fallingPause = 150;
+            if (activeActor == null)
+                activeActor = actor;
 
-                if (activeActor == null)
-                    activeActor = actor;
-
-                var nextActorInQueue = actorsQueue.FirstOrDefault();
-                if (nextActorInQueue != null)
-                    OnActorsQueueChange(new QueueChangeEventArgs(nextActorInQueue));
-                else
-                    OnActorsQueueChange(new QueueChangeEventArgs(null, Color.White));
-            }
+            var nextActorInQueue = actorsQueue.FirstOrDefault();
+            if (nextActorInQueue != null)
+                OnActorsQueueChange(new QueueChangeEventArgs(nextActorInQueue));
+            else
+                OnActorsQueueChange(new QueueChangeEventArgs(null, Color.White));
         }
 
-        private bool ActorCollideActors(Actor newActor, List<Actor> actorsList)
+        protected virtual Point GetNewActorPosition(Actor actor)
+        {
+            return new Point(Game1.Random.Next(0, playground.GetLength(0) + 1 - actor.Shape.GetLength(0)), 0);
+        }
+
+        protected virtual bool ActorCollideActors(Actor newActor, List<Actor> actorsList)
         {
             Actor tmpActor = null;
             return ActorCollideActors(newActor, actorsList, out tmpActor);
         }
 
-        private bool ActorCollideActors(Actor newActor, List<Actor> actorsList, out Actor collidedActor)
+        protected virtual bool ActorCollideActors(Actor newActor, List<Actor> actorsList, out Actor collidedActor)
         {
             collidedActor = null;
             var newRect = new Rectangle(newActor.Position, new Point(newActor.Shape.GetLength(1), newActor.Shape.GetLength(0)));
@@ -1268,133 +802,15 @@ namespace GalaxyBlox.Objects
             return false;
         }
 
-        private void UpdateLevel()
-        {
-            var level = 0;
-            var scoreCap = 0;
-            while (scoreCap < Score)
-            {
-                level++;
-                scoreCap += level * 50;
-            }
-            Level = level;
-        }
-
         /// <summary>
         /// Game speed is defined by game score
         /// </summary>
-        private int GetGameSpeed(GameSpeed gameSpeedSetting)
+        protected virtual int GetGameSpeed(GameSpeed gameSpeedSetting)
         {
-            var maxFallingSpeed = 250;
-            var fallingSpeed = 800;
-            switch (gameSpeedSetting)
-            {
-                case GameSpeed.Normal:
-                    fallingSpeed = (int)(fallingSpeed - Math.Pow(Level, 2)); // TODO test more speeds
-                    if (fallingSpeed < maxFallingSpeed)
-                        fallingSpeed = maxFallingSpeed;
-
-                    if (ActiveBonus == GameBonus.TimeSlowdown)
-                        fallingSpeed = fallingSpeed * slowDownMultiplier; // if is slowdown activated return slower speeds
-
-                    break;
-                case GameSpeed.Speedup:
-                    fallingSpeed = 50; break;
-                case GameSpeed.Falling:
-                    fallingSpeed = 5; break;
-            }
-
-            return fallingSpeed;
+            return 0;
         }
 
-        private void AddBonus()
-        {
-            if (gameBonuses.Count < maxBonuses)
-            {
-                var bonusIndex = Game1.Random.Next(0, availableBonuses.Count - 1);
-                gameBonuses.Add(availableBonuses[bonusIndex]);
-                timeSinceLastBonus = 0;
-                RefreshBonuses();
-            }
-        }
-
-        private void ActivateBonus(GameBonus bonusToActivate)
-        {
-            var bonus = gameBonuses.Where(bns => bns == bonusToActivate);
-            if (bonus.Count() == 0)
-            {
-                RefreshBonuses();
-                return;
-            }
-            
-            switch (bonusToActivate)
-            {
-                case GameBonus.TimeSlowdown:
-                    {
-                        Bonus_SlowDown_Activate();
-                    } break;
-                case GameBonus.Laser:
-                    {
-                        Bonus_Laser_Activate();
-                    } break;
-                case GameBonus.SwipeCubes:
-                    {
-                        Bonus_Swipe_Activate();
-                    } break;
-                case GameBonus.CancelLastCube:
-                    {
-                        Bonus_CancelLastCube_Activate();
-                    } break;
-                case GameBonus.CubesExplosion:
-                    {
-                        Bonus_CubesExplosion_Activate();
-                    } break;
-            }
-
-            gameBonuses.Remove(bonus.First());
-            RefreshBonuses();
-        }
-
-        private void DeactivateBonus()
-        {
-            switch (ActiveBonus)
-            {
-                case GameBonus.TimeSlowdown:
-                    {
-                        Bonus_SlowDown_Deactivate();
-                    }
-                    break;
-                case GameBonus.Laser:
-                    {
-                        Bonus_Laser_Deactivate();
-                    } break;
-                case GameBonus.SwipeCubes:
-                    {
-                        Bonus_Swipe_Deactivate();
-                    } break;
-                case GameBonus.CancelLastCube:
-                    {
-                        Bonus_CancelLastCube_Deactivate();
-                    } break;
-                case GameBonus.CubesExplosion:
-                    {
-                        Bonus_CubesExplosion_Deactivate();
-                    }
-                    break;
-            }
-            RefreshBonuses();
-        }
-
-        private void RefreshBonuses()
-        {
-            var disabledBonuses = new List<GameBonus>();
-            if (LastPlayedActor == null)
-                disabledBonuses.Add(GameBonus.CancelLastCube);
-
-            OnAvailableBonusesChange(new AvailableBonusesChangeEventArgs(gameBonuses, disabledBonuses, ActiveBonus == GameBonus.None));
-        }
-
-        private void UpdateEffectsArray()
+        protected virtual void UpdateEffectsArray()
         {
             playgroundEffectsList.Clear();
 
@@ -1409,17 +825,6 @@ namespace GalaxyBlox.Objects
 
             if (activeActor != null)
                 DrawActor(activeActor.Shape, activeActor.Position, activeActor.Color);
-
-            if (ActiveBonus == GameBonus.Laser)
-            {
-                for (int x = laserPosition.X; x < laserPosition.X + laserWidth; x++)
-                {
-                    for (int y = laserPosition.Y; y < playground.GetLength(1); y++)
-                    {
-                        playgroundEffectsList.Add(new Tuple<int, int, Color>(x, y, Color.Red * 0.35f));
-                    }
-                }
-            }
         }
 
         private void DrawActor(bool[,] actorToDraw, Point positionToDraw, Color colorToDraw)
@@ -1503,7 +908,7 @@ namespace GalaxyBlox.Objects
             return result;
         }
 
-        enum ActorMovement
+        protected enum ActorMovement
         {
             None,
             Right,
