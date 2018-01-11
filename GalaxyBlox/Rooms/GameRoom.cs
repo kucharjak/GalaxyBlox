@@ -247,6 +247,8 @@ namespace GalaxyBlox.Rooms
             var eventArgs = (ActiveBonusChangedEventArgs)e;
             if (eventArgs.ActiveBonus != null)
                 PrepareInterfaceForBonus(eventArgs.ActiveBonus.Type);
+            else
+                PrepareInterfaceForBonus(BonusType.None);
         }
 
         private void Arena_AvailableBonusesChanged(object sender, EventArgs e)

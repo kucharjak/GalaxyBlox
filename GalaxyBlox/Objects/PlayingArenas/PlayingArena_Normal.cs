@@ -98,6 +98,8 @@ namespace GalaxyBlox.Objects.PlayingArenas
         protected float fallingSpeedFactor;
         protected float increaseFallingSpeedLevelCount;
 
+        protected bool bonusSwipeCubesLeft;
+
         public PlayingArena_Normal(Room parentRoom, Vector2 size, Vector2 position) : base(parentRoom, size, position)
         {
         }
@@ -228,7 +230,8 @@ namespace GalaxyBlox.Objects.PlayingArenas
         {
             if (ActiveBonus?.Type == BonusType.SwipeCubes)
             {
-                Bonus_Swipe_MakeAction(true);
+                bonusSwipeCubesLeft = true;
+                Bonus_Swipe_MakeAction();
                 return;
             }
 
@@ -238,8 +241,9 @@ namespace GalaxyBlox.Objects.PlayingArenas
         public override void ControlRight_Down()
         {
             if (ActiveBonus?.Type == BonusType.SwipeCubes)
-            {
-                Bonus_Swipe_MakeAction(false);
+            { 
+                bonusSwipeCubesLeft = false;
+                Bonus_Swipe_MakeAction();
                 return;
             }
 
@@ -311,7 +315,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
 
         protected override int GetGameSpeed(SettingOptions.GameSpeed gameSpeedSetting)
         {
-            var levelIndex = (int)Math.Floor(Level / increaseFourLineLimitPerLevel);
+            var levelIndex = (int)Math.Floor(Level / increaseFallingSpeedLevelCount);
             var fallingSpeed = baseFallingSpeed;
             var normalFallingSpeed = MathHelper.Clamp((int)(baseFallingSpeed * (1f - fallingSpeedFactor * levelIndex)), minFallingSpeed, baseFallingSpeed);
             switch (gameSpeedSetting)
@@ -410,6 +414,9 @@ namespace GalaxyBlox.Objects.PlayingArenas
 
         protected virtual void RefreshBonuses()
         {
+            // if there is no last actor to cancel, disable cancel bonus
+            gameBonuses.Where(gmb => gmb.Type == BonusType.CancelLastCube).ToList().ForEach(gmb => gmb.Enabled = LastPlayedActor != null);
+
             OnAvailableBonusesChange(new AvailableBonusesChangeEventArgs(gameBonuses));
         }
 
@@ -491,16 +498,17 @@ namespace GalaxyBlox.Objects.PlayingArenas
 
         protected virtual void Bonus_Swipe_Activate(GameBonus bonus)
         {
-            ActiveBonus = null;
+            ActiveBonus = bonus;
+
             actorsQueue.InsertRange(0, actors);
             OnActorsQueueChange(new QueueChangeEventArgs(actorsQueue.First()));
             actors.Clear();
             activeActor = null;
         }
 
-        protected virtual void Bonus_Swipe_MakeAction(bool swipeLeft)
+        protected virtual void Bonus_Swipe_MakeAction()
         {
-            if (swipeLeft)
+            if (bonusSwipeCubesLeft)
             {
                 for (int y = 0; y < playground.GetLength(1); y++)
                 {
@@ -572,6 +580,34 @@ namespace GalaxyBlox.Objects.PlayingArenas
                 Name = "Explosion",
                 SpecialText = "EXP",
                 Enabled = true,
+            });
+            availableBonuses.Add(new GameBonus(Bonus_CancelLastCube_Activate, null, null, Bonus_CancelLastCube_Deactivate)
+            {
+                Type = BonusType.CancelLastCube,
+                Name = "Cancel last",
+                SpecialText = "CNL",
+                Enabled = true
+            });
+            availableBonuses.Add(new GameBonus(Bonus_Laser_Activate, Bonus_Laser_MakeAction, null, Bonus_Laser_Deactivate)
+            {
+                Type = BonusType.Laser,
+                Name = "Laser",
+                SpecialText = "LSR",
+                Enabled = true
+            });
+            availableBonuses.Add(new GameBonus(Bonus_Swipe_Activate, Bonus_Swipe_MakeAction, null, Bonus_Swipe_Deactivate)
+            {
+                Type = BonusType.SwipeCubes,
+                Name = "Swipe cubes",
+                SpecialText = "SWP",
+                Enabled = true
+            });
+            availableBonuses.Add(new GameBonus(Bonus_SlowDown_Activate, null, null, Bonus_SlowDown_Deactivate)
+            {
+                Type = BonusType.TimeSlowdown,
+                Name = "Slowdown time",
+                SpecialText = "SLW",
+                Enabled = true
             });
         }
 
