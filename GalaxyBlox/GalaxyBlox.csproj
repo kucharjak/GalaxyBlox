@@ -96,6 +96,7 @@
     <Compile Include="Static\SettingOptions.cs" />
     <Compile Include="Static\Settings.cs" />
     <Compile Include="Utils\Colors.cs" />
+    <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\SerializableDictionary.cs" />
     <Compile Include="Utils\Strings.cs" />
     <Compile Include="Utils\Xml.cs" />

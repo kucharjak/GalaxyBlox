@@ -8,6 +8,7 @@ using GalaxyBlox.Static;
 using Microsoft.Xna.Framework;
 using static GalaxyBlox.Static.SettingOptions;
 using GalaxyBlox.EventArgsClasses;
+using GalaxyBlox.Utils;
 
 namespace GalaxyBlox.Objects.PlayingArenas
 {
@@ -390,6 +391,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
         {
             if (gameBonuses.Count < maxBonuses)
             {
+                availableBonuses.Shuffle(); // before every pick i shuffle available bonuses for more random chance
                 var bonusIndex = Game1.Random.Next(0, availableBonuses.Count - 1);
                 gameBonuses.Add(availableBonuses[bonusIndex]);
                 timeSinceLastBonus = 0;
@@ -414,8 +416,15 @@ namespace GalaxyBlox.Objects.PlayingArenas
 
         protected virtual void RefreshBonuses()
         {
-            // if there is no last actor to cancel, disable cancel bonus
-            gameBonuses.Where(gmb => gmb.Type == BonusType.CancelLastCube).ToList().ForEach(gmb => gmb.Enabled = LastPlayedActor != null);
+            if (ActiveBonus == null || ActiveBonus.Type == BonusType.None)
+            {
+                gameBonuses.ForEach(gmb => gmb.Enabled = true);
+                gameBonuses.Where(gmb => gmb.Type == BonusType.CancelLastCube).ToList().ForEach(gmb => gmb.Enabled = LastPlayedActor != null); // if there is no last actor to cancel, disable cancel bonus
+            }
+            else
+            {
+                gameBonuses.ForEach(gmb => gmb.Enabled = false);
+            }
 
             OnAvailableBonusesChange(new AvailableBonusesChangeEventArgs(gameBonuses));
         }

@@ -2,15 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using GalaxyBlox.Utils;
 
 namespace GalaxyBlox.Static
 {
@@ -119,6 +113,7 @@ namespace GalaxyBlox.Static
 
             public static bool[,] GetRandomShape()
             {
+                ShapeBank.Shuffle(); // Shuffle all shapes for more random
                 var maxCount = ShapeBank.Count();
                 var nextShape = Game1.Random.Next(0, maxCount);
                 while (ReturnedRandomShapes.Where(shp => shp == nextShape).Count() >= 2) // if are last 2 shapes same generate new shape
