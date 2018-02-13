@@ -17,7 +17,14 @@ namespace GalaxyBlox.Static
             public static Texture2D ControlButton_rotate;
             public static Texture2D ControlButton_left;
             public static Texture2D ControlButton_right;
-            public static Texture2D ControlButton_pause;
+            public static Texture2D Button_pause;
+
+            public static Texture2D Button_exit;
+            public static Texture2D Button_play;
+            public static Texture2D Button_settings;
+            public static Texture2D Button_highscore;
+            public static Texture2D Button_left;
+            public static Texture2D Button_right;
 
             public static Texture2D BorderedButtonBackground;
 
@@ -56,8 +63,8 @@ namespace GalaxyBlox.Static
             public static Color MenuButtonPressColor = new Color(121, 140, 170);//new Color(89, 107, 135);
             public static Color MenuButtonTextColor = Color.White;
 
-            public static Color PauseButtonBackgroundColor = new Color(198, 215, 255);
-            public static Color PauseButtonSelectedColor = new Color(239, 244, 255);
+            public static Color ButtonBackgroundColor = new Color(216, 216, 216);
+            public static Color ButtonSelectedColor = new Color(255, 255, 255);
 
             public static Color ControlButtonBackgroundColor = new Color(198, 215, 255);
             public static Color ControlButtonSelectColor = new Color(239, 244, 255);

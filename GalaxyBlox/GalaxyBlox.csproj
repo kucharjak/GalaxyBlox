@@ -102,7 +102,7 @@
     <Compile Include="Utils\Xml.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\Fonts\ButtonText.spritefont" />
+    <None Include="Content\Fonts\PlainText.spritefont" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>

@@ -65,7 +65,15 @@ namespace GalaxyBlox
             Static.Contents.Textures.ControlButton_left = Content.Load<Texture2D>("Sprites/ControlButton_left");
             Static.Contents.Textures.ControlButton_right = Content.Load<Texture2D>("Sprites/ControlButton_right");
             Static.Contents.Textures.ControlButton_rotate = Content.Load<Texture2D>("Sprites/ControlButton_rotate");
-            Static.Contents.Textures.ControlButton_pause = Content.Load<Texture2D>("Sprites/ControlButton_pause");
+
+            Static.Contents.Textures.Button_pause = Content.Load<Texture2D>("Sprites/btn_pause");
+            Static.Contents.Textures.Button_exit = Content.Load<Texture2D>("Sprites/btn_exit");
+            Static.Contents.Textures.Button_play = Content.Load<Texture2D>("Sprites/btn_play");
+            Static.Contents.Textures.Button_settings= Content.Load<Texture2D>("Sprites/btn_settings");
+            Static.Contents.Textures.Button_highscore= Content.Load<Texture2D>("Sprites/btn_highscore");
+            Static.Contents.Textures.Button_left= Content.Load<Texture2D>("Sprites/btn_left");
+            Static.Contents.Textures.Button_right = Content.Load<Texture2D>("Sprites/btn_right");
+
             Static.Contents.Textures.BackgroundGame = Content.Load<Texture2D>("Backgrounds/Background");
             Static.Contents.Textures.BackgroundMenu = Static.Contents.Textures.BackgroundGame;
             Static.Contents.Textures.BorderedButtonBackground = Content.Load<Texture2D>("Sprites/BorderedButtonBackground");

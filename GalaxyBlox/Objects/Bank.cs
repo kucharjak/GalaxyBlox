@@ -12,12 +12,12 @@ namespace GalaxyBlox.Objects
             {
                 var button = new Button(parentRoom)
                 {
-                    BackgroundImage = Contents.Textures.ControlButton_pause,
+                    BackgroundImage = Contents.Textures.Button_pause,
                     Alpha = 1f,
-                    BaseColor = Contents.Colors.PauseButtonBackgroundColor,
-                    DefaultBackgroundColor = Contents.Colors.PauseButtonBackgroundColor,
-                    SelectedBackgroundColor = Contents.Colors.PauseButtonSelectedColor,
-                    PressBackgroundColor = Contents.Colors.PauseButtonBackgroundColor,
+                    BaseColor = Contents.Colors.ButtonBackgroundColor,
+                    DefaultBackgroundColor = Contents.Colors.ButtonBackgroundColor,
+                    SelectedBackgroundColor = Contents.Colors.ButtonSelectedColor,
+                    PressBackgroundColor = Contents.Colors.ButtonBackgroundColor,
                     ShowText = false,
                     TextSpriteFont = Contents.Fonts.PlainTextFont,
                     TextColor = Contents.Colors.MenuButtonTextColor,
@@ -50,12 +50,11 @@ namespace GalaxyBlox.Objects
                 var button = new Button(parentRoom)
                 {
                     BackgroundImage = Contents.Textures.Pix,
-                    Alpha = 0.5f,
-                    BaseColor = Contents.Colors.MenuButtonBackgroundColor,
-                    DefaultBackgroundColor = Contents.Colors.MenuButtonBackgroundColor,
-                    SelectedBackgroundColor = Contents.Colors.MenuButtonSelectedColor,
-                    PressBackgroundColor = Contents.Colors.MenuButtonPressColor,
-                    TextColor = Contents.Colors.MenuButtonTextColor,
+                    Alpha = 1f,
+                    BaseColor = Contents.Colors.ButtonBackgroundColor,
+                    DefaultBackgroundColor = Contents.Colors.ButtonBackgroundColor,
+                    SelectedBackgroundColor = Contents.Colors.ButtonSelectedColor,
+                    PressBackgroundColor = Contents.Colors.ButtonSelectedColor,
                     TextSpriteFont = Contents.Fonts.PlainTextFont,
                     Text = "",
                     ShowText = true,

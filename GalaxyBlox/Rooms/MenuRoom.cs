@@ -24,7 +24,7 @@ namespace GalaxyBlox.Rooms
             }
         }
         Button btnContinue;
-        GameObject highScore;
+        //GameObject highScore;
 
         public MenuRoom(Room parent, string name, Vector2 size, Vector2 position) : base(parent, name, size, position)
         {
@@ -47,55 +47,72 @@ namespace GalaxyBlox.Rooms
             var btnCount = 4;
             var btnStartPosY = (Size.Y - ((btnCount * btnSize.Y) + ((btnCount - 1) * btnPadding))) / 2;
 
-            // Adding HighScore
-            //// ADDING LABEL FOR SCORE
-            highScore = new GameObject(this) // label for Score
-            {
-                Position = new Vector2(padding, btnStartPosY - 35),
-                Size = new Vector2(btnSize.X, 35),
-                LayerDepth = 0.05f,
-                Alpha = 1f,
-                TextSpriteFont = Contents.Fonts.PlainTextFont,
-                TextAlignment = TextAlignment.Left,
-                TextHeight = 35,
-                ShowText = true,
-                TextColor = Color.White
-            };
-            Objects.Add(highScore);
-            ResetHighscoreText();
+            //// Adding HighScore
+            ////// ADDING LABEL FOR SCORE
+            //highScore = new GameObject(this) // label for Score
+            //{
+            //    Position = new Vector2(padding, btnStartPosY - 35),
+            //    Size = new Vector2(btnSize.X, 35),
+            //    LayerDepth = 0.05f,
+            //    Alpha = 1f,
+            //    TextSpriteFont = Contents.Fonts.PlainTextFont,
+            //    TextAlignment = TextAlignment.Left,
+            //    TextHeight = 35,
+            //    ShowText = true,
+            //    TextColor = Color.White
+            //};
+            //Objects.Add(highScore);
+            //ResetHighscoreText();
 
             ////// ADDING BUTTONS //////
+            //// EXIT BUTTON ////
+            var btnPauseSize = 100;
+            objToAdd = Bank.Buttons.GetMenuButton(this);
+            objToAdd.BackgroundImage = Contents.Textures.Button_exit;
+            objToAdd.Size = new Vector2(btnPauseSize);
+            objToAdd.Position = new Vector2(15, 15);
+            (objToAdd as Button).Click += btnFinish_Click;
+            Objects.Add(objToAdd);
+
+            //// PAUSE BUTTON ////
             btnContinue = Bank.Buttons.GetMenuButton(this);
-            btnContinue.Size = btnSize;
-            btnContinue.Position = new Vector2(padding, btnStartPosY);
-            btnContinue.Text = "Pokračovat";
-            btnContinue.TextHeight = btnTextSize;
+            btnContinue.BackgroundImage = Contents.Textures.Button_pause;
+            btnContinue.Size = new Vector2(btnPauseSize);
+            btnContinue.Position = new Vector2(Size.X - btnPauseSize - 15, 15);
             btnContinue.Enabled = false;
             btnContinue.Click += btnContinue_Click;
             Objects.Add(btnContinue);
 
+
+            //// PLAY BUTTON ////
+            var playButtonSize = new Vector2(280, 180);
+
             objToAdd = Bank.Buttons.GetMenuButton(this);
-            objToAdd.Size = btnSize;
-            objToAdd.Position = new Vector2(padding, btnStartPosY + (btnSize.Y + btnPadding));
-            objToAdd.Text = "Nová hra";
-            objToAdd.TextHeight = btnTextSize;
+            objToAdd.BackgroundImage = Contents.Textures.Button_play;
+            objToAdd.Size = playButtonSize;
+            objToAdd.Position = new Vector2((Size.X - objToAdd.Size.X) / 2, Size.Y - objToAdd.Size.Y - padding);
             (objToAdd as Button).Click += btnNewGame_Click;
             Objects.Add(objToAdd);
 
+            var playButtonsPosition = objToAdd.Position;
+            var sideButtonsSize = new Vector2(136, 112);
+
+            //// SETTINGS BUTTON ////
             objToAdd = Bank.Buttons.GetMenuButton(this);
-            objToAdd.Size = btnSize;
-            objToAdd.Position = new Vector2(padding, btnStartPosY + (btnSize.Y + btnPadding) * 2);
-            objToAdd.Text = "Nastavení";
-            objToAdd.TextHeight = btnTextSize;
+            objToAdd.BackgroundImage = Contents.Textures.Button_settings;
+            objToAdd.Size = sideButtonsSize;
+            objToAdd.Position = new Vector2((playButtonsPosition.X - sideButtonsSize.X) / 2, playButtonsPosition.Y + (playButtonSize.Y - sideButtonsSize.Y) / 2);
             (objToAdd as Button).Click += btnSettings_Click;
             Objects.Add(objToAdd);
 
+            var offset = playButtonsPosition.X + playButtonSize.X;
+
+            //// HIGHSCORE BUTTON ////
             objToAdd = Bank.Buttons.GetMenuButton(this);
-            objToAdd.Size = btnSize;
-            objToAdd.Position = new Vector2(padding, btnStartPosY + (btnSize.Y + btnPadding) * 3);
-            objToAdd.Text = "Konec";
-            objToAdd.TextHeight = btnTextSize;
-            (objToAdd as Button).Click += btnFinish_Click;
+            objToAdd.BackgroundImage = Contents.Textures.Button_highscore;
+            objToAdd.Size = sideButtonsSize;
+            objToAdd.Position = new Vector2(offset + (Size.X - offset - sideButtonsSize.X) / 2, playButtonsPosition.Y + (playButtonSize.Y - sideButtonsSize.Y) / 2);
+            (objToAdd as Button).Click += btnHighscore_click;
             Objects.Add(objToAdd);
         }
 
@@ -109,21 +126,21 @@ namespace GalaxyBlox.Rooms
             else
                 btnContinue.Enabled = false;
 
-            ResetHighscoreText();
+            //ResetHighscoreText();
         }
 
-        private void ResetHighscoreText()
-        { 
-            if (Settings.Game.Highscores.Items.Count != 0)
-            {
-                var best = Settings.Game.Highscores.Items.First().Value.FirstOrDefault();
-                highScore.Text = $"Highscore: { Utils.Strings.ScoreToLongString(best.Value) }";
-            }
-            else
-            {
-                highScore.Text = "Highscore: -----";
-            }
-        }
+        //private void ResetHighscoreText()
+        //{ 
+        //    if (Settings.Game.Highscores.Items.Count != 0)
+        //    {
+        //        var best = Settings.Game.Highscores.Items.First().Value.FirstOrDefault();
+        //        highScore.Text = $"Highscore: { Utils.Strings.ScoreToLongString(best.Value) }";
+        //    }
+        //    else
+        //    {
+        //        highScore.Text = "Highscore: -----";
+        //    }
+        //}
 
         private void btnFinish_Click(object sender, EventArgs e)
         {
@@ -135,6 +152,10 @@ namespace GalaxyBlox.Rooms
         {
             var size = new Vector2(600, 350);
             new SettingsRoom(this, "Room_Settings", size, new Vector2((Size.X - size.X) / 2, (Size.Y - size.Y) / 2)).Show();
+        }
+
+        private void btnHighscore_click(object sender, EventArgs e)
+        {
         }
 
         private void btnControls_Click(object sender, EventArgs e)
