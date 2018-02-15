@@ -29,14 +29,16 @@ namespace GalaxyBlox.Static
         [Serializable]
         public enum GameMode
         {
-            [XmlEnum("vanilla")]
+            [XmlEnum("classic")]
             Classic,
             [XmlEnum("normal")]
             Normal,
             [XmlEnum("extreme")]
             Extreme,
             [XmlEnum("test")]
-            Test
+            Test,
+            [XmlEnum("continue")]
+            Continue
         }
 
         public enum GameSpeed

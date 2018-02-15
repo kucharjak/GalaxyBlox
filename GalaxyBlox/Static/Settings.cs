@@ -26,8 +26,7 @@ namespace GalaxyBlox.Static
             public const int MaxHighscoresPerGameMod = 1;
 
             public static readonly Vector2 WindowSize = new Vector2(720, 1208);
-
-            public static SettingOptions.GameMode Mode = SettingOptions.GameMode.Test;
+            
             public static Vector2 ArenaSize = new Vector2(12, 20);
 
             public static UserSettings UserSettings;
@@ -49,7 +48,7 @@ namespace GalaxyBlox.Static
             {
                 var tmpUserSettings = new UserSettings();
                 if (!Utils.Xml.TryDeserialize(out tmpUserSettings, settingsPath))
-                    tmpUserSettings = new UserSettings() { Indicator = SettingOptions.Indicator.Shape };
+                    tmpUserSettings = new UserSettings() { Indicator = SettingOptions.Indicator.Shape, LastGameMode = SettingOptions.GameMode.Normal };
 
                 UserSettings = tmpUserSettings;
             }
@@ -111,7 +110,10 @@ namespace GalaxyBlox.Static
         public class UserSettings
         {
             [XmlElement]
-            public SettingOptions.Indicator Indicator = SettingOptions.Indicator.None;
+            public SettingOptions.GameMode LastGameMode = SettingOptions.GameMode.Normal;
+
+            [XmlElement]
+            public SettingOptions.Indicator Indicator = SettingOptions.Indicator.Shape;
         }
     }
 }

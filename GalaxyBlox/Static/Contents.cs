@@ -35,6 +35,7 @@ namespace GalaxyBlox.Static
         public static class Fonts
         {
             public static SpriteFont PlainTextFont;
+            public static SpriteFont PixelArtTextFont;
         }
 
         public static class Colors

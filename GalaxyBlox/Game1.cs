@@ -61,6 +61,8 @@ namespace GalaxyBlox
 
             Static.Contents.Textures.Pix = Content.Load<Texture2D>("Sprites/pixel");
             Static.Contents.Fonts.PlainTextFont = Content.Load<SpriteFont>("Fonts/PlainText");
+            Static.Contents.Fonts.PixelArtTextFont = Content.Load<SpriteFont>("Fonts/PixelArtText");
+
             Static.Contents.Textures.ControlButton_fall = Content.Load<Texture2D>("Sprites/ControlButton_down");
             Static.Contents.Textures.ControlButton_left = Content.Load<Texture2D>("Sprites/ControlButton_left");
             Static.Contents.Textures.ControlButton_right = Content.Load<Texture2D>("Sprites/ControlButton_right");

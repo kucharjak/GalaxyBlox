@@ -224,3 +224,10 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/btn_settings.png
 
+#begin Fonts/PixelArtText.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/PixelArtText.spritefont
+
