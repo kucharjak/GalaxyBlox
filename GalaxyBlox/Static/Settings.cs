@@ -23,7 +23,7 @@ namespace GalaxyBlox.Static
             private static IsolatedStorageFile dataFile = IsolatedStorageFile.GetUserStoreForDomain();
             private const string settingsPath = "settings.xml";
             private const string highscoresPath = "highscores.xml";
-            public const int MaxHighscoresPerGameMod = 1;
+            public const int MaxHighscoresPerGameMod = 5;
 
             public static readonly Vector2 WindowSize = new Vector2(720, 1208);
 

@@ -25,6 +25,8 @@ namespace GalaxyBlox.Static
             public static Texture2D Button_highscore;
             public static Texture2D Button_left;
             public static Texture2D Button_right;
+            public static Texture2D Button_left_small;
+            public static Texture2D Button_right_small;
             public static Texture2D Buttons_empty;
 
             public static Texture2D BorderedButtonBackground;
@@ -32,8 +34,10 @@ namespace GalaxyBlox.Static
             public static Texture2D BackgroundGame;
             public static Texture2D BackgroundMenu;
             public static Texture2D Dialog_background;
+            public static Texture2D Dialog_inside;
             public static Texture2D Dialog_icon_settings;
             public static Texture2D Dialog_icon_questionMark;
+            public static Texture2D Dialog_icon_highscore;
         }
 
         public static class Fonts

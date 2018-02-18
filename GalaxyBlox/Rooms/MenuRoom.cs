@@ -240,6 +240,7 @@ namespace GalaxyBlox.Rooms
 
         private void btnHighscore_click(object sender, EventArgs e)
         {
+            new HighscoresRoom(this, "Room_Settings", Vector2.Zero, Vector2.Zero).Show();
         }
 
         private void btnControls_Click(object sender, EventArgs e)
@@ -281,6 +282,8 @@ namespace GalaxyBlox.Rooms
                         break;
                     }
             }
+
+            Settings.Game.SaveUserSettings();
         }
     }
 }

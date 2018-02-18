@@ -75,15 +75,19 @@ namespace GalaxyBlox
             Static.Contents.Textures.Button_highscore= Content.Load<Texture2D>("Sprites/btn_highscore");
             Static.Contents.Textures.Button_left= Content.Load<Texture2D>("Sprites/btn_left");
             Static.Contents.Textures.Button_right = Content.Load<Texture2D>("Sprites/btn_right");
+            Static.Contents.Textures.Button_left_small = Content.Load<Texture2D>("Sprites/btn_left_small");
+            Static.Contents.Textures.Button_right_small = Content.Load<Texture2D>("Sprites/btn_right_small");
             Static.Contents.Textures.Buttons_empty = Content.Load<Texture2D>("Sprites/btn_empty");
 
             Static.Contents.Textures.BackgroundGame = Content.Load<Texture2D>("Backgrounds/Background");
             Static.Contents.Textures.BackgroundMenu = Static.Contents.Textures.BackgroundGame;
             Static.Contents.Textures.BorderedButtonBackground = Content.Load<Texture2D>("Sprites/BorderedButtonBackground");
             Static.Contents.Textures.Dialog_background = Content.Load<Texture2D>("Backgrounds/dialog_background");
+            Static.Contents.Textures.Dialog_inside = Content.Load<Texture2D>("Backgrounds/dialog_inside");
 
-            Static.Contents.Textures.Dialog_icon_settings = Content.Load<Texture2D>("Sprites/dialog_icon_settings");
             Static.Contents.Textures.Dialog_icon_questionMark = Content.Load<Texture2D>("Sprites/dialog_icon_questionMark");
+            Static.Contents.Textures.Dialog_icon_settings = Content.Load<Texture2D>("Sprites/dialog_icon_settings");
+            Static.Contents.Textures.Dialog_icon_highscore = Content.Load<Texture2D>("Sprites/dialog_icon_highscore");
         }
 
         /// <summary>

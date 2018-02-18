@@ -90,6 +90,7 @@
     <Compile Include="Rooms\CloseGameRoom.cs" />
     <Compile Include="Rooms\GameModeSelectRoom.cs" />
     <Compile Include="Rooms\GameRoom.cs" />
+    <Compile Include="Rooms\HighscoresRoom.cs" />
     <Compile Include="Rooms\MenuRoom.cs" />
     <Compile Include="Rooms\GameOverRoom.cs" />
     <Compile Include="Rooms\SettingsRoom.cs" />
