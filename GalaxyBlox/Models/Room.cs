@@ -30,6 +30,10 @@ namespace GalaxyBlox.Models
         public Color BackgroundColor { get { return BaseColor * Alpha; } }
         public Color BaseColor = Color.White;
         public bool FullScreen = false;
+        public Texture2D DialogBackground;
+        public Texture2D DialogIcon;
+        public bool IsDialog = false;
+        public bool DialogOffscreenClose = false;
         public float Alpha = 1f;
         public Vector2 Size;
 
@@ -71,6 +75,20 @@ namespace GalaxyBlox.Models
             Initialize();
         }
 
+        public void CenterParent()
+        {
+            if (Parent != null)
+                Position = new Vector2((Parent.Size.X - Size.X) / 2, (Parent.Size.Y - Size.Y) / 2);
+            else
+                CenterWindow();
+        }
+
+        public void CenterWindow()
+        {
+            var windowSize = Static.Settings.Game.WindowSize;
+            Position = new Vector2((windowSize.X - Size.X) / 2, (windowSize.Y - Size.Y) / 2);
+        }
+
         public void Show()
         {
             RoomManager.ShowRoom(this);
@@ -103,6 +121,40 @@ namespace GalaxyBlox.Models
 
         public virtual void Prepare(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
+            if (IsDialog && Background == null && DialogBackground != null)
+            {
+                var backgroundTarget = new RenderTarget2D(graphicsDevice, (int)Size.X, (int)Size.Y);
+                var pieceSizeX = DialogBackground.Width / 3;
+                var pieceSizeY = DialogBackground.Height / 3;
+
+                graphicsDevice.SetRenderTarget(backgroundTarget);
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
+                graphicsDevice.DepthStencilState = new DepthStencilState() { DepthBufferEnable = true };
+                graphicsDevice.Clear(Color.Transparent);
+
+
+                for (int x = 0; x < 3; x++)
+                {
+                    for (int y = 0; y < 3; y++)
+                    {
+                        var resultWidth = x != 1 ? pieceSizeX : (int)(Size.X - 2 * pieceSizeX);
+                        var resultHeigth = y != 1 ? pieceSizeY : (int)(Size.Y - 2 * pieceSizeY);
+                        var resultX = x != 2 ? pieceSizeX * x : (int)(Size.X - pieceSizeX);
+                        var resultY = y != 2 ? pieceSizeY * y : (int)(Size.Y - pieceSizeY);
+
+                        spriteBatch.Draw(DialogBackground, new Rectangle(resultX, resultY, resultWidth, resultHeigth), new Rectangle(pieceSizeX * x, pieceSizeY * y, pieceSizeX, pieceSizeY), Color.White);
+                    }
+                }
+
+                if (DialogIcon != null)
+                    spriteBatch.Draw(DialogIcon, new Vector2((Size.X - DialogIcon.Width) / 2, 0), Color.White);
+
+                spriteBatch.End();
+                graphicsDevice.SetRenderTarget(null);
+                
+                Background = backgroundTarget;
+            }
+
             foreach (var obj in Objects)
                 obj.Prepare(spriteBatch, graphicsDevice);
         }
@@ -111,10 +163,14 @@ namespace GalaxyBlox.Models
         {
             if (Background != null)
             {
-                if (FullScreen)
+                if (FullScreen && !IsDialog)
+                {
                     spriteBatch.Draw(Background, new Rectangle(0, 0, Game1.ActiveGame.GraphicsDevice.Viewport.Width, Game1.ActiveGame.GraphicsDevice.Viewport.Height), null, BackgroundColor, 0, new Vector2(), SpriteEffects.None, LayerDepth);
+                }
                 else
+                {
                     spriteBatch.Draw(Background, DisplayRectWithScale(), null, BackgroundColor, 0, new Vector2(), SpriteEffects.None, LayerDepth);
+                }
             }
 
             foreach (var obj in Objects)
@@ -133,8 +189,15 @@ namespace GalaxyBlox.Models
         {
             if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.Back))
                 HandleBackButton();
-
+            
             var rectInput = new Rectangle((int)input.Position.X, (int)input.Position.Y, 1, 1);
+
+            if (IsDialog && DialogOffscreenClose && !rectInput.Intersects(DisplayRectWithScale()))
+            {
+                End();
+                return;
+            }
+
             var swipe = Objects.Where(area => area.Type == "swipe_area").ToArray();
             bool swiped = false;
             if (swipe.Count() > 0)

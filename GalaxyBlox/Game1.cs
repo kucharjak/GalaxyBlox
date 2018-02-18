@@ -75,10 +75,14 @@ namespace GalaxyBlox
             Static.Contents.Textures.Button_highscore= Content.Load<Texture2D>("Sprites/btn_highscore");
             Static.Contents.Textures.Button_left= Content.Load<Texture2D>("Sprites/btn_left");
             Static.Contents.Textures.Button_right = Content.Load<Texture2D>("Sprites/btn_right");
+            Static.Contents.Textures.Buttons_empty = Content.Load<Texture2D>("Sprites/btn_empty");
 
             Static.Contents.Textures.BackgroundGame = Content.Load<Texture2D>("Backgrounds/Background");
             Static.Contents.Textures.BackgroundMenu = Static.Contents.Textures.BackgroundGame;
             Static.Contents.Textures.BorderedButtonBackground = Content.Load<Texture2D>("Sprites/BorderedButtonBackground");
+            Static.Contents.Textures.Dialog_background = Content.Load<Texture2D>("Backgrounds/dialog_background");
+
+            Static.Contents.Textures.Dialog_icon_settings = Content.Load<Texture2D>("Sprites/dialog_icon_settings");
         }
 
         /// <summary>

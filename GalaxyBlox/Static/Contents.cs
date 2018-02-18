@@ -25,11 +25,14 @@ namespace GalaxyBlox.Static
             public static Texture2D Button_highscore;
             public static Texture2D Button_left;
             public static Texture2D Button_right;
+            public static Texture2D Buttons_empty;
 
             public static Texture2D BorderedButtonBackground;
 
             public static Texture2D BackgroundGame;
             public static Texture2D BackgroundMenu;
+            public static Texture2D Dialog_background;
+            public static Texture2D Dialog_icon_settings;
         }
 
         public static class Fonts
@@ -62,7 +65,7 @@ namespace GalaxyBlox.Static
             public static Color MenuButtonBackgroundColor = new Color(121, 140, 170);
             public static Color MenuButtonSelectedColor = new Color(153, 189, 247);
             public static Color MenuButtonPressColor = new Color(121, 140, 170);//new Color(89, 107, 135);
-            public static Color MenuButtonTextColor = Color.White;
+            public static Color MenuButtonTextColor = new Color(91, 6, 0);
 
             public static Color ButtonBackgroundColor = new Color(216, 216, 216);
             public static Color ButtonSelectedColor = new Color(255, 255, 255);
@@ -81,7 +84,7 @@ namespace GalaxyBlox.Static
             public static Color PanelHeaderBackgroundColor = new Color(121, 140, 170);
             public static Color PanelContentBackgroundColor = new Color(100, 118, 147);
 
-            public static Color RoomsSeparateColor = new Color(0, 0, 0, 95);
+            public static Color RoomsSeparateColor = new Color(0, 0, 0, 150);
         }
 
         public static class Shapes

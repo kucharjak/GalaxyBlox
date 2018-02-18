@@ -30,53 +30,56 @@ namespace GalaxyBlox.Rooms
 
         protected override void Initialize()
         {
-            Background = Contents.Textures.Pix;
-            BaseColor = Color.DarkBlue;
+            DialogBackground = Contents.Textures.Dialog_background;
+            DialogIcon = Contents.Textures.Dialog_icon_settings;
+            IsDialog = true;
+
+            this.Size = new Vector2(600, 400);
+            CenterParent();
+
             newIndicator = Settings.Game.UserSettings.Indicator;
 
-            var margin = 40;
-            var padding = 20;
-            var posY = margin;
+            var margin = new { top = 129, left = 25, right = 25, bottom = 35 }; // anonymous type for margin
+            
+            var settingsItemSize = new Vector2(160, 80);
+            var settingsItemTextHeight = (int)(settingsItemSize.Y * 0.3f);
 
-            var settingsItemmSize = new Vector2(150, 85);
-            var settingsItemTextHeight = (int)(settingsItemmSize.Y * 0.5f);
-
-            var btnDialogSize = new Vector2(250, 100);
-            var btnDialogTextHeight = (int)(btnDialogSize.Y * 0.5f);
-
-            GameObject obj = Bank.Visuals.GetSettingsLabel(this);
-            obj.Text = "Zaměřovač:";
-            obj.Size = settingsItemmSize;
-            obj.TextHeight = settingsItemTextHeight;
-            obj.Position = new Vector2(margin, posY);
-            Objects.Add(obj);
+            var btnDialogSize = new Vector2(160, 80);
+            var btnDialogTextHeight = (int)(btnDialogSize.Y * 0.3f);
 
             btnIndicator = Bank.Buttons.GetSettingsButton(this);
-            btnIndicator.Size = settingsItemmSize;
+            btnIndicator.Size = settingsItemSize;
             btnIndicator.TextHeight = settingsItemTextHeight;
-            btnIndicator.Position = new Vector2(Size.X - btnIndicator.Size.X - margin, posY);
+            btnIndicator.Text = newIndicator.ToString().ToUpper();
+            btnIndicator.Position = new Vector2(Size.X - btnIndicator.Size.X - margin.right, margin.top);
             btnIndicator.Click += BtnSetIndicator_Click;
             Objects.Add(btnIndicator);
-            SetBtnIndicatorText();
+
+            GameObject obj = Bank.Visuals.GetSettingsLabel(this);
+            obj.Text = "INDICATOR:";
+            obj.Size = settingsItemSize;
+            obj.TextHeight = settingsItemTextHeight;
+            obj.Position = new Vector2(margin.left, btnIndicator.Position.Y);
+            Objects.Add(obj);
 
             btnOK = Bank.Buttons.GetSettingsButton(this);
             btnOK.Size = btnDialogSize;
-            btnOK.Text = "Uložit";
+            btnOK.Text = "SAVE";
             btnOK.TextHeight = btnDialogTextHeight;
             btnOK.Click += BtnOK_Click;
             Objects.Add(btnOK);
 
             btnCancel = Bank.Buttons.GetSettingsButton(this);
             btnCancel.Size = btnDialogSize;
-            btnCancel.Text = "Zrušit";
+            btnCancel.Text = "CANCEL";
             btnCancel.TextHeight = btnDialogTextHeight;
             btnCancel.Click += BtnCancel_Click;
             Objects.Add(btnCancel);
 
-            var btnPosX = (Size.X - (btnOK.Size.X + btnCancel.Size.X + padding)) / 2;
-            btnOK.Position = new Vector2(btnPosX, Size.Y - btnOK.Size.Y - margin);
-            btnPosX += btnOK.Size.X + padding;
-            btnCancel.Position = new Vector2(btnPosX, Size.Y - btnCancel.Size.Y - margin);
+            var btnPosX = (Size.X - (btnOK.Size.X + btnCancel.Size.X + margin.left)) / 2;
+            btnOK.Position = new Vector2(btnPosX, Size.Y - btnOK.Size.Y - margin.bottom);
+            btnPosX += btnOK.Size.X + margin.left;
+            btnCancel.Position = new Vector2(btnPosX, Size.Y - btnCancel.Size.Y - margin.bottom);
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
@@ -95,19 +98,7 @@ namespace GalaxyBlox.Rooms
         {
             var newValue = Enum.GetValues(typeof(SettingOptions.Indicator)).Cast<SettingOptions.Indicator>().SkipWhile(val => val != newIndicator).Skip(1).FirstOrDefault();
             newIndicator = newValue;
-            SetBtnIndicatorText();
-        }
-
-        private void SetBtnIndicatorText()
-        {
-            var text = "";
-            switch (newIndicator)
-            {
-                case SettingOptions.Indicator.None: text = "žádný"; break;
-                case SettingOptions.Indicator.Shadow: text = "stín"; break;
-                case SettingOptions.Indicator.Shape: text = "tvar"; break;
-            }
-            btnIndicator.Text = text;
+            btnIndicator.Text = newValue.ToString().ToUpper();
         }
     }
 }
