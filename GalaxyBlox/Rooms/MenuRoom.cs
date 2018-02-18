@@ -97,17 +97,7 @@ namespace GalaxyBlox.Rooms
             objToAdd.Position = new Vector2(15, 15);
             (objToAdd as Button).Click += btnFinish_Click;
             Objects.Add(objToAdd);
-
-            ////// PAUSE BUTTON ////
-            //btnContinue = Bank.Buttons.GetMenuButton(this);
-            //btnContinue.BackgroundImage = Contents.Textures.Button_pause;
-            //btnContinue.Size = new Vector2(btnPauseSize);
-            //btnContinue.Position = new Vector2(Size.X - btnPauseSize - 15, 15);
-            //btnContinue.Enabled = false;
-            //btnContinue.Click += btnContinue_Click;
-            //Objects.Add(btnContinue);
-
-
+            
             //// PLAY BUTTON ////
             var playButtonSize = new Vector2(280, 180);
 
@@ -240,8 +230,7 @@ namespace GalaxyBlox.Rooms
 
         private void btnFinish_Click(object sender, EventArgs e)
         {
-            RoomManager.Rooms.Clear();
-            Game1.Activity.Finish();
+            new CloseGameRoom(this, "Room_CloseDialog", Vector2.Zero, Vector2.Zero).Show();
         }
 
         private void btnSettings_Click(object sender, EventArgs e)
@@ -256,12 +245,6 @@ namespace GalaxyBlox.Rooms
         private void btnControls_Click(object sender, EventArgs e)
         {
         }
-
-        //private void btnContinue_Click(object sender, EventArgs e)
-        //{
-        //    if (mainGame != null)
-        //        mainGame.Show();
-        //}
 
         private void btnPlayGame_Click(object sender, EventArgs e)
         {

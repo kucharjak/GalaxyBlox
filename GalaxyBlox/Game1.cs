@@ -83,6 +83,7 @@ namespace GalaxyBlox
             Static.Contents.Textures.Dialog_background = Content.Load<Texture2D>("Backgrounds/dialog_background");
 
             Static.Contents.Textures.Dialog_icon_settings = Content.Load<Texture2D>("Sprites/dialog_icon_settings");
+            Static.Contents.Textures.Dialog_icon_questionMark = Content.Load<Texture2D>("Sprites/dialog_icon_questionMark");
         }
 
         /// <summary>

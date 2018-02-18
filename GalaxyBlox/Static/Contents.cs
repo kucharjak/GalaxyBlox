@@ -33,6 +33,7 @@ namespace GalaxyBlox.Static
             public static Texture2D BackgroundMenu;
             public static Texture2D Dialog_background;
             public static Texture2D Dialog_icon_settings;
+            public static Texture2D Dialog_icon_questionMark;
         }
 
         public static class Fonts
