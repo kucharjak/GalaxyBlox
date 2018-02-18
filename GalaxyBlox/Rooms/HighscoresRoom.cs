@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using GalaxyBlox.Objects;
 using GalaxyBlox.Static;
 using static GalaxyBlox.Static.SettingOptions;
+using static GalaxyBlox.Static.Settings;
 
 namespace GalaxyBlox.Rooms
 {
@@ -128,7 +129,10 @@ namespace GalaxyBlox.Rooms
 
             var highscoresCount = 5;
             var mode = Settings.Game.Highscores.Items.Where(gameMode => gameMode.Key == SelectedMode).FirstOrDefault();
-            var highscores = mode.Value.Select(score => new { score.Name, score.Value }).ToArray();
+
+            var highscores = new List<Score>();
+            if (mode.Value != null)
+                highscores = mode.Value;
 
             var highscoreMargin = 15;
             var highscoreTextSize = 25;
