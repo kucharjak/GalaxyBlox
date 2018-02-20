@@ -134,7 +134,7 @@ namespace GalaxyBlox.Rooms
                         if (index >= selection.Count())
                             index = 0;
 
-                        character.Text = selection.ToString();
+                        character.Text = selection[index].ToString();
                         RefreshOkButton();
                     };
                     arrDown.Click += delegate 
