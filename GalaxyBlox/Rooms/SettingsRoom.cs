@@ -34,7 +34,7 @@ namespace GalaxyBlox.Rooms
             DialogIcon = Contents.Textures.Dialog_icon_settings;
             IsDialog = true;
 
-            this.Size = new Vector2(600, 400);
+            this.Size = new Vector2(600, 420);
             CenterParent();
 
             newIndicator = Settings.Game.UserSettings.Indicator;
@@ -43,23 +43,32 @@ namespace GalaxyBlox.Rooms
             
             var settingsItemSize = new Vector2(160, 80);
             var settingsItemTextHeight = (int)(settingsItemSize.Y * 0.3f);
+            var itemPadding = 25;
 
             var btnDialogSize = new Vector2(160, 80);
             var btnDialogTextHeight = (int)(btnDialogSize.Y * 0.3f);
+
+            var highscoreBackgroundSize = new Vector2(Size.X - margin.left - margin.right, 1 * settingsItemSize.Y + 2 * itemPadding);
+
+            GameObject obj = new DynamicBackgroundObject(this, Contents.Textures.Dialog_inside);
+            obj.Position = new Vector2(margin.left, margin.top);
+            obj.Size = highscoreBackgroundSize;
+            obj.LayerDepth = 0.04f;
+            Objects.Add(obj);
 
             btnIndicator = Bank.Buttons.GetSettingsButton(this);
             btnIndicator.Size = settingsItemSize;
             btnIndicator.TextHeight = settingsItemTextHeight;
             btnIndicator.Text = newIndicator.ToString().ToUpper();
-            btnIndicator.Position = new Vector2(Size.X - btnIndicator.Size.X - margin.right, margin.top);
+            btnIndicator.Position = new Vector2(Size.X - btnIndicator.Size.X - margin.right - itemPadding, obj.Position.Y + itemPadding);
             btnIndicator.Click += BtnSetIndicator_Click;
             Objects.Add(btnIndicator);
 
-            GameObject obj = Bank.Visuals.GetSettingsLabel(this);
+            obj = Bank.Visuals.GetSettingsLabel(this);
             obj.Text = "INDICATOR:";
             obj.Size = settingsItemSize;
             obj.TextHeight = settingsItemTextHeight;
-            obj.Position = new Vector2(margin.left, btnIndicator.Position.Y);
+            obj.Position = new Vector2(margin.left + itemPadding, btnIndicator.Position.Y);
             Objects.Add(obj);
 
             btnOK = Bank.Buttons.GetSettingsButton(this);

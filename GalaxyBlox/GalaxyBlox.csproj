@@ -79,6 +79,7 @@
     <Compile Include="Objects\ActorViewer.cs" />
     <Compile Include="Objects\Button.cs" />
     <Compile Include="Objects\Bank.cs" />
+    <Compile Include="Objects\DynamicBackground.cs" />
     <Compile Include="Objects\GameBonus.cs" />
     <Compile Include="Objects\PlayingArena.cs" />
     <Compile Include="Objects\PlayingArenas\PlayingArena_Classic.cs" />

@@ -91,10 +91,9 @@ namespace GalaxyBlox.Rooms
             var itemPadding = 40;
             var highscoreBackgroundSize = new Vector2(550, 350);
 
-            highscoreBackground = new GameObject(this);
+            highscoreBackground = new DynamicBackgroundObject(this, Contents.Textures.Dialog_inside);
             highscoreBackground.Position = new Vector2(margin.left, lblSelectedGameMode.Position.Y + lblSelectedGameMode.Size.Y + itemPadding);
             highscoreBackground.Size = highscoreBackgroundSize;
-            highscoreBackground.BackgroundImage = Contents.Textures.Dialog_inside;
             highscoreBackground.LayerDepth = 0.04f;
             Objects.Add(highscoreBackground);
 
