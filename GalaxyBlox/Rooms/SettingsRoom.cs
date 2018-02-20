@@ -56,7 +56,7 @@ namespace GalaxyBlox.Rooms
             obj.LayerDepth = 0.04f;
             Objects.Add(obj);
 
-            btnIndicator = Bank.Buttons.GetSettingsButton(this);
+            btnIndicator = Bank.Buttons.GetEmptyButton(this);
             btnIndicator.Size = settingsItemSize;
             btnIndicator.TextHeight = settingsItemTextHeight;
             btnIndicator.Text = newIndicator.ToString().ToUpper();
@@ -71,14 +71,14 @@ namespace GalaxyBlox.Rooms
             obj.Position = new Vector2(margin.left + itemPadding, btnIndicator.Position.Y);
             Objects.Add(obj);
 
-            btnOK = Bank.Buttons.GetSettingsButton(this);
+            btnOK = Bank.Buttons.GetEmptyButton(this);
             btnOK.Size = btnDialogSize;
             btnOK.Text = "SAVE";
             btnOK.TextHeight = btnDialogTextHeight;
             btnOK.Click += BtnOK_Click;
             Objects.Add(btnOK);
 
-            btnCancel = Bank.Buttons.GetSettingsButton(this);
+            btnCancel = Bank.Buttons.GetEmptyButton(this);
             btnCancel.Size = btnDialogSize;
             btnCancel.Text = "CANCEL";
             btnCancel.TextHeight = btnDialogTextHeight;

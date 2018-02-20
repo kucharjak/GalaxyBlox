@@ -72,7 +72,7 @@ namespace GalaxyBlox.Models
                 InGameOffsetY = (int)((realSize.Y - (windowSize.Y * Scale)) / 2);
             }
 
-            Initialize();
+            //Initialize();
         }
 
         public void CenterParent()
@@ -91,6 +91,8 @@ namespace GalaxyBlox.Models
 
         public void Show()
         {
+            Initialize(); // initialize after show call 
+
             RoomManager.ShowRoom(this);
         }
 

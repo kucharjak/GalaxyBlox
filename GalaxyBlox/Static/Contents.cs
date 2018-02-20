@@ -27,7 +27,9 @@ namespace GalaxyBlox.Static
             public static Texture2D Button_right;
             public static Texture2D Button_left_small;
             public static Texture2D Button_right_small;
-            public static Texture2D Buttons_empty;
+            public static Texture2D Button_up_small;
+            public static Texture2D Button_down_small;
+            public static Texture2D Button_empty;
 
             public static Texture2D BorderedButtonBackground;
 
@@ -144,6 +146,11 @@ namespace GalaxyBlox.Static
                 return ShapeBank[nextShape];
                 //return ShapeBank[(Game1.Random.Next(0, maxCount * 100) % maxCount)];
             }
+        }
+
+        public static class Constants
+        {
+            public static string AvailableNameChars = " ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         }
     }
 }

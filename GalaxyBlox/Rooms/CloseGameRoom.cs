@@ -51,14 +51,14 @@ namespace GalaxyBlox.Rooms
             obj.Position = new Vector2(margin.left, margin.top);
             Objects.Add(obj);
 
-            btnOK = Bank.Buttons.GetSettingsButton(this);
+            btnOK = Bank.Buttons.GetEmptyButton(this);
             btnOK.Size = btnDialogSize;
             btnOK.Text = "YEP";
             btnOK.TextHeight = btnDialogTextHeight;
             btnOK.Click += BtnOK_Click;
             Objects.Add(btnOK);
 
-            btnCancel = Bank.Buttons.GetSettingsButton(this);
+            btnCancel = Bank.Buttons.GetEmptyButton(this);
             btnCancel.Size = btnDialogSize;
             btnCancel.Text = "NOPE";
             btnCancel.TextHeight = btnDialogTextHeight;

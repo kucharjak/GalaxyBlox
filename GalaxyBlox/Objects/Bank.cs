@@ -65,11 +65,11 @@ namespace GalaxyBlox.Objects
                 return button;
             }
 
-            public static Button GetSettingsButton(Room parentRoom)
+            public static Button GetEmptyButton(Room parentRoom)
             {
                 var button = new Button(parentRoom)
                 {
-                    BackgroundImage = Contents.Textures.Buttons_empty,
+                    BackgroundImage = Contents.Textures.Button_empty,
                     Alpha = 1f,
                     BaseColor = Contents.Colors.ButtonBackgroundColor,
                     DefaultBackgroundColor = Contents.Colors.ButtonBackgroundColor,
@@ -169,7 +169,7 @@ namespace GalaxyBlox.Objects
                     LayerDepth = 0.05f,
                     Alpha = 1f,
                     TextAlignment = TextAlignment.Center,
-                    TextSpriteFont = Contents.Fonts.PlainTextFont,
+                    TextSpriteFont = Contents.Fonts.PixelArtTextFont,
                     Text = "",
                     ShowText = true,
                     TextColor = Color.White,

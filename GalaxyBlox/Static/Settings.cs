@@ -110,6 +110,9 @@ namespace GalaxyBlox.Static
         public class UserSettings
         {
             [XmlElement]
+            public string LastName;
+
+            [XmlElement]
             public SettingOptions.GameMode LastGameMode = SettingOptions.GameMode.Normal;
 
             [XmlElement]

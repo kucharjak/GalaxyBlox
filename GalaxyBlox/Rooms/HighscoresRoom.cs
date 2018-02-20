@@ -104,7 +104,7 @@ namespace GalaxyBlox.Rooms
             //obj.Position = new Vector2(margin.left, btnIndicator.Position.Y);
             //Objects.Add(obj);
 
-            btnOK = Bank.Buttons.GetSettingsButton(this);
+            btnOK = Bank.Buttons.GetEmptyButton(this);
             btnOK.Size = btnDialogSize;
             btnOK.Position = new Vector2((Size.X - btnOK.Size.X) / 2, Size.Y - btnOK.Size.Y - margin.bottom);
             btnOK.Text = "NICE";
