@@ -48,6 +48,8 @@ namespace GalaxyBlox.Models
         public string Name = "";
         public float LayerDepth = 0.1f;
 
+        private bool initialized = false;
+
         public Room(Room parent, string name, Vector2 size, Vector2 position) : this(name, size, position)
         {
             Parent = parent;
@@ -91,7 +93,11 @@ namespace GalaxyBlox.Models
 
         public void Show()
         {
-            Initialize(); // initialize after show call 
+            if (!initialized)
+            {
+                Initialize(); // initialize after show call 
+                initialized = true;
+            }
 
             RoomManager.ShowRoom(this);
         }
