@@ -71,6 +71,25 @@ namespace GalaxyBlox.Rooms
             var btnCount = 4;
             var btnStartPosY = (Size.Y - ((btnCount * btnSize.Y) + ((btnCount - 1) * btnPadding))) / 2;
 
+            //// TEST GAME OVER ROOM BUTTONS ////
+            //objToAdd = Bank.Buttons.GetMenuButton(this);
+            //objToAdd.BackgroundImage = Contents.Textures.Button_settings;
+            //objToAdd.Text = "0";
+            //objToAdd.ShowText = true;
+            //objToAdd.Size = new Vector2(136, 112);
+            //objToAdd.Position = new Vector2((Size.X - objToAdd.Size.X) / 2, 350);
+            //(objToAdd as Button).Click += delegate { new GameOverRoom(this, "Room_GameOver", Vector2.Zero, Vector2.Zero, 0, GameMode.Test, false).Show(); };
+            //Objects.Add(objToAdd);
+
+            //objToAdd = Bank.Buttons.GetMenuButton(this);
+            //objToAdd.BackgroundImage = Contents.Textures.Button_settings;
+            //objToAdd.Text = "350";
+            //objToAdd.ShowText = true;
+            //objToAdd.Size = new Vector2(136, 112);
+            //objToAdd.Position = new Vector2((Size.X - objToAdd.Size.X) / 2, 350 + objToAdd.Size.Y + 30);
+            //(objToAdd as Button).Click += delegate { new GameOverRoom(this, "Room_GameOver", Vector2.Zero, Vector2.Zero, 35698790, GameMode.Test, true).Show(); };
+            //Objects.Add(objToAdd);
+
             //// Adding HighScore
             ////// ADDING LABEL FOR SCORE
             //highScore = new GameObject(this) // label for Score

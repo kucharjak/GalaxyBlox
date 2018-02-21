@@ -327,7 +327,7 @@
 /processorParam:TextureFormat=Color
 /build:Backgrounds/dialog_inside.png
 
-#begin Sprites/btn_down_small.png
+#begin Sprites/btn_down_medium.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -337,9 +337,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/btn_down_small.png
+/build:Sprites/btn_down_medium.png
 
-#begin Sprites/btn_up_small.png
+#begin Sprites/btn_up_medium.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -349,5 +349,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/btn_up_small.png
+/build:Sprites/btn_up_medium.png
 

@@ -546,31 +546,23 @@ namespace GalaxyBlox.Objects
 
         protected virtual void GameOver()
         {
+            var isNewHighscore = false;
             if (!Settings.Game.Highscores.Items.ContainsKey(gameMode))
             {
-                Settings.Game.Highscores.SaveHighScore(gameMode, new List<Score>() { new Score("Test", score) });
+                isNewHighscore = true;
             }
             else
             {
                 var highscores = Settings.Game.Highscores.Items[gameMode];
-                if (highscores.Any(scr => scr.Value < score))
+                if (highscores.Count < Settings.Game.MaxHighscoresPerGameMod || highscores.Any(scr => scr.Value < score))
                 {
-                    highscores.Add(new Score("Test", score));
-                    highscores = highscores.OrderByDescending(scr => scr.Value).ToList();
-
-                    while (highscores.Count > Settings.Game.MaxHighscoresPerGameMod)
-                    {
-                        highscores.RemoveAt(highscores.Count - 1);
-                    }
-                    Settings.Game.Highscores.SaveHighScore(gameMode, highscores);
+                    isNewHighscore = true;
                 }
             }
-            Settings.Game.SaveHighscores();
 
-            var size = new Vector2(600, 350);
-            var gameOverRoom = new GameOverRoom(ParentRoom, "Room_GameOver", size, new Vector2((ParentRoom.Size.X - size.X) / 2, (ParentRoom.Size.Y - size.Y) / 2), score, true);
-            gameOverRoom.Show();
+            var gameOverRoom = new GameOverRoom(ParentRoom, "Room_GameOver", Vector2.Zero, Vector2.Zero, score, gameMode, isNewHighscore);
             gameOverRoom.Closed += GameOverRoom_Closed;
+            gameOverRoom.Show();
         }
 
         protected virtual bool CheckPlaygroundForFullLines(out int[] fullLines)

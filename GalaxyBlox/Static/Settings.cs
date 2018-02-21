@@ -24,6 +24,7 @@ namespace GalaxyBlox.Static
             private const string settingsPath = "settings.xml";
             private const string highscoresPath = "highscores.xml";
             public const int MaxHighscoresPerGameMod = 5;
+            public const bool UseLastHighscoreName = false;
 
             public static readonly Vector2 WindowSize = new Vector2(720, 1208);
 
