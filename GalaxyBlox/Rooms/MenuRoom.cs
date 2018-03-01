@@ -49,10 +49,12 @@ namespace GalaxyBlox.Rooms
 
         public MenuRoom(Room parent, string name, Vector2 size, Vector2 position) : base(parent, name, size, position)
         {
+            Initialize();
         }
 
         public MenuRoom(string name, Vector2 size, Vector2 position) : base(name, size, position)
         {
+            Initialize();
         }
 
         protected override void Initialize()

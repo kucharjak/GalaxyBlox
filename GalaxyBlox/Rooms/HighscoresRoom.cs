@@ -38,6 +38,7 @@ namespace GalaxyBlox.Rooms
 
         public HighscoresRoom(Room parent, string name, Vector2 size, Vector2 position) : base(parent, name, size, position)
         {
+            Initialize();
         }
 
         protected override void Initialize()

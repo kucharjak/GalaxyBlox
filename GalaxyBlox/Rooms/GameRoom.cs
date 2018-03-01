@@ -38,10 +38,12 @@ namespace GalaxyBlox.Rooms
 
         public GameRoom(Room parent, string name, Vector2 size, Vector2 position) : base(parent, name, size, position)
         {
+            Initialize();
         }
 
         public GameRoom(string name, Vector2 size, Vector2 position) : base(name, size, position)
         {
+            Initialize();
         }
 
         protected override void Initialize()

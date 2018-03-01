@@ -34,6 +34,8 @@ namespace GalaxyBlox.Rooms
             this.score = highscore;
             this.gameMode = gameMode;
             this.isNewHighscore = isNewHighscore;
+
+            Initialize();
         }
 
         protected override void Initialize()
