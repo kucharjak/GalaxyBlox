@@ -44,7 +44,7 @@ namespace GalaxyBlox.Models
                 room.Prepare(spriteBatch, graphicsDevice);
             }
 
-            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
 
             if (Static.Settings.Game.ShowFPS)
             {

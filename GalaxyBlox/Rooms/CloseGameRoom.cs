@@ -30,6 +30,7 @@ namespace GalaxyBlox.Rooms
         {
             DialogBackground = Contents.Textures.Dialog_background;
             DialogIcon = Contents.Textures.Dialog_icon_questionMark;
+            DialogBackgroundScale = 4;
             IsDialog = true;
 
             this.Size = new Vector2(600, 360);

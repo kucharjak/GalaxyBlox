@@ -32,6 +32,7 @@ namespace GalaxyBlox.Rooms
         {
             DialogBackground = Contents.Textures.Dialog_background;
             DialogIcon = Contents.Textures.Dialog_icon_settings;
+            DialogBackgroundScale = 4;
             IsDialog = true;
 
             this.Size = new Vector2(600, 420);
@@ -50,7 +51,7 @@ namespace GalaxyBlox.Rooms
 
             var highscoreBackgroundSize = new Vector2(Size.X - margin.left - margin.right, 1 * settingsItemSize.Y + 2 * itemPadding);
 
-            GameObject obj = new DynamicBackgroundObject(this, Contents.Textures.Dialog_inside);
+            GameObject obj = new DynamicBackgroundObject(this, Contents.Textures.Dialog_inside, 4);
             obj.Position = new Vector2(margin.left, margin.top);
             obj.Size = highscoreBackgroundSize;
             obj.LayerDepth = 0.04f;

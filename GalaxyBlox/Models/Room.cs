@@ -32,6 +32,7 @@ namespace GalaxyBlox.Models
         public bool FullScreen = false;
         public Texture2D DialogBackground;
         public Texture2D DialogIcon;
+        public int DialogBackgroundScale = 1;
         public bool IsDialog = false;
         public bool DialogOffscreenClose = false;
         public float Alpha = 1f;
@@ -134,6 +135,8 @@ namespace GalaxyBlox.Models
                 var backgroundTarget = new RenderTarget2D(graphicsDevice, (int)Size.X, (int)Size.Y);
                 var pieceSizeX = DialogBackground.Width / 3;
                 var pieceSizeY = DialogBackground.Height / 3;
+                var realPieceSizeX = pieceSizeX * DialogBackgroundScale;
+                var realPieceSizeY = pieceSizeY * DialogBackgroundScale;
 
                 graphicsDevice.SetRenderTarget(backgroundTarget);
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
@@ -145,17 +148,17 @@ namespace GalaxyBlox.Models
                 {
                     for (int y = 0; y < 3; y++)
                     {
-                        var resultWidth = x != 1 ? pieceSizeX : (int)(Size.X - 2 * pieceSizeX);
-                        var resultHeigth = y != 1 ? pieceSizeY : (int)(Size.Y - 2 * pieceSizeY);
-                        var resultX = x != 2 ? pieceSizeX * x : (int)(Size.X - pieceSizeX);
-                        var resultY = y != 2 ? pieceSizeY * y : (int)(Size.Y - pieceSizeY);
+                        var resultWidth = x != 1 ? realPieceSizeX : (int)(Size.X - 2 * realPieceSizeX);
+                        var resultHeigth = y != 1 ? realPieceSizeY : (int)(Size.Y - 2 * realPieceSizeY);
+                        var resultX = x != 2 ? realPieceSizeX * x : (int)(Size.X - realPieceSizeX);
+                        var resultY = y != 2 ? realPieceSizeY * y : (int)(Size.Y - realPieceSizeY);
 
                         spriteBatch.Draw(DialogBackground, new Rectangle(resultX, resultY, resultWidth, resultHeigth), new Rectangle(pieceSizeX * x, pieceSizeY * y, pieceSizeX, pieceSizeY), Color.White);
                     }
                 }
 
                 if (DialogIcon != null)
-                    spriteBatch.Draw(DialogIcon, new Vector2((Size.X - DialogIcon.Width) / 2, 0), Color.White);
+                    spriteBatch.Draw(DialogIcon, new Vector2(Size.X / 2, 0), null, Color.White, 0f, new Vector2(DialogIcon.Width / 2f, 0f), DialogBackgroundScale, SpriteEffects.None, 0f);
 
                 spriteBatch.End();
                 graphicsDevice.SetRenderTarget(null);
