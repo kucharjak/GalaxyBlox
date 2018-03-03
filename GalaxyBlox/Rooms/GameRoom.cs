@@ -54,23 +54,23 @@ namespace GalaxyBlox.Rooms
 
             GameObject lastObj;
 
-            var playingArenaPadding = 5;
+            var playingArenaPadding = 16;
 
             // ADDING FIRST PANEL
             // PANEL BACKGROUND
             Objects.Add(new GameObject(this)
             {
-                Size = new Vector2(712, 140),
+                Size = new Vector2(712, 132),
                 Position = new Vector2(4, 4),
                 BackgroundImage = Contents.Textures.GameUI_top_background,
                 LayerDepth = 0.01f
             });
             lastObj = Objects.Last();
-            var playingArenaStart = lastObj.Position.Y + lastObj.Size.Y + 5;
+            var playingArenaStart = lastObj.Position.Y + lastObj.Size.Y + playingArenaPadding;
 
             // ACTOR VIEWER
-            var viewerPos = new Vector2(lastObj.Position.X + 24, lastObj.Position.Y + 20);
-            var viewerSize = new Vector2(100);
+            var viewerPos = new Vector2(lastObj.Position.X + 16, lastObj.Position.Y + 16);
+            var viewerSize = new Vector2(116, 100);
             Objects.Add(new DynamicBackgroundObject(this, Contents.Textures.Dialog_inside, 4)
             {
                 Size = viewerSize,
@@ -84,11 +84,11 @@ namespace GalaxyBlox.Rooms
             };
             Objects.Add(actorViewer);
 
-            var btnPauseSize = 100;
+            var btnPauseSize = new Vector2(116, 100);
             // PAUSE BUTTON
             btnPause = Bank.Buttons.GetPauseButton(this);
-            btnPause.Size = new Vector2(btnPauseSize);
-            btnPause.Position = new Vector2(lastObj.Position.X + lastObj.Size.X - btnPauseSize - 24, lastObj.Position.Y + 20);
+            btnPause.Size = btnPauseSize;
+            btnPause.Position = new Vector2(lastObj.Position.X + lastObj.Size.X - btnPauseSize.X - 16, lastObj.Position.Y + 16);
             btnPause.Click += btnPause_Click;
             Objects.Add(btnPause);
             
@@ -101,7 +101,7 @@ namespace GalaxyBlox.Rooms
             lblScore = new GameObject(this)
             {
                 Size = lblScoreSize,
-                Position = new Vector2(148, lastObj.Position.Y + 28),
+                Position = new Vector2(148, lastObj.Position.Y + 24),
                 TextSpriteFont = Contents.Fonts.PixelArtTextFont,
                 Text = "SCORE",
                 TextHeight = (int)lblScoreSize.Y,
@@ -118,7 +118,7 @@ namespace GalaxyBlox.Rooms
                 BackgroundImage = Contents.Textures.Pix,
                 BaseColor = Color.White,
                 Size = scoreLineSize,
-                Position = new Vector2(148 + (416 - scoreLineSize.X) / 2, lastObj.Position.Y + 76),
+                Position = new Vector2(148 + (416 - scoreLineSize.X) / 2, lastObj.Position.Y + 72),
                 LayerDepth = 0.05f
             });
             
@@ -139,8 +139,7 @@ namespace GalaxyBlox.Rooms
 
             // ADDING SECOND PANEL
             // SETTINGS
-            var btnSize = 136;
-            var btnPadding = 10;
+            var btnSize = new Vector2(152, 112);
 
             // PANEL BACKGROUND
             float playingArenaEndY = 0;
@@ -149,33 +148,33 @@ namespace GalaxyBlox.Rooms
             {
                 Objects.Add(new GameObject(this)
                 {
-                    Size = new Vector2(712, 184),
-                    Position = new Vector2(4, Size.Y - 184 - 4),
+                    Size = new Vector2(712, 144),
+                    Position = new Vector2(4, Size.Y - 144 - 4),
                     BackgroundImage = Contents.Textures.GameUI_bottom_classic_background,
                     LayerDepth = 0.01f
                 });
                 lastObj = Objects.Last();
                 playingArenaEndY = lastObj.Position.Y - playingArenaPadding;
-                controlButtonsStartY = lastObj.Position.Y + 24;
+                controlButtonsStartY = lastObj.Position.Y + 16;
             }
             else
             {
                 Objects.Add(new GameObject(this)
                 {
-                    Size = new Vector2(712, 300),
-                    Position = new Vector2(4, Size.Y - 300 - 4),
+                    Size = new Vector2(712, 224),
+                    Position = new Vector2(4, Size.Y - 224 - 4),
                     BackgroundImage = Contents.Textures.GameUI_bottom_normal_background,
                     LayerDepth = 0.01f
                 });
                 lastObj = Objects.Last();
                 playingArenaEndY = lastObj.Position.Y - playingArenaPadding;
-                controlButtonsStartY = lastObj.Position.Y + 140;
+                controlButtonsStartY = lastObj.Position.Y + 96;
 
                 // ADDING BONUS PANEL
                 pnlBonusBtns = new GameObject(this)
                 {
-                    Size = new Vector2(672, 84),
-                    Position = new Vector2(lastObj.Position.X + 20, lastObj.Position.Y + 20),
+                    Size = new Vector2(680, 60),
+                    Position = new Vector2(lastObj.Position.X + 16, lastObj.Position.Y + 16),
                     LayerDepth = 0.02f
                 };
                 Objects.Add(pnlBonusBtns);
@@ -185,8 +184,8 @@ namespace GalaxyBlox.Rooms
             // CONTROL BUTTON LEFT
             btnControlLeft = Bank.Buttons.GetControlButton(this);
             btnControlLeft.BackgroundImage = Contents.Textures.ControlButton_left;
-            btnControlLeft.Size = new Vector2(btnSize);
-            btnControlLeft.Position = new Vector2(28, controlButtonsStartY);
+            btnControlLeft.Size = btnSize;
+            btnControlLeft.Position = new Vector2(lastObj.Position.X + 16, controlButtonsStartY);
             btnControlLeft.Release += btnLeft_Release;
             btnControlLeft.Hover += btnLeft_Hover;
             Objects.Add(btnControlLeft);
@@ -194,8 +193,8 @@ namespace GalaxyBlox.Rooms
             // CONTROL BUTTON FALL
             btnControlFall = Bank.Buttons.GetControlButton(this);
             btnControlFall.BackgroundImage = Contents.Textures.ControlButton_fall;
-            btnControlFall.Size = new Vector2(btnSize);
-            btnControlFall.Position = new Vector2(204, controlButtonsStartY);
+            btnControlFall.Size = btnSize;
+            btnControlFall.Position = new Vector2(lastObj.Position.X + 192, controlButtonsStartY);
             btnControlFall.Click += btnDown_Click;
             btnControlFall.Hover += btnDown_Hover;
             btnControlFall.Release += btnDown_Release;
@@ -204,36 +203,38 @@ namespace GalaxyBlox.Rooms
             // CONTROL BUTTON ROTATE
             btnControlRotate = Bank.Buttons.GetControlButton(this);
             btnControlRotate.BackgroundImage = Contents.Textures.ControlButton_rotate;
-            btnControlRotate.Size = new Vector2(btnSize);
-            btnControlRotate.Position = new Vector2(380, controlButtonsStartY);
+            btnControlRotate.Size = btnSize;
+            btnControlRotate.Position = new Vector2(lastObj.Position.X + 368, controlButtonsStartY);
             btnControlRotate.Click += btnRotate_Click;
             Objects.Add(btnControlRotate);
 
             // CONTROL BUTTON RIGHT
             btnControlRight = Bank.Buttons.GetControlButton(this);
             btnControlRight.BackgroundImage = Contents.Textures.ControlButton_right;
-            btnControlRight.Size = new Vector2(btnSize);
-            btnControlRight.Position = new Vector2(556, controlButtonsStartY);
+            btnControlRight.Size = btnSize;
+            btnControlRight.Position = new Vector2(lastObj.Position.X + 544, controlButtonsStartY);
             btnControlRight.Release += btnRight_Release;
             btnControlRight.Hover += btnRight_Hover;
             Objects.Add(btnControlRight);
 
             // ADDING PLAYING ARENA
+            var arenaSize = new Vector2(Size.X - 2 * playingArenaPadding, playingArenaEndY - playingArenaStart);
+            var arenaPosition = new Vector2(playingArenaPadding, playingArenaStart);
             switch (gameMode)
             {
                 case GameMode.Classic:
                     {
-                        arena = new PlayingArena_Classic(this, new Vector2(Size.X - playingArenaPadding, playingArenaEndY - playingArenaStart), new Vector2(playingArenaPadding, playingArenaStart));
+                        arena = new PlayingArena_Classic(this, arenaSize, arenaPosition);
                     } break;
                 case GameMode.Normal:
                     {
-                        arena = new PlayingArena_Normal(this, new Vector2(Size.X - playingArenaPadding, playingArenaEndY - playingArenaStart), new Vector2(playingArenaPadding, playingArenaStart));
+                        arena = new PlayingArena_Normal(this, arenaSize, arenaPosition);
                         (arena as PlayingArena_Normal).AvailableBonusesChanged += Arena_AvailableBonusesChanged;
                         (arena as PlayingArena_Normal).ActiveBonusChanged += Arena_ActiveBonusChanged;
                     } break;
                 case GameMode.Extreme:
                     {
-                        arena = new PlayingArena_Extreme(this, new Vector2(Size.X - playingArenaPadding, playingArenaEndY - playingArenaStart), new Vector2(playingArenaPadding, playingArenaStart));
+                        arena = new PlayingArena_Extreme(this, arenaSize, arenaPosition);
                         (arena as PlayingArena_Extreme).AvailableBonusesChanged += Arena_AvailableBonusesChanged;
                         (arena as PlayingArena_Extreme).ActiveBonusChanged += Arena_ActiveBonusChanged;
                     } break;
@@ -245,6 +246,15 @@ namespace GalaxyBlox.Rooms
             arena.GameEnded += Arena_GameEnded;
             arena.StartNewGame();
             Objects.Add(arena);
+
+            // adding border for arena
+            var borderOffset = new Vector2(12);
+            Objects.Add(new DynamicBackgroundObject(this, Contents.Textures.GameUI_playingArena_border, 4)
+            {
+                Position = new Vector2(arena.Position.X - borderOffset.X, arena.Position.Y - borderOffset.Y),
+                Size = new Vector2(arena.Size.X + 2 * borderOffset.X, arena.Size.Y + 2 * borderOffset.Y),
+                LayerDepth = 0.051f
+            });
         }
 
         private void Arena_ActiveBonusChanged(object sender, EventArgs e)

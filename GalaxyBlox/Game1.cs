@@ -88,7 +88,8 @@ namespace GalaxyBlox
 
             Static.Contents.Textures.GameUI_top_background = Content.Load<Texture2D>("Backgrounds/ui_top_background");
             Static.Contents.Textures.GameUI_bottom_classic_background = Content.Load<Texture2D>("Backgrounds/ui_down_classic_background");
-            Static.Contents.Textures.GameUI_bottom_normal_background= Content.Load<Texture2D>("Backgrounds/ui_down_normal_background");
+            Static.Contents.Textures.GameUI_bottom_normal_background = Content.Load<Texture2D>("Backgrounds/ui_down_normal_background");
+            Static.Contents.Textures.GameUI_playingArena_border = Content.Load<Texture2D>("Backgrounds/playing_arena_border");
 
             Static.Contents.Textures.Dialog_icon_questionMark = Content.Load<Texture2D>("Sprites/dialog_icon_questionMark");
             Static.Contents.Textures.Dialog_icon_settings = Content.Load<Texture2D>("Sprites/dialog_icon_settings");

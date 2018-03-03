@@ -32,10 +32,10 @@ namespace GalaxyBlox.Objects
                 var button = new Button(parentRoom)
                 {
                     Alpha = 1f,
-                    BaseColor = Contents.Colors.ControlButtonBackgroundColor,
-                    DefaultBackgroundColor = Contents.Colors.ControlButtonBackgroundColor,
-                    SelectedBackgroundColor = Contents.Colors.ControlButtonSelectColor,
-                    PressBackgroundColor = Contents.Colors.ControlButtonBackgroundColor,
+                    BaseColor = Contents.Colors.ButtonBackgroundColor,
+                    DefaultBackgroundColor = Contents.Colors.ButtonBackgroundColor,
+                    SelectedBackgroundColor = Contents.Colors.ButtonSelectedColor,
+                    PressBackgroundColor = Contents.Colors.ButtonSelectedColor,
                     ShowText = false,
                     TextSpriteFont = Contents.Fonts.PlainTextFont,
                     TextColor = Contents.Colors.MenuButtonTextColor,

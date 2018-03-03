@@ -34,6 +34,7 @@ namespace GalaxyBlox.Static
             public static Texture2D GameUI_top_background;
             public static Texture2D GameUI_bottom_classic_background;
             public static Texture2D GameUI_bottom_normal_background;
+            public static Texture2D GameUI_playingArena_border;
 
             public static Texture2D BackgroundGame;
             public static Texture2D BackgroundMenu;
@@ -76,19 +77,8 @@ namespace GalaxyBlox.Static
             public static Color MenuButtonPressColor = new Color(121, 140, 170);//new Color(89, 107, 135);
             public static Color MenuButtonTextColor = new Color(91, 6, 0);
 
-            public static Color ButtonBackgroundColor = new Color(216, 216, 216);
+            public static Color ButtonBackgroundColor = new Color(230, 230, 230);
             public static Color ButtonSelectedColor = new Color(255, 255, 255);
-
-            public static Color ControlButtonBackgroundColor = new Color(198, 215, 255);
-            public static Color ControlButtonSelectColor = new Color(239, 244, 255);
-
-            public static Color BonusButtonBackgroundColor = new Color(107, 151, 255);
-            public static Color BonusButtonSelectedColor = new Color(107, 151, 255);
-
-            public static Color ControlPanelBackgroundColor = new Color(107, 151, 255);
-            public static Color ScorePanelBackgroundColor = new Color(107, 151, 255);
-
-            public static Color BonusPanelBackgroundColor = new Color(142, 176, 255);
 
             public static Color PanelHeaderBackgroundColor = new Color(121, 140, 170);
             public static Color PanelContentBackgroundColor = new Color(100, 118, 147);

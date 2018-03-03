@@ -112,15 +112,12 @@ namespace GalaxyBlox.Objects
         public PlayingArena(Room parentRoom, Vector2 size, Vector2 position) : base(parentRoom)
         {
             InitializeArenaSettings();
-
-            var innerPadding = 4;
-            var cubeMargin = 1;
-
+            
             BackgroundColor = Contents.Colors.PlaygroundColor;
             BorderColor = Contents.Colors.PlaygroundBorderColor;
             Alpha = 1f;
 
-            playgroundInnerPadding = 4;
+            playgroundInnerPadding = 0;
             playgroundCubeMargin = 1;
 
             var spaceLeftForCubes = new Vector2(
