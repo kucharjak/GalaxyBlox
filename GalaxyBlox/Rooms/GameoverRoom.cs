@@ -128,7 +128,7 @@ namespace GalaxyBlox.Rooms
                     arrDown.Position = new Vector2(posX + i * (btnArrowSize.X + charItemPadding), character.Position.Y + character.Size.Y + charItemPadding);
                     Objects.Add(arrDown);
 
-                    arrUp.Click += delegate 
+                    arrDown.Click += delegate
                     {
                         var c = character.Text.First();
                         var selection = Contents.Constants.AvailableNameChars;
@@ -140,7 +140,7 @@ namespace GalaxyBlox.Rooms
                         character.Text = selection[index].ToString();
                         RefreshOkButton();
                     };
-                    arrDown.Click += delegate 
+                    arrUp.Click += delegate 
                     {
                         var c = character.Text.First();
                         var selection = Contents.Constants.AvailableNameChars;

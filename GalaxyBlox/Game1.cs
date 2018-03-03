@@ -63,10 +63,10 @@ namespace GalaxyBlox
             Static.Contents.Fonts.PlainTextFont = Content.Load<SpriteFont>("Fonts/PlainText");
             Static.Contents.Fonts.PixelArtTextFont = Content.Load<SpriteFont>("Fonts/PixelArtText");
 
-            Static.Contents.Textures.ControlButton_fall = Content.Load<Texture2D>("Sprites/ControlButton_down");
-            Static.Contents.Textures.ControlButton_left = Content.Load<Texture2D>("Sprites/ControlButton_left");
-            Static.Contents.Textures.ControlButton_right = Content.Load<Texture2D>("Sprites/ControlButton_right");
-            Static.Contents.Textures.ControlButton_rotate = Content.Load<Texture2D>("Sprites/ControlButton_rotate");
+            Static.Contents.Textures.ControlButton_fall = Content.Load<Texture2D>("Sprites/btn_control_down");
+            Static.Contents.Textures.ControlButton_left = Content.Load<Texture2D>("Sprites/btn_control_left");
+            Static.Contents.Textures.ControlButton_right = Content.Load<Texture2D>("Sprites/btn_control_right");
+            Static.Contents.Textures.ControlButton_rotate = Content.Load<Texture2D>("Sprites/btn_control_rotate");
 
             Static.Contents.Textures.Button_pause = Content.Load<Texture2D>("Sprites/btn_pause");
             Static.Contents.Textures.Button_exit = Content.Load<Texture2D>("Sprites/btn_exit");
@@ -83,9 +83,12 @@ namespace GalaxyBlox
             
             Static.Contents.Textures.BackgroundGame = Content.Load<Texture2D>("Backgrounds/Background");
             Static.Contents.Textures.BackgroundMenu = Static.Contents.Textures.BackgroundGame;
-            Static.Contents.Textures.BorderedButtonBackground = Content.Load<Texture2D>("Sprites/BorderedButtonBackground");
             Static.Contents.Textures.Dialog_background = Content.Load<Texture2D>("Backgrounds/dialog_background");
             Static.Contents.Textures.Dialog_inside = Content.Load<Texture2D>("Backgrounds/dialog_inside");
+
+            Static.Contents.Textures.GameUI_top_background = Content.Load<Texture2D>("Backgrounds/ui_top_background");
+            Static.Contents.Textures.GameUI_bottom_classic_background = Content.Load<Texture2D>("Backgrounds/ui_down_classic_background");
+            Static.Contents.Textures.GameUI_bottom_normal_background= Content.Load<Texture2D>("Backgrounds/ui_down_normal_background");
 
             Static.Contents.Textures.Dialog_icon_questionMark = Content.Load<Texture2D>("Sprites/dialog_icon_questionMark");
             Static.Contents.Textures.Dialog_icon_settings = Content.Load<Texture2D>("Sprites/dialog_icon_settings");

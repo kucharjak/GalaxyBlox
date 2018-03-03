@@ -113,6 +113,9 @@ namespace GalaxyBlox.Objects
         {
             InitializeArenaSettings();
 
+            var innerPadding = 4;
+            var cubeMargin = 1;
+
             BackgroundColor = Contents.Colors.PlaygroundColor;
             BorderColor = Contents.Colors.PlaygroundBorderColor;
             Alpha = 1f;

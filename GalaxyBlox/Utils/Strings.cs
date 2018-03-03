@@ -3,12 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
+using System.Globalization;
 
 namespace GalaxyBlox.Utils
 {
@@ -16,25 +11,12 @@ namespace GalaxyBlox.Utils
     {
         public static string ScoreToLongString(long score)
         {
-            StringBuilder result = new StringBuilder();
+            var f = new NumberFormatInfo { NumberGroupSeparator = " " };
 
-            var charCount = 0;
-            foreach (var c in score.ToString().Reverse())
-            {
-                result.Insert(0, c);
-
-                charCount++;
-                if (charCount == 3)
-                {
-                    result.Insert(0, " ");
-                    charCount = 0;
-                }
-            }
-
-            return result.ToString();
+            return score.ToString(f);
         }
 
-        public static string ScoreToString(long score, int scoreLenght, bool separateWithSpace = false)
+        public static string ScoreToShortString(long score, int scoreLenght, bool separateWithSpace = false)
         {
             string scoreString = score.ToString();
             if (scoreString.Length <= scoreLenght)
