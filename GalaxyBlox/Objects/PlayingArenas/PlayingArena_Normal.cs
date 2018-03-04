@@ -114,14 +114,13 @@ namespace GalaxyBlox.Objects.PlayingArenas
             newActorStartingPositionXPadding = 2;
 
             // init bonuses
-
+            maxBonuses = 2;
             availableBonuses = new List<GameBonus>();
             AddGameBonuses();
-            gameBonuses = new List<GameBonus>();
+            ResetBonuses();
 
-            maxBonuses = 3;
-            freeBonusTimeLimit = 1; // low for testing
-            timeUntilFreeBonus = freeBonusTimeLimit;
+            //freeBonusTimeLimit = 1; // low for testing
+            //timeUntilFreeBonus = freeBonusTimeLimit;
 
             slowDownLimit = 7500;
             slowDownPower = 5;
@@ -154,14 +153,14 @@ namespace GalaxyBlox.Objects.PlayingArenas
         {
             base.Update(gameTime);
 
-            if (gameBonuses.Count == 0 && ActiveBonus == null)
-                timeSinceLastBonus += gameTime.ElapsedGameTime.Milliseconds;
+            //if (gameBonuses.Count == 0 && ActiveBonus == null)
+            //    timeSinceLastBonus += gameTime.ElapsedGameTime.Milliseconds;
 
-            if (timeSinceLastBonus >= timeUntilFreeBonus)
-            {
-                AddBonus();
-                timeUntilFreeBonus = freeBonusTimeLimit;
-            }
+            //if (timeSinceLastBonus >= timeUntilFreeBonus)
+            //{
+            //    AddBonus();
+            //    timeUntilFreeBonus = freeBonusTimeLimit;
+            //}
 
             switch (ActiveBonus?.Type)
             {
@@ -206,7 +205,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
                             MoveLaser();
                         }
                         break;
-                    case BonusType.CubesExplosion:
+                    case BonusType.CubesDropWithExplosion:
                         {
                             if (activeActor == null)
                                 DeactivateBonus();
@@ -223,6 +222,13 @@ namespace GalaxyBlox.Objects.PlayingArenas
                         break;
                 }
             }
+        }
+
+        public override void StartNewGame()
+        {
+            base.StartNewGame();
+
+            RefreshBonuses();
         }
 
         // controls
@@ -287,10 +293,12 @@ namespace GalaxyBlox.Objects.PlayingArenas
         {
             base.DestroyFullLines(fullLines);
 
-            if (fullLines.Count() >= 4)
-            {
-                AddBonus();
-            }
+            //if (fullLines.Count() >= 4)
+            //{
+            //    AddBonus();
+            //}
+
+            AddProgressToBonus(fullLines.Count() * fullLines[0] / 2);
 
             LastPlayedActor = null;
         }
@@ -387,22 +395,49 @@ namespace GalaxyBlox.Objects.PlayingArenas
 
         // private bonus activations
 
-        protected virtual void AddBonus()
+        protected virtual void AddProgressToBonus(int progress)
         {
-            if (gameBonuses.Count < maxBonuses)
+            if (gameBonuses == null || gameBonuses.Count == 0 || gameBonuses.All(bns => bns.Progress == 100))
+                return;
+
+            GameBonus bonus;
+            if (gameBonuses.Any(bns => bns.Progress > 0 && bns.Progress < 100))
             {
-                availableBonuses.Shuffle(); // before every pick i shuffle available bonuses for more random chance
-                var bonusIndex = Game1.Random.Next(0, availableBonuses.Count - 1);
-                gameBonuses.Add(availableBonuses[bonusIndex]);
-                timeSinceLastBonus = 0;
-                RefreshBonuses();
+                bonus = gameBonuses.Where(bns => bns.Progress > 0 && bns.Progress < 100).First();
             }
+            else
+            {
+                bonus = gameBonuses.Where(bns => bns.Progress < 100).First();
+            }
+
+            bonus.Progress += progress;
+            if (bonus.Progress >= 100)
+            {
+                //availableBonuses.Shuffle(); // before every pick i shuffle available bonuses for more random chance
+                var bonusIndex = gameBonuses.FindIndex(bns => bns == bonus);
+                var index = Game1.Random.Next(0, availableBonuses.Count - 1);
+
+                gameBonuses.RemoveAt(bonusIndex);
+                gameBonuses.Insert(bonusIndex, availableBonuses[index]);
+            }
+            RefreshBonuses();
         }
 
         protected virtual void ActivateBonus(GameBonus bonus)
         {
             bonus.OnActivate();
+
+            var bonusIndex = gameBonuses.IndexOf(bonus);
             gameBonuses.Remove(bonus);
+            gameBonuses.Insert(bonusIndex, new GameBonus(null, null, null, null)
+            {
+                Type = BonusType.None,
+                Enabled = false,
+                Name = "None",
+                SpecialText = "None",
+                Progress = 0
+            });
+
             RefreshBonuses();
         }
 
@@ -585,39 +620,63 @@ namespace GalaxyBlox.Objects.PlayingArenas
         {
             availableBonuses.Add(new GameBonus(Bonus_CubesExplosion_Activate, null, null, Bonus_CubesExplosion_Deactivate)
             {
-                Type = BonusType.CubesExplosion,
-                Name = "Explosion",
-                SpecialText = "EXP",
+                Type = BonusType.CubesDropWithExplosion,
+                Name = "DropAndExplode",
+                SpecialText = "DROP",
                 Enabled = true,
+                Progress = 100
             });
             availableBonuses.Add(new GameBonus(Bonus_CancelLastCube_Activate, null, null, Bonus_CancelLastCube_Deactivate)
             {
                 Type = BonusType.CancelLastCube,
                 Name = "Cancel last",
-                SpecialText = "CNL",
-                Enabled = true
+                SpecialText = "UNDO",
+                Enabled = true,
+                Progress = 100
             });
             availableBonuses.Add(new GameBonus(Bonus_Laser_Activate, Bonus_Laser_MakeAction, null, Bonus_Laser_Deactivate)
             {
                 Type = BonusType.Laser,
                 Name = "Laser",
-                SpecialText = "LSR",
-                Enabled = true
+                SpecialText = "LASER",
+                Enabled = true,
+                Progress = 100
             });
             availableBonuses.Add(new GameBonus(Bonus_Swipe_Activate, Bonus_Swipe_MakeAction, null, Bonus_Swipe_Deactivate)
             {
                 Type = BonusType.SwipeCubes,
                 Name = "Swipe cubes",
-                SpecialText = "SWP",
-                Enabled = true
+                SpecialText = "SWIPE",
+                Enabled = true,
+                Progress = 100
             });
             availableBonuses.Add(new GameBonus(Bonus_SlowDown_Activate, null, null, Bonus_SlowDown_Deactivate)
             {
                 Type = BonusType.TimeSlowdown,
                 Name = "Slowdown time",
-                SpecialText = "SLW",
-                Enabled = true
+                SpecialText = "SLOW",
+                Enabled = true,
+                Progress = 100
             });
+        }
+
+        protected virtual void ResetBonuses()
+        {
+            gameBonuses = new List<GameBonus>();
+
+            for (int i = 0; i < maxBonuses; i++)
+            {
+                gameBonuses.Add(new GameBonus(null, null, null, null)
+                {
+                    Type = BonusType.None,
+                    Enabled = false,
+                    Name = "None",
+                    SpecialText = "None",
+                    Progress = 0
+                });
+            }
+
+            RefreshBonuses();
         }
 
         protected virtual void MoveLaser()

@@ -24,21 +24,21 @@ namespace GalaxyBlox.Objects.PlayingArenas
             actorCreatePeriod = 2000;
             newActorStartingPositionXPadding = 3;
 
+            maxBonuses = 3;
             availableBonuses = new List<GameBonus>();
             AddGameBonuses();
-            gameBonuses = new List<GameBonus>();
-
-            maxBonuses = 4;
-            freeBonusTimeLimit = 1; // low for testing
-            timeUntilFreeBonus = freeBonusTimeLimit;
+            ResetBonuses();
+            
+            //freeBonusTimeLimit = 1; // low for testing
+            //timeUntilFreeBonus = freeBonusTimeLimit;
 
             slowDownLimit = 10000;
             slowDownPower = 5;
 
-            laserWidth = 3;
+            laserWidth = 2;
 
-            cubesExplosionPower = 3;
-            cubesExplosionExtraPower = 5;
+            cubesExplosionPower = 2;
+            cubesExplosionExtraPower = 4;
             cubesExplosionExtraPowerProb = 100;
             cubesExplosionFallingSpeed = 6;
 

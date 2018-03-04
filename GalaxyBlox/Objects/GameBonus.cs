@@ -22,6 +22,8 @@ namespace GalaxyBlox.Objects
 
         public bool Enabled;
 
+        public int Progress;
+
         public delegate void Activate(GameBonus bonus);
         Activate activate;
 

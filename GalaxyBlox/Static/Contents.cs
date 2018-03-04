@@ -30,6 +30,7 @@ namespace GalaxyBlox.Static
             public static Texture2D Button_up_medium;
             public static Texture2D Button_down_medium;
             public static Texture2D Button_empty;
+            public static Texture2D Button_bonus;
             
             public static Texture2D GameUI_top_background;
             public static Texture2D GameUI_bottom_classic_background;

@@ -32,7 +32,7 @@ namespace GalaxyBlox.Rooms
         private Button btnControlRotate;
 
         private GameObject pnlBonusBtns;
-        private List<Button> bonusButtons;
+        private List<GameObject> bonusObjs;
 
         private SettingOptions.GameMode gameMode;
 
@@ -175,10 +175,12 @@ namespace GalaxyBlox.Rooms
                 {
                     Size = new Vector2(680, 60),
                     Position = new Vector2(lastObj.Position.X + 16, lastObj.Position.Y + 16),
-                    LayerDepth = 0.02f
+                    LayerDepth = 0.02f,
+                    //BackgroundImage = Contents.Textures.Pix,
+                    //BaseColor = Color.Red
                 };
                 Objects.Add(pnlBonusBtns);
-                bonusButtons = new List<Button>();
+                bonusObjs = new List<GameObject>();
             }
 
             // CONTROL BUTTON LEFT
@@ -275,42 +277,73 @@ namespace GalaxyBlox.Rooms
         private void RefreshBonusButtons(List<GameBonus> newBonuses)
         {
             // remove old bonus buttons
-            foreach (var oldButton in bonusButtons)
-                Objects.Remove(oldButton);
-            bonusButtons.Clear();
+            foreach (var obj in bonusObjs)
+                Objects.Remove(obj);
+            bonusObjs.Clear();
 
             // add new bonus buttons
-            var btnBonusPadding = 10;
-            var btnBonusSize = pnlBonusBtns.Size.Y - 2 * btnBonusPadding;
-            var btnBonusTextHeight = (int)(btnBonusSize * 0.45f);
-            var btnMargin = (pnlBonusBtns.Size.X - (newBonuses.Count * btnBonusSize)) / (newBonuses.Count + 1);
+            var btnBonusSize = new Vector2(160, 60);
+            var btnBonusTextHeight = (int)(btnBonusSize.Y * 0.35f);
+            var btnMargin = (pnlBonusBtns.Size.X - (newBonuses.Count * btnBonusSize.X)) / (newBonuses.Count + 1);
 
             var i = 0;
             foreach (var bonus in newBonuses)
             {
-                var btn = new Button(this)
+                if (bonus.Type != BonusType.None && bonus.Progress >= 100)
                 {
-                    Size = new Vector2(btnBonusSize),
-                    Position = new Vector2(btnMargin + i * (btnBonusSize + btnMargin), pnlBonusBtns.Position.Y + btnBonusPadding),
-                    BackgroundImage = Contents.Textures.Pix,
-                    BaseColor = Color.Red,
-                    DefaultBackgroundColor = Color.White,
-                    SelectedBackgroundColor = Color.White,
-                    LayerDepth = 0.05f,
-                    TextSpriteFont = Contents.Fonts.PlainTextFont,
-                    TextHeight = btnBonusTextHeight,
-                    ShowText = true,
-                    Enabled = bonus.Enabled,
-                    TextAlignment = TextAlignment.Center,
-                    Text = bonus.SpecialText,
-                    Data = newBonuses[i]
-                };
-                btn.Click += Btn_Click;
-                Objects.Add(btn);
-                bonusButtons.Add(btn);
+                    var btn = Bank.Buttons.GetEmptyButton(this);
+                    btn.Size = btnBonusSize;
+                    btn.Position = new Vector2(pnlBonusBtns.Position.X + btnMargin + i * (btnBonusSize.X + btnMargin), pnlBonusBtns.Position.Y);
+                    btn.BackgroundImage = Contents.Textures.Button_bonus;
+                    //btn.LayerDepth = 0.052f;
+                    btn.TextHeight = btnBonusTextHeight;
+                    btn.Text = bonus.SpecialText;
+                    btn.Data = newBonuses[i];
+                    btn.Click += Btn_Click;
 
+                    Objects.Add(btn);
+                    bonusObjs.Add(btn);
+                }
+                else
+                {
+                    var btnBack = new GameObject(this)
+                    {
+                        Size = btnBonusSize,
+                        Position = new Vector2(pnlBonusBtns.Position.X + btnMargin + i * (btnBonusSize.X + btnMargin), pnlBonusBtns.Position.Y),
+                        BackgroundImage = Contents.Textures.Pix,
+                        BaseColor = new Color(11, 42, 96),
+                        LayerDepth = 0.05f,
+                        TextSpriteFont = Contents.Fonts.PixelArtTextFont,
+                        TextColor = new Color(44, 110, 224),
+                        TextHeight = btnBonusTextHeight,
+                        TextAlignment = TextAlignment.Center,
+                        Text = bonus.Progress.ToString() + "%",
+                        ShowText = true
+                    };
+                    Objects.Add(btnBack);
+                    bonusObjs.Add(btnBack);
+                }
                 i++;
             }
+
+            //if (newBonuses.Count > 1)
+            //{
+            //    var lineWidth = 8;
+            //    var linesMargin = (pnlBonusBtns.Size.X - ((newBonuses.Count - 1) * lineWidth)) / (newBonuses.Count);
+            //    for (int index = 0; index < newBonuses.Count; index++)
+            //    {
+            //        var line = new GameObject(this)
+            //        {
+            //            Size = new Vector2(lineWidth, pnlBonusBtns.Size.Y),
+            //            Position = new Vector2(pnlBonusBtns.Position.X + linesMargin + index * (lineWidth + linesMargin), pnlBonusBtns.Position.Y),
+            //            BackgroundImage = Contents.Textures.Pix,
+            //            BaseColor = new Color(11, 42, 96),
+            //            LayerDepth = 0.05f
+            //    };
+            //        Objects.Add(line);
+            //        bonusObjs.Add(line);
+            //    }
+            //}
         }
 
         private void Btn_Click(object sender, EventArgs e)
@@ -348,22 +381,7 @@ namespace GalaxyBlox.Rooms
                     } break;
             }
         }
-
-        private string TranslateBonusToText(BonusType bonus)
-        {
-            string result = "!err";
-            switch(bonus)
-            {
-                //case GameBonus.TimeRewind: result = "Rew"; break;
-                case BonusType.TimeSlowdown: result = "Slo"; break;
-                case BonusType.Laser: result = "Lsr"; break;
-                case BonusType.SwipeCubes: result = "Swp"; break;
-                case BonusType.CancelLastCube: result = "Cnl"; break;
-                case BonusType.CubesExplosion: result = "EXP"; break;
-            }
-            return result;
-        }
-
+        
         private void Arena_GameEnded(object sender, EventArgs e)
         {
             if (Parent != null)

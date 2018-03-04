@@ -331,7 +331,7 @@ namespace GalaxyBlox.Objects
             RotateActor();
         }
 
-        public void StartNewGame()
+        public virtual void StartNewGame()
         {
             backgroundChanged = true;
             backgroundFirstDraw = true;

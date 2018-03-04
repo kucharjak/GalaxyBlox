@@ -56,7 +56,7 @@ namespace GalaxyBlox.Static
             TimeSlowdown,
             SwipeCubes,
             Laser,
-            CubesExplosion
+            CubesDropWithExplosion
         }
     }
 }
