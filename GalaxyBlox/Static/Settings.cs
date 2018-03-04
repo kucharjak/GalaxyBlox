@@ -118,6 +118,9 @@ namespace GalaxyBlox.Static
 
             [XmlElement]
             public SettingOptions.Indicator Indicator = SettingOptions.Indicator.Shape;
+
+            [XmlElement]
+            public bool Vibration;
         }
     }
 }

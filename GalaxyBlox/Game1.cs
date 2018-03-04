@@ -1,3 +1,5 @@
+using Android.Content;
+using Android.OS;
 using Android.Util;
 using GalaxyBlox.Models;
 using Microsoft.Xna.Framework;
@@ -16,6 +18,8 @@ namespace GalaxyBlox
         public static ContentManager GameContent;
 
         public static Random Random;
+
+        public static Vibrator Vibrator;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -45,6 +49,7 @@ namespace GalaxyBlox
 
             GameContent = Content;
             Random = new Random(unchecked((int)DateTime.Now.Ticks));
+            Vibrator = (Vibrator)Activity.GetSystemService(Context.VibratorService);
 
             new Rooms.MenuRoom("Room_Menu", Static.Settings.Game.WindowSize, new Vector2()).Show();
             //new Rooms.GameRoom("Room_Game", Static.Settings.Game.WindowSize, new Vector2()).Show();

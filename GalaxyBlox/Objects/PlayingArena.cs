@@ -523,6 +523,9 @@ namespace GalaxyBlox.Objects
                 int[] linesDestroyed;
                 if (CheckPlaygroundForFullLines(out linesDestroyed))
                 {
+                    if (Settings.Game.UserSettings.Vibration)
+                        Game1.Vibrator.Vibrate(25 * linesDestroyed.Count());
+
                     DestroyFullLines(linesDestroyed);
                     IncreaseScoreForLines(linesDestroyed.Count());
                 }

@@ -18,8 +18,10 @@ namespace GalaxyBlox
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            var g = new Game1();
-            SetContentView((View)g.Services.GetService(typeof(View)));
+            var g = new Game1();            
+            var view = (View)g.Services.GetService(typeof(View));
+            //view.SystemUiVisibility = (StatusBarVisibility)SystemUiFlags.HideNavigation | (StatusBarVisibility)SystemUiFlags.ImmersiveSticky;
+            SetContentView(view);
             g.Run();
         }
     }
