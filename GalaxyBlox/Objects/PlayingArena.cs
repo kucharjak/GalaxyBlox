@@ -96,6 +96,7 @@ namespace GalaxyBlox.Objects
 
         //private List<Point> playgroundChanges = new List<Point>();
 
+        protected Vector2 backgroundSize;
         protected bool backgroundChanged;
         protected bool backgroundFirstDraw;
         protected Color BackgroundColor;
@@ -120,9 +121,14 @@ namespace GalaxyBlox.Objects
             playgroundInnerPadding = 0;
             playgroundCubeMargin = 1;
 
+            Size = size;
+            Position = position;
+
+            var displayRect = DisplayRect();
+
             var spaceLeftForCubes = new Vector2(
-                (int)(size.X - 2 * playgroundInnerPadding - (arenaSize.X - 1) * playgroundCubeMargin),
-                (int)(size.Y - 2 * playgroundInnerPadding - (arenaSize.Y - 1) * playgroundCubeMargin));
+                (int)(displayRect.Size.X - 2 * playgroundInnerPadding - (arenaSize.X - 1) * playgroundCubeMargin),
+                (int)(displayRect.Size.Y - 2 * playgroundInnerPadding - (arenaSize.Y - 1) * playgroundCubeMargin));
 
             if (spaceLeftForCubes.X / arenaSize.X < spaceLeftForCubes.Y / arenaSize.Y)
             { // WIDTH
@@ -133,16 +139,23 @@ namespace GalaxyBlox.Objects
                 playgroundCubeSize = (int)(spaceLeftForCubes.Y / arenaSize.Y);
             }
 
-            Size = new Vector2(
+            backgroundSize = new Vector2(
                 (arenaSize.X - 1) * (playgroundCubeSize + playgroundCubeMargin) + playgroundCubeSize + 2 * playgroundInnerPadding,
-                (arenaSize.Y - 1) * (playgroundCubeSize + playgroundCubeMargin) + playgroundCubeSize + 2 * playgroundInnerPadding);
+                (arenaSize.Y - 1) * (playgroundCubeSize + playgroundCubeMargin) + playgroundCubeSize + 2 * playgroundInnerPadding
+                );
+
+            Size = new Vector2(
+                (float)Math.Ceiling(backgroundSize.X / ParentRoom.Scale),
+                (float)Math.Ceiling(backgroundSize.Y / ParentRoom.Scale)
+                );
 
             Position = new Vector2(
-                position.X + ((size.X - Size.X) / 2),
-                position.Y + ((size.Y - Size.Y) / 2));  //(position.Y + size.Y) - Size.Y);
+                (float)Math.Ceiling(position.X + ((size.X - Size.X) / 2)),
+                (float)Math.Ceiling(position.Y + ((size.Y - Size.Y) / 2))
+                );
 
-            mainRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)Size.X, (int)Size.Y);
-            backgroundRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)Size.X, (int)Size.Y);
+            mainRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
+            backgroundRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
             BackgroundImage = mainRenderTarget;
 
             actors = new List<Actor>();
@@ -186,7 +199,7 @@ namespace GalaxyBlox.Objects
 
                 spriteBatch.Draw(
                     Contents.Textures.Pix,
-                    new Rectangle(playgroundInnerPadding - 2 * playgroundCubeMargin, playgroundInnerPadding - 2 * playgroundCubeMargin, (int)Size.X - 2 * (playgroundInnerPadding - 2 * playgroundCubeMargin), (int)Size.Y - 2 * (playgroundInnerPadding - 2 * playgroundCubeMargin)),
+                    new Rectangle(playgroundInnerPadding - 2 * playgroundCubeMargin, playgroundInnerPadding - 2 * playgroundCubeMargin, (int)backgroundSize.X - 2 * (playgroundInnerPadding - 2 * playgroundCubeMargin), (int)backgroundSize.Y - 2 * (playgroundInnerPadding - 2 * playgroundCubeMargin)),
                     BackgroundColor);
 
                 for (int x = 0; x < playground.GetLength(0); x++)
@@ -274,7 +287,7 @@ namespace GalaxyBlox.Objects
 
             spriteBatch.Draw(
                         backgroundRenderTarget,
-                        new Rectangle(0, 0, (int)Size.X, (int)Size.Y),
+                        new Rectangle(0, 0, (int)backgroundSize.X, (int)backgroundSize.Y),
                         Color.White);
 
             foreach (var effect in playgroundEffectsList)

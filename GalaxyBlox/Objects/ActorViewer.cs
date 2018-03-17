@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using GalaxyBlox.Static;
 using GalaxyBlox.Models;
 
@@ -13,20 +14,23 @@ namespace GalaxyBlox.Objects
 
         private Point cubesOffset;
         private int cubeSize;
-        private int cubeBorderSize;
+        private int cubesPadding;
 
         private bool actorDrawn;
 
+        private Vector2 backgroundSize;
         private RenderTarget2D renderTarget;
-        public ActorViewer(Room parentRoom, Vector2 size, Color backgroundColor, int cubeSize = 25, int cubeBorderSize = 2) : base(parentRoom)
+
+        public ActorViewer(Room parentRoom, Vector2 size, Color backgroundColor) : base(parentRoom)
         {
             this.backgroundColor = backgroundColor;
-            this.cubeSize = cubeSize;
-            this.cubeBorderSize = cubeBorderSize;
 
             Size = size;
-            renderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, 1, 1);
+            backgroundSize = new Vector2(DisplayRect().Size.X, DisplayRect().Size.Y);
+            renderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
             BackgroundImage = renderTarget;
+
+            cubesPadding = 1;
         }
 
         public void ResetActor()
@@ -37,7 +41,7 @@ namespace GalaxyBlox.Objects
                 renderTarget = null;
             }
 
-            renderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, 1, 1);
+            renderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
             BackgroundImage = renderTarget;
             actor = null;
             actorDrawn = false;
@@ -49,21 +53,24 @@ namespace GalaxyBlox.Objects
             this.actorColor = actorColor;
 
             // calculate size of renderTarget
-            var cubeCount = actor.GetLength(0) > actor.GetLength(1) ? actor.GetLength(0) : actor.GetLength(1);
+            var actorWidth = actor.GetLength(0);
+            var actorHeight = actor.GetLength(1);
+            var cubeCount = actorWidth > actorHeight ? actorWidth : actorHeight;
+
             cubeCount += 2; // padding
-            var renderTargetSize = (cubeCount * cubeSize) + ((cubeCount - 1) * cubeBorderSize);
 
-            if (renderTarget != null)
-            {
-                renderTarget.Dispose();
-                renderTarget = null;
-            } 
+            if (backgroundSize.X > backgroundSize.Y)
+            { // HEIGTH is smaller
+                cubeSize = (int)((backgroundSize.Y - ((cubeCount - 1) * cubesPadding)) / cubeCount);
+            }
+            else
+            { // WIDTH is smaller
+                cubeSize = (int)((backgroundSize.X - ((cubeCount - 1) * cubesPadding)) / cubeCount);
+            }
 
-            renderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, renderTargetSize, renderTargetSize);
-            BackgroundImage = renderTarget;
             cubesOffset = new Point(
-                (int)(renderTargetSize - cubeSize * actor.GetLength(0) - actor.GetLength(0) * cubeBorderSize) / 2,
-                (int)(renderTargetSize - cubeSize * actor.GetLength(1) - actor.GetLength(1) * cubeBorderSize) / 2);
+                (int)(backgroundSize.X - cubeSize * actorWidth - (actorWidth - 1) * cubesPadding) / 2,
+                (int)(backgroundSize.Y - cubeSize * actorHeight - (actorHeight - 1 )* cubesPadding) / 2);
 
             actorDrawn = false;
         }
@@ -97,7 +104,7 @@ namespace GalaxyBlox.Objects
 
                         spriteBatch.Draw(
                             Contents.Textures.Pix,
-                            new Rectangle((int)cubesOffset.X + x * (cubeSize + cubeBorderSize), (int)cubesOffset.Y + y * (cubeSize + cubeBorderSize), cubeSize, cubeSize),
+                            new Rectangle((int)cubesOffset.X + x * (cubeSize + cubesPadding), (int)cubesOffset.Y + y * (cubeSize + cubesPadding), cubeSize, cubeSize),
                             actorColor);
                     }
                 }

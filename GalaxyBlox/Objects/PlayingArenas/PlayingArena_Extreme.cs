@@ -54,7 +54,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
             baseFallingSpeed = 1200;
             minFallingSpeed = 50;
             fallingSpeedFactor = 0.04f;
-            increaseFourLineLimitPerLevel = 1.5f;
+            increaseFallingSpeedLevelCount = 1.5f;
 
             CalculateScoreForLevelArray();
         }
