@@ -100,6 +100,11 @@ namespace GalaxyBlox
             Static.Contents.Textures.Dialog_icon_questionMark = Content.Load<Texture2D>("Sprites/dialog_icon_questionMark");
             Static.Contents.Textures.Dialog_icon_settings = Content.Load<Texture2D>("Sprites/dialog_icon_settings");
             Static.Contents.Textures.Dialog_icon_highscore = Content.Load<Texture2D>("Sprites/dialog_icon_highscore");
+
+            Static.Contents.Textures.Star_small = Content.Load<Texture2D>("Sprites/star_small");
+            Static.Contents.Textures.Star_medium_01 = Content.Load<Texture2D>("Sprites/star_medium_01");
+            Static.Contents.Textures.Star_medium_02 = Content.Load<Texture2D>("Sprites/star_medium_02");
+            Static.Contents.Textures.Star_big = Content.Load<Texture2D>("Sprites/star_big");
         }
 
         /// <summary>

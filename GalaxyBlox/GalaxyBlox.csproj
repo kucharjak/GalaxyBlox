@@ -85,6 +85,7 @@
     <Compile Include="Objects\PlayingArenas\PlayingArena_Classic.cs" />
     <Compile Include="Objects\PlayingArenas\PlayingArena_Extreme.cs" />
     <Compile Include="Objects\PlayingArenas\PlayingArena_Normal.cs" />
+    <Compile Include="Objects\StarSystem.cs" />
     <Compile Include="Objects\SwipeArea.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

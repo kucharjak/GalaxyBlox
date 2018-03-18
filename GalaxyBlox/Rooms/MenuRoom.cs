@@ -199,6 +199,13 @@ namespace GalaxyBlox.Rooms
             objToAdd.Position = new Vector2(Size.X - padding - arrowButtonsSize.X, lblSelectedGameMode.Position.Y + (lblSelectedGameMode.Size.Y - arrowButtonsSize.Y) / 2);
             (objToAdd as Button).Click += btnSelectRight_Click;
             Objects.Add(objToAdd);
+
+            //// ADDING STAR SYSTEM ////
+            //objToAdd = new StarSystem(this, new Vector2(720, 664), new Vector2(0, 40));
+            objToAdd = new StarSystem(this, new Vector2(680, 1200), new Vector2(20, 40));
+            objToAdd.LayerDepth = 0.039f;
+            (objToAdd as StarSystem).Start(218884, 1, 3, 3, 5, 15);
+            Objects.Add(objToAdd);
         }
 
         private void btnSelectRight_Click(object sender, EventArgs e)
@@ -270,6 +277,10 @@ namespace GalaxyBlox.Rooms
 
         private void btnPlayGame_Click(object sender, EventArgs e)
         {
+            //var star = Objects.Where(obj => (obj as StarSystem) != null).First();
+            //(star as StarSystem).Start(Game1.Random.Next(0, 2000000), 1, 3, 3, 5, 15);
+            //return;
+
             if (selectedGameMode == GameMode.Continue && mainGame != null)
             {
                 mainGame.Show();

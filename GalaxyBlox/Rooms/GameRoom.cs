@@ -63,7 +63,7 @@ namespace GalaxyBlox.Rooms
                 Size = new Vector2(712, 132),
                 Position = new Vector2(4, 4),
                 BackgroundImage = Contents.Textures.GameUI_top_background,
-                LayerDepth = 0.01f
+                LayerDepth = 0.02f
             });
             lastObj = Objects.Last();
             var playingArenaStart = lastObj.Position.Y + lastObj.Size.Y + playingArenaPadding;
@@ -151,7 +151,7 @@ namespace GalaxyBlox.Rooms
                     Size = new Vector2(712, 144),
                     Position = new Vector2(4, Size.Y - 144 - 4),
                     BackgroundImage = Contents.Textures.GameUI_bottom_classic_background,
-                    LayerDepth = 0.01f
+                    LayerDepth = 0.02f
                 });
                 lastObj = Objects.Last();
                 playingArenaEndY = lastObj.Position.Y - playingArenaPadding;
@@ -164,7 +164,7 @@ namespace GalaxyBlox.Rooms
                     Size = new Vector2(712, 224),
                     Position = new Vector2(4, Size.Y - 224 - 4),
                     BackgroundImage = Contents.Textures.GameUI_bottom_normal_background,
-                    LayerDepth = 0.01f
+                    LayerDepth = 0.02f
                 });
                 lastObj = Objects.Last();
                 playingArenaEndY = lastObj.Position.Y - playingArenaPadding;
@@ -257,6 +257,13 @@ namespace GalaxyBlox.Rooms
                 Size = new Vector2(arena.Size.X + 2 * borderOffset.X, arena.Size.Y + 2 * borderOffset.Y),
                 LayerDepth = 0.051f
             });
+
+            //// ADDING STAR SYSTEM ////
+            Objects.Add(new StarSystem(this, new Vector2(680, 1200), new Vector2(20, 40)));
+            lastObj = Objects.Last();
+            lastObj.LayerDepth = 0.019f;
+            (lastObj as StarSystem).Start(218884, 1, 3, 3, 5, 15);
+            (lastObj as StarSystem).MaxTimer = 10000;
         }
 
         private void Arena_ActiveBonusChanged(object sender, EventArgs e)

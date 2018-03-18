@@ -124,17 +124,31 @@ namespace GalaxyBlox.Models
             return resultVect;
         }
 
-        public Rectangle DisplayRect()
+        public Rectangle DisplayRect(Rectangle rect)
         {
             var offsetX = Origin.X * (Size.X * Scale - Size.X);
             var offsetY = Origin.Y * (Size.Y * Scale - Size.Y);
 
             var resultRect = new Rectangle(
-                (int)((Position.X + ParentRoom.Position.X - offsetX) * ParentRoom.Scale + ParentRoom.InGameOffsetX),
-                (int)((Position.Y + ParentRoom.Position.Y - offsetY) * ParentRoom.Scale + ParentRoom.InGameOffsetY),
-                (int)(Size.X * ParentRoom.Scale * Scale),
-                (int)(Size.Y * ParentRoom.Scale * Scale));
+                (int)((rect.X + ParentRoom.Position.X - offsetX) * ParentRoom.Scale + ParentRoom.InGameOffsetX),
+                (int)((rect.Y + ParentRoom.Position.Y - offsetY) * ParentRoom.Scale + ParentRoom.InGameOffsetY),
+                (int)(rect.Size.X * ParentRoom.Scale * Scale),
+                (int)(rect.Size.Y * ParentRoom.Scale * Scale));
             return resultRect;
+        }
+
+        public Rectangle DisplayRect()
+        {
+            return DisplayRect(new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y));
+            //var offsetX = Origin.X * (Size.X * Scale - Size.X);
+            //var offsetY = Origin.Y * (Size.Y * Scale - Size.Y);
+
+            //var resultRect = new Rectangle(
+            //    (int)((Position.X + ParentRoom.Position.X - offsetX) * ParentRoom.Scale + ParentRoom.InGameOffsetX),
+            //    (int)((Position.Y + ParentRoom.Position.Y - offsetY) * ParentRoom.Scale + ParentRoom.InGameOffsetY),
+            //    (int)(Size.X * ParentRoom.Scale * Scale),
+            //    (int)(Size.Y * ParentRoom.Scale * Scale));
+            //return resultRect;
         }
     }
 

@@ -44,6 +44,11 @@ namespace GalaxyBlox.Static
             public static Texture2D Dialog_icon_settings;
             public static Texture2D Dialog_icon_questionMark;
             public static Texture2D Dialog_icon_highscore;
+
+            public static Texture2D Star_small;
+            public static Texture2D Star_medium_01;
+            public static Texture2D Star_medium_02;
+            public static Texture2D Star_big;
         }
 
         public static class Fonts
