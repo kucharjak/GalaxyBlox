@@ -105,6 +105,8 @@ namespace GalaxyBlox
             Static.Contents.Textures.Star_medium_01 = Content.Load<Texture2D>("Sprites/star_medium_01");
             Static.Contents.Textures.Star_medium_02 = Content.Load<Texture2D>("Sprites/star_medium_02");
             Static.Contents.Textures.Star_big = Content.Load<Texture2D>("Sprites/star_big");
+
+            Static.Contents.Textures.Logo = Content.Load<Texture2D>("Sprites/logo");
         }
 
         /// <summary>

@@ -49,6 +49,8 @@ namespace GalaxyBlox.Static
             public static Texture2D Star_medium_01;
             public static Texture2D Star_medium_02;
             public static Texture2D Star_big;
+
+            public static Texture2D Logo;
         }
 
         public static class Fonts

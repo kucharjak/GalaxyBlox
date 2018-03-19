@@ -206,6 +206,18 @@ namespace GalaxyBlox.Rooms
             objToAdd.LayerDepth = 0.039f;
             (objToAdd as StarSystem).Start(218884, 1, 3, 3, 5, 15);
             Objects.Add(objToAdd);
+
+            objToAdd = new Logo(this)
+            {
+                Position = new Vector2(0, 170),
+                Size = new Vector2(720, 256),
+                LayerDepth = 0.05f,
+                MaxScale = 1f,
+                MinScale = 0.9f,
+                TimeLimit = 5000,
+                Timer = 2500
+            };
+            Objects.Add(objToAdd);
         }
 
         private void btnSelectRight_Click(object sender, EventArgs e)
