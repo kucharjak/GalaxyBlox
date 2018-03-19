@@ -63,7 +63,7 @@ namespace GalaxyBlox.Rooms
             Background = Contents.Textures.BackgroundMenu;
 
             selectebleGameModes = availableGameModes.ToList(); // fill modes that i can select from 
-            SelectedGameMode = selectebleGameModes[selectebleGameModes.FindIndex(mode => mode == Settings.Game.UserSettings.LastGameMode)];
+            SelectedGameMode = selectebleGameModes[selectebleGameModes.FindIndex(mode => mode ==  GameMode.Normal)];
 
             GameObject objToAdd;
             var padding = 30;

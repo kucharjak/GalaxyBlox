@@ -47,6 +47,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
 
         //protected List<BonusType> availableBonuses = new List<BonusType>() { BonusType.CubesExplosion, BonusType.CancelLastCube, BonusType.Laser, BonusType.SwipeCubes, BonusType.TimeSlowdown };
         protected List<GameBonus> availableBonuses;
+        protected Random bonusRandom;
 
         protected GameBonus activeBonus;
         /// <summary>
@@ -147,6 +148,8 @@ namespace GalaxyBlox.Objects.PlayingArenas
             increaseFallingSpeedLevelCount = 2;
 
             CalculateScoreForLevelArray();
+
+            bonusRandom = new Random((int)DateTime.Now.Ticks);
         }
 
         public override void Update(GameTime gameTime)
@@ -415,7 +418,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
             {
                 //availableBonuses.Shuffle(); // before every pick i shuffle available bonuses for more random chance
                 var bonusIndex = gameBonuses.FindIndex(bns => bns == bonus);
-                var index = Game1.Random.Next(0, availableBonuses.Count - 1);
+                var index = bonusRandom.Next(0, availableBonuses.Count);
 
                 gameBonuses.RemoveAt(bonusIndex);
                 gameBonuses.Insert(bonusIndex, availableBonuses[index]);

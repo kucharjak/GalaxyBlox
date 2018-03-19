@@ -125,23 +125,30 @@ namespace GalaxyBlox.Static
                 },
             };
 
-            private static List<int> ReturnedRandomShapes = new List<int>();
+            //private static List<int> returnedRandomShapes;
+            private static Random shapeRandom;
 
             public static bool[,] GetRandomShape()
             {
-                ShapeBank.Shuffle(); // Shuffle all shapes for more random
-                var maxCount = ShapeBank.Count();
-                var nextShape = Game1.Random.Next(0, maxCount);
-                while (ReturnedRandomShapes.Where(shp => shp == nextShape).Count() >= 2) // if are last 2 shapes same generate new shape
-                {
-                    nextShape = Game1.Random.Next(0, maxCount);
-                }
+                if (shapeRandom == null)
+                    shapeRandom = new Random((int)DateTime.Now.Ticks);
 
-                ReturnedRandomShapes.Add(nextShape);
-                if (ReturnedRandomShapes.Count > 2) // max 2 last shapes to remember
-                    ReturnedRandomShapes.RemoveAt(0);
-
+                var nextShape = shapeRandom.Next(0, ShapeBank.Count);
                 return ShapeBank[nextShape];
+
+                //ShapeBank.Shuffle(); // Shuffle all shapes for more random
+                //var maxCount = ShapeBank.Count();
+                //var nextShape = Game1.Random.Next(0, maxCount);
+                //while (returnedRandomShapes.Where(shp => shp == nextShape).Count() >= 2) // if are last 2 shapes same generate new shape
+                //{
+                //    nextShape = Game1.Random.Next(0, maxCount);
+                //}
+
+                //returnedRandomShapes.Add(nextShape);
+                //if (returnedRandomShapes.Count > 2) // max 2 last shapes to remember
+                //    returnedRandomShapes.RemoveAt(0);
+
+                //return ShapeBank[nextShape];
                 //return ShapeBank[(Game1.Random.Next(0, maxCount * 100) % maxCount)];
             }
         }
