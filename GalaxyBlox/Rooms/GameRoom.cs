@@ -263,7 +263,8 @@ namespace GalaxyBlox.Rooms
             lastObj = Objects.Last();
             lastObj.LayerDepth = 0.019f;
             (lastObj as StarSystem).Start(218884, 1, 3, 3, 5, 15);
-            (lastObj as StarSystem).MaxTimer = 10000;
+            (lastObj as StarSystem).MaxTimer = 5000;
+            (lastObj as StarSystem).Alpha = 0.8f;
         }
 
         private void Arena_ActiveBonusChanged(object sender, EventArgs e)

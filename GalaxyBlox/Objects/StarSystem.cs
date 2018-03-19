@@ -23,14 +23,20 @@ namespace GalaxyBlox.Objects
         private List<Star> stars;
 
         public int MaxTimer;
-        public float MaxStarScale;
+        public float MaxStarScale = 2f;
+        public float MinimumStarScale = 1f;
+
+        public Color StarColor { get { return BaseStarColor * Alpha; } }
+        public Color BaseStarColor = Color.White;
+        public float Alpha = 1f;
 
         private int seed;
 
         public StarSystem(Room parentRoom, Vector2 size, Vector2 position) : base(parentRoom)
         {
-            MaxTimer = 5000;
-            MaxStarScale = 1.55f;
+            MaxTimer = 2500;
+            MaxStarScale = 1.1f;
+            MinimumStarScale = 0.35f;
 
             Position = position;
             Size = size;
@@ -98,7 +104,7 @@ namespace GalaxyBlox.Objects
                         star.ScalingUp = true;
                 }
 
-                star.Scale = 1 + star.Timer / (float)MaxTimer * (MaxStarScale - 1);
+                star.Scale = MinimumStarScale + star.Timer / (float)MaxTimer * (MaxStarScale - MinimumStarScale);
             }
         }
 
@@ -117,7 +123,7 @@ namespace GalaxyBlox.Objects
                     starTextures[star.Type],
                     DisplayRect(starRect),
                     null,
-                    Color.White,
+                    StarColor,
                     0f,
                     new Vector2(),
                     SpriteEffects.None,
