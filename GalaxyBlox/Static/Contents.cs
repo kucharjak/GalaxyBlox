@@ -94,7 +94,10 @@ namespace GalaxyBlox.Static
 
         public static class Shapes
         {
-            public static readonly List<bool[,]> ShapeBank = new List<bool[,]>() // basic shapes
+            /// <summary>
+            /// Clasic / basic shapes 
+            /// </summary>
+            public static readonly List<bool[,]> ShapeBank = new List<bool[,]>()
             {
                 new bool[,]
                 {
@@ -125,6 +128,37 @@ namespace GalaxyBlox.Static
                 },
             };
 
+            /// <summary>
+            /// More shapes inspired by original shapes
+            /// </summary>
+            public static readonly List<bool[,]> ExtendedShapeBank = new List<bool[,]>()
+            {
+                new bool[,]
+                {
+                    { true, true, false },
+                    { false, true, false },
+                    { false, true, true }
+                },
+                new bool[,]
+                {
+                    { false, true, false },
+                    { true, true, true },
+                    { false, true, false }
+                },
+                new bool[,]
+                {
+                    { true, true },
+                    { true, true },
+                    { true, false }
+                },
+                new bool[,]
+                {
+                    { true, true, true },
+                    { true, false, false },
+                    { true, false, false }
+                }
+            };
+
             //private static List<int> returnedRandomShapes;
             private static Random shapeRandom;
 
@@ -151,6 +185,20 @@ namespace GalaxyBlox.Static
                 //return ShapeBank[nextShape];
                 //return ShapeBank[(Game1.Random.Next(0, maxCount * 100) % maxCount)];
             }
+
+            public static bool[,] GetExtendedRandomShape()
+            {
+                if (shapeRandom == null)
+                    shapeRandom = new Random((int)DateTime.Now.Ticks);
+
+                var shapes = new List<bool[,]>();
+                shapes.AddRange(ShapeBank);
+                shapes.AddRange(ExtendedShapeBank);
+
+                var nextShape = shapeRandom.Next(0, shapes.Count);
+                return shapes[nextShape];
+            }
+
         }
 
         public static class Constants

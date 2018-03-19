@@ -21,9 +21,11 @@ namespace GalaxyBlox.Rooms
     {
         private SettingOptions.Indicator newIndicator;
         private bool newVibration;
+        private bool newUseExtendedShapesLibrary;
 
         Button btnIndicator;
         Button btnVibration;
+        Button btnExtendedShapes;
         Button btnOK;
         Button btnCancel;
 
@@ -39,11 +41,12 @@ namespace GalaxyBlox.Rooms
             DialogBackgroundScale = 4;
             IsDialog = true;
 
-            this.Size = new Vector2(600, 525);
+            this.Size = new Vector2(600, 630);
             CenterParent();
 
             newIndicator = Settings.Game.UserSettings.Indicator;
             newVibration = Settings.Game.UserSettings.Vibration;
+            newUseExtendedShapesLibrary = Settings.Game.UserSettings.UseExtendedShapeLibrary;
 
             var margin = new { top = 129, left = 25, right = 25, bottom = 35 }; // anonymous type for margin
             
@@ -54,7 +57,7 @@ namespace GalaxyBlox.Rooms
             var btnDialogSize = new Vector2(160, 80);
             var btnDialogTextHeight = (int)(btnDialogSize.Y * 0.3f);
 
-            var highscoreBackgroundSize = new Vector2(Size.X - margin.left - margin.right, 2 * settingsItemSize.Y + 3 * itemPadding);
+            var highscoreBackgroundSize = new Vector2(Size.X - margin.left - margin.right, 3 * settingsItemSize.Y + 4 * itemPadding);
 
             GameObject obj = new DynamicBackgroundObject(this, Contents.Textures.Dialog_inside, 4);
             obj.Position = new Vector2(margin.left, margin.top);
@@ -92,6 +95,21 @@ namespace GalaxyBlox.Rooms
             obj.Position = new Vector2(margin.left + itemPadding, btnVibration.Position.Y);
             Objects.Add(obj);
 
+            btnExtendedShapes = Bank.Buttons.GetEmptyButton(this);
+            btnExtendedShapes.Size = settingsItemSize;
+            btnExtendedShapes.TextHeight = settingsItemTextHeight;
+            btnExtendedShapes.Text = Settings.Game.UserSettings.UseExtendedShapeLibrary ? "ON" : "OFF";
+            btnExtendedShapes.Position = new Vector2(Size.X - btnExtendedShapes.Size.X - margin.right - itemPadding, btnVibration.Position.Y + btnVibration.Size.Y + itemPadding);
+            btnExtendedShapes.Click += BtnExtendedShapes_Click;
+            Objects.Add(btnExtendedShapes);
+
+            obj = Bank.Visuals.GetSettingsLabel(this);
+            obj.Text = "MORE SHAPES:";
+            obj.Size = settingsItemSize;
+            obj.TextHeight = settingsItemTextHeight;
+            obj.Position = new Vector2(margin.left + itemPadding, btnExtendedShapes.Position.Y);
+            Objects.Add(obj);
+
             btnOK = Bank.Buttons.GetEmptyButton(this);
             btnOK.Size = btnDialogSize;
             btnOK.Text = "SAVE";
@@ -121,6 +139,7 @@ namespace GalaxyBlox.Rooms
         {
             Settings.Game.UserSettings.Indicator = newIndicator;
             Settings.Game.UserSettings.Vibration = newVibration;
+            Settings.Game.UserSettings.UseExtendedShapeLibrary = newUseExtendedShapesLibrary;
 
             Settings.Game.SaveUserSettings();
             End();
@@ -137,6 +156,12 @@ namespace GalaxyBlox.Rooms
         {
             newVibration = !newVibration;
             btnVibration.Text = newVibration ? "ON" : "OFF";
+        }
+
+        private void BtnExtendedShapes_Click(object sender, EventArgs e)
+        {
+            newUseExtendedShapesLibrary = !newUseExtendedShapesLibrary;
+            btnExtendedShapes.Text = newUseExtendedShapesLibrary ? "ON" : "OFF";
         }
     }
 }

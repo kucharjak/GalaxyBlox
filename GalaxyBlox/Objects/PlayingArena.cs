@@ -757,7 +757,7 @@ namespace GalaxyBlox.Objects
                 var actorsToFullQueue = actorsQueueSize - actorsQueue.Count;
                 for (int i = 0; i < actorsToFullQueue; i++)
                 {
-                    var newActorShape = Contents.Shapes.GetRandomShape();
+                    var newActorShape = GetRandomShape();
                     newActorShape = RotateActor(newActorShape, Game1.Random.Next(0, 3), true);
                     actorsQueue.Add(new Actor(newActorShape, new Point(), Contents.Colors.GameCubesColors[Game1.Random.Next(1, Contents.Colors.GameCubesColors.Count)]));
                 }
@@ -780,6 +780,11 @@ namespace GalaxyBlox.Objects
                 OnActorsQueueChange(new QueueChangeEventArgs(nextActorInQueue));
             else
                 OnActorsQueueChange(new QueueChangeEventArgs(null, Color.White));
+        }
+
+        protected virtual bool[,] GetRandomShape()
+        {
+            return Contents.Shapes.GetRandomShape();
         }
 
         protected virtual Point GetNewActorPosition(Actor actor)

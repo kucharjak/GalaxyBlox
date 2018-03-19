@@ -121,6 +121,9 @@ namespace GalaxyBlox.Static
 
             [XmlElement]
             public bool Vibration = true;
+
+            [XmlElement]
+            public bool UseExtendedShapeLibrary = false;
         }
     }
 }
