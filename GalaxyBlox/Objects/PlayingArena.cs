@@ -154,9 +154,9 @@ namespace GalaxyBlox.Objects
                 (float)Math.Ceiling(position.Y + ((size.Y - Size.Y) / 2))
                 );
 
-            mainRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
-            backgroundRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
-            BackgroundImage = mainRenderTarget;
+            //mainRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
+            //backgroundRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
+            //BackgroundImage = mainRenderTarget;
 
             actors = new List<Actor>();
             actorsQueue = new List<Actor>();
@@ -192,6 +192,14 @@ namespace GalaxyBlox.Objects
         {
             if (backgroundChanged)
             {
+                if (backgroundRenderTarget != null)
+                {
+                    backgroundRenderTarget.Dispose();
+                    backgroundRenderTarget = null;
+                }
+                    
+                backgroundRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
+
                 graphicsDevice.SetRenderTarget(backgroundRenderTarget);
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
                 graphicsDevice.DepthStencilState = new DepthStencilState() { DepthBufferEnable = true };
@@ -218,68 +226,14 @@ namespace GalaxyBlox.Objects
                 backgroundChanged = false;
             }
 
-            //    if (backgroundFirstDraw || backgroundRenderTarget.IsContentLost)
-            //    {
-            //        graphicsDevice.SetRenderTarget(backgroundRenderTarget);
-            //        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
-            //        graphicsDevice.DepthStencilState = new DepthStencilState() { DepthBufferEnable = true };
-            //        graphicsDevice.Clear(BorderColor);
+            if (mainRenderTarget != null)
+            {
+                mainRenderTarget.Dispose();
+                mainRenderTarget = null;
+            }
 
-            //        spriteBatch.Draw(
-            //            Contents.Textures.Pix,
-            //            new Rectangle(playgroundInnerPadding - 2 * playgroundCubeMargin, playgroundInnerPadding - 2 * playgroundCubeMargin, (int)Size.X - 2 * (playgroundInnerPadding - 2 * playgroundCubeMargin), (int)Size.Y - 2 * (playgroundInnerPadding - 2 * playgroundCubeMargin)),
-            //            BackgroundColor);
-
-            //        for (int x = 0; x < playground.GetLength(0); x++)
-            //        {
-            //            for (int y = 0; y < playground.GetLength(1); y++)
-            //            {
-            //                spriteBatch.Draw(
-            //                    Contents.Textures.Pix,
-            //                    new Rectangle(playgroundInnerPadding + x * (playgroundCubeSize + playgroundCubeMargin), playgroundInnerPadding + y * (playgroundCubeSize + playgroundCubeMargin), playgroundCubeSize, playgroundCubeSize),
-            //                    GetCubeColor(x, y));
-            //            }
-            //        }
-
-            //        spriteBatch.End();
-            //        graphicsDevice.SetRenderTarget(null);
-            //        backgroundChanged = false;
-
-            //        backgroundFirstDraw = false;
-            //    }
-            //    else
-            //    {
-            //        using (var tempRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)Size.X, (int)Size.Y))
-            //        {
-            //            graphicsDevice.SetRenderTarget(tempRenderTarget);
-            //            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
-            //            spriteBatch.Draw(backgroundRenderTarget, new Rectangle(0, 0, (int)Size.X, (int)Size.Y), null, Color.White);
-            //            spriteBatch.End();
-
-            //            graphicsDevice.SetRenderTarget(backgroundRenderTarget);
-            //            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque); //, BlendState.AlphaBlend
-
-            //            spriteBatch.Draw(tempRenderTarget, new Rectangle(0, 0, (int)Size.X, (int)Size.Y), Color.White);
-
-            //            foreach (var change in playgroundChanges)
-            //            { 
-            //                    spriteBatch.Draw(
-            //                        Contents.Textures.Pix,
-            //                        new Rectangle(playgroundInnerPadding + change.X * (playgroundCubeSize + playgroundCubeMargin) - playgroundCubeMargin, playgroundInnerPadding + change.Y * (playgroundCubeSize + playgroundCubeMargin) - playgroundCubeMargin, playgroundCubeSize + 2* playgroundCubeMargin, playgroundCubeSize + 2 * playgroundCubeMargin),
-            //                        BackgroundColor);
-            //                    spriteBatch.Draw(
-            //                        Contents.Textures.Pix,
-            //                        new Rectangle(playgroundInnerPadding + change.X * (playgroundCubeSize + playgroundCubeMargin), playgroundInnerPadding + change.Y * (playgroundCubeSize + playgroundCubeMargin), playgroundCubeSize, playgroundCubeSize),
-            //                        Contents.Colors.GameCubesColors[playground[change.X, change.Y]]);
-            //            }
-            //            playgroundChanges.Clear();
-
-            //            spriteBatch.End();
-            //            graphicsDevice.SetRenderTarget(null);
-            //            backgroundChanged = false;
-            //        }
-            //    }
-            //}
+            mainRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
+            BackgroundImage = mainRenderTarget;
 
             graphicsDevice.SetRenderTarget(mainRenderTarget);
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);

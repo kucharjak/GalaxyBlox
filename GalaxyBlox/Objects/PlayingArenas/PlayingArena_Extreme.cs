@@ -57,6 +57,8 @@ namespace GalaxyBlox.Objects.PlayingArenas
             increaseFallingSpeedLevelCount = 1.5f;
 
             CalculateScoreForLevelArray();
+
+            bonusRandom = new Random((int)DateTime.Now.Ticks);
         }
     }
 }
