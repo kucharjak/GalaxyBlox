@@ -31,9 +31,10 @@ namespace GalaxyBlox.Rooms
 
         GameObject lblSelectedGameMode;
 
-
         Button btnContinue;
         //GameObject highScore;
+
+        private bool gameJustStarted;
 
         GameRoom mainGame
         {
@@ -62,6 +63,8 @@ namespace GalaxyBlox.Rooms
             FullScreen = true;
             Background = Contents.Textures.BackgroundMenu;
 
+            gameJustStarted = true;
+
             selectebleGameModes = availableGameModes.ToList(); // fill modes that i can select from 
             SelectedGameMode = selectebleGameModes[selectebleGameModes.FindIndex(mode => mode ==  GameMode.Normal)];
 
@@ -73,42 +76,6 @@ namespace GalaxyBlox.Rooms
             var btnCount = 4;
             var btnStartPosY = (Size.Y - ((btnCount * btnSize.Y) + ((btnCount - 1) * btnPadding))) / 2;
 
-            //// TEST GAME OVER ROOM BUTTONS ////
-            //objToAdd = Bank.Buttons.GetMenuButton(this);
-            //objToAdd.BackgroundImage = Contents.Textures.Button_settings;
-            //objToAdd.Text = "0";
-            //objToAdd.ShowText = true;
-            //objToAdd.Size = new Vector2(136, 112);
-            //objToAdd.Position = new Vector2((Size.X - objToAdd.Size.X) / 2, 350);
-            //(objToAdd as Button).Click += delegate { new GameOverRoom(this, "Room_GameOver", Vector2.Zero, Vector2.Zero, 0, GameMode.Test, false).Show(); };
-            //Objects.Add(objToAdd);
-
-            //objToAdd = Bank.Buttons.GetMenuButton(this);
-            //objToAdd.BackgroundImage = Contents.Textures.Button_settings;
-            //objToAdd.Text = "350";
-            //objToAdd.ShowText = true;
-            //objToAdd.Size = new Vector2(136, 112);
-            //objToAdd.Position = new Vector2((Size.X - objToAdd.Size.X) / 2, 350 + objToAdd.Size.Y + 30);
-            //(objToAdd as Button).Click += delegate { new GameOverRoom(this, "Room_GameOver", Vector2.Zero, Vector2.Zero, 35698790, GameMode.Test, true).Show(); };
-            //Objects.Add(objToAdd);
-
-            //// Adding HighScore
-            ////// ADDING LABEL FOR SCORE
-            //highScore = new GameObject(this) // label for Score
-            //{
-            //    Position = new Vector2(padding, btnStartPosY - 35),
-            //    Size = new Vector2(btnSize.X, 35),
-            //    LayerDepth = 0.05f,
-            //    Alpha = 1f,
-            //    TextSpriteFont = Contents.Fonts.PlainTextFont,
-            //    TextAlignment = TextAlignment.Left,
-            //    TextHeight = 35,
-            //    ShowText = true,
-            //    TextColor = Color.White
-            //};
-            //Objects.Add(highScore);
-            //ResetHighscoreText();
-
             ////// ADDING BUTTONS //////
             //// EXIT BUTTON ////
             var btnPauseSize = 100;
@@ -118,7 +85,7 @@ namespace GalaxyBlox.Rooms
             objToAdd.Position = new Vector2(15, 15);
             (objToAdd as Button).Click += btnFinish_Click;
             Objects.Add(objToAdd);
-            
+
             //// PLAY BUTTON ////
             var playButtonSize = new Vector2(280, 180);
 
@@ -240,6 +207,12 @@ namespace GalaxyBlox.Rooms
 
         public override void AfterChangeEvent()
         {
+            if (gameJustStarted)
+            {
+                gameJustStarted = false;
+                return;
+            }
+
             if (mainGame != null)
             { //Continue
                 selectebleGameModes = new List<GameMode>() { GameMode.Continue };
