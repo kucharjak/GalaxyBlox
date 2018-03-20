@@ -141,12 +141,12 @@ namespace GalaxyBlox.Static
                     { false, true, false },
                     { false, true, true }
                 },
-                new bool[,]
-                {
-                    { false, true, false },
-                    { true, true, true },
-                    { false, true, false }
-                },
+                //new bool[,]
+                //{
+                //    { false, true, false },
+                //    { true, true, true },
+                //    { false, true, false }
+                //},
                 new bool[,]
                 {
                     { true, true },
@@ -158,7 +158,11 @@ namespace GalaxyBlox.Static
                     { true, true, true },
                     { true, false, false },
                     { true, false, false }
-                }
+                },
+                new bool[,]
+                {
+                    {true, true, true }
+                },
             };
 
             //private static List<int> returnedRandomShapes;

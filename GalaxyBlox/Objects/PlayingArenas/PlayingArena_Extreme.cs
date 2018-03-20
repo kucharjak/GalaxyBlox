@@ -18,7 +18,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
         protected override void InitializeArenaSettings() // TODO: ADD INFO
         {
             gameMode = GameMode.Extreme;
-            arenaSize = new Vector2(18, 30);
+            arenaSize = new Vector2(14, 28);
 
             actorsMaxCount = 5; // TODO: GRADUAL UPDATE PER LEVEL
             actorCreatePeriod = 2000;
