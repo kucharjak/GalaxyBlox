@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace GalaxyBlox.Objects
 {
-    class Logo : GameObject
+    class BreathingObject : GameObject
     {
         public float MaxScale = 1f;
         public float MinScale = 1f;
@@ -14,9 +14,8 @@ namespace GalaxyBlox.Objects
 
         public bool IsPaused;
 
-        public Logo(Room parentRoom) : base(parentRoom)
+        public BreathingObject(Room parentRoom) : base(parentRoom)
         {
-            BackgroundImage = Static.Contents.Textures.Logo;
             Origin = new Vector2(.5f, .5f);
         }
 

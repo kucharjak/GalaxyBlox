@@ -81,7 +81,8 @@
     <Compile Include="Objects\Bank.cs" />
     <Compile Include="Objects\DynamicBackground.cs" />
     <Compile Include="Objects\GameBonus.cs" />
-    <Compile Include="Objects\Logo.cs" />
+    <Compile Include="Objects\BreathingObject.cs" />
+    <Compile Include="Objects\ObjectHider.cs" />
     <Compile Include="Objects\PlayingArena.cs" />
     <Compile Include="Objects\PlayingArenas\PlayingArena_Classic.cs" />
     <Compile Include="Objects\PlayingArenas\PlayingArena_Extreme.cs" />

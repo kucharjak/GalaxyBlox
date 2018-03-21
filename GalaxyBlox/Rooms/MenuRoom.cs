@@ -32,7 +32,11 @@ namespace GalaxyBlox.Rooms
         GameObject lblSelectedGameMode;
 
         Button btnContinue;
-        //GameObject highScore;
+        Button btnTapToStart;
+
+        GameObject tapToStart;
+
+        ObjectHider hider;
 
         private bool gameJustStarted;
 
@@ -76,6 +80,13 @@ namespace GalaxyBlox.Rooms
             var btnCount = 4;
             var btnStartPosY = (Size.Y - ((btnCount * btnSize.Y) + ((btnCount - 1) * btnPadding))) / 2;
 
+            hider = new ObjectHider(this)
+            {
+                HideAlpha = 0f,
+                HideTimePeriod = 500
+            };
+            Objects.Add(hider);
+
             ////// ADDING BUTTONS //////
             //// EXIT BUTTON ////
             var btnPauseSize = 100;
@@ -85,7 +96,24 @@ namespace GalaxyBlox.Rooms
             objToAdd.Position = new Vector2(15, 15);
             (objToAdd as Button).Click += btnFinish_Click;
             Objects.Add(objToAdd);
+            hider.HideObject(objToAdd, HidePlace.Top);
 
+            //var nameSize = new Vector2(Size.X, 35);
+            //objToAdd = new GameObject(this)
+            //{
+            //    Size = nameSize,
+            //    Position = new Vector2(0, Size.Y - nameSize.Y - padding),
+            //    TextSpriteFont = Contents.Fonts.PixelArtTextFont,
+            //    Text = "JAKUB KUCHAR 2018",
+            //    TextColor = Color.White,
+            //    TextHeight = (int)(nameSize.Y * 0.8f),
+            //    TextAlignment = TextAlignment.Center,
+            //    ShowText = true,
+            //    LayerDepth = 0.05f,
+            //};
+            //Objects.Add(objToAdd);
+            //hider.HideObject(objToAdd, HidePlace.Bottom);
+            
             //// PLAY BUTTON ////
             var playButtonSize = new Vector2(280, 180);
 
@@ -95,6 +123,7 @@ namespace GalaxyBlox.Rooms
             objToAdd.Position = new Vector2((Size.X - objToAdd.Size.X) / 2, Size.Y - objToAdd.Size.Y - padding);
             (objToAdd as Button).Click += btnPlayGame_Click;
             Objects.Add(objToAdd);
+            hider.HideObject(objToAdd, HidePlace.Bottom);
 
             var playButtonsPosition = objToAdd.Position;
             var sideButtonsSize = new Vector2(136, 112);
@@ -106,6 +135,7 @@ namespace GalaxyBlox.Rooms
             objToAdd.Position = new Vector2((playButtonsPosition.X - sideButtonsSize.X) / 2, playButtonsPosition.Y + (playButtonSize.Y - sideButtonsSize.Y) / 2);
             (objToAdd as Button).Click += btnSettings_Click;
             Objects.Add(objToAdd);
+            hider.HideObject(objToAdd, HidePlace.Left);
 
             var offset = playButtonsPosition.X + playButtonSize.X;
 
@@ -116,6 +146,7 @@ namespace GalaxyBlox.Rooms
             objToAdd.Position = new Vector2(offset + (Size.X - offset - sideButtonsSize.X) / 2, playButtonsPosition.Y + (playButtonSize.Y - sideButtonsSize.Y) / 2);
             (objToAdd as Button).Click += btnHighscore_click;
             Objects.Add(objToAdd);
+            hider.HideObject(objToAdd, HidePlace.Right);
 
             var gamemodeTextSize = 45;
 
@@ -132,6 +163,7 @@ namespace GalaxyBlox.Rooms
             lblSelectedGameMode.TextColor = Color.White;
             lblSelectedGameMode.Text = selectedGameMode.ToString().ToUpper();
             Objects.Add(lblSelectedGameMode);
+            hider.HideObject(lblSelectedGameMode, HidePlace.Bottom);
 
             var modeLabelTextSize = 23;
 
@@ -148,6 +180,7 @@ namespace GalaxyBlox.Rooms
             objToAdd.TextColor = Color.White;
             objToAdd.Text = "- SELECT GAME -";
             Objects.Add(objToAdd);
+            hider.HideObject(objToAdd, HidePlace.Bottom);
 
             var arrowButtonsSize = new Vector2(84, 120);
 
@@ -158,6 +191,7 @@ namespace GalaxyBlox.Rooms
             objToAdd.Position = new Vector2(padding, lblSelectedGameMode.Position.Y + (lblSelectedGameMode.Size.Y - arrowButtonsSize.Y) / 2);
             (objToAdd as Button).Click += btnSelectLeft_Click;
             Objects.Add(objToAdd);
+            hider.HideObject(objToAdd, HidePlace.Left);
 
             //// SELECT RIGH GAMEMODE BUTTON ////
             objToAdd = Bank.Buttons.GetMenuButton(this);
@@ -166,6 +200,7 @@ namespace GalaxyBlox.Rooms
             objToAdd.Position = new Vector2(Size.X - padding - arrowButtonsSize.X, lblSelectedGameMode.Position.Y + (lblSelectedGameMode.Size.Y - arrowButtonsSize.Y) / 2);
             (objToAdd as Button).Click += btnSelectRight_Click;
             Objects.Add(objToAdd);
+            hider.HideObject(objToAdd, HidePlace.Right);
 
             //// ADDING STAR SYSTEM ////
             //objToAdd = new StarSystem(this, new Vector2(720, 664), new Vector2(0, 40));
@@ -174,9 +209,11 @@ namespace GalaxyBlox.Rooms
             (objToAdd as StarSystem).Start(218884, 1, 3, 3, 5, 15);
             Objects.Add(objToAdd);
 
-            objToAdd = new Logo(this)
+            //// ADDING LOGO ////
+            objToAdd = new BreathingObject(this)
             {
-                Position = new Vector2(0, 170),
+                BackgroundImage = Contents.Textures.Logo,
+                Position = new Vector2(0, 140),
                 Size = new Vector2(720, 256),
                 LayerDepth = 0.05f,
                 MaxScale = 1f,
@@ -185,6 +222,46 @@ namespace GalaxyBlox.Rooms
                 Timer = 2500
             };
             Objects.Add(objToAdd);
+            hider.HideObject(objToAdd, HidePlace.Top);
+
+            hider.Hide(false);
+
+            //// ADDING TAP START BUTTON ////
+            btnTapToStart = Bank.Buttons.GetMenuButton(this);
+            btnTapToStart.Position = new Vector2(0, 0);
+            btnTapToStart.Size = this.Size;
+            btnTapToStart.Alpha = 0f;
+            btnTapToStart.Click += TapStartButton_Click;
+            Objects.Add(btnTapToStart);
+
+            tapToStart = new BreathingObject(this)
+            {
+                Position = new Vector2(0, 0),
+                Size = this.Size,
+                TextSpriteFont = Contents.Fonts.PixelArtTextFont,
+                Text = "TAP TO START",
+                TextColor = new Color(252, 239, 0),
+                TextHeight = 55,
+                TextAlignment = TextAlignment.Center,
+                ShowText = true,
+                LayerDepth = 0.05f,
+                MaxScale = 1f,
+                MinScale = 0.9f,
+                TimeLimit = 4000,
+                Timer = 2000
+            };
+            Objects.Add(tapToStart);
+        }
+
+        private void TapStartButton_Click(object sender, EventArgs e)
+        {
+            if (hider != null)
+                hider.Show(true);
+
+            Objects.Remove((GameObject)sender);
+
+            if (tapToStart != null)
+                Objects.Remove(tapToStart);
         }
 
         private void btnSelectRight_Click(object sender, EventArgs e)
