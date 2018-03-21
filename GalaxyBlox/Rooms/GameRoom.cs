@@ -300,6 +300,7 @@ namespace GalaxyBlox.Rooms
                 if (bonus.Type != BonusType.None && bonus.Progress >= 100)
                 {
                     var btn = Bank.Buttons.GetEmptyButton(this);
+                    btn.Name = "BonusButton_" + i.ToString();
                     btn.Size = btnBonusSize;
                     btn.Position = new Vector2(pnlBonusBtns.Position.X + btnMargin + i * (btnBonusSize.X + btnMargin), pnlBonusBtns.Position.Y);
                     btn.BackgroundImage = Contents.Textures.Button_bonus;
@@ -361,7 +362,13 @@ namespace GalaxyBlox.Rooms
             {
                 var bonus = (btn.Data as GameBonus);
                 PrepareInterfaceForBonus(bonus.Type);
-                (arena as PlayingArena_Normal).Control_ActivateBonus(bonus);
+
+                int? position = null;
+                int tmp;
+                if (!String.IsNullOrEmpty(btn.Name) && btn.Name.StartsWith("BonusButton_") && int.TryParse(btn.Name.Replace("BonusButton_", ""), out tmp))
+                    position = tmp;
+
+                (arena as PlayingArena_Normal).Control_ActivateBonus(bonus, position);
             }
                 
         }

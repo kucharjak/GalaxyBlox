@@ -271,9 +271,9 @@ namespace GalaxyBlox.Objects.PlayingArenas
             base.ControlDown_Click();
         }
 
-        public void Control_ActivateBonus(GameBonus bonus)
+        public void Control_ActivateBonus(GameBonus bonus, int? position = null)
         {
-            ActivateBonus(bonus);
+            ActivateBonus(bonus, position);
         }
 
         // Private methods
@@ -434,13 +434,22 @@ namespace GalaxyBlox.Objects.PlayingArenas
             RefreshBonuses();
         }
 
-        protected virtual void ActivateBonus(GameBonus bonus)
+        protected virtual void ActivateBonus(GameBonus bonus, int? position = null)
         {
             bonus.OnActivate();
 
-            var bonusIndex = gameBonuses.IndexOf(bonus);
-            gameBonuses.Remove(bonus);
-            gameBonuses.Insert(bonusIndex, new GameBonus(null, null, null, null)
+            var insertIndex = 0;
+            if (position.HasValue && gameBonuses.Count > position.Value && gameBonuses[position.Value] == bonus)
+            {
+                insertIndex = position.Value;
+            }
+             else
+            {
+                insertIndex = gameBonuses.IndexOf(bonus);
+            }
+
+            gameBonuses.RemoveAt(insertIndex);
+            gameBonuses.Insert(insertIndex, new GameBonus(null, null, null, null)
             {
                 Type = BonusType.None,
                 Enabled = false,
