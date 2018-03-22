@@ -72,6 +72,8 @@ namespace GalaxyBlox.Objects
             }
         }
 
+        public bool IsPaused;
+
         protected Actor activeActor = null;
         protected ActorMovement activeActorMovement;
         protected List<Actor> actors;
@@ -169,6 +171,9 @@ namespace GalaxyBlox.Objects
 
         public override void Update(GameTime gameTime)
         {
+            if (IsPaused)
+                return;
+
             base.Update(gameTime);
 
             if (fallingPause > 0)
@@ -182,8 +187,6 @@ namespace GalaxyBlox.Objects
 
             if (moveTimer < 0)
                 moveTimer = 0;
-
-            
 
             UpdateEffectsArray();
         }
@@ -309,6 +312,17 @@ namespace GalaxyBlox.Objects
             actors.Clear();
             actorsQueue.Clear();
             CreateNewActor();
+            IsPaused = false;
+        }
+
+        public virtual void Pause()
+        {
+            IsPaused = true;
+        }
+
+        public virtual void Resume()
+        {
+            IsPaused = false; 
         }
 
         protected virtual void GameOverRoom_Closed(object sender, EventArgs e)

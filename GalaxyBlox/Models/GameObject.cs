@@ -91,7 +91,7 @@ namespace GalaxyBlox.Models
                 spriteBatch.Draw(BackgroundImage, DisplayRect(), null, Color * baseAlpha, 0, new Vector2(), SpriteEffects.None, ParentRoom.LayerDepth + LayerDepth);
 
             if (ShowText && TextSpriteFont != null)
-                spriteBatch.DrawString(TextSpriteFont, Text, DisplayTextPosition(), TextColor * baseAlpha, 0f, new Vector2(), Scale * textScale * ParentRoom.Scale, SpriteEffects.None, ParentRoom.LayerDepth + LayerDepth + 0.01f);
+                spriteBatch.DrawString(TextSpriteFont, Text, DisplayTextPosition(), TextColor * Alpha * baseAlpha, 0f, new Vector2(), Scale * textScale * ParentRoom.Scale, SpriteEffects.None, ParentRoom.LayerDepth + LayerDepth + 0.01f);
         }
 
         private void UpdateTextPosition()

@@ -19,10 +19,34 @@ namespace GalaxyBlox.Objects
         public int HideTimePeriod = 500; // in ms
         public float HideAlpha = 0f;
 
+        public bool IsAllHidden;
+
         List<HideInfo> objectsToHide;
+
+        public event EventHandler AllHidden;
+        protected virtual void OnAllHidden(EventArgs e)
+        {
+            EventHandler handler = AllHidden;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        public event EventHandler AllShown;
+        protected virtual void OnAllShown(EventArgs e)
+        {
+            EventHandler handler = AllShown;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
         public ObjectHider(Room parentRoom) : base(parentRoom)
         {
             objectsToHide = new List<HideInfo>();
+            IsAllHidden = false;
         }
 
         public override void Update(GameTime gameTime)
@@ -32,12 +56,14 @@ namespace GalaxyBlox.Objects
             for (int i = 0; i < objectsToHide.Count(); i++)
             {
                 var hideInfo = objectsToHide[i];
+                var wasHidding = false;
 
                 if (hideInfo.HideAction == HideAction.Nothing)
                     continue;
 
                 if (hideInfo.HideAction == HideAction.Hidding)
                 {
+                    wasHidding = true;
                     hideInfo.Timer -= gameTime.ElapsedGameTime.Milliseconds;
                     if (hideInfo.Timer <= 0)
                         hideInfo.HideAction = HideAction.Nothing;
@@ -45,12 +71,13 @@ namespace GalaxyBlox.Objects
 
                 if (hideInfo.HideAction == HideAction.Showing)
                 {
+                    wasHidding = false;
                     hideInfo.Timer += gameTime.ElapsedGameTime.Milliseconds;
                     if (hideInfo.Timer >= HideTimePeriod)
                         hideInfo.HideAction = HideAction.Nothing;
                 }
-
-                hideInfo.Object.Alpha = HideAlpha + (hideInfo.ShowAlpha - HideAlpha) * (hideInfo.Timer / (float)HideTimePeriod);
+                
+                hideInfo.Object.Alpha = MathHelper.Clamp(HideAlpha + (hideInfo.ShowAlpha - HideAlpha) * (hideInfo.Timer / (float)HideTimePeriod), HideAlpha, hideInfo.ShowAlpha);
 
                 Vector2 newPos = new Vector2();
                 switch (hideInfo.HidePlace)
@@ -67,13 +94,15 @@ namespace GalaxyBlox.Objects
                 }
                 hideInfo.Object.Position = newPos;
 
-                //hideInfo.Object.Position = new Vector2(
-                //    (int)((hideInfo.HidePosition.X > hideInfo.ShowPosition.X ? hideInfo.HidePosition.X : hideInfo.ShowPosition.X) 
-                //            - (hideInfo.HidePosition.X - hideInfo.ShowPosition.X) * (hideInfo.Timer / (float)HideTimePeriod)),
-                //    (int)((hideInfo.HidePosition.Y > hideInfo.ShowPosition.Y ? hideInfo.HidePosition.Y : hideInfo.ShowPosition.Y) 
-                //            - (hideInfo.HidePosition.Y - hideInfo.ShowPosition.Y) * (hideInfo.Timer / (float)HideTimePeriod)));
-
                 objectsToHide[i] = hideInfo;
+
+                if (objectsToHide.All(obj => obj.HideAction == HideAction.Nothing))
+                {
+                    if (wasHidding)
+                        OnAllHidden(new EventArgs());
+                    else
+                        OnAllShown(new EventArgs());
+                }
             }
         }
 
@@ -150,7 +179,11 @@ namespace GalaxyBlox.Objects
                     obj.Object.Position = obj.HidePosition;
                     obj.Object.Alpha = HideAlpha;
                 }
+
+                OnAllHidden(new EventArgs());
             }
+
+            IsAllHidden = true;
         }
 
         public void Show(bool animate)
@@ -172,7 +205,11 @@ namespace GalaxyBlox.Objects
                     obj.Object.Position = obj.ShowPosition;
                     obj.Object.Alpha = obj.ShowAlpha;
                 }
+
+                OnAllShown(new EventArgs());
             }
+
+            IsAllHidden = false;
         }
     }
 

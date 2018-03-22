@@ -30,15 +30,9 @@ namespace GalaxyBlox.Rooms
         }
 
         GameObject lblSelectedGameMode;
-
-        Button btnContinue;
-        Button btnTapToStart;
-
         GameObject tapToStart;
-
+        Button btnTapToStart;
         ObjectHider hider;
-
-        private bool gameJustStarted;
 
         GameRoom mainGame
         {
@@ -67,8 +61,6 @@ namespace GalaxyBlox.Rooms
             FullScreen = true;
             Background = Contents.Textures.BackgroundMenu;
 
-            gameJustStarted = true;
-
             selectebleGameModes = availableGameModes.ToList(); // fill modes that i can select from 
             SelectedGameMode = selectebleGameModes[selectebleGameModes.FindIndex(mode => mode ==  GameMode.Normal)];
 
@@ -82,7 +74,6 @@ namespace GalaxyBlox.Rooms
 
             hider = new ObjectHider(this)
             {
-                HideAlpha = 0f,
                 HideTimePeriod = 500
             };
             Objects.Add(hider);
@@ -225,6 +216,7 @@ namespace GalaxyBlox.Rooms
             hider.HideObject(objToAdd, HidePlace.Top);
 
             hider.Hide(false);
+            hider.AllHidden += Hider_AllHidden;
 
             //// ADDING TAP START BUTTON ////
             btnTapToStart = Bank.Buttons.GetMenuButton(this);
@@ -253,96 +245,13 @@ namespace GalaxyBlox.Rooms
             Objects.Add(tapToStart);
         }
 
-        private void TapStartButton_Click(object sender, EventArgs e)
+        private void Hider_AllHidden(object sender, EventArgs e)
         {
-            if (hider != null)
-                hider.Show(true);
-
-            Objects.Remove((GameObject)sender);
-
-            if (tapToStart != null)
-                Objects.Remove(tapToStart);
+            PlayGame();
         }
 
-        private void btnSelectRight_Click(object sender, EventArgs e)
+        private void PlayGame()
         {
-            var index = selectebleGameModes.FindIndex(mode => mode == SelectedGameMode) + 1;
-            if (index >= selectebleGameModes.Count)
-                index = 0;
-
-            SelectedGameMode = selectebleGameModes[index];
-        }
-
-        private void btnSelectLeft_Click(object sender, EventArgs e)
-        {
-            var index = selectebleGameModes.FindIndex(mode => mode == SelectedGameMode) - 1;
-            if (index < 0)
-                index = selectebleGameModes.Count - 1;
-
-            SelectedGameMode = selectebleGameModes[index];
-        }
-
-        public override void AfterChangeEvent()
-        {
-            if (gameJustStarted)
-            {
-                gameJustStarted = false;
-                return;
-            }
-
-            if (mainGame != null)
-            { //Continue
-                selectebleGameModes = new List<GameMode>() { GameMode.Continue };
-                selectebleGameModes.AddRange(availableGameModes);
-                SelectedGameMode = selectebleGameModes.First();
-            }
-            else
-            {
-                selectebleGameModes = availableGameModes.ToList();
-                SelectedGameMode = selectebleGameModes[selectebleGameModes.FindIndex(mode => mode == Settings.Game.UserSettings.LastGameMode)];
-            }
-
-            //ResetHighscoreText();
-        }
-
-        //private void ResetHighscoreText()
-        //{ 
-        //    if (Settings.Game.Highscores.Items.Count != 0)
-        //    {
-        //        var best = Settings.Game.Highscores.Items.First().Value.FirstOrDefault();
-        //        highScore.Text = $"Highscore: { Utils.Strings.ScoreToLongString(best.Value) }";
-        //    }
-        //    else
-        //    {
-        //        highScore.Text = "Highscore: -----";
-        //    }
-        //}
-
-        private void btnFinish_Click(object sender, EventArgs e)
-        {
-            new CloseGameRoom(this, "Room_CloseDialog", Vector2.Zero, Vector2.Zero).Show();
-        }
-
-        private void btnSettings_Click(object sender, EventArgs e)
-        {
-            new SettingsRoom(this, "Room_Settings", Vector2.Zero, Vector2.Zero).Show();
-        }
-
-        private void btnHighscore_click(object sender, EventArgs e)
-        {
-            new HighscoresRoom(this, "Room_Settings", Vector2.Zero, Vector2.Zero).Show();
-        }
-
-        private void btnControls_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void btnPlayGame_Click(object sender, EventArgs e)
-        {
-            //var star = Objects.Where(obj => (obj as StarSystem) != null).First();
-            //(star as StarSystem).Start(Game1.Random.Next(0, 2000000), 1, 3, 3, 5, 15);
-            //return;
-
             if (selectedGameMode == GameMode.Continue && mainGame != null)
             {
                 mainGame.Show();
@@ -378,6 +287,87 @@ namespace GalaxyBlox.Rooms
             }
 
             Settings.Game.SaveUserSettings();
+        }
+
+        private void TapStartButton_Click(object sender, EventArgs e)
+        {
+            if (hider != null)
+                hider.Show(true);
+
+            Objects.Remove((GameObject)sender);
+
+            if (tapToStart != null)
+                Objects.Remove(tapToStart);
+        }
+
+        private void btnSelectRight_Click(object sender, EventArgs e)
+        {
+            var index = selectebleGameModes.FindIndex(mode => mode == SelectedGameMode) + 1;
+            if (index >= selectebleGameModes.Count)
+                index = 0;
+
+            SelectedGameMode = selectebleGameModes[index];
+        }
+
+        private void btnSelectLeft_Click(object sender, EventArgs e)
+        {
+            var index = selectebleGameModes.FindIndex(mode => mode == SelectedGameMode) - 1;
+            if (index < 0)
+                index = selectebleGameModes.Count - 1;
+
+            SelectedGameMode = selectebleGameModes[index];
+        }
+
+        public override void AfterChangeEvent(Room previousRoom)
+        {
+            if (previousRoom == null)
+                return;
+
+            if (previousRoom.Name == "Room_Game")
+            {
+                if (mainGame != null)
+                { //Continue
+                    selectebleGameModes = new List<GameMode>() { GameMode.Continue };
+                    selectebleGameModes.AddRange(availableGameModes);
+                    SelectedGameMode = selectebleGameModes.First();
+                }
+                else
+                {
+                    selectebleGameModes = availableGameModes.ToList();
+                    SelectedGameMode = selectebleGameModes[selectebleGameModes.FindIndex(mode => mode == Settings.Game.UserSettings.LastGameMode)];
+                }
+
+                hider.Show(true);
+            }
+        }
+
+        private void btnFinish_Click(object sender, EventArgs e)
+        {
+            new CloseGameRoom(this, "Room_CloseDialog", Vector2.Zero, Vector2.Zero).Show();
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            new SettingsRoom(this, "Room_Settings", Vector2.Zero, Vector2.Zero).Show();
+        }
+
+        private void btnHighscore_click(object sender, EventArgs e)
+        {
+            new HighscoresRoom(this, "Room_Settings", Vector2.Zero, Vector2.Zero).Show();
+        }
+
+        private void btnControls_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void btnPlayGame_Click(object sender, EventArgs e)
+        {
+            //var star = Objects.Where(obj => (obj as StarSystem) != null).First();
+            //(star as StarSystem).Start(Game1.Random.Next(0, 2000000), 1, 3, 3, 5, 15);
+            //return;
+
+            hider.HideTimePeriod = 350;
+            hider.Hide(true);
         }
     }
 }

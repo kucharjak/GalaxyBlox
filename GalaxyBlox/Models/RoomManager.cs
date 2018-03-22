@@ -68,18 +68,24 @@ namespace GalaxyBlox.Models
         
         public static void ShowRoom(Room room)
         {
+            Room previousRoom = null;
+
             if (!rooms.Contains(room))
                 AddRoom(room);
 
             if (ActiveRoom != null)
+            {
                 ActiveRoom.LayerDepth = 0.8f;
+                previousRoom = ActiveRoom;
+            }
+                
             
             ActiveRoom = room;
             ActiveRoom.LayerDepth = 0.9f;
             RecalculateRoomDepth();
 
             ActiveRoom.IsVisible = true;
-            ActiveRoom.AfterChangeEvent();
+            ActiveRoom.AfterChangeEvent(previousRoom);
         }
 
         public static void CloseRoom(Room room, bool endRoom = false)
@@ -94,7 +100,7 @@ namespace GalaxyBlox.Models
                     if (endRoom)
                         DeleteRoom(room);
 
-                    ActiveRoom.AfterChangeEvent();
+                    ActiveRoom.AfterChangeEvent(room);
                     ActiveRoom.LayerDepth = 0.9f;
                     ActiveRoom.IsVisible = true;
                 }
@@ -107,7 +113,7 @@ namespace GalaxyBlox.Models
                         if (endRoom)
                             DeleteRoom(room);
 
-                        ActiveRoom.AfterChangeEvent();
+                        ActiveRoom.AfterChangeEvent(room);
                     }
                     else
                         throw new Exception("Active room can't be null");

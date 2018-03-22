@@ -34,6 +34,8 @@ namespace GalaxyBlox.Rooms
         private GameObject pnlBonusBtns;
         private List<GameObject> bonusObjs;
 
+        private ObjectHider hider;
+
         private SettingOptions.GameMode gameMode;
 
         public GameRoom(Room parent, string name, Vector2 size, Vector2 position) : base(parent, name, size, position)
@@ -56,6 +58,12 @@ namespace GalaxyBlox.Rooms
 
             var playingArenaPadding = 16;
 
+            hider = new ObjectHider(this)
+            {
+                 HideTimePeriod = 350
+            };
+            Objects.Add(hider);
+            
             // ADDING FIRST PANEL
             // PANEL BACKGROUND
             Objects.Add(new GameObject(this)
@@ -66,6 +74,8 @@ namespace GalaxyBlox.Rooms
                 LayerDepth = 0.02f
             });
             lastObj = Objects.Last();
+            hider.HideObject(Objects.Last(), HidePlace.Top);
+
             var playingArenaStart = lastObj.Position.Y + lastObj.Size.Y + playingArenaPadding;
 
             // ACTOR VIEWER
@@ -77,12 +87,15 @@ namespace GalaxyBlox.Rooms
                 Position = viewerPos,
                 LayerDepth = 0.045f
             });
+            hider.HideObject(Objects.Last(), HidePlace.Top);
+
             actorViewer = new ActorViewer(this, viewerSize, Contents.Colors.ActorViewerBackgroundColor)
             {
                 Position = viewerPos,
                 LayerDepth = 0.05f
             };
             Objects.Add(actorViewer);
+            hider.HideObject(Objects.Last(), HidePlace.Top);
 
             var btnPauseSize = new Vector2(116, 100);
             // PAUSE BUTTON
@@ -91,7 +104,8 @@ namespace GalaxyBlox.Rooms
             btnPause.Position = new Vector2(lastObj.Position.X + lastObj.Size.X - btnPauseSize.X - 16, lastObj.Position.Y + 16);
             btnPause.Click += btnPause_Click;
             Objects.Add(btnPause);
-            
+            hider.HideObject(Objects.Last(), HidePlace.Top);
+
             // SETTINGS 
             var lblScoreSize = new Vector2(416, 40);
             var lblLevelSize = new Vector2(416, 24);
@@ -111,7 +125,8 @@ namespace GalaxyBlox.Rooms
                 LayerDepth = 0.05f
             };
             Objects.Add(lblScore);
-            
+            hider.HideObject(Objects.Last(), HidePlace.Top);
+
             // LINE BETWEEN SCORE AND LEVEL
             Objects.Add(new GameObject(this)
             {
@@ -121,7 +136,8 @@ namespace GalaxyBlox.Rooms
                 Position = new Vector2(148 + (416 - scoreLineSize.X) / 2, lastObj.Position.Y + 72),
                 LayerDepth = 0.05f
             });
-            
+            hider.HideObject(Objects.Last(), HidePlace.Top);
+
             // LEVEL
             lblLevel = new GameObject(this)
             {
@@ -136,6 +152,7 @@ namespace GalaxyBlox.Rooms
                 LayerDepth = 0.05f
             };
             Objects.Add(lblLevel);
+            hider.HideObject(Objects.Last(), HidePlace.Top);
 
             // ADDING SECOND PANEL
             // SETTINGS
@@ -154,6 +171,8 @@ namespace GalaxyBlox.Rooms
                     LayerDepth = 0.02f
                 });
                 lastObj = Objects.Last();
+                hider.HideObject(Objects.Last(), HidePlace.Bottom);
+
                 playingArenaEndY = lastObj.Position.Y - playingArenaPadding;
                 controlButtonsStartY = lastObj.Position.Y + 16;
             }
@@ -167,6 +186,8 @@ namespace GalaxyBlox.Rooms
                     LayerDepth = 0.02f
                 });
                 lastObj = Objects.Last();
+                hider.HideObject(Objects.Last(), HidePlace.Bottom);
+
                 playingArenaEndY = lastObj.Position.Y - playingArenaPadding;
                 controlButtonsStartY = lastObj.Position.Y + 96;
 
@@ -180,6 +201,8 @@ namespace GalaxyBlox.Rooms
                     //BaseColor = Color.Red
                 };
                 Objects.Add(pnlBonusBtns);
+                hider.HideObject(Objects.Last(), HidePlace.Bottom);
+
                 bonusObjs = new List<GameObject>();
             }
 
@@ -191,6 +214,7 @@ namespace GalaxyBlox.Rooms
             btnControlLeft.Release += btnLeft_Release;
             btnControlLeft.Hover += btnLeft_Hover;
             Objects.Add(btnControlLeft);
+            hider.HideObject(Objects.Last(), HidePlace.Bottom);
 
             // CONTROL BUTTON FALL
             btnControlFall = Bank.Buttons.GetControlButton(this);
@@ -201,6 +225,7 @@ namespace GalaxyBlox.Rooms
             btnControlFall.Hover += btnDown_Hover;
             btnControlFall.Release += btnDown_Release;
             Objects.Add(btnControlFall);
+            hider.HideObject(Objects.Last(), HidePlace.Bottom);
 
             // CONTROL BUTTON ROTATE
             btnControlRotate = Bank.Buttons.GetControlButton(this);
@@ -209,6 +234,7 @@ namespace GalaxyBlox.Rooms
             btnControlRotate.Position = new Vector2(lastObj.Position.X + 368, controlButtonsStartY);
             btnControlRotate.Click += btnRotate_Click;
             Objects.Add(btnControlRotate);
+            hider.HideObject(Objects.Last(), HidePlace.Bottom);
 
             // CONTROL BUTTON RIGHT
             btnControlRight = Bank.Buttons.GetControlButton(this);
@@ -218,6 +244,7 @@ namespace GalaxyBlox.Rooms
             btnControlRight.Release += btnRight_Release;
             btnControlRight.Hover += btnRight_Hover;
             Objects.Add(btnControlRight);
+            hider.HideObject(Objects.Last(), HidePlace.Bottom);
 
             // ADDING PLAYING ARENA
             var arenaSize = new Vector2(Size.X - 2 * playingArenaPadding, playingArenaEndY - playingArenaStart);
@@ -248,6 +275,7 @@ namespace GalaxyBlox.Rooms
             arena.GameEnded += Arena_GameEnded;
             arena.StartNewGame();
             Objects.Add(arena);
+            hider.HideObject(Objects.Last(), HidePlace.Bottom);
 
             // adding border for arena
             var borderOffset = new Vector2(12);
@@ -257,6 +285,7 @@ namespace GalaxyBlox.Rooms
                 Size = new Vector2(arena.Size.X + 2 * borderOffset.X, arena.Size.Y + 2 * borderOffset.Y),
                 LayerDepth = 0.051f
             });
+            hider.HideObject(Objects.Last(), HidePlace.Bottom);
 
             //// ADDING STAR SYSTEM ////
             Objects.Add(new StarSystem(this, new Vector2(680, 1200), new Vector2(20, 40)));
@@ -265,6 +294,28 @@ namespace GalaxyBlox.Rooms
             (lastObj as StarSystem).Start(218884, 1, 3, 3, 5, 15);
             (lastObj as StarSystem).MaxTimer = 5000;
             (lastObj as StarSystem).Alpha = 0.8f;
+
+            hider.AllHidden += Hider_AllHidden;
+            hider.AllShown += Hider_AllShown;
+            hider.Hide(false);
+        }
+
+        private void Hider_AllShown(object sender, EventArgs e)
+        {
+            if (arena != null)
+                arena.Resume();
+        }
+
+        private void Hider_AllHidden(object sender, EventArgs e)
+        {
+            if (Parent != null)
+                Close();
+        }
+
+        public override void AfterChangeEvent(Room previousRoom)
+        {
+            if (previousRoom == null || previousRoom.Name == "Room_Menu")
+                hider.Show(true);
         }
 
         private void Arena_ActiveBonusChanged(object sender, EventArgs e)
@@ -286,7 +337,10 @@ namespace GalaxyBlox.Rooms
         {
             // remove old bonus buttons
             foreach (var obj in bonusObjs)
+            {
                 Objects.Remove(obj);
+                hider.Clear(obj);
+            }
             bonusObjs.Clear();
 
             // add new bonus buttons
@@ -312,6 +366,7 @@ namespace GalaxyBlox.Rooms
 
                     Objects.Add(btn);
                     bonusObjs.Add(btn);
+                    hider.HideObject(Objects.Last(), HidePlace.Bottom);
                 }
                 else
                 {
@@ -331,6 +386,7 @@ namespace GalaxyBlox.Rooms
                     };
                     Objects.Add(btnBack);
                     bonusObjs.Add(btnBack);
+                    hider.HideObject(Objects.Last(), HidePlace.Bottom);
                 }
                 i++;
             }
@@ -439,8 +495,10 @@ namespace GalaxyBlox.Rooms
 
         private void btnPause_Click(object sender, EventArgs e)
         {
-            if (Parent != null)
-                Close();
+            if (arena != null)
+                arena.Pause();
+
+            hider.Hide(true);
         }
 
         private void btnRotate_Click(object sender, EventArgs e)

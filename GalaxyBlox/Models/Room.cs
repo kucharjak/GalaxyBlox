@@ -180,7 +180,7 @@ namespace GalaxyBlox.Models
                 obj.Draw(spriteBatch);
         }
         
-        public virtual void AfterChangeEvent()
+        public virtual void AfterChangeEvent(Room previousRoom)
         {
         }
 
