@@ -228,17 +228,19 @@ namespace GalaxyBlox.Rooms
 
             tapToStart = new BreathingObject(this)
             {
-                Position = new Vector2(0, 0),
-                Size = this.Size,
+                Position = new Vector2(0, Size.Y / 2),
+                Size = new Vector2(Size.X, Size.Y / 2),
                 TextSpriteFont = Contents.Fonts.PixelArtTextFont,
                 Text = "TAP TO START",
                 TextColor = new Color(252, 239, 0),
-                TextHeight = 55,
+                TextHeight = 50,
                 TextAlignment = TextAlignment.Center,
                 ShowText = true,
                 LayerDepth = 0.05f,
                 MaxScale = 1f,
-                MinScale = 0.9f,
+                MinScale = 0.8f,
+                MaxAlpha = 1f,
+                MinAlpha = 0.4f,
                 TimeLimit = 4000,
                 Timer = 2000
             };

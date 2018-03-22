@@ -7,6 +7,8 @@ namespace GalaxyBlox.Objects
     {
         public float MaxScale = 1f;
         public float MinScale = 1f;
+        public float MaxAlpha = 1f;
+        public float MinAlpha = 1f;
         public int Timer = 0;
         public int TimeLimit = 0;
 
@@ -45,6 +47,7 @@ namespace GalaxyBlox.Objects
                 }
             }            
 
+            Alpha = MinAlpha + (float)Timer / TimeLimit * (MaxAlpha - MinAlpha);
             Scale = MinScale + (float)Timer / TimeLimit * (MaxScale - MinScale);
         }
     }
