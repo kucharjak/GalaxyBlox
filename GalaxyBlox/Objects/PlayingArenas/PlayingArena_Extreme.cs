@@ -6,6 +6,7 @@ using System.Text;
 using GalaxyBlox.Models;
 using Microsoft.Xna.Framework;
 using static GalaxyBlox.Static.SettingOptions;
+using GalaxyBlox.Static;
 
 namespace GalaxyBlox.Objects.PlayingArenas
 {
@@ -59,6 +60,14 @@ namespace GalaxyBlox.Objects.PlayingArenas
             CalculateScoreForLevelArray();
 
             bonusRandom = new Random((int)DateTime.Now.Ticks);
+        }
+
+        protected override bool[,] GetRandomShape()
+        {
+            if (Settings.Game.UserSettings.UseExtendedShapeLibrary)
+                return Contents.Shapes.GetExtendedRandomShape();
+            else
+                return Contents.Shapes.GetRandomShape();
         }
     }
 }

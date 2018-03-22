@@ -349,14 +349,6 @@ namespace GalaxyBlox.Objects.PlayingArenas
             return fallingSpeed;
         }
 
-        protected override bool[,] GetRandomShape()
-        {
-            if (Settings.Game.UserSettings.UseExtendedShapeLibrary)
-                return Contents.Shapes.GetExtendedRandomShape();
-            else
-                return Contents.Shapes.GetRandomShape();
-        }
-
         protected override Point GetNewActorPosition(Actor actor)
         {
             var availibleArenaSize = (int)arenaSize.X - 2 * newActorStartingPositionXPadding;

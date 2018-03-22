@@ -83,7 +83,7 @@ namespace GalaxyBlox.Rooms
             btnVibration = Bank.Buttons.GetEmptyButton(this);
             btnVibration.Size = settingsItemSize;
             btnVibration.TextHeight = settingsItemTextHeight;
-            btnVibration.Text = Settings.Game.UserSettings.Vibration ? "ON" : "OFF";
+            btnVibration.Text = Settings.Game.UserSettings.Vibration ? "YES" : "NO";
             btnVibration.Position = new Vector2(Size.X - btnVibration.Size.X - margin.right - itemPadding, btnIndicator.Position.Y + btnIndicator.Size.Y + itemPadding);
             btnVibration.Click += BtnVibration_Click;
             Objects.Add(btnVibration);
@@ -98,13 +98,13 @@ namespace GalaxyBlox.Rooms
             btnExtendedShapes = Bank.Buttons.GetEmptyButton(this);
             btnExtendedShapes.Size = settingsItemSize;
             btnExtendedShapes.TextHeight = settingsItemTextHeight;
-            btnExtendedShapes.Text = Settings.Game.UserSettings.UseExtendedShapeLibrary ? "ON" : "OFF";
+            btnExtendedShapes.Text = Settings.Game.UserSettings.UseExtendedShapeLibrary ? "YES" : "NOPE";
             btnExtendedShapes.Position = new Vector2(Size.X - btnExtendedShapes.Size.X - margin.right - itemPadding, btnVibration.Position.Y + btnVibration.Size.Y + itemPadding);
             btnExtendedShapes.Click += BtnExtendedShapes_Click;
             Objects.Add(btnExtendedShapes);
 
             obj = Bank.Visuals.GetSettingsLabel(this);
-            obj.Text = "MORE SHAPES:";
+            obj.Text = "MORE BLOCKs:";
             obj.Size = settingsItemSize;
             obj.TextHeight = settingsItemTextHeight;
             obj.Position = new Vector2(margin.left + itemPadding, btnExtendedShapes.Position.Y);
@@ -155,13 +155,13 @@ namespace GalaxyBlox.Rooms
         private void BtnVibration_Click(object sender, EventArgs e)
         {
             newVibration = !newVibration;
-            btnVibration.Text = newVibration ? "ON" : "OFF";
+            btnVibration.Text = newVibration ? "YES" : "NO";
         }
 
         private void BtnExtendedShapes_Click(object sender, EventArgs e)
         {
             newUseExtendedShapesLibrary = !newUseExtendedShapesLibrary;
-            btnExtendedShapes.Text = newUseExtendedShapesLibrary ? "ON" : "OFF";
+            btnExtendedShapes.Text = newUseExtendedShapesLibrary ? "YES" : "NO";
         }
     }
 }
