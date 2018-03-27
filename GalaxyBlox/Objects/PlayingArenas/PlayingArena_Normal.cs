@@ -156,6 +156,9 @@ namespace GalaxyBlox.Objects.PlayingArenas
         {
             base.Update(gameTime);
 
+            if (IsPaused)
+                return;
+
             //if (gameBonuses.Count == 0 && ActiveBonus == null)
             //    timeSinceLastBonus += gameTime.ElapsedGameTime.Milliseconds;
 
@@ -356,7 +359,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
             var positionsWithoutOtherActors = new List<Point>(); // i won't place new actor on other existing actor
             for (int i = 0; i < availibleArenaSize + 1 - actor.Shape.GetLength(0); i++)
             {
-                actor.Position = new Point(i + newActorStartingPositionXPadding, 0);
+                actor.Position = new Point(i + newActorStartingPositionXPadding, - actor.Shape.GetLength(1) + 1);
                 if (!ActorCollideActors(actor, actors))
                     positionsWithoutOtherActors.Add(actor.Position);
             }
@@ -365,7 +368,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
             if (positionsWithoutOtherActors.Count > 0)
                 return positionsWithoutOtherActors[Game1.Random.Next(0, positionsWithoutOtherActors.Count - 1)];
             else
-                return new Point(Game1.Random.Next(0, availibleArenaSize + 1 - actor.Shape.GetLength(0) + 2), 0);
+                return new Point(Game1.Random.Next(0, availibleArenaSize + 1 - actor.Shape.GetLength(0) + 2), - actor.Shape.GetLength(1) + 1);
         }
 
         protected override void UpdateEffectsArray()
@@ -793,6 +796,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
 
                 if (Settings.Game.UserSettings.Vibration)
                     Game1.Vibrator.Vibrate(extraPower ? 150 : 50);
+
                 ExplodeActor(actor, !extraPower ? cubesExplosionPower : cubesExplosionExtraPower);
 
                 if (actor == activeActor)

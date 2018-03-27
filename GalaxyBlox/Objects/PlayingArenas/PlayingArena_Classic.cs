@@ -76,6 +76,9 @@ namespace GalaxyBlox.Objects.PlayingArenas
         {
             base.Update(gameTime);
 
+            if (IsPaused)
+                return;
+
             MoveActiveActorToSide();
 
             foreach (var actor in actors.ToArray())
@@ -126,7 +129,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
 
         protected override Point GetNewActorPosition(Actor actor)
         {
-            return new Point((playground.GetLength(0) - actor.Shape.GetLength(0)) / 2, 0);
+            return new Point((playground.GetLength(0) - actor.Shape.GetLength(0)) / 2, -actor.Shape.GetLength(1) + 1);
         }
     }
 }

@@ -4,7 +4,6 @@ using System.Linq;
 using GalaxyBlox.Static;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Android.Util;
 using GalaxyBlox.EventArgsClasses;
 using GalaxyBlox.Models;
 using GalaxyBlox.Rooms;
@@ -15,7 +14,6 @@ namespace GalaxyBlox.Objects
 {
     class PlayingArena : GameObject
     {
-
         public event EventHandler ActorsQueueChanged;
         protected virtual void OnActorsQueueChange(QueueChangeEventArgs e)
         {
@@ -73,6 +71,7 @@ namespace GalaxyBlox.Objects
         }
 
         public bool IsPaused;
+        private int resumeTimer;
 
         protected Actor activeActor = null;
         protected ActorMovement activeActorMovement;
@@ -171,6 +170,14 @@ namespace GalaxyBlox.Objects
 
         public override void Update(GameTime gameTime)
         {
+            if (resumeTimer > 0)
+            {
+                resumeTimer -= gameTime.ElapsedGameTime.Milliseconds;
+
+                if (resumeTimer <= 0)
+                    IsPaused = false;
+            }
+
             if (IsPaused)
                 return;
 
@@ -195,13 +202,16 @@ namespace GalaxyBlox.Objects
         {
             if (backgroundChanged)
             {
-                if (backgroundRenderTarget != null)
+                if (backgroundRenderTarget == null || backgroundRenderTarget.IsContentLost || backgroundRenderTarget.IsDisposed)
                 {
-                    backgroundRenderTarget.Dispose();
-                    backgroundRenderTarget = null;
+                    if (backgroundRenderTarget != null)
+                    {
+                        backgroundRenderTarget.Dispose();
+                        backgroundRenderTarget = null;
+                    }
+
+                    backgroundRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
                 }
-                    
-                backgroundRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
 
                 graphicsDevice.SetRenderTarget(backgroundRenderTarget);
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
@@ -229,14 +239,17 @@ namespace GalaxyBlox.Objects
                 backgroundChanged = false;
             }
 
-            if (mainRenderTarget != null)
+            if (mainRenderTarget == null || mainRenderTarget.IsContentLost || mainRenderTarget.IsDisposed)
             {
-                mainRenderTarget.Dispose();
-                mainRenderTarget = null;
+                if (mainRenderTarget != null)
+                {
+                    mainRenderTarget.Dispose();
+                    mainRenderTarget = null;
+                }
+                
+                mainRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
+                BackgroundImage = mainRenderTarget;
             }
-
-            mainRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
-            BackgroundImage = mainRenderTarget;
 
             graphicsDevice.SetRenderTarget(mainRenderTarget);
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
@@ -320,9 +333,14 @@ namespace GalaxyBlox.Objects
             IsPaused = true;
         }
 
-        public virtual void Resume()
+        public virtual void Resume(int resumeTimer = 0)
         {
-            IsPaused = false; 
+            if (resumeTimer > 0)
+            {
+                this.resumeTimer = resumeTimer;
+            }
+            else
+                IsPaused = false; 
         }
 
         protected virtual void GameOverRoom_Closed(object sender, EventArgs e)
@@ -497,7 +515,14 @@ namespace GalaxyBlox.Objects
                 actors.Remove(actor);
 
                 if (actor == activeActor)
+                {
                     activeActor = actors.Count > 0 ? actors.First() : null;
+                    var nextActorInQueue = actors.Count > 1 ? actors[1] : actorsQueue.FirstOrDefault();
+                    if (nextActorInQueue != null)
+                        OnActorsQueueChange(new QueueChangeEventArgs(nextActorInQueue));
+                    else
+                        OnActorsQueueChange(new QueueChangeEventArgs(null, Color.White));
+                }
 
                 CheckGameOver();
 
@@ -506,7 +531,6 @@ namespace GalaxyBlox.Objects
                 {
                     if (Settings.Game.UserSettings.Vibration)
                         Game1.Vibrator.Vibrate(25 * linesDestroyed.Count());
-
                     DestroyFullLines(linesDestroyed);
                     IncreaseScoreForLines(linesDestroyed.Count());
                 }
@@ -531,16 +555,20 @@ namespace GalaxyBlox.Objects
         protected virtual void GameOver()
         {
             var isNewHighscore = false;
-            if (!Settings.Game.Highscores.Items.ContainsKey(gameMode))
+
+            if (score > 0)
             {
-                isNewHighscore = true;
-            }
-            else
-            {
-                var highscores = Settings.Game.Highscores.Items[gameMode];
-                if (highscores.Count < Settings.Game.MaxHighscoresPerGameMod || highscores.Any(scr => scr.Value < score))
+                if (!Settings.Game.Highscores.Items.ContainsKey(gameMode))
                 {
                     isNewHighscore = true;
+                }
+                else
+                {
+                    var highscores = Settings.Game.Highscores.Items[gameMode];
+                    if (highscores.Count < Settings.Game.MaxHighscoresPerGameMod || highscores.Any(scr => scr.Value < score))
+                    {
+                        isNewHighscore = true;
+                    }
                 }
             }
 
@@ -661,7 +689,8 @@ namespace GalaxyBlox.Objects
         {
             foreach (var cube in cubes)
             {
-                if (cube.Item1 < playground.GetLength(0) && cube.Item2 < playground.GetLength(1))
+                if (cube.Item1 < playground.GetLength(0) && cube.Item1 >= 0
+                    && cube.Item2 < playground.GetLength(1) && cube.Item2 >= 0)
                     playground[cube.Item1, cube.Item2] = cube.Item3;
             }
             backgroundChanged = true;
@@ -701,10 +730,16 @@ namespace GalaxyBlox.Objects
                     if (actorArray[x, y])
                     {
                         var boxPosition = new Point(actorPosition.X + x, actorPosition.Y + y);
+
+                        if (boxPosition.Y < 0 &&
+                            boxPosition.X < playground.GetLength(0) &&
+                            boxPosition.X >= 0)
+                            continue;
+
                         if (boxPosition.X >= playground.GetLength(0) ||
                             boxPosition.Y >= playground.GetLength(1) ||
                             boxPosition.X < 0 ||
-                            boxPosition.Y < 0 ||
+                            //boxPosition.Y < 0 ||
                             playground[boxPosition.X, boxPosition.Y] > 0)
                         { // collision happened
                             return true;
@@ -743,7 +778,7 @@ namespace GalaxyBlox.Objects
             if (activeActor == null)
                 activeActor = actor;
 
-            var nextActorInQueue = actorsQueue.FirstOrDefault();
+            var nextActorInQueue = actors.Count > 1 ? actors[1] :actorsQueue.FirstOrDefault();
             if (nextActorInQueue != null)
                 OnActorsQueueChange(new QueueChangeEventArgs(nextActorInQueue));
             else
@@ -853,6 +888,9 @@ namespace GalaxyBlox.Objects
 
                             for (int y = startPosition.Y; y < playground.GetLength(1); y++)
                             {
+                                if (y < 0)
+                                    continue;
+
                                 if (playground[startPosition.X, y] == 0)
                                 {
                                     playgroundEffectsList.Add(new Tuple<int, int, Color>(startPosition.X, y, Contents.Colors.IndicatorColor));
