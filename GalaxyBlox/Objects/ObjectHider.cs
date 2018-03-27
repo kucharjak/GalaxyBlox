@@ -3,12 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using GalaxyBlox.Models;
 using Microsoft.Xna.Framework;
 
@@ -22,6 +16,9 @@ namespace GalaxyBlox.Objects
         public bool IsAllHidden;
 
         List<HideInfo> objectsToHide;
+
+        private bool wasHidding = false;
+        private bool wasShowing = false;
 
         public event EventHandler AllHidden;
         protected virtual void OnAllHidden(EventArgs e)
@@ -52,6 +49,18 @@ namespace GalaxyBlox.Objects
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            if (wasHidding)
+            {
+                wasHidding = false;
+                OnAllHidden(new EventArgs());
+            }
+
+            if (wasShowing)
+            {
+                wasShowing = false;
+                OnAllShown(new EventArgs());
+            }
 
             for (int i = 0; i < objectsToHide.Count(); i++)
             {
@@ -99,9 +108,13 @@ namespace GalaxyBlox.Objects
                 if (objectsToHide.All(obj => obj.HideAction == HideAction.Nothing))
                 {
                     if (wasHidding)
-                        OnAllHidden(new EventArgs());
+                    {
+                        this.wasHidding = true;
+                    }
                     else
-                        OnAllShown(new EventArgs());
+                    {
+                        this.wasShowing = true;
+                    }
                 }
             }
         }
