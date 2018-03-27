@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Android.Util;
 using GalaxyBlox.Models;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -303,7 +302,7 @@ namespace GalaxyBlox.Rooms
         private void Hider_AllShown(object sender, EventArgs e)
         {
             if (arena != null)
-                arena.Resume();
+                arena.Resume(100);
         }
 
         private void Hider_AllHidden(object sender, EventArgs e)

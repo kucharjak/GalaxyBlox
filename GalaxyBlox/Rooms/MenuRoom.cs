@@ -2,7 +2,6 @@
 using GalaxyBlox.Models;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
-using Android.Util;
 using Microsoft.Xna.Framework;
 using GalaxyBlox.Objects;
 using System.Linq;
@@ -29,10 +28,16 @@ namespace GalaxyBlox.Rooms
             }
         }
 
-        GameObject lblSelectedGameMode;
-        GameObject tapToStart;
-        Button btnTapToStart;
-        ObjectHider hider;
+        private GameObject lblSelectedGameMode;
+        private BreathingObject tapToStart;
+        private Button btnTapToStart;
+        private ObjectHider hider;
+
+        /// <summary>
+        /// Waiting time to hide menu in milliseconds. Set for 1m 30s.
+        /// </summary>
+        private const int hideWaitingTime = 90000;
+        private int hideTimer = hideWaitingTime;
 
         GameRoom mainGame
         {
@@ -224,6 +229,7 @@ namespace GalaxyBlox.Rooms
             btnTapToStart.Size = this.Size;
             btnTapToStart.Alpha = 0f;
             btnTapToStart.Click += TapStartButton_Click;
+            btnTapToStart.Hover += TapStartButton_Click;
             Objects.Add(btnTapToStart);
 
             tapToStart = new BreathingObject(this)
@@ -247,9 +253,28 @@ namespace GalaxyBlox.Rooms
             Objects.Add(tapToStart);
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            if (hideTimer < hideWaitingTime)
+            {
+                hideTimer += gameTime.ElapsedGameTime.Milliseconds;
+
+                if (hideTimer >= hideWaitingTime)
+                    hider.Hide(true);
+            }
+        }
+
         private void Hider_AllHidden(object sender, EventArgs e)
         {
-            PlayGame();
+            if (hideTimer >= hideWaitingTime)
+            {
+                tapToStart.IsPaused = false;
+                tapToStart.Alpha = 1f;
+            }
+            else
+                PlayGame();
         }
 
         private void PlayGame()
@@ -293,13 +318,13 @@ namespace GalaxyBlox.Rooms
 
         private void TapStartButton_Click(object sender, EventArgs e)
         {
-            if (hider != null)
+            if (hider != null && hider.IsAllHidden)
                 hider.Show(true);
 
-            Objects.Remove((GameObject)sender);
+            tapToStart.IsPaused = true;
+            tapToStart.Alpha = 0f;
 
-            if (tapToStart != null)
-                Objects.Remove(tapToStart);
+            hideTimer = 0;
         }
 
         private void btnSelectRight_Click(object sender, EventArgs e)
