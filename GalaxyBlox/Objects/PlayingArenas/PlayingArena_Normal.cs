@@ -793,11 +793,9 @@ namespace GalaxyBlox.Objects.PlayingArenas
             else
             {
                 var extraPower = Game1.Random.Next(0, cubesExplosionExtraPowerProb) == cubesExplosionExtraPowerProb;
-
-                if (Settings.Game.UserSettings.Vibration)
-                    Game1.Vibrator.Vibrate(extraPower ? 150 : 50);
-
+                
                 ExplodeActor(actor, !extraPower ? cubesExplosionPower : cubesExplosionExtraPower);
+                Vibrations.Vibrate(extraPower ? 150 : 50);
 
                 if (actor == activeActor)
                     activeActor = null;

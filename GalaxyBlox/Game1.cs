@@ -1,6 +1,3 @@
-using Android.Content;
-using Android.OS;
-using Android.Util;
 using GalaxyBlox.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -19,8 +16,6 @@ namespace GalaxyBlox
 
         public static Random Random;
 
-        public static Vibrator Vibrator;
-
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         
@@ -30,8 +25,6 @@ namespace GalaxyBlox
             Content.RootDirectory = "Content";
 
             graphics.IsFullScreen = true;
-            //graphics.PreferredBackBufferWidth = GameWindow.Width;
-            //graphics.PreferredBackBufferHeight = GameWindow.Height;
             ActiveGame = this;
         }
 
@@ -49,10 +42,8 @@ namespace GalaxyBlox
 
             GameContent = Content;
             Random = new Random(unchecked((int)DateTime.Now.Ticks));
-            Vibrator = (Vibrator)Activity.GetSystemService(Context.VibratorService);
 
             new Rooms.MenuRoom("Room_Menu", Static.Settings.Game.WindowSize, new Vector2()).Show();
-            //new Rooms.GameRoom("Room_Game", Static.Settings.Game.WindowSize, new Vector2()).Show();
         }
 
         /// <summary>

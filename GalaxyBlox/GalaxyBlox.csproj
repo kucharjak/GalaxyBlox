@@ -105,6 +105,7 @@
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\SerializableDictionary.cs" />
     <Compile Include="Utils\Strings.cs" />
+    <Compile Include="Utils\Vibrations.cs" />
     <Compile Include="Utils\Xml.cs" />
   </ItemGroup>
   <ItemGroup>

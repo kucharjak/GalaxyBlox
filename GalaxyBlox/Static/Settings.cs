@@ -1,5 +1,4 @@
-﻿using Android.Util;
-using GalaxyBlox.Static;
+﻿using GalaxyBlox.Static;
 using GalaxyBlox.Utils;
 using Microsoft.Xna.Framework;
 using System;
@@ -123,7 +122,7 @@ namespace GalaxyBlox.Static
             public bool Vibration = true;
 
             [XmlElement]
-            public bool UseExtendedShapeLibrary = false;
+            public bool UseExtendedShapeLibrary = true;
         }
     }
 }
