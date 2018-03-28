@@ -6,6 +6,7 @@ using System.Text;
 using GalaxyBlox.Models;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using GalaxyBlox.Utils;
 
 namespace GalaxyBlox.Objects
 {
@@ -64,7 +65,7 @@ namespace GalaxyBlox.Objects
                 spriteBatch.End();
                 graphicsDevice.SetRenderTarget(null);
 
-                BackgroundImage = backgroundTarget;
+                SpriteImage = new Sprite(backgroundTarget, backgroundTarget.GetRectangle());
                 dynamicBackgroundChanged = false;
             }
 

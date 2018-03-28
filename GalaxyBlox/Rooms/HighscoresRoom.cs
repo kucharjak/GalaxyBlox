@@ -76,7 +76,7 @@ namespace GalaxyBlox.Rooms
 
             //// SELECT LEFT GAMEMODE BUTTON ////
             GameObject objToAdd = Bank.Buttons.GetMenuButton(this);
-            objToAdd.BackgroundImage = Contents.Textures.Button_left_small;
+            objToAdd.SpriteImage = Contents.Sprites.Button_left_small;
             objToAdd.Size = arrowButtonsSize;
             objToAdd.Position = new Vector2(margin.left, lblSelectedGameMode.Position.Y + (lblSelectedGameMode.Size.Y - arrowButtonsSize.Y) / 2);
             (objToAdd as Button).Click += btnSelectLeft_Click;
@@ -84,7 +84,7 @@ namespace GalaxyBlox.Rooms
 
             //// SELECT RIGH GAMEMODE BUTTON ////
             objToAdd = Bank.Buttons.GetMenuButton(this);
-            objToAdd.BackgroundImage = Contents.Textures.Button_right_small;
+            objToAdd.SpriteImage = Contents.Sprites.Button_right_small;
             objToAdd.Size = arrowButtonsSize;
             objToAdd.Position = new Vector2(Size.X - margin.right - arrowButtonsSize.X, lblSelectedGameMode.Position.Y + (lblSelectedGameMode.Size.Y - arrowButtonsSize.Y) / 2);
             (objToAdd as Button).Click += btnSelectRight_Click;

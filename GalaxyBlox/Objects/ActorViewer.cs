@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using GalaxyBlox.Static;
 using GalaxyBlox.Models;
+using GalaxyBlox.Utils;
 
 namespace GalaxyBlox.Objects
 {
@@ -17,7 +18,7 @@ namespace GalaxyBlox.Objects
         private int cubesPadding;
 
         private bool actorDrawn;
-
+        
         private Vector2 backgroundSize;
         private RenderTarget2D renderTarget;
 
@@ -28,7 +29,7 @@ namespace GalaxyBlox.Objects
             Size = size;
             backgroundSize = new Vector2(DisplayRect().Size.X, DisplayRect().Size.Y);
             renderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
-            BackgroundImage = renderTarget;
+            SpriteImage = new Sprite(renderTarget, renderTarget.GetRectangle());
 
             cubesPadding = 1;
         }
@@ -42,7 +43,7 @@ namespace GalaxyBlox.Objects
             }
 
             renderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
-            BackgroundImage = renderTarget;
+            SpriteImage = new Sprite(renderTarget, renderTarget.GetRectangle());
             actor = null;
             actorDrawn = false;
         }

@@ -87,7 +87,7 @@ namespace GalaxyBlox.Rooms
             //// EXIT BUTTON ////
             var btnPauseSize = 100;
             objToAdd = Bank.Buttons.GetMenuButton(this);
-            objToAdd.BackgroundImage = Contents.Textures.Button_exit;
+            objToAdd.SpriteImage = Contents.Sprites.Button_exit;
             objToAdd.Size = new Vector2(btnPauseSize);
             objToAdd.Position = new Vector2(15, 15);
             (objToAdd as Button).Click += btnFinish_Click;
@@ -114,7 +114,7 @@ namespace GalaxyBlox.Rooms
             var playButtonSize = new Vector2(280, 180);
 
             objToAdd = Bank.Buttons.GetMenuButton(this);
-            objToAdd.BackgroundImage = Contents.Textures.Button_play;
+            objToAdd.SpriteImage = Contents.Sprites.Button_play;
             objToAdd.Size = playButtonSize;
             objToAdd.Position = new Vector2((Size.X - objToAdd.Size.X) / 2, Size.Y - objToAdd.Size.Y - padding);
             (objToAdd as Button).Click += btnPlayGame_Click;
@@ -126,7 +126,7 @@ namespace GalaxyBlox.Rooms
 
             //// SETTINGS BUTTON ////
             objToAdd = Bank.Buttons.GetMenuButton(this);
-            objToAdd.BackgroundImage = Contents.Textures.Button_settings;
+            objToAdd.SpriteImage = Contents.Sprites.Button_settings;
             objToAdd.Size = sideButtonsSize;
             objToAdd.Position = new Vector2((playButtonsPosition.X - sideButtonsSize.X) / 2, playButtonsPosition.Y + (playButtonSize.Y - sideButtonsSize.Y) / 2);
             (objToAdd as Button).Click += btnSettings_Click;
@@ -137,7 +137,7 @@ namespace GalaxyBlox.Rooms
 
             //// HIGHSCORE BUTTON ////
             objToAdd = Bank.Buttons.GetMenuButton(this);
-            objToAdd.BackgroundImage = Contents.Textures.Button_highscore;
+            objToAdd.SpriteImage = Contents.Sprites.Button_highscore;
             objToAdd.Size = sideButtonsSize;
             objToAdd.Position = new Vector2(offset + (Size.X - offset - sideButtonsSize.X) / 2, playButtonsPosition.Y + (playButtonSize.Y - sideButtonsSize.Y) / 2);
             (objToAdd as Button).Click += btnHighscore_click;
@@ -182,7 +182,7 @@ namespace GalaxyBlox.Rooms
 
             //// SELECT LEFT GAMEMODE BUTTON ////
             objToAdd = Bank.Buttons.GetMenuButton(this);
-            objToAdd.BackgroundImage = Contents.Textures.Button_left;
+            objToAdd.SpriteImage = Contents.Sprites.Button_left;
             objToAdd.Size = arrowButtonsSize;
             objToAdd.Position = new Vector2(padding, lblSelectedGameMode.Position.Y + (lblSelectedGameMode.Size.Y - arrowButtonsSize.Y) / 2);
             (objToAdd as Button).Click += btnSelectLeft_Click;
@@ -191,7 +191,7 @@ namespace GalaxyBlox.Rooms
 
             //// SELECT RIGH GAMEMODE BUTTON ////
             objToAdd = Bank.Buttons.GetMenuButton(this);
-            objToAdd.BackgroundImage = Contents.Textures.Button_right;
+            objToAdd.SpriteImage = Contents.Sprites.Button_right;
             objToAdd.Size = arrowButtonsSize;
             objToAdd.Position = new Vector2(Size.X - padding - arrowButtonsSize.X, lblSelectedGameMode.Position.Y + (lblSelectedGameMode.Size.Y - arrowButtonsSize.Y) / 2);
             (objToAdd as Button).Click += btnSelectRight_Click;
@@ -208,7 +208,7 @@ namespace GalaxyBlox.Rooms
             //// ADDING LOGO ////
             objToAdd = new BreathingObject(this)
             {
-                BackgroundImage = Contents.Textures.Logo,
+                SpriteImage = Contents.Sprites.Logo,
                 Position = new Vector2(0, 140),
                 Size = new Vector2(720, 256),
                 LayerDepth = 0.05f,

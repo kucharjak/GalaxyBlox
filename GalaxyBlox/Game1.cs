@@ -1,4 +1,5 @@
 using GalaxyBlox.Models;
+using GalaxyBlox.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -98,6 +99,50 @@ namespace GalaxyBlox
             Static.Contents.Textures.Star_big = Content.Load<Texture2D>("Sprites/star_big");
 
             Static.Contents.Textures.Logo = Content.Load<Texture2D>("Sprites/logo");
+
+            /// loading sprites
+
+            Static.Contents.Sprites.Pix = new Sprite(Static.Contents.Textures.Pix, Static.Contents.Textures.Pix.GetRectangle());
+
+            Static.Contents.Sprites.ControlButton_fall = new Sprite(Static.Contents.Textures.ControlButton_fall, Static.Contents.Textures.ControlButton_fall.GetRectangle());
+            Static.Contents.Sprites.ControlButton_left = new Sprite(Static.Contents.Textures.ControlButton_left, Static.Contents.Textures.ControlButton_left.GetRectangle());
+            Static.Contents.Sprites.ControlButton_right = new Sprite(Static.Contents.Textures.ControlButton_right, Static.Contents.Textures.ControlButton_right.GetRectangle());
+            Static.Contents.Sprites.ControlButton_rotate = new Sprite(Static.Contents.Textures.ControlButton_rotate, Static.Contents.Textures.ControlButton_rotate.GetRectangle());
+
+            Static.Contents.Sprites.Button_pause = new Sprite(Static.Contents.Textures.Button_pause, Static.Contents.Textures.Button_pause.GetRectangle());
+            Static.Contents.Sprites.Button_exit = new Sprite(Static.Contents.Textures.Button_exit, Static.Contents.Textures.Button_exit.GetRectangle());
+            Static.Contents.Sprites.Button_play = new Sprite(Static.Contents.Textures.Button_play, Static.Contents.Textures.Button_play.GetRectangle());
+            Static.Contents.Sprites.Button_settings = new Sprite(Static.Contents.Textures.Button_settings, Static.Contents.Textures.Button_settings.GetRectangle());
+            Static.Contents.Sprites.Button_highscore = new Sprite(Static.Contents.Textures.Button_highscore, Static.Contents.Textures.Button_highscore.GetRectangle());
+            Static.Contents.Sprites.Button_left = new Sprite(Static.Contents.Textures.Button_left, Static.Contents.Textures.Button_left.GetRectangle());
+            Static.Contents.Sprites.Button_right = new Sprite(Static.Contents.Textures.Button_right, Static.Contents.Textures.Button_right.GetRectangle());
+            Static.Contents.Sprites.Button_left_small = new Sprite(Static.Contents.Textures.Button_left_small, Static.Contents.Textures.Button_left_small.GetRectangle());
+            Static.Contents.Sprites.Button_right_small = new Sprite(Static.Contents.Textures.Button_right_small, Static.Contents.Textures.Button_right_small.GetRectangle());
+            Static.Contents.Sprites.Button_up_medium = new Sprite(Static.Contents.Textures.Button_up_medium, Static.Contents.Textures.Button_up_medium.GetRectangle());
+            Static.Contents.Sprites.Button_down_medium = new Sprite(Static.Contents.Textures.Button_down_medium, Static.Contents.Textures.Button_down_medium.GetRectangle());
+            Static.Contents.Sprites.Button_empty = new Sprite(Static.Contents.Textures.Button_empty, Static.Contents.Textures.Button_empty.GetRectangle());
+            Static.Contents.Sprites.Button_bonus = new Sprite(Static.Contents.Textures.Button_bonus, Static.Contents.Textures.Button_bonus.GetRectangle());
+
+            Static.Contents.Sprites.BackgroundGame = new Sprite(Static.Contents.Textures.BackgroundGame, Static.Contents.Textures.BackgroundGame.GetRectangle());
+            Static.Contents.Sprites.BackgroundMenu = new Sprite(Static.Contents.Textures.BackgroundMenu, Static.Contents.Textures.BackgroundMenu.GetRectangle());
+            Static.Contents.Sprites.Dialog_background = new Sprite(Static.Contents.Textures.Dialog_background, Static.Contents.Textures.Dialog_background.GetRectangle());
+            Static.Contents.Sprites.Dialog_inside = new Sprite(Static.Contents.Textures.Dialog_inside, Static.Contents.Textures.Dialog_inside.GetRectangle());
+
+            Static.Contents.Sprites.GameUI_top_background = new Sprite(Static.Contents.Textures.GameUI_top_background, Static.Contents.Textures.GameUI_top_background.GetRectangle());
+            Static.Contents.Sprites.GameUI_bottom_classic_background = new Sprite(Static.Contents.Textures.GameUI_bottom_classic_background, Static.Contents.Textures.GameUI_bottom_classic_background.GetRectangle());
+            Static.Contents.Sprites.GameUI_bottom_normal_background = new Sprite(Static.Contents.Textures.GameUI_bottom_normal_background, Static.Contents.Textures.GameUI_bottom_normal_background.GetRectangle());
+            Static.Contents.Sprites.GameUI_playingArena_border = new Sprite(Static.Contents.Textures.GameUI_playingArena_border, Static.Contents.Textures.GameUI_playingArena_border.GetRectangle());
+
+            Static.Contents.Sprites.Dialog_icon_questionMark = new Sprite(Static.Contents.Textures.Dialog_icon_questionMark, Static.Contents.Textures.Dialog_icon_questionMark.GetRectangle());
+            Static.Contents.Sprites.Dialog_icon_settings = new Sprite(Static.Contents.Textures.Dialog_icon_settings, Static.Contents.Textures.Dialog_icon_settings.GetRectangle());
+            Static.Contents.Sprites.Dialog_icon_highscore = new Sprite(Static.Contents.Textures.Dialog_icon_highscore, Static.Contents.Textures.Dialog_icon_highscore.GetRectangle());
+
+            Static.Contents.Sprites.Star_small = new Sprite(Static.Contents.Textures.Star_small, Static.Contents.Textures.Star_small.GetRectangle());
+            Static.Contents.Sprites.Star_medium_01 = new Sprite(Static.Contents.Textures.Star_medium_01, Static.Contents.Textures.Star_medium_01.GetRectangle());
+            Static.Contents.Sprites.Star_medium_02 = new Sprite(Static.Contents.Textures.Star_medium_02, Static.Contents.Textures.Star_medium_02.GetRectangle());
+            Static.Contents.Sprites.Star_big = new Sprite(Static.Contents.Textures.Star_big, Static.Contents.Textures.Star_big.GetRectangle());
+
+            Static.Contents.Sprites.Logo = new Sprite(Static.Contents.Textures.Logo, Static.Contents.Textures.Logo.GetRectangle());
         }
 
         /// <summary>

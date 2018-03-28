@@ -3,13 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
 using GalaxyBlox.Models;
-using Android.Util;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using GalaxyBlox.Objects;
@@ -104,7 +98,7 @@ namespace GalaxyBlox.Rooms
                 for (int i = 0; i < maxCharacters; i++)
                 {
                     var arrUp = Bank.Buttons.GetMenuButton(this);
-                    arrUp.BackgroundImage = Contents.Textures.Button_up_medium;
+                    arrUp.SpriteImage = Contents.Sprites.Button_up_medium;
                     arrUp.Size = btnArrowSize;
                     arrUp.Position = new Vector2(posX + i * (btnArrowSize.X + charItemPadding), posY);
                     Objects.Add(arrUp);
@@ -113,7 +107,7 @@ namespace GalaxyBlox.Rooms
                     character.Size = charItemSize;  
                     character.Position = new Vector2(posX + i * (charItemSize.X + charItemPadding), arrUp.Position.Y + arrUp.Size.Y + charItemPadding);
                     character.ShowText = true;
-                    character.TextAlignment = Models.TextAlignment.Center;
+                    character.TextAlignment = TextAlignment.Center;
                     character.TextSpriteFont = Contents.Fonts.PixelArtTextFont;
                     character.TextHeight = (int)(charItemSize.Y * 0.8f);
                     character.Text = Settings.Game.UseLastHighscoreName && !String.IsNullOrEmpty(lastName) && lastName.Count() > i ? lastName[i].ToString() : Contents.Constants.AvailableNameChars.First().ToString();
@@ -123,7 +117,7 @@ namespace GalaxyBlox.Rooms
                     charactersList.Add(character);
 
                     var arrDown = Bank.Buttons.GetMenuButton(this);
-                    arrDown.BackgroundImage = Contents.Textures.Button_down_medium;
+                    arrDown.SpriteImage = Contents.Sprites.Button_down_medium;
                     arrDown.Size = btnArrowSize;
                     arrDown.Position = new Vector2(posX + i * (btnArrowSize.X + charItemPadding), character.Position.Y + character.Size.Y + charItemPadding);
                     Objects.Add(arrDown);

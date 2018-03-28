@@ -12,7 +12,7 @@ namespace GalaxyBlox.Objects
             {
                 var button = new Button(parentRoom)
                 {
-                    BackgroundImage = Contents.Textures.Button_pause,
+                    SpriteImage = Contents.Sprites.Button_pause,
                     Alpha = 1f,
                     BaseColor = Contents.Colors.ButtonBackgroundColor,
                     DefaultBackgroundColor = Contents.Colors.ButtonBackgroundColor,
@@ -49,7 +49,7 @@ namespace GalaxyBlox.Objects
             {
                 var button = new Button(parentRoom)
                 {
-                    BackgroundImage = Contents.Textures.Pix,
+                    SpriteImage = Contents.Sprites.Pix,
                     Alpha = 1f,
                     BaseColor = Contents.Colors.ButtonBackgroundColor,
                     DefaultBackgroundColor = Contents.Colors.ButtonBackgroundColor,
@@ -69,7 +69,7 @@ namespace GalaxyBlox.Objects
             {
                 var button = new Button(parentRoom)
                 {
-                    BackgroundImage = Contents.Textures.Button_empty,
+                    SpriteImage = Contents.Sprites.Button_empty,
                     Alpha = 1f,
                     BaseColor = Contents.Colors.ButtonBackgroundColor,
                     DefaultBackgroundColor = Contents.Colors.ButtonBackgroundColor,
@@ -90,7 +90,7 @@ namespace GalaxyBlox.Objects
             {
                 var button = new Button(parentRoom)
                 {
-                    BackgroundImage = Contents.Textures.Pix,
+                    SpriteImage = Contents.Sprites.Pix,
                     Alpha = 0.5f,
                     BaseColor = Contents.Colors.MenuButtonBackgroundColor,
                     DefaultBackgroundColor = Contents.Colors.MenuButtonBackgroundColor,
@@ -115,7 +115,7 @@ namespace GalaxyBlox.Objects
                 var label = new GameObject(parentRoom)
                 {
                     LayerDepth = 0.05f,
-                    BackgroundImage = Contents.Textures.Pix,
+                    SpriteImage = Contents.Sprites.Pix,
                     BaseColor = Contents.Colors.PanelHeaderBackgroundColor,
                     Alpha = 1f,
                     TextAlignment = TextAlignment.Center,
@@ -134,7 +134,7 @@ namespace GalaxyBlox.Objects
                 {
                     LayerDepth = 0.05f,
                     TextAlignment = TextAlignment.Center,
-                    BackgroundImage = Contents.Textures.Pix,
+                    SpriteImage = Contents.Sprites.Pix,
                     BaseColor = Contents.Colors.PanelContentBackgroundColor,
                     Alpha = 1f,
                     TextSpriteFont = Contents.Fonts.PlainTextFont,

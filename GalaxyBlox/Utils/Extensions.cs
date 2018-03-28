@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,16 @@ namespace GalaxyBlox.Utils
                 list[k] = list[n];
                 list[n] = value;
             }
+        }
+
+        /// <summary>
+        /// Get rectangle of Texture2D with x = 0 and y = 0.
+        /// </summary>
+        /// <param name="texture"></param>
+        /// <returns></returns>
+        public static Rectangle GetRectangle(this Texture2D texture)
+        {
+            return new Rectangle(0, 0, texture.Width, texture.Height);
         }
     }
 }

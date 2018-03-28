@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using GalaxyBlox.Utils;
+using GalaxyBlox.Models;
 
 namespace GalaxyBlox.Static
 {
@@ -51,6 +52,49 @@ namespace GalaxyBlox.Static
             public static Texture2D Star_big;
 
             public static Texture2D Logo;
+        }
+
+        public static class Sprites
+        {
+            public static Sprite Pix;
+            public static Sprite ControlButton_fall;
+            public static Sprite ControlButton_rotate;
+            public static Sprite ControlButton_left;
+            public static Sprite ControlButton_right;
+            public static Sprite Button_pause;
+
+            public static Sprite Button_exit;
+            public static Sprite Button_play;
+            public static Sprite Button_settings;
+            public static Sprite Button_highscore;
+            public static Sprite Button_left;
+            public static Sprite Button_right;
+            public static Sprite Button_left_small;
+            public static Sprite Button_right_small;
+            public static Sprite Button_up_medium;
+            public static Sprite Button_down_medium;
+            public static Sprite Button_empty;
+            public static Sprite Button_bonus;
+
+            public static Sprite GameUI_top_background;
+            public static Sprite GameUI_bottom_classic_background;
+            public static Sprite GameUI_bottom_normal_background;
+            public static Sprite GameUI_playingArena_border;
+
+            public static Sprite BackgroundGame;
+            public static Sprite BackgroundMenu;
+            public static Sprite Dialog_background;
+            public static Sprite Dialog_inside;
+            public static Sprite Dialog_icon_settings;
+            public static Sprite Dialog_icon_questionMark;
+            public static Sprite Dialog_icon_highscore;
+
+            public static Sprite Star_small;
+            public static Sprite Star_medium_01;
+            public static Sprite Star_medium_02;
+            public static Sprite Star_big;
+
+            public static Sprite Logo;
         }
 
         public static class Fonts

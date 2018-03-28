@@ -249,7 +249,7 @@ namespace GalaxyBlox.Objects
                 }
                 
                 mainRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
-                BackgroundImage = mainRenderTarget;
+                SpriteImage = new Sprite(mainRenderTarget, mainRenderTarget.GetRectangle());
             }
 
             graphicsDevice.SetRenderTarget(mainRenderTarget);

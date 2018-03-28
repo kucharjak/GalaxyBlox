@@ -56,7 +56,10 @@ namespace GalaxyBlox.Models
             textScale = textHeight / (float)textSpriteFont.LineSpacing;
         }
 
-        public Texture2D BackgroundImage = null;
+        public Sprite SpriteImage = null;
+        public SpriteAnimation SpriteAnimation = null;
+
+        //public Texture2D BackgroundImage = null;
         public Color Color { get { return BaseColor * Alpha; } }
         public Color BaseColor = Color.White;
         public float Alpha = 1f;
@@ -77,6 +80,8 @@ namespace GalaxyBlox.Models
         {
             if (!Enabled)
                 return;
+
+
         }
 
         public virtual void Prepare(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
@@ -87,8 +92,8 @@ namespace GalaxyBlox.Models
         {
             var baseAlpha = Enabled ? 1f : .25f;
 
-            if (BackgroundImage != null)
-                spriteBatch.Draw(BackgroundImage, DisplayRect(), null, Color * baseAlpha, 0, new Vector2(), SpriteEffects.None, ParentRoom.LayerDepth + LayerDepth);
+            if (SpriteImage != null)
+                spriteBatch.Draw(SpriteImage.TextureRef, DisplayRect(), SpriteImage.SourceRectangle, Color * baseAlpha, 0, new Vector2(), SpriteEffects.None, ParentRoom.LayerDepth + LayerDepth);
 
             if (ShowText && TextSpriteFont != null)
                 spriteBatch.DrawString(TextSpriteFont, Text, DisplayTextPosition(), TextColor * Alpha * baseAlpha, 0f, new Vector2(), Scale * textScale * ParentRoom.Scale, SpriteEffects.None, ParentRoom.LayerDepth + LayerDepth + 0.01f);

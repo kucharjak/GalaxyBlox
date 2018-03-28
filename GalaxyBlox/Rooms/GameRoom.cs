@@ -69,7 +69,7 @@ namespace GalaxyBlox.Rooms
             {
                 Size = new Vector2(712, 132),
                 Position = new Vector2(4, 4),
-                BackgroundImage = Contents.Textures.GameUI_top_background,
+                SpriteImage = Contents.Sprites.GameUI_top_background,
                 LayerDepth = 0.02f
             });
             lastObj = Objects.Last();
@@ -129,7 +129,7 @@ namespace GalaxyBlox.Rooms
             // LINE BETWEEN SCORE AND LEVEL
             Objects.Add(new GameObject(this)
             {
-                BackgroundImage = Contents.Textures.Pix,
+                SpriteImage = Contents.Sprites.Pix,
                 BaseColor = Color.White,
                 Size = scoreLineSize,
                 Position = new Vector2(148 + (416 - scoreLineSize.X) / 2, lastObj.Position.Y + 72),
@@ -166,7 +166,7 @@ namespace GalaxyBlox.Rooms
                 {
                     Size = new Vector2(712, 144),
                     Position = new Vector2(4, Size.Y - 144 - 4),
-                    BackgroundImage = Contents.Textures.GameUI_bottom_classic_background,
+                    SpriteImage = Contents.Sprites.GameUI_bottom_classic_background,
                     LayerDepth = 0.02f
                 });
                 lastObj = Objects.Last();
@@ -181,7 +181,7 @@ namespace GalaxyBlox.Rooms
                 {
                     Size = new Vector2(712, 224),
                     Position = new Vector2(4, Size.Y - 224 - 4),
-                    BackgroundImage = Contents.Textures.GameUI_bottom_normal_background,
+                    SpriteImage = Contents.Sprites.GameUI_bottom_normal_background,
                     LayerDepth = 0.02f
                 });
                 lastObj = Objects.Last();
@@ -196,7 +196,7 @@ namespace GalaxyBlox.Rooms
                     Size = new Vector2(680, 60),
                     Position = new Vector2(lastObj.Position.X + 16, lastObj.Position.Y + 16),
                     LayerDepth = 0.02f,
-                    //BackgroundImage = Contents.Textures.Pix,
+                    //SpriteImage = Contents.Sprites.Pix,
                     //BaseColor = Color.Red
                 };
                 Objects.Add(pnlBonusBtns);
@@ -207,7 +207,7 @@ namespace GalaxyBlox.Rooms
 
             // CONTROL BUTTON LEFT
             btnControlLeft = Bank.Buttons.GetControlButton(this);
-            btnControlLeft.BackgroundImage = Contents.Textures.ControlButton_left;
+            btnControlLeft.SpriteImage = Contents.Sprites.ControlButton_left;
             btnControlLeft.Size = btnSize;
             btnControlLeft.Position = new Vector2(lastObj.Position.X + 16, controlButtonsStartY);
             btnControlLeft.Release += btnLeft_Release;
@@ -217,7 +217,7 @@ namespace GalaxyBlox.Rooms
 
             // CONTROL BUTTON FALL
             btnControlFall = Bank.Buttons.GetControlButton(this);
-            btnControlFall.BackgroundImage = Contents.Textures.ControlButton_fall;
+            btnControlFall.SpriteImage = Contents.Sprites.ControlButton_fall;
             btnControlFall.Size = btnSize;
             btnControlFall.Position = new Vector2(lastObj.Position.X + 192, controlButtonsStartY);
             btnControlFall.Click += btnDown_Click;
@@ -228,7 +228,7 @@ namespace GalaxyBlox.Rooms
 
             // CONTROL BUTTON ROTATE
             btnControlRotate = Bank.Buttons.GetControlButton(this);
-            btnControlRotate.BackgroundImage = Contents.Textures.ControlButton_rotate;
+            btnControlRotate.SpriteImage = Contents.Sprites.ControlButton_rotate;
             btnControlRotate.Size = btnSize;
             btnControlRotate.Position = new Vector2(lastObj.Position.X + 368, controlButtonsStartY);
             btnControlRotate.Click += btnRotate_Click;
@@ -237,7 +237,7 @@ namespace GalaxyBlox.Rooms
 
             // CONTROL BUTTON RIGHT
             btnControlRight = Bank.Buttons.GetControlButton(this);
-            btnControlRight.BackgroundImage = Contents.Textures.ControlButton_right;
+            btnControlRight.SpriteImage = Contents.Sprites.ControlButton_right;
             btnControlRight.Size = btnSize;
             btnControlRight.Position = new Vector2(lastObj.Position.X + 544, controlButtonsStartY);
             btnControlRight.Release += btnRight_Release;
@@ -356,7 +356,7 @@ namespace GalaxyBlox.Rooms
                     btn.Name = "BonusButton_" + i.ToString();
                     btn.Size = btnBonusSize;
                     btn.Position = new Vector2(pnlBonusBtns.Position.X + btnMargin + i * (btnBonusSize.X + btnMargin), pnlBonusBtns.Position.Y);
-                    btn.BackgroundImage = Contents.Textures.Button_bonus;
+                    btn.SpriteImage = Contents.Sprites.Button_bonus;
                     //btn.LayerDepth = 0.052f;
                     btn.TextHeight = btnBonusTextHeight;
                     btn.Text = bonus.SpecialText;
@@ -373,7 +373,7 @@ namespace GalaxyBlox.Rooms
                     {
                         Size = btnBonusSize,
                         Position = new Vector2(pnlBonusBtns.Position.X + btnMargin + i * (btnBonusSize.X + btnMargin), pnlBonusBtns.Position.Y),
-                        BackgroundImage = Contents.Textures.Pix,
+                        SpriteImage = Contents.Sprites.Pix,
                         BaseColor = new Color(11, 42, 96),
                         LayerDepth = 0.05f,
                         TextSpriteFont = Contents.Fonts.PixelArtTextFont,
@@ -400,7 +400,7 @@ namespace GalaxyBlox.Rooms
             //        {
             //            Size = new Vector2(lineWidth, pnlBonusBtns.Size.Y),
             //            Position = new Vector2(pnlBonusBtns.Position.X + linesMargin + index * (lineWidth + linesMargin), pnlBonusBtns.Position.Y),
-            //            BackgroundImage = Contents.Textures.Pix,
+            //            SpriteImage = Contents.Sprites.Pix,
             //            BaseColor = new Color(11, 42, 96),
             //            LayerDepth = 0.05f
             //    };
