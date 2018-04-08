@@ -51,7 +51,7 @@ namespace GalaxyBlox.Rooms
         {
             gameMode = Settings.Game.UserSettings.LastGameMode;
             FullScreen = true;
-            Background = Contents.Textures.BackgroundGame;
+            Background = Contents.Sprites.Game_Background;
 
             GameObject lastObj;
 
@@ -80,7 +80,7 @@ namespace GalaxyBlox.Rooms
             // ACTOR VIEWER
             var viewerPos = new Vector2(lastObj.Position.X + 16, lastObj.Position.Y + 16);
             var viewerSize = new Vector2(116, 100);
-            Objects.Add(new DynamicBackgroundObject(this, Contents.Textures.Dialog_inside, 4)
+            Objects.Add(new DynamicBackgroundObject(this, Contents.Sprites.Dialog_inside, 4)
             {
                 Size = viewerSize,
                 Position = viewerPos,
@@ -278,7 +278,7 @@ namespace GalaxyBlox.Rooms
 
             // adding border for arena
             var borderOffset = new Vector2(12);
-            Objects.Add(new DynamicBackgroundObject(this, Contents.Textures.GameUI_playingArena_border, 4)
+            Objects.Add(new DynamicBackgroundObject(this, Contents.Sprites.GameUI_playingArena_border, 4)
             {
                 Position = new Vector2(arena.Position.X - borderOffset.X, arena.Position.Y - borderOffset.Y),
                 Size = new Vector2(arena.Size.X + 2 * borderOffset.X, arena.Size.Y + 2 * borderOffset.Y),

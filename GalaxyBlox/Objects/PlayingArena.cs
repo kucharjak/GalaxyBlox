@@ -220,8 +220,9 @@ namespace GalaxyBlox.Objects
                 graphicsDevice.Clear(BorderColor);
 
                 spriteBatch.Draw(
-                    Contents.Textures.Pix,
+                    Contents.Sprites.Pix.TextureRef,
                     new Rectangle(playgroundInnerPadding - 2 * playgroundCubeMargin, playgroundInnerPadding - 2 * playgroundCubeMargin, (int)backgroundSize.X - 2 * (playgroundInnerPadding - 2 * playgroundCubeMargin), (int)backgroundSize.Y - 2 * (playgroundInnerPadding - 2 * playgroundCubeMargin)),
+                    Contents.Sprites.Pix.SourceRectangle,
                     BackgroundColor);
 
                 for (int x = 0; x < playground.GetLength(0); x++)
@@ -229,8 +230,9 @@ namespace GalaxyBlox.Objects
                     for (int y = 0; y < playground.GetLength(1); y++)
                     {
                         spriteBatch.Draw(
-                            Contents.Textures.Pix,
+                            Contents.Sprites.Pix.TextureRef,
                             new Rectangle(playgroundInnerPadding + x * (playgroundCubeSize + playgroundCubeMargin), playgroundInnerPadding + y * (playgroundCubeSize + playgroundCubeMargin), playgroundCubeSize, playgroundCubeSize),
+                            Contents.Sprites.Pix.SourceRectangle,
                             GetCubeColor(x, y));
                     }
                 }
@@ -264,8 +266,9 @@ namespace GalaxyBlox.Objects
             foreach (var effect in playgroundEffectsList)
             {
                 spriteBatch.Draw(
-                        Contents.Textures.Pix,
+                        Contents.Sprites.Pix.TextureRef,
                         new Rectangle(playgroundInnerPadding + effect.Item1 * (playgroundCubeSize + playgroundCubeMargin), playgroundInnerPadding + effect.Item2 * (playgroundCubeSize + playgroundCubeMargin), playgroundCubeSize, playgroundCubeSize),
+                        Contents.Sprites.Pix.SourceRectangle,
                         effect.Item3);
             }
 

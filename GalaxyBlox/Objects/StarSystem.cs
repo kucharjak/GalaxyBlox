@@ -3,12 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using GalaxyBlox.Models;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
@@ -18,7 +12,7 @@ namespace GalaxyBlox.Objects
     class StarSystem : GameObject
     {
         private Dictionary<Star.StarType, int> starSizes;
-        private Dictionary<Star.StarType, Texture2D> starTextures;
+        private Dictionary<Star.StarType, Sprite> starTextures;
 
         private List<Star> stars;
 
@@ -48,12 +42,12 @@ namespace GalaxyBlox.Objects
             starSizes.Add(Star.StarType.medium_02, 28);
             starSizes.Add(Star.StarType.big, 44);
 
-            starTextures = new Dictionary<Star.StarType, Texture2D>();
-            starTextures.Add(Star.StarType.tiny, Static.Contents.Textures.Pix);
-            starTextures.Add(Star.StarType.small, Static.Contents.Textures.Star_small);
-            starTextures.Add(Star.StarType.medium_01, Static.Contents.Textures.Star_medium_01);
-            starTextures.Add(Star.StarType.medium_02, Static.Contents.Textures.Star_medium_02);
-            starTextures.Add(Star.StarType.big, Static.Contents.Textures.Star_big);
+            starTextures = new Dictionary<Star.StarType, Sprite>();
+            starTextures.Add(Star.StarType.tiny, Static.Contents.Sprites.Pix);
+            starTextures.Add(Star.StarType.small, Static.Contents.Sprites.Star_small);
+            starTextures.Add(Star.StarType.medium_01, Static.Contents.Sprites.Star_medium_01);
+            starTextures.Add(Star.StarType.medium_02, Static.Contents.Sprites.Star_medium_02);
+            starTextures.Add(Star.StarType.big, Static.Contents.Sprites.Star_big);
         }
 
         public void Start(int rndSeed, int bigStarCount, int medium01StarCount, int medium02StarCount, int smallStarCount, int tinyStarCount)
@@ -120,9 +114,9 @@ namespace GalaxyBlox.Objects
                     size);
 
                 spriteBatch.Draw(
-                    starTextures[star.Type],
+                    starTextures[star.Type].TextureRef,
                     DisplayRect(starRect),
-                    null,
+                    starTextures[star.Type].SourceRectangle,
                     StarColor,
                     0f,
                     new Vector2(),

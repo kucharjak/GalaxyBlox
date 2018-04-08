@@ -64,7 +64,7 @@ namespace GalaxyBlox.Rooms
         protected override void Initialize()
         {
             FullScreen = true;
-            Background = Contents.Textures.BackgroundMenu;
+            Background = Contents.Sprites.Game_Background;
 
             selectebleGameModes = availableGameModes.ToList(); // fill modes that i can select from 
             SelectedGameMode = selectebleGameModes[selectebleGameModes.FindIndex(mode => mode ==  GameMode.Normal)];
@@ -178,7 +178,7 @@ namespace GalaxyBlox.Rooms
             Objects.Add(objToAdd);
             hider.HideObject(objToAdd, HidePlace.Bottom);
 
-            var arrowButtonsSize = new Vector2(84, 120);
+            var arrowButtonsSize = new Vector2(60, 112);
 
             //// SELECT LEFT GAMEMODE BUTTON ////
             objToAdd = Bank.Buttons.GetMenuButton(this);

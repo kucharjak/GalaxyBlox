@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Android.Util;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Input;
@@ -26,12 +25,12 @@ namespace GalaxyBlox.Models
         public Room Parent { get; protected set; }
 
         protected List<GameObject> Objects { get; set; } = new List<GameObject>();
-        public Texture2D Background;
+        public Sprite Background;
         public Color BackgroundColor { get { return BaseColor * Alpha; } }
         public Color BaseColor = Color.White;
         public bool FullScreen = false;
-        public Texture2D DialogBackground;
-        public Texture2D DialogIcon;
+        public Sprite DialogBackground;
+        public Sprite DialogIcon;
         public int DialogBackgroundScale = 1;
         public bool IsDialog = false;
         public bool DialogOffscreenClose = false;
@@ -111,7 +110,7 @@ namespace GalaxyBlox.Models
         {
             if (IsPaused || !IsVisible)
                 return;
-
+            
             var input = TouchPanel.GetState().Where(tch => tch.State != TouchLocationState.Invalid);
             if (input.Count() > 0)
                 HandleInput(input.FirstOrDefault());
@@ -125,8 +124,8 @@ namespace GalaxyBlox.Models
             if (IsDialog && Background == null && DialogBackground != null)
             {
                 var backgroundTarget = new RenderTarget2D(graphicsDevice, (int)Size.X, (int)Size.Y);
-                var pieceSizeX = DialogBackground.Width / 3;
-                var pieceSizeY = DialogBackground.Height / 3;
+                var pieceSizeX = DialogBackground.SourceRectangle.Width / 3;
+                var pieceSizeY = DialogBackground.SourceRectangle.Height / 3;
                 var realPieceSizeX = pieceSizeX * DialogBackgroundScale;
                 var realPieceSizeY = pieceSizeY * DialogBackgroundScale;
 
@@ -145,17 +144,17 @@ namespace GalaxyBlox.Models
                         var resultX = x != 2 ? realPieceSizeX * x : (int)(Size.X - realPieceSizeX);
                         var resultY = y != 2 ? realPieceSizeY * y : (int)(Size.Y - realPieceSizeY);
 
-                        spriteBatch.Draw(DialogBackground, new Rectangle(resultX, resultY, resultWidth, resultHeigth), new Rectangle(pieceSizeX * x, pieceSizeY * y, pieceSizeX, pieceSizeY), Color.White);
+                        spriteBatch.Draw(DialogBackground.TextureRef, new Rectangle(resultX, resultY, resultWidth, resultHeigth), new Rectangle(DialogBackground.SourceRectangle.X + pieceSizeX * x, DialogBackground.SourceRectangle.Y + pieceSizeY * y, pieceSizeX, pieceSizeY), Color.White);
                     }
                 }
 
                 if (DialogIcon != null)
-                    spriteBatch.Draw(DialogIcon, new Vector2(Size.X / 2, 0), null, Color.White, 0f, new Vector2(DialogIcon.Width / 2f, 0f), DialogBackgroundScale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(DialogIcon.TextureRef, new Vector2(Size.X / 2, 0), DialogIcon.SourceRectangle, Color.White, 0f, new Vector2(DialogIcon.SourceRectangle.Width / 2f, 0f), DialogBackgroundScale, SpriteEffects.None, 0f);
 
                 spriteBatch.End();
                 graphicsDevice.SetRenderTarget(null);
-                
-                Background = backgroundTarget;
+
+                Background = new Sprite(backgroundTarget, new Rectangle(0, 0, (int)Size.X, (int)Size.Y));
             }
 
             foreach (var obj in Objects)
@@ -168,11 +167,11 @@ namespace GalaxyBlox.Models
             {
                 if (FullScreen && !IsDialog)
                 {
-                    spriteBatch.Draw(Background, new Rectangle(0, 0, Game1.ActiveGame.GraphicsDevice.Viewport.Width, Game1.ActiveGame.GraphicsDevice.Viewport.Height), null, BackgroundColor, 0, new Vector2(), SpriteEffects.None, LayerDepth);
+                    spriteBatch.Draw(Background.TextureRef, new Rectangle(0, 0, Game1.ActiveGame.GraphicsDevice.Viewport.Width, Game1.ActiveGame.GraphicsDevice.Viewport.Height), null, BackgroundColor, 0, new Vector2(), SpriteEffects.None, LayerDepth);
                 }
                 else
                 {
-                    spriteBatch.Draw(Background, DisplayRectWithScale(), null, BackgroundColor, 0, new Vector2(), SpriteEffects.None, LayerDepth);
+                    spriteBatch.Draw(Background.TextureRef, DisplayRectWithScale(), null, BackgroundColor, 0, new Vector2(), SpriteEffects.None, LayerDepth);
                 }
             }
 

@@ -80,8 +80,6 @@ namespace GalaxyBlox.Models
         {
             if (!Enabled)
                 return;
-
-
         }
 
         public virtual void Prepare(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)

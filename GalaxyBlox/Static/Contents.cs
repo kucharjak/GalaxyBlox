@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using GalaxyBlox.Utils;
 using GalaxyBlox.Models;
+using Microsoft.Xna.Framework.Content;
 
 namespace GalaxyBlox.Static
 {
@@ -14,44 +15,14 @@ namespace GalaxyBlox.Static
         public static class Textures
         {
             public static Texture2D Pix;
-            public static Texture2D ControlButton_fall;
-            public static Texture2D ControlButton_rotate;
-            public static Texture2D ControlButton_left;
-            public static Texture2D ControlButton_right;
-            public static Texture2D Button_pause;
-
-            public static Texture2D Button_exit;
-            public static Texture2D Button_play;
-            public static Texture2D Button_settings;
-            public static Texture2D Button_highscore;
-            public static Texture2D Button_left;
-            public static Texture2D Button_right;
-            public static Texture2D Button_left_small;
-            public static Texture2D Button_right_small;
-            public static Texture2D Button_up_medium;
-            public static Texture2D Button_down_medium;
-            public static Texture2D Button_empty;
-            public static Texture2D Button_bonus;
-            
-            public static Texture2D GameUI_top_background;
-            public static Texture2D GameUI_bottom_classic_background;
-            public static Texture2D GameUI_bottom_normal_background;
-            public static Texture2D GameUI_playingArena_border;
-
-            public static Texture2D BackgroundGame;
-            public static Texture2D BackgroundMenu;
-            public static Texture2D Dialog_background;
-            public static Texture2D Dialog_inside;
-            public static Texture2D Dialog_icon_settings;
-            public static Texture2D Dialog_icon_questionMark;
-            public static Texture2D Dialog_icon_highscore;
-
-            public static Texture2D Star_small;
-            public static Texture2D Star_medium_01;
-            public static Texture2D Star_medium_02;
-            public static Texture2D Star_big;
-
+            public static Texture2D Buttons;
+            public static Texture2D Stars;
+            public static Texture2D Dialog_Icons;
             public static Texture2D Logo;
+
+            public static Texture2D Dialog_Backgrounds;
+            public static Texture2D GameUI_Backgrounds;
+            public static Texture2D Game_Background;
         }
 
         public static class Sprites
@@ -81,8 +52,7 @@ namespace GalaxyBlox.Static
             public static Sprite GameUI_bottom_normal_background;
             public static Sprite GameUI_playingArena_border;
 
-            public static Sprite BackgroundGame;
-            public static Sprite BackgroundMenu;
+            public static Sprite Game_Background;
             public static Sprite Dialog_background;
             public static Sprite Dialog_inside;
             public static Sprite Dialog_icon_settings;

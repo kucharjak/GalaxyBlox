@@ -3,13 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
 using GalaxyBlox.Models;
-using Android.Util;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using GalaxyBlox.Objects;
@@ -29,8 +23,8 @@ namespace GalaxyBlox.Rooms
 
         protected override void Initialize()
         {
-            DialogBackground = Contents.Textures.Dialog_background;
-            DialogIcon = Contents.Textures.Dialog_icon_questionMark;
+            DialogBackground = Contents.Sprites.Dialog_background;
+            DialogIcon = Contents.Sprites.Dialog_icon_questionMark;
             DialogBackgroundScale = 4;
             IsDialog = true;
 
@@ -81,7 +75,6 @@ namespace GalaxyBlox.Rooms
         private void BtnOK_Click(object sender, EventArgs e)
         {
             RoomManager.Rooms.Clear();
-            Game1.Activity.Finish();
         }
     }
 }

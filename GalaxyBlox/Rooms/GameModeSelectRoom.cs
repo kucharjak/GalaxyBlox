@@ -29,7 +29,7 @@ namespace GalaxyBlox.Rooms
 
         protected override void Initialize()
         {
-            Background = Static.Contents.Textures.Pix;
+            //Background = Static.Contents.Textures.Pix;
             BaseColor = Color.DarkBlue;
 
             var btnCount = 3;

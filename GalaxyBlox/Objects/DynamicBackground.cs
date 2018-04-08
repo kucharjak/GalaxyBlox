@@ -12,8 +12,8 @@ namespace GalaxyBlox.Objects
 {
     class DynamicBackgroundObject : GameObject
     {
-        private Texture2D dynamicBackground;
-        public Texture2D DynamicBackground
+        private Sprite dynamicBackground;
+        public Sprite DynamicBackground
         {
             get { return dynamicBackground; }
             set { dynamicBackground = value; dynamicBackgroundChanged = true; }
@@ -27,7 +27,7 @@ namespace GalaxyBlox.Objects
         }
         private bool dynamicBackgroundChanged;
         
-        public DynamicBackgroundObject(Room parentRoom, Texture2D dynamicBackground, int dynamicBackgroundScale = 1) : base(parentRoom)
+        public DynamicBackgroundObject(Room parentRoom, Sprite dynamicBackground, int dynamicBackgroundScale = 1) : base(parentRoom)
         {
             DynamicBackground = dynamicBackground;
             DynamicBackgroundScale = dynamicBackgroundScale;
@@ -38,8 +38,8 @@ namespace GalaxyBlox.Objects
             if (dynamicBackground != null && dynamicBackgroundChanged)
             {
                 var backgroundTarget = new RenderTarget2D(graphicsDevice, (int)Size.X, (int)Size.Y);
-                var pieceSizeX = dynamicBackground.Width / 3;
-                var pieceSizeY = dynamicBackground.Height / 3;
+                var pieceSizeX = dynamicBackground.SourceRectangle.Width / 3;
+                var pieceSizeY = dynamicBackground.SourceRectangle.Height / 3;
                 var realPieceSizeX = pieceSizeX * dynamicBackgroundScale;
                 var realPieceSizeY = pieceSizeY * dynamicBackgroundScale;
 
@@ -58,7 +58,7 @@ namespace GalaxyBlox.Objects
                         var resultY = y != 2 ? realPieceSizeY * y : (int)(Size.Y - realPieceSizeY);
 
 
-                        spriteBatch.Draw(dynamicBackground, new Rectangle(resultX, resultY, resultWidth, resultHeigth), new Rectangle(pieceSizeX * x, pieceSizeY * y, pieceSizeX, pieceSizeY), Color.White);
+                        spriteBatch.Draw(dynamicBackground.TextureRef, new Rectangle(resultX, resultY, resultWidth, resultHeigth), new Rectangle(dynamicBackground.SourceRectangle.X + pieceSizeX * x, dynamicBackground.SourceRectangle.Y + pieceSizeY * y, pieceSizeX, pieceSizeY), Color.White);
                     }
                 }
 

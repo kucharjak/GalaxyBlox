@@ -3,13 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
 using GalaxyBlox.Models;
-using Android.Util;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 using GalaxyBlox.Objects;
@@ -36,8 +30,8 @@ namespace GalaxyBlox.Rooms
 
         protected override void Initialize()
         {
-            DialogBackground = Contents.Textures.Dialog_background;
-            DialogIcon = Contents.Textures.Dialog_icon_settings;
+            DialogBackground = Contents.Sprites.Dialog_background;
+            DialogIcon = Contents.Sprites.Dialog_icon_settings;
             DialogBackgroundScale = 4;
             IsDialog = true;
 
@@ -59,7 +53,7 @@ namespace GalaxyBlox.Rooms
 
             var highscoreBackgroundSize = new Vector2(Size.X - margin.left - margin.right, 3 * settingsItemSize.Y + 4 * itemPadding);
 
-            GameObject obj = new DynamicBackgroundObject(this, Contents.Textures.Dialog_inside, 4);
+            GameObject obj = new DynamicBackgroundObject(this, Contents.Sprites.Dialog_inside, 4);
             obj.Position = new Vector2(margin.left, margin.top);
             obj.Size = highscoreBackgroundSize;
             obj.LayerDepth = 0.04f;

@@ -104,8 +104,9 @@ namespace GalaxyBlox.Objects
                             continue;
 
                         spriteBatch.Draw(
-                            Contents.Textures.Pix,
+                            Contents.Sprites.Pix.TextureRef,
                             new Rectangle((int)cubesOffset.X + x * (cubeSize + cubesPadding), (int)cubesOffset.Y + y * (cubeSize + cubesPadding), cubeSize, cubeSize),
+                            Contents.Sprites.Pix.SourceRectangle,
                             actorColor);
                     }
                 }

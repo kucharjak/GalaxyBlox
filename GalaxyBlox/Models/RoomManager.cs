@@ -3,13 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using Android.Util;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using GalaxyBlox.EventArgsClasses;
@@ -61,7 +54,7 @@ namespace GalaxyBlox.Models
             }
 
             // draw separation
-            spriteBatch.Draw(Static.Contents.Textures.Pix, new Rectangle(0, 0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height), null, Static.Contents.Colors.RoomsSeparateColor, 0f, new Vector2(), SpriteEffects.None, 0.8f);
+            spriteBatch.Draw(Static.Contents.Sprites.Pix.TextureRef, new Rectangle(0, 0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height), Static.Contents.Sprites.Pix.SourceRectangle, Static.Contents.Colors.RoomsSeparateColor, 0f, new Vector2(), SpriteEffects.None, 0.8f);
 
             spriteBatch.End();
         }
