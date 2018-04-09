@@ -24,7 +24,7 @@ namespace GalaxyBlox.Models
 
         public Room Parent { get; protected set; }
 
-        protected List<GameObject> Objects { get; set; } = new List<GameObject>();
+        public List<GameObject> Objects { get; set; } = new List<GameObject>();
         public Sprite Background;
         public Color BackgroundColor { get { return BaseColor * Alpha; } }
         public Color BaseColor = Color.White;
@@ -114,6 +114,9 @@ namespace GalaxyBlox.Models
             var input = TouchPanel.GetState().Where(tch => tch.State != TouchLocationState.Invalid);
             if (input.Count() > 0)
                 HandleInput(input.FirstOrDefault());
+
+            if (Objects.Any(obj => obj.Destroyed))
+                Objects.RemoveAll(obj => obj.Destroyed);
 
             foreach (var obj in Objects.ToArray())
                 obj.Update(gameTime);

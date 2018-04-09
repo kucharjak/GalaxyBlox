@@ -69,6 +69,8 @@ namespace GalaxyBlox.Models
 
         public object Data = null;
 
+        public bool Destroyed = false;
+
         public Rectangle Rectangle { get { return new Rectangle((int)(Position.X), (int)(Position.Y), (int)Size.X, (int)Size.Y); } }
 
         public GameObject(Room parentRoom)
@@ -80,6 +82,14 @@ namespace GalaxyBlox.Models
         {
             if (!Enabled)
                 return;
+
+            if (SpriteAnimation != null)
+            {
+                SpriteAnimation.Update(gameTime);
+
+                if (SpriteAnimation.ActiveSprite != null)
+                    SpriteImage = SpriteAnimation.ActiveSprite;
+            }
         }
 
         public virtual void Prepare(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)

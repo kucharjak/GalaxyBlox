@@ -6,6 +6,8 @@ namespace GalaxyBlox.Models
 {
     public class SpriteAnimation
     {
+        public GameObject Parent;
+
         public Sprite ActiveSprite;
         public int Position;
         public int Rounds;
@@ -58,7 +60,7 @@ namespace GalaxyBlox.Models
         public SpriteAnimation(List<Sprite> sprites, int fps, bool start = true)
         {
             this.sprites = sprites;
-            this.FPS = fps;
+            FPS = fps;
             Rounds = 0;
             Position = 0;
             this.start = start;
@@ -105,6 +107,15 @@ namespace GalaxyBlox.Models
                 ActiveSprite = sprites[Position];
             }
 
+        }
+
+        public SpriteAnimation Copy(bool? start = null)
+        {
+            var copy = new SpriteAnimation(sprites, fps, start.HasValue ? start.Value : Pause)
+            {
+                Loop = this.Loop
+            };
+            return copy;
         }
     }
 }

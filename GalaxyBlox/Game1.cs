@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using static GalaxyBlox.Static.Contents;
 
 namespace GalaxyBlox
@@ -70,7 +71,7 @@ namespace GalaxyBlox
             Textures.GameUI_Backgrounds = Content.Load<Texture2D>("Backgrounds/gameUI");
             Textures.Game_Background = Content.Load<Texture2D>("Backgrounds/background");
 
-            /// loading sprites
+            ///// LOADING SPRITES /////
 
             Sprites.Pix = new Sprite(Textures.Pix, Textures.Pix.GetRectangle());
 
@@ -112,6 +113,15 @@ namespace GalaxyBlox
             Sprites.Star_big = new Sprite(Textures.Stars, new Rectangle(30, 0, 3, 3));
 
             Sprites.Logo = new Sprite(Textures.Logo, Textures.Logo.GetRectangle());
+
+            ///// LOADING ANIMATIONS //////
+
+            var tmpSprites = new List<Sprite>();
+
+            Textures.Explosion = Content.Load<Texture2D>("Animations/explosion");
+            for (int i = 0; i < 10; i++)
+                tmpSprites.Add(new Sprite(Textures.Explosion, new Rectangle(i * 32, 0, 32, 32)));
+            Animations.Explosion = new SpriteAnimation(tmpSprites, 20, true) { Loop = false };
         }
 
         /// <summary>

@@ -201,6 +201,9 @@ namespace GalaxyBlox.Objects
 
         public override void Prepare(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
+            if (IsPaused)
+                return;
+
             if (backgroundChanged)
             {
                 if (backgroundRenderTarget == null || backgroundRenderTarget.IsContentLost || backgroundRenderTarget.IsDisposed)
@@ -928,6 +931,27 @@ namespace GalaxyBlox.Objects
         {
             var result = Contents.Colors.GameCubesColors[playground[posX, posY]];
             return result;
+        }
+
+        protected virtual Rectangle GetCubesIngamePosition(Point cubePos)
+        {
+            return GetCubesIngamePosition(cubePos, cubePos);
+        }
+
+        protected virtual Rectangle GetCubesIngamePosition(Point startCubePos, Point endCubePos)
+        {
+            var avgCubeW = Size.X / arenaSize.X;
+            var avgCubeH = Size.Y / arenaSize.Y;
+
+            var pos = new Point(
+                (int)(Position.X + startCubePos.X * avgCubeW),
+                (int)(Position.Y + startCubePos.Y * avgCubeH));
+
+            var size = new Point(
+                (int)((endCubePos.X - startCubePos.X + 1) * avgCubeW),
+                (int)((endCubePos.Y - startCubePos.Y + 1) * avgCubeH));
+
+            return new Rectangle(pos, size);
         }
 
         protected enum ActorMovement

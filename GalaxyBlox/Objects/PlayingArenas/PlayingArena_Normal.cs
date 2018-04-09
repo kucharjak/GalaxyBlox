@@ -41,9 +41,6 @@ namespace GalaxyBlox.Objects.PlayingArenas
 
         protected List<GameBonus> gameBonuses;
         protected int maxBonuses;
-        protected int timeSinceLastBonus = 0;
-        protected int timeUntilFreeBonus;
-        protected int freeBonusTimeLimit;
 
         //protected List<BonusType> availableBonuses = new List<BonusType>() { BonusType.CubesExplosion, BonusType.CancelLastCube, BonusType.Laser, BonusType.SwipeCubes, BonusType.TimeSlowdown };
         protected List<GameBonus> availableBonuses;
@@ -120,9 +117,6 @@ namespace GalaxyBlox.Objects.PlayingArenas
             AddGameBonuses();
             ResetBonuses();
 
-            //freeBonusTimeLimit = 1; // low for testing
-            //timeUntilFreeBonus = freeBonusTimeLimit;
-
             slowDownLimit = 7500;
             slowDownPower = 5;
 
@@ -159,14 +153,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
             if (IsPaused)
                 return;
 
-            //if (gameBonuses.Count == 0 && ActiveBonus == null)
-            //    timeSinceLastBonus += gameTime.ElapsedGameTime.Milliseconds;
-
-            //if (timeSinceLastBonus >= timeUntilFreeBonus)
-            //{
-            //    AddBonus();
-            //    timeUntilFreeBonus = freeBonusTimeLimit;
-            //}
+            //AddProgressToBonus(10);
 
             switch (ActiveBonus?.Type)
             {
@@ -299,11 +286,6 @@ namespace GalaxyBlox.Objects.PlayingArenas
         {
             base.DestroyFullLines(fullLines);
 
-            //if (fullLines.Count() >= 4)
-            //{
-            //    AddBonus();
-            //}
-
             AddProgressToBonus(fullLines.Count() * fullLines[0] / 2);
 
             LastPlayedActor = null;
@@ -419,7 +401,6 @@ namespace GalaxyBlox.Objects.PlayingArenas
             bonus.Progress += progress;
             if (bonus.Progress >= 100)
             {
-                //availableBonuses.Shuffle(); // before every pick i shuffle available bonuses for more random chance
                 var bonusIndex = gameBonuses.FindIndex(bns => bns == bonus);
                 var index = bonusRandom.Next(0, availableBonuses.Count);
 
@@ -795,7 +776,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
                 var extraPower = Game1.Random.Next(0, cubesExplosionExtraPowerProb) == cubesExplosionExtraPowerProb;
                 
                 ExplodeActor(actor, !extraPower ? cubesExplosionPower : cubesExplosionExtraPower);
-                Vibrations.Vibrate(extraPower ? 150 : 50);
+                Vibrations.Vibrate(extraPower ? 350 : 150);
 
                 if (actor == activeActor)
                     activeActor = null;
@@ -824,8 +805,51 @@ namespace GalaxyBlox.Objects.PlayingArenas
                     }
                 }
             }
+            
+            if (ParentRoom != null)
+            {
+                var lowestX = actorCubes.Min(cb => cb.Item1);
+                var lowestY = actorCubes.Min(cb => cb.Item2);
+                var biggestX = actorCubes.Max(cb => cb.Item1);
+                var biggestY = actorCubes.Max(cb => cb.Item2);
+
+                var explosionRect = GetCubesIngamePosition(new Point(lowestX, lowestY), new Point(biggestX, biggestY));
+
+                var explosionOversize = new Vector2(Size.X / arenaSize.X * 0.5f);
+                var explosion = new GameObject(ParentRoom)
+                {
+                    SpriteAnimation = Contents.Animations.Explosion.Copy(true),
+                    Position = new Vector2(explosionRect.X, explosionRect.Y) - explosionOversize,
+                    Size = new Vector2(explosionRect.Width, explosionRect.Height) + 2 * explosionOversize,
+                    LayerDepth = 0.06f,
+                    //BaseColor = actor.Color
+                };
+
+                explosion.SpriteAnimation.Parent = explosion;
+                explosion.SpriteAnimation.AnimationEnd += Explosion_AnimationEnd;
+                explosion.SpriteAnimation.AnimationNext += SpriteAnimation_AnimationNext;
+                ParentRoom.Objects.Add(explosion);
+                Pause();
+            }
+
             InsertBoxesToPlayground(actorCubes);
             backgroundChanged = true;
+        }
+
+        private void SpriteAnimation_AnimationNext(object sender, EventArgs e)
+        {
+            var animation = (sender as SpriteAnimation);
+            if (animation.Position >= 2 && IsPaused)
+                Resume();
+        }
+
+        private void Explosion_AnimationEnd(object sender, EventArgs e)
+        {
+            if (IsPaused)
+                Resume();
+
+            var animation = (sender as SpriteAnimation);
+            animation.Parent.Destroyed = true;
         }
     }
 }
