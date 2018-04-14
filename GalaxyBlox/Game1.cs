@@ -118,10 +118,15 @@ namespace GalaxyBlox
 
             var tmpSprites = new List<Sprite>();
 
-            Textures.Explosion = Content.Load<Texture2D>("Animations/explosion");
+            Textures.Animations = Content.Load<Texture2D>("Animations/animations");
             for (int i = 0; i < 10; i++)
-                tmpSprites.Add(new Sprite(Textures.Explosion, new Rectangle(i * 32, 0, 32, 32)));
+                tmpSprites.Add(new Sprite(Textures.Animations, new Rectangle(i * 32, 0, 32, 32)));
             Animations.Explosion = new SpriteAnimation(tmpSprites, 20, true) { Loop = false };
+
+            tmpSprites = new List<Sprite>();
+            for (int i = 0; i < 18; i++)
+                tmpSprites.Add(new Sprite(Textures.Animations, new Rectangle(i * 32, 32, 32, 64)));
+            Animations.Laser = new SpriteAnimation(tmpSprites, 20, true) { Loop = false };
         }
 
         /// <summary>

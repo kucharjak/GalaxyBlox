@@ -123,7 +123,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/stars.png
 
-#begin Animations/explosion.png
+#begin Animations/animations.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -133,5 +133,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Animations/explosion.png
+/build:Animations/animations.png
 

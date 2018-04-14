@@ -24,7 +24,7 @@ namespace GalaxyBlox.Static
             public static Texture2D GameUI_Backgrounds;
             public static Texture2D Game_Background;
 
-            public static Texture2D Explosion;
+            public static Texture2D Animations;
         }
 
         public static class Sprites
@@ -72,6 +72,7 @@ namespace GalaxyBlox.Static
         public static class Animations
         {
             public static SpriteAnimation Explosion;
+            public static SpriteAnimation Laser;
         }
 
         public static class Fonts

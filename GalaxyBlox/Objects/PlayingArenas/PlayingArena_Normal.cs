@@ -516,7 +516,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
         {
             LaserActors();
             LaserPlayground();
-            backgroundChanged = true;
+            Vibrations.Vibrate(16 * 60);
 
             DeactivateBonus();
         }
@@ -761,6 +761,24 @@ namespace GalaxyBlox.Objects.PlayingArenas
                     playground[x, y] = 0;
                 }
             }
+            backgroundChanged = true;
+
+            var laserWidthExtension = new Vector2(Size.X / arenaSize.X * 0.5f, 0);
+            var laserCubesRect = GetCubesIngamePosition(new Point(laserRect.X, laserRect.Y), new Point(laserRect.X + laserRect.Width - 1, laserRect.Height));
+            var laser = new GameObject(ParentRoom)
+            {
+                SpriteAnimation = Contents.Animations.Laser.Copy(true),
+                Position = new Vector2(laserCubesRect.X, 0) - laserWidthExtension,
+                Size = new Vector2(laserCubesRect.Width, ParentRoom.Size.Y) + 2 * laserWidthExtension,
+                LayerDepth = 0.095f,
+                //BaseColor = actor.Color
+            };
+
+            laser.SpriteAnimation.Parent = laser;
+            laser.SpriteAnimation.AnimationEnd += Laser_AnimationEnd;
+            laser.SpriteAnimation.AnimationNext += Laser_AnimationNext;
+            ParentRoom.Objects.Add(laser);
+            Pause();
         }
 
         protected virtual void MoveActorTowardsExplosion(Actor actor)
@@ -815,19 +833,19 @@ namespace GalaxyBlox.Objects.PlayingArenas
 
                 var explosionRect = GetCubesIngamePosition(new Point(lowestX, lowestY), new Point(biggestX, biggestY));
 
-                var explosionOversize = new Vector2(Size.X / arenaSize.X * 0.5f);
+                var explosionSizeExtension = new Vector2(Size.X / arenaSize.X * 0.5f);
                 var explosion = new GameObject(ParentRoom)
                 {
                     SpriteAnimation = Contents.Animations.Explosion.Copy(true),
-                    Position = new Vector2(explosionRect.X, explosionRect.Y) - explosionOversize,
-                    Size = new Vector2(explosionRect.Width, explosionRect.Height) + 2 * explosionOversize,
+                    Position = new Vector2(explosionRect.X, explosionRect.Y) - explosionSizeExtension,
+                    Size = new Vector2(explosionRect.Width, explosionRect.Height) + 2 * explosionSizeExtension,
                     LayerDepth = 0.06f,
                     //BaseColor = actor.Color
                 };
 
                 explosion.SpriteAnimation.Parent = explosion;
                 explosion.SpriteAnimation.AnimationEnd += Explosion_AnimationEnd;
-                explosion.SpriteAnimation.AnimationNext += SpriteAnimation_AnimationNext;
+                explosion.SpriteAnimation.AnimationNext += Explosion_AnimationNext;
                 ParentRoom.Objects.Add(explosion);
                 Pause();
             }
@@ -836,7 +854,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
             backgroundChanged = true;
         }
 
-        private void SpriteAnimation_AnimationNext(object sender, EventArgs e)
+        private void Explosion_AnimationNext(object sender, EventArgs e)
         {
             var animation = (sender as SpriteAnimation);
             if (animation.Position >= 2 && IsPaused)
@@ -844,6 +862,22 @@ namespace GalaxyBlox.Objects.PlayingArenas
         }
 
         private void Explosion_AnimationEnd(object sender, EventArgs e)
+        {
+            if (IsPaused)
+                Resume();
+
+            var animation = (sender as SpriteAnimation);
+            animation.Parent.Destroyed = true;
+        }
+
+        private void Laser_AnimationNext(object sender, EventArgs e)
+        {
+            var animation = (sender as SpriteAnimation);
+            if (animation.Position >= 12 && IsPaused)
+                Resume();
+        }
+
+        private void Laser_AnimationEnd(object sender, EventArgs e)
         {
             if (IsPaused)
                 Resume();
