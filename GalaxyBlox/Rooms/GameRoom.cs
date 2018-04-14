@@ -111,7 +111,7 @@ namespace GalaxyBlox.Rooms
             var scoreLineSize = new Vector2(284, 4);
 
             // SCORE
-            lblScore = new GameObject(this)
+            lblScore = new BreathingObject(this)
             {
                 Size = lblScoreSize,
                 Position = new Vector2(148, lastObj.Position.Y + 24),
@@ -121,7 +121,15 @@ namespace GalaxyBlox.Rooms
                 TextAlignment = TextAlignment.Center,
                 TextColor = Color.White,
                 ShowText = true,
-                LayerDepth = 0.05f
+                LayerDepth = 0.05f,
+                MaxScale = 1.1f,
+                MinScale = 1f,
+                TimerLimit = 200,
+                Timer = 0,
+                Loop = false,
+                IsPaused = true,
+                StartTextColor = Color.White,
+                EndTextColor = Color.Red
             };
             Objects.Add(lblScore);
             hider.HideObject(Objects.Last(), HidePlace.Top);
@@ -138,7 +146,7 @@ namespace GalaxyBlox.Rooms
             hider.HideObject(Objects.Last(), HidePlace.Top);
 
             // LEVEL
-            lblLevel = new GameObject(this)
+            lblLevel = new BreathingObject(this)
             {
                 Size = lblLevelSize,
                 Position = new Vector2(148, lastObj.Position.Y + 88),
@@ -148,7 +156,15 @@ namespace GalaxyBlox.Rooms
                 TextAlignment = TextAlignment.Center,
                 TextColor = Color.White,
                 ShowText = true,
-                LayerDepth = 0.05f
+                LayerDepth = 0.05f,
+                MaxScale = 1.1f,
+                MinScale = 1f,
+                TimerLimit = 500,
+                Timer = 0,
+                Loop = false,
+                IsPaused = true,
+                StartTextColor = Color.White,
+                EndTextColor = Color.Red
             };
             Objects.Add(lblLevel);
             hider.HideObject(Objects.Last(), HidePlace.Top);
@@ -473,7 +489,13 @@ namespace GalaxyBlox.Rooms
             if (lblScore != null)
             {
                 if (arena.Score > 0)
-                    lblScore.Text = Strings.ScoreToLongString(arena.Score); //Strings.ScoreToString(arena.Score, 3); 
+                {
+                    var newValue = Strings.ScoreToLongString(arena.Score);
+                    if (newValue != lblScore.Text)
+                        (lblScore as BreathingObject).BreathOut();
+
+                    lblScore.Text = newValue;
+                }
                 else
                     lblScore.Text = "SCORE";
             }
@@ -481,7 +503,13 @@ namespace GalaxyBlox.Rooms
             if (lblLevel != null)
             {
                 if (arena.Level > 0)
-                    lblLevel.Text = arena.Level.ToString();
+                {
+                    var newValue = arena.Level.ToString();
+                    if (newValue != lblLevel.Text)
+                        (lblLevel as BreathingObject).BreathOut();
+
+                    lblLevel.Text = newValue;
+                }
                 else
                     lblLevel.Text = "LEVEL";
             }

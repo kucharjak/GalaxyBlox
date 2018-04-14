@@ -214,7 +214,7 @@ namespace GalaxyBlox.Rooms
                 LayerDepth = 0.05f,
                 MaxScale = 1f,
                 MinScale = 0.9f,
-                TimeLimit = 5000,
+                TimerLimit = 5000,
                 Timer = 2500
             };
             Objects.Add(objToAdd);
@@ -247,8 +247,8 @@ namespace GalaxyBlox.Rooms
                 MinScale = 0.8f,
                 MaxAlpha = 1f,
                 MinAlpha = 0.4f,
-                TimeLimit = 4000,
-                Timer = 2000
+                TimerLimit = 4000,
+                Timer = 2000,
             };
             Objects.Add(tapToStart);
         }
