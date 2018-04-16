@@ -654,7 +654,7 @@ namespace GalaxyBlox.Objects
         {
         }
         
-        protected virtual void RemoveActorFromPlayground(Actor actor)
+        protected virtual int RemoveActorFromPlayground(Actor actor)
         {
             var actorCubes = new List<Tuple<int, int, int>>();
 
@@ -667,10 +667,10 @@ namespace GalaxyBlox.Objects
                 }
             }
 
-            InsertBoxesToPlayground(actorCubes);
+            return InsertBoxesToPlayground(actorCubes);
         }
 
-        protected virtual void InsertActorToPlayground(Actor actor)
+        protected virtual int InsertActorToPlayground(Actor actor)
         {
             var actorCubes = new List<Tuple<int, int, int>>();
             var actorColorPos = Contents.Colors.GameCubesColors.IndexOf(actor.Color);
@@ -684,26 +684,36 @@ namespace GalaxyBlox.Objects
                 }
             }
 
-            InsertBoxesToPlayground(actorCubes);
+            return InsertBoxesToPlayground(actorCubes);
         }
 
         /// <summary>
         /// Adds index, that represents color, to playground.
         /// </summary>
         /// <param name="cubes">List of cubes defined in tuple where values are - posX, posY, colorIndex</param>
-        protected virtual void InsertBoxesToPlayground(List<Tuple<int, int, int>> cubes)
+        protected virtual int InsertBoxesToPlayground(List<Tuple<int, int, int>> cubes)
         {
+            var overwritenCubes = 0;
+
             foreach (var cube in cubes)
             {
-                if (cube.Item1 < playground.GetLength(0) && cube.Item1 >= 0
-                    && cube.Item2 < playground.GetLength(1) && cube.Item2 >= 0)
+                if (cube.Item1 < playground.GetLength(0) && cube.Item1 >= 0 &&
+                    cube.Item2 < playground.GetLength(1) && cube.Item2 >= 0 &&
+                    playground[cube.Item1, cube.Item2] != cube.Item3)
+                {
                     playground[cube.Item1, cube.Item2] = cube.Item3;
+                    overwritenCubes++;
+                }                    
             }
             backgroundChanged = true;
+
+            return overwritenCubes;
         }
 
-        protected virtual void InsertBoxesToPlayground(Point boxesPosition, int[,] boxesArray, bool insertZeros = false)
+        protected virtual int InsertBoxesToPlayground(Point boxesPosition, int[,] boxesArray, bool insertZeros = false)
         {
+            var overwritenCubes = 0;
+
             for (int x = 0; x < boxesArray.GetLength(0); x++)
             {
                 for (int y = 0; y < boxesArray.GetLength(1); y++)
@@ -711,15 +721,18 @@ namespace GalaxyBlox.Objects
                     if (boxesArray[x, y] > 0 || insertZeros)
                     {
                         var boxPosition = new Point(boxesPosition.X + x, boxesPosition.Y + y);
-                        if (boxPosition.X < playground.GetLength(0) && boxPosition.Y < playground.GetLength(1) && boxPosition.X >= 0 && boxPosition.Y >= 0)
+                        if (boxPosition.X < playground.GetLength(0) && boxPosition.Y < playground.GetLength(1) && 
+                            boxPosition.X >= 0 && boxPosition.Y >= 0 && playground[boxPosition.X, boxPosition.Y] != boxesArray[x, y])
                         {
                             playground[boxPosition.X, boxPosition.Y] = boxesArray[x, y];
-                            //playgroundChanges.Add(new Point(boxPosition.X, boxPosition.Y)); // log change for redraw
+                            overwritenCubes++;
                         }
                     }
                 }
             }
             backgroundChanged = true; // indicating for background redraw
+
+            return overwritenCubes;
         }
 
         protected virtual bool ActorCollideWithPlayground(Actor actor)

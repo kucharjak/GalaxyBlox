@@ -367,18 +367,35 @@ namespace GalaxyBlox.Objects.PlayingArenas
                     }
                 }
             }
-        } 
-
-        protected override void InsertActorToPlayground(Actor actor)
-        {
-            base.InsertActorToPlayground(actor);
-            LastPlayedActor = actor;
         }
 
-        protected override void RemoveActorFromPlayground(Actor actor)
+
+        protected int CountActorCubes(Actor actor)
         {
-            base.RemoveActorFromPlayground(actor);
+            var result = 0;
+
+            for (int x = 0; x < actor.Shape.GetLength(0); x++)
+            {
+                for (int y = 0; y < actor.Shape.GetLength(1); y++)
+                {
+                    if (actor.Shape[x, y])
+                        result++;
+                }
+            }
+
+            return result;
+        }
+
+        protected override int InsertActorToPlayground(Actor actor)
+        {
+            LastPlayedActor = actor;
+            return base.InsertActorToPlayground(actor);
+        }
+
+        protected override int RemoveActorFromPlayground(Actor actor)
+        {
             LastPlayedActor = null;
+            return base.RemoveActorFromPlayground(actor);
         }
 
         // private bonus activations
@@ -717,6 +734,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
                         var IsDestroyed = rect.X + rect.Width - laserPosition.X <= laserWidth;
                         if (IsDestroyed)
                         {
+                            Score += (int)(CountActorCubes(actor) * baseCubeScore * (1f + MathHelper.Clamp((Level - 1), 0, maxLevel) * scoreLevelMultiplier));
                             actors.Remove(actor);
                             continue;
                         }
@@ -745,23 +763,35 @@ namespace GalaxyBlox.Objects.PlayingArenas
                         }
                     }
 
+                    var cubesBefore = CountActorCubes(actor);
+
                     actor.Position += startPosition;
                     actor.Shape = newShape;
+
+                    var cubesAfter = CountActorCubes(actor);
+                    Score += (int)((cubesBefore - cubesAfter) * baseCubeScore * (1f + MathHelper.Clamp((Level - 1), 0, maxLevel) * scoreLevelMultiplier));
                 }
             }
         }
 
         protected virtual void LaserPlayground()
         {
+            var overwritenCubes = 0;
             var laserRect = new Rectangle(laserPosition, new Point(laserWidth, playground.GetLength(1)));
             for (int x = laserRect.X; x < laserRect.X + laserRect.Width; x++)
             {
                 for (int y = laserRect.Y; y < laserRect.Y + laserRect.Height; y++)
                 {
-                    playground[x, y] = 0;
+                    if (playground[x, y] != 0)
+                    {
+                        playground[x, y] = 0;
+                        overwritenCubes++;
+                    }
                 }
             }
             backgroundChanged = true;
+
+            Score += (int)(overwritenCubes * baseCubeScore * (1f + MathHelper.Clamp((Level - 1), 0, maxLevel) * scoreLevelMultiplier));
 
             var laserWidthExtension = new Vector2(Size.X / arenaSize.X * 0.5f, 0);
             var laserCubesRect = GetCubesIngamePosition(new Point(laserRect.X, laserRect.Y), new Point(laserRect.X + laserRect.Width - 1, laserRect.Height));
@@ -850,8 +880,10 @@ namespace GalaxyBlox.Objects.PlayingArenas
                 Pause();
             }
 
-            InsertBoxesToPlayground(actorCubes);
             backgroundChanged = true;
+
+            var cubes = InsertBoxesToPlayground(actorCubes);
+            Score += (int)(cubes * baseCubeScore * (1f + MathHelper.Clamp((Level - 1), 0, maxLevel) * scoreLevelMultiplier));
         }
 
         private void Explosion_AnimationNext(object sender, EventArgs e)

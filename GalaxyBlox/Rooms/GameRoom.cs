@@ -369,6 +369,7 @@ namespace GalaxyBlox.Rooms
                 if (bonus.Type != BonusType.None && bonus.Progress >= 100)
                 {
                     var btn = Bank.Buttons.GetEmptyButton(this);
+                    btn.Enabled = bonus.Enabled;
                     btn.Name = "BonusButton_" + i.ToString();
                     btn.Size = btnBonusSize;
                     btn.Position = new Vector2(pnlBonusBtns.Position.X + btnMargin + i * (btnBonusSize.X + btnMargin), pnlBonusBtns.Position.Y);
@@ -397,33 +398,15 @@ namespace GalaxyBlox.Rooms
                         TextHeight = btnBonusTextHeight,
                         TextAlignment = TextAlignment.Center,
                         Text = bonus.Progress.ToString() + "%",
-                        ShowText = true
+                        ShowText = true,
                     };
+
                     Objects.Add(btnBack);
                     bonusObjs.Add(btnBack);
                     hider.HideObject(Objects.Last(), HidePlace.Bottom);
                 }
                 i++;
             }
-
-            //if (newBonuses.Count > 1)
-            //{
-            //    var lineWidth = 8;
-            //    var linesMargin = (pnlBonusBtns.Size.X - ((newBonuses.Count - 1) * lineWidth)) / (newBonuses.Count);
-            //    for (int index = 0; index < newBonuses.Count; index++)
-            //    {
-            //        var line = new GameObject(this)
-            //        {
-            //            Size = new Vector2(lineWidth, pnlBonusBtns.Size.Y),
-            //            Position = new Vector2(pnlBonusBtns.Position.X + linesMargin + index * (lineWidth + linesMargin), pnlBonusBtns.Position.Y),
-            //            SpriteImage = Contents.Sprites.Pix,
-            //            BaseColor = new Color(11, 42, 96),
-            //            LayerDepth = 0.05f
-            //    };
-            //        Objects.Add(line);
-            //        bonusObjs.Add(line);
-            //    }
-            //}
         }
 
         private void Btn_Click(object sender, EventArgs e)
