@@ -337,11 +337,12 @@ namespace GalaxyBlox.Objects.PlayingArenas
         protected override Point GetNewActorPosition(Actor actor)
         {
             var availibleArenaSize = (int)arenaSize.X - 2 * newActorStartingPositionXPadding;
+            var actorStartYPosition = gameMode == GameMode.Extreme ? -actor.Shape.GetLength(1) + 1 : 0;
 
             var positionsWithoutOtherActors = new List<Point>(); // i won't place new actor on other existing actor
             for (int i = 0; i < availibleArenaSize + 1 - actor.Shape.GetLength(0); i++)
             {
-                actor.Position = new Point(i + newActorStartingPositionXPadding, - actor.Shape.GetLength(1) + 1);
+                actor.Position = new Point(i + newActorStartingPositionXPadding, actorStartYPosition);
                 if (!ActorCollideActors(actor, actors))
                     positionsWithoutOtherActors.Add(actor.Position);
             }
@@ -350,7 +351,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
             if (positionsWithoutOtherActors.Count > 0)
                 return positionsWithoutOtherActors[Game1.Random.Next(0, positionsWithoutOtherActors.Count - 1)];
             else
-                return new Point(Game1.Random.Next(0, availibleArenaSize + 1 - actor.Shape.GetLength(0) + 2), - actor.Shape.GetLength(1) + 1);
+                return new Point(Game1.Random.Next(0, availibleArenaSize + 1 - actor.Shape.GetLength(0) + 2), actorStartYPosition);
         }
 
         protected override void UpdateEffectsArray()
