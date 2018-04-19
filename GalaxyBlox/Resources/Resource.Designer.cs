@@ -50,9 +50,6 @@ namespace GalaxyBlox
 			// aapt resource value: 0x7f020001
 			public const int Splash = 2130837505;
 			
-			// aapt resource value: 0x7f020002
-			public const int Splash_CRT = 2130837506;
-			
 			static Drawable()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
@@ -66,11 +63,8 @@ namespace GalaxyBlox
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f030001
-			public const int ApplicationName = 2130903041;
-			
 			// aapt resource value: 0x7f030000
-			public const int Hello = 2130903040;
+			public const int ApplicationName = 2130903040;
 			
 			static String()
 			{

@@ -153,7 +153,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
             if (IsPaused)
                 return;
 
-            //AddProgressToBonus(10);
+            AddProgressToBonus(10);
 
             switch (ActiveBonus?.Type)
             {
@@ -640,14 +640,14 @@ namespace GalaxyBlox.Objects.PlayingArenas
                 Enabled = true,
                 Progress = 100
             });
-            availableBonuses.Add(new GameBonus(Bonus_CancelLastCube_Activate, null, null, Bonus_CancelLastCube_Deactivate)
-            {
-                Type = BonusType.CancelLastCube,
-                Name = "Cancel last",
-                SpecialText = "UNDO",
-                Enabled = true,
-                Progress = 100
-            });
+            //availableBonuses.Add(new GameBonus(Bonus_CancelLastCube_Activate, null, null, Bonus_CancelLastCube_Deactivate)
+            //{
+            //    Type = BonusType.CancelLastCube,
+            //    Name = "Cancel last",
+            //    SpecialText = "UNDO",
+            //    Enabled = true,
+            //    Progress = 100
+            //});
             availableBonuses.Add(new GameBonus(Bonus_Laser_Activate, Bonus_Laser_MakeAction, null, Bonus_Laser_Deactivate)
             {
                 Type = BonusType.Laser,
@@ -656,22 +656,22 @@ namespace GalaxyBlox.Objects.PlayingArenas
                 Enabled = true,
                 Progress = 100
             });
-            availableBonuses.Add(new GameBonus(Bonus_Swipe_Activate, Bonus_Swipe_MakeAction, null, Bonus_Swipe_Deactivate)
-            {
-                Type = BonusType.SwipeCubes,
-                Name = "Swipe cubes",
-                SpecialText = "SWIPE",
-                Enabled = true,
-                Progress = 100
-            });
-            availableBonuses.Add(new GameBonus(Bonus_SlowDown_Activate, null, null, Bonus_SlowDown_Deactivate)
-            {
-                Type = BonusType.TimeSlowdown,
-                Name = "Slowdown time",
-                SpecialText = "SLOW",
-                Enabled = true,
-                Progress = 100
-            });
+            //availableBonuses.Add(new GameBonus(Bonus_Swipe_Activate, Bonus_Swipe_MakeAction, null, Bonus_Swipe_Deactivate)
+            //{
+            //    Type = BonusType.SwipeCubes,
+            //    Name = "Swipe cubes",
+            //    SpecialText = "SWIPE",
+            //    Enabled = true,
+            //    Progress = 100
+            //});
+            //availableBonuses.Add(new GameBonus(Bonus_SlowDown_Activate, null, null, Bonus_SlowDown_Deactivate)
+            //{
+            //    Type = BonusType.TimeSlowdown,
+            //    Name = "Slowdown time",
+            //    SpecialText = "SLOW",
+            //    Enabled = true,
+            //    Progress = 100
+            //});
         }
 
         protected virtual void ResetBonuses()

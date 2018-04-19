@@ -145,7 +145,6 @@
     <Content Include="Content\Sprites\ControlButton_pause.png" />
     <Content Include="Content\Sprites\ControlButton_rotate.png" />
     <Content Include="Content\Sprites\pixel.png" />
-    <AndroidResource Include="Resources\Drawable\Splash_CRT.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
