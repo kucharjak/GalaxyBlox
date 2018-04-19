@@ -94,22 +94,22 @@ namespace GalaxyBlox.Rooms
             Objects.Add(objToAdd);
             hider.HideObject(objToAdd, HidePlace.Top);
 
-            //var nameSize = new Vector2(Size.X, 35);
-            //objToAdd = new GameObject(this)
-            //{
-            //    Size = nameSize,
-            //    Position = new Vector2(0, Size.Y - nameSize.Y - padding),
-            //    TextSpriteFont = Contents.Fonts.PixelArtTextFont,
-            //    Text = "JAKUB KUCHAR 2018",
-            //    TextColor = Color.White,
-            //    TextHeight = (int)(nameSize.Y * 0.8f),
-            //    TextAlignment = TextAlignment.Center,
-            //    ShowText = true,
-            //    LayerDepth = 0.05f,
-            //};
-            //Objects.Add(objToAdd);
-            //hider.HideObject(objToAdd, HidePlace.Bottom);
-            
+            var nameSize = new Vector2(Size.X - 15, 25);
+            objToAdd = new GameObject(this)
+            {
+                Size = nameSize,
+                Position = new Vector2(0, 15),
+                TextSpriteFont = Contents.Fonts.PixelArtTextFont,
+                Text = "Jakub Kuchar 2018",
+                TextColor = Color.White,
+                TextHeight = (int)(nameSize.Y * 0.8f),
+                TextAlignment = TextAlignment.Right,
+                ShowText = true,
+                LayerDepth = 0.05f,
+            };
+            Objects.Add(objToAdd);
+            hider.HideObject(objToAdd, HidePlace.Top);
+
             //// PLAY BUTTON ////
             var playButtonSize = new Vector2(280, 180);
 
