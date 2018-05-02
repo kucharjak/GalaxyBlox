@@ -19,6 +19,7 @@ namespace GalaxyBlox.Static
             public static Texture2D Stars;
             public static Texture2D Dialog_Icons;
             public static Texture2D Logo;
+            public static Texture2D FrozenStars;
 
             public static Texture2D Dialog_Backgrounds;
             public static Texture2D GameUI_Backgrounds;
@@ -67,6 +68,8 @@ namespace GalaxyBlox.Static
             public static Sprite Star_big;
 
             public static Sprite Logo;
+
+            public static Sprite FrozenStars;
         }
 
         public static class Animations

@@ -35,6 +35,8 @@ namespace GalaxyBlox.Rooms
 
         private ObjectHider hider;
 
+        private BreathingObject frozenStars;
+
         private SettingOptions.GameMode gameMode;
 
         public GameRoom(Room parent, string name, Vector2 size, Vector2 position) : base(parent, name, size, position)
@@ -432,8 +434,41 @@ namespace GalaxyBlox.Rooms
             switch(bonus)
             {
                 case BonusType.None:
+                    {
+                        if (frozenStars != null)
+                        {
+                            frozenStars.Visible = false;
+                            frozenStars.Enabled = false;
+                        }
+
+                        btnControlLeft.Enabled = true;
+                        btnControlRight.Enabled = true;
+                        btnControlFall.Enabled = true;
+                        btnControlRotate.Enabled = true;
+                    } break;
                 case BonusType.TimeSlowdown:
                     {
+                        if (frozenStars != null)
+                        {
+                            frozenStars.Visible = true;
+                            frozenStars.Enabled = true;
+                        }
+                        else
+                        {
+                            frozenStars = new BreathingObject(this)
+                            {
+                                SpriteImage = Contents.Sprites.FrozenStars,
+                                Position = new Vector2(0),
+                                Size = this.Size,
+                                LayerDepth = 0.06f,
+                                MinScale = 0.98f,
+                                MaxScale = 1.02f,
+                                Loop = true,
+                                TimerLimit = 10000
+                            };
+                            Objects.Add(frozenStars);
+                        }
+
                         btnControlLeft.Enabled = true;
                         btnControlRight.Enabled = true;
                         btnControlFall.Enabled = true;

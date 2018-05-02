@@ -65,6 +65,7 @@ namespace GalaxyBlox.Models
         public float Alpha = 1f;
         public float LayerDepth = 0f;
 
+        public bool Visible = true;
         public bool Enabled = true;
 
         public object Data = null;
@@ -98,6 +99,9 @@ namespace GalaxyBlox.Models
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
+            if (!Visible)
+                return;
+
             var baseAlpha = Enabled ? 1f : .25f;
 
             if (SpriteImage != null)

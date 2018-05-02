@@ -66,6 +66,7 @@ namespace GalaxyBlox
             Textures.Stars = Content.Load<Texture2D>("Sprites/stars");
             Textures.Dialog_Icons = Content.Load<Texture2D>("Sprites/dialogs_icon");
             Textures.Logo = Content.Load<Texture2D>("Sprites/logo");
+            Textures.FrozenStars = Content.Load<Texture2D>("Sprites/frozen_stars");
 
             Textures.Dialog_Backgrounds = Content.Load<Texture2D>("Backgrounds/dialogs");
             Textures.GameUI_Backgrounds = Content.Load<Texture2D>("Backgrounds/gameUI");
@@ -113,6 +114,8 @@ namespace GalaxyBlox
             Sprites.Star_big = new Sprite(Textures.Stars, new Rectangle(30, 0, 3, 3));
 
             Sprites.Logo = new Sprite(Textures.Logo, Textures.Logo.GetRectangle());
+
+            Sprites.FrozenStars = new Sprite(Textures.FrozenStars, Textures.FrozenStars.GetRectangle());
 
             ///// LOADING ANIMATIONS //////
 
