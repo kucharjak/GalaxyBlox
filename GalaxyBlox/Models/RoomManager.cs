@@ -39,7 +39,7 @@ namespace GalaxyBlox.Models
 
             spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
 
-            if (Static.Settings.Game.ShowFPS)
+            if (Static.Settings.ShowFPS)
             {
                 spriteBatch.DrawString(Static.Contents.Fonts.PlainTextFont, "CUR: " + fc.CurrentFramesPerSecond, new Vector2(), Color.Red, 0f, new Vector2(), 1f, SpriteEffects.None, 1f);
                 spriteBatch.DrawString(Static.Contents.Fonts.PlainTextFont, "AVG: " + fc.AverageFramesPerSecond, new Vector2(0, Static.Contents.Fonts.PlainTextFont.LineSpacing), Color.Red, 0f, new Vector2(), 1f, SpriteEffects.None, 1f);

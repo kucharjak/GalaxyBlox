@@ -564,14 +564,14 @@ namespace GalaxyBlox.Objects
 
             if (score > 0)
             {
-                if (!Settings.Game.Highscores.Items.ContainsKey(gameMode))
+                if (!Settings.Highscores.Items.ContainsKey(gameMode))
                 {
                     isNewHighscore = true;
                 }
                 else
                 {
-                    var highscores = Settings.Game.Highscores.Items[gameMode];
-                    if (highscores.Count < Settings.Game.MaxHighscoresPerGameMod || highscores.Any(scr => scr.Value < score))
+                    var highscores = Settings.Highscores.Items[gameMode];
+                    if (highscores.Count < Settings.MaxHighscoresPerGameMod || highscores.Any(scr => scr.Value < score))
                     {
                         isNewHighscore = true;
                     }
@@ -849,7 +849,7 @@ namespace GalaxyBlox.Objects
         {
             playgroundEffectsList.Clear();
 
-            if (gameMode != SettingOptions.GameMode.Classic && Settings.Game.UserSettings.Indicator != SettingOptions.Indicator.None) // draw indicator if set
+            if (gameMode != SettingOptions.GameMode.Classic && Settings.UserSettings.Indicator != SettingOptions.Indicator.None) // draw indicator if set
                 DrawIndicator();
 
             foreach (var actor in actors)
@@ -881,7 +881,7 @@ namespace GalaxyBlox.Objects
             if (activeActor == null)
                 return;
 
-            switch (Settings.Game.UserSettings.Indicator)
+            switch (Settings.UserSettings.Indicator)
             {
                 case SettingOptions.Indicator.Shadow:
                     {

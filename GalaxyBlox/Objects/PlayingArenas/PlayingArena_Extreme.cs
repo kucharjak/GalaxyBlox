@@ -64,7 +64,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
 
         protected override bool[,] GetRandomShape()
         {
-            if (Settings.Game.UserSettings.UseExtendedShapeLibrary)
+            if (Settings.UserSettings.UseExtendedShapeLibrary)
                 return Contents.Shapes.GetExtendedRandomShape();
             else
                 return Contents.Shapes.GetRandomShape();

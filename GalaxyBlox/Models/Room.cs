@@ -60,7 +60,7 @@ namespace GalaxyBlox.Models
             Size = size;
 
             var realSize = new Vector2(Game1.ActiveGame.GraphicsDevice.Viewport.Width, Game1.ActiveGame.GraphicsDevice.Viewport.Height);
-            var windowSize = Static.Settings.Game.WindowSize;
+            var windowSize = Static.Settings.WindowSize;
             if (realSize.X - windowSize.X > realSize.Y - windowSize.Y)
             { // HEIGHT + X offset
                 Scale = realSize.Y / (windowSize.Y * 1f);
@@ -85,7 +85,7 @@ namespace GalaxyBlox.Models
 
         public void CenterWindow()
         {
-            var windowSize = Static.Settings.Game.WindowSize;
+            var windowSize = Static.Settings.WindowSize;
             Position = new Vector2((windowSize.X - Size.X) / 2, (windowSize.Y - Size.Y) / 2);
         }
 

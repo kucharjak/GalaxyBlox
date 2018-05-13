@@ -10,6 +10,7 @@ using GalaxyBlox.Objects;
 using GalaxyBlox.Static;
 using static GalaxyBlox.Static.SettingOptions;
 using static GalaxyBlox.Static.Settings;
+using static GalaxyBlox.Static.SettingClasses;
 
 namespace GalaxyBlox.Rooms
 {
@@ -93,7 +94,7 @@ namespace GalaxyBlox.Rooms
                 var maxCharacters = 3;
                 var posX = (Size.X - (maxCharacters - 1) * charItemPadding - charItemSize.X * maxCharacters) / 2;
                 var posY = lastObj.Position.Y + lastObj.Size.Y + itemPadding;
-                var lastName = Settings.Game.UserSettings.LastName;
+                var lastName = Settings.UserSettings.LastName;
 
                 for (int i = 0; i < maxCharacters; i++)
                 {
@@ -110,7 +111,7 @@ namespace GalaxyBlox.Rooms
                     character.TextAlignment = TextAlignment.Center;
                     character.TextSpriteFont = Contents.Fonts.PixelArtTextFont;
                     character.TextHeight = (int)(charItemSize.Y * 0.8f);
-                    character.Text = Settings.Game.UseLastHighscoreName && !String.IsNullOrEmpty(lastName) && lastName.Count() > i ? lastName[i].ToString() : Contents.Constants.AvailableNameChars.First().ToString();
+                    character.Text = Settings.UseLastHighscoreName && !String.IsNullOrEmpty(lastName) && lastName.Count() > i ? lastName[i].ToString() : Contents.Constants.AvailableNameChars.First().ToString();
                     character.TextColor = Color.White;
                     character.LayerDepth = 0.05f;
                     Objects.Add(character);
@@ -191,21 +192,21 @@ namespace GalaxyBlox.Rooms
             if (isNewHighscore)
             {
                 var name = String.Join("", charactersList.Select(character => character.Text));
-                Settings.Game.UserSettings.LastName = name;
+                Settings.UserSettings.LastName = name;
 
-                var highscores = Settings.Game.Highscores.Items.ContainsKey(gameMode) ? Settings.Game.Highscores.Items[gameMode] : new List<Score>();
+                var highscores = Settings.Highscores.Items.ContainsKey(gameMode) ? Settings.Highscores.Items[gameMode] : new List<Score>();
                 highscores.Add(new Score(name, score));
 
                 highscores = highscores.OrderByDescending(scr => scr.Value).ToList();
-                while (highscores.Count > Settings.Game.MaxHighscoresPerGameMod)
+                while (highscores.Count > Settings.MaxHighscoresPerGameMod)
                 {
                     highscores.RemoveAt(highscores.Count - 1);
                 }
 
-                if (Settings.Game.Highscores.Items.ContainsKey(gameMode))
-                    Settings.Game.Highscores.Items.Remove(gameMode);
-                Settings.Game.Highscores.Items.Add(gameMode, highscores);
-                Settings.Game.SaveAll();
+                if (Settings.Highscores.Items.ContainsKey(gameMode))
+                    Settings.Highscores.Items.Remove(gameMode);
+                Settings.Highscores.Items.Add(gameMode, highscores);
+                Settings.SaveAll();
             }
 
             End();

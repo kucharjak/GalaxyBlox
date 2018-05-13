@@ -69,28 +69,28 @@ namespace GalaxyBlox.Rooms
 
         private void BtnExtremeMode_Click(object sender, EventArgs e)
         {
-            Static.Settings.Game.UserSettings.LastGameMode = GameMode.Extreme;
-            Static.Settings.Game.ArenaSize = new Vector2(18, 30);
+            Static.Settings.UserSettings.LastGameMode = GameMode.Extreme;
+            Static.Settings.ArenaSize = new Vector2(18, 30);
             StartGame();
         }
 
         private void BtnNormalMode_Click(object sender, EventArgs e)
         {
-            Static.Settings.Game.UserSettings.LastGameMode = GameMode.Normal;
-            Static.Settings.Game.ArenaSize = new Vector2(12, 20);
+            Static.Settings.UserSettings.LastGameMode = GameMode.Normal;
+            Static.Settings.ArenaSize = new Vector2(12, 20);
             StartGame();
         }
 
         private void BtnClassicMode_Click(object sender, EventArgs e)
         {
-            Static.Settings.Game.UserSettings.LastGameMode = GameMode.Classic;
-            Static.Settings.Game.ArenaSize = new Vector2(12, 20);
+            Static.Settings.UserSettings.LastGameMode = GameMode.Classic;
+            Static.Settings.ArenaSize = new Vector2(12, 20);
             StartGame();
         }
 
         private void StartGame()
         {
-            new GameRoom(Parent, "Room_Game", Static.Settings.Game.WindowSize, new Vector2()).Show();
+            new GameRoom(Parent, "Room_Game", Static.Settings.WindowSize, new Vector2()).Show();
             End();
         }
     }

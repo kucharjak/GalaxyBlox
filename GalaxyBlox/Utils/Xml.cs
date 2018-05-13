@@ -5,7 +5,10 @@ using System.Xml.Serialization;
 
 namespace GalaxyBlox.Utils
 {
-    public static class Xml
+    /// <summary>
+    /// Class for serializing and deserializing xml files to/from isolated storage file.
+    /// </summary>
+    public static class XmlIsoStore
     {
         public static void Serialize<T>(T objectToSerialize, string path)
         {

@@ -20,7 +20,6 @@ namespace GalaxyBlox
             base.OnCreate(bundle);
             var g = new Game1();            
             var view = (View)g.Services.GetService(typeof(View));
-            //view.SystemUiVisibility = (StatusBarVisibility)SystemUiFlags.HideNavigation | (StatusBarVisibility)SystemUiFlags.ImmersiveSticky;
             SetContentView(view);
             g.Run();
         }

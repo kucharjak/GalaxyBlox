@@ -7,6 +7,9 @@ using System.Text;
 
 namespace GalaxyBlox.Utils
 {
+    /// <summary>
+    /// Extensions for existing objects. 
+    /// </summary>
     public static class Extensions
     {
         /// <summary>

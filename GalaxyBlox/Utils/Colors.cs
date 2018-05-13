@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace GalaxyBlox.Utils
 {
+    /// <summary>
+    /// Methods for handling colors.
+    /// </summary>
     public static class Colors
     {
+        /// <summary>
+        /// Method that mix colors from list to one color by calculating average of all color channels. 
+        /// </summary>
+        /// <param name="colors">List of colors to mix</param>
+        /// <returns></returns>
         public static Color MixMultipleColors(List<Color> colors)
         {
             int r = 0, g = 0, b = 0;

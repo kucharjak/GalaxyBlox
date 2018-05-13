@@ -1,128 +1,67 @@
-﻿using GalaxyBlox.Static;
-using GalaxyBlox.Utils;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using Microsoft.Xna.Framework;
 using System.IO.IsolatedStorage;
-using System.Xml.Serialization;
+using static GalaxyBlox.Static.SettingClasses;
 
 namespace GalaxyBlox.Static
 {
+    /// <summary>
+    /// Vital settings of the game.
+    /// </summary>
     public static class Settings
     {
-        /// <summary>
-        /// Vital settings of the game.
-        /// </summary>
-        public static class Game
+        public static readonly bool ShowFPS = false;
+
+        private static IsolatedStorageFile dataFile = IsolatedStorageFile.GetUserStoreForDomain();
+        private const string settingsPath = "settings.xml";
+        private const string highscoresPath = "highscores.xml";
+        public const int MaxHighscoresPerGameMod = 5;
+        public const bool UseLastHighscoreName = false;
+
+        public static readonly Vector2 WindowSize = new Vector2(720, 1208);
+
+        public static Vector2 ArenaSize = new Vector2(12, 20);
+
+        public static UserSettings UserSettings;
+        public static Highscores Highscores;
+
+        public static void LoadAll()
         {
-            // DEBUG SETTINGS - TODO: Do it smarter
-            public static readonly bool ShowFPS = false;
-
-            private static IsolatedStorageFile dataFile = IsolatedStorageFile.GetUserStoreForDomain();
-            private const string settingsPath = "settings.xml";
-            private const string highscoresPath = "highscores.xml";
-            public const int MaxHighscoresPerGameMod = 5;
-            public const bool UseLastHighscoreName = false;
-
-            public static readonly Vector2 WindowSize = new Vector2(720, 1208);
-
-            public static Vector2 ArenaSize = new Vector2(12, 20);
-
-            public static UserSettings UserSettings;
-            public static Highscores Highscores;
-
-            public static void LoadAll()
-            {
-                LoadUserSettings();
-                LoadHighscores();
-            }
-
-            public static void SaveAll()
-            {
-                SaveUserSettings();
-                SaveHighscores();
-            }
-
-            public static void LoadUserSettings()
-            {
-                var tmpUserSettings = new UserSettings();
-                if (!Utils.Xml.TryDeserialize(out tmpUserSettings, settingsPath))
-                    tmpUserSettings = new UserSettings() { Indicator = SettingOptions.Indicator.Shape, LastGameMode = SettingOptions.GameMode.Normal };
-
-                UserSettings = tmpUserSettings;
-            }
-
-            public static void SaveUserSettings()
-            {
-                Utils.Xml.Serialize(UserSettings, settingsPath);
-            }
-
-            public static void LoadHighscores()
-            {
-                var tmpHighscores = new Highscores();
-                if (!Utils.Xml.TryDeserialize(out tmpHighscores, highscoresPath))
-                    tmpHighscores = new Highscores();
-
-                Highscores = tmpHighscores;
-            }
-
-            public static void SaveHighscores()
-            {
-                Utils.Xml.Serialize(Highscores, highscoresPath);
-            }
+            LoadUserSettings();
+            LoadHighscores();
         }
 
-        [XmlRoot]
-        public class Highscores
+        public static void SaveAll()
         {
-            [XmlElement]
-            public SerializableDictionary<SettingOptions.GameMode, List<Score>> Items = new SerializableDictionary<SettingOptions.GameMode, List<Score>>();
-
-            // METHODS
-            public void SaveHighScore(SettingOptions.GameMode gameMode, List<Score> scores)
-            {
-                if (Items == null)
-                    Items = new SerializableDictionary<SettingOptions.GameMode, List<Score>>();
-
-                if (Items.ContainsKey(gameMode))
-                    Items[gameMode] = scores;
-                else
-                    Items.Add(gameMode, scores);
-            }
+            SaveUserSettings();
+            SaveHighscores();
         }
 
-        [Serializable]
-        public struct Score
+        public static void LoadUserSettings()
         {
-            public string Name { get; set; }
-            public long Value { get; set; }
+            var tmpUserSettings = new UserSettings();
+            if (!Utils.XmlIsoStore.TryDeserialize(out tmpUserSettings, settingsPath))
+                tmpUserSettings = new UserSettings() { Indicator = SettingOptions.Indicator.Shape, LastGameMode = SettingOptions.GameMode.Normal };
 
-            public Score(string name, long value)
-            {
-                Name = name;
-                Value = value;
-            }
+            UserSettings = tmpUserSettings;
         }
 
-
-        [XmlRoot]
-        public class UserSettings
+        public static void SaveUserSettings()
         {
-            [XmlElement]
-            public string LastName;
+            Utils.XmlIsoStore.Serialize(UserSettings, settingsPath);
+        }
 
-            [XmlElement]
-            public SettingOptions.GameMode LastGameMode = SettingOptions.GameMode.Normal;
+        public static void LoadHighscores()
+        {
+            var tmpHighscores = new Highscores();
+            if (!Utils.XmlIsoStore.TryDeserialize(out tmpHighscores, highscoresPath))
+                tmpHighscores = new Highscores();
 
-            [XmlElement]
-            public SettingOptions.Indicator Indicator = SettingOptions.Indicator.Shape;
+            Highscores = tmpHighscores;
+        }
 
-            [XmlElement]
-            public bool Vibration = true;
-
-            [XmlElement]
-            public bool UseExtendedShapeLibrary = true;
+        public static void SaveHighscores()
+        {
+            Utils.XmlIsoStore.Serialize(Highscores, highscoresPath);
         }
     }
 }

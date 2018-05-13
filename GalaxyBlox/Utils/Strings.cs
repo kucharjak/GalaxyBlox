@@ -7,19 +7,33 @@ using System.Globalization;
 
 namespace GalaxyBlox.Utils
 {
+    /// <summary>
+    /// Class with methods for string handling. 
+    /// </summary>
     public static class Strings
     {
+        /// <summary>
+        /// Takes numeric score and returns it's value in string without number separator.
+        /// </summary>
+        /// <param name="score">Score value</param>
+        /// <returns></returns>
         public static string ScoreToLongString(long score)
         {
             var f = new NumberFormatInfo { NumberGroupSeparator = " " };
-
             return score.ToString(f);
         }
 
-        public static string ScoreToShortString(long score, int scoreLenght, bool separateWithSpace = false)
+        /// <summary>
+        /// Takes numeric score and returns it's value in string with set lenght and appropriate suffixe.
+        /// </summary>
+        /// <param name="score">Score value</param>
+        /// <param name="scoreLength">Wanted score length</param>
+        /// <param name="separateWithSpace"></param>
+        /// <returns></returns>
+        public static string ScoreToShortString(long score, int scoreLength, bool separateWithSpace = false)
         {
             string scoreString = score.ToString();
-            if (scoreString.Length <= scoreLenght)
+            if (scoreString.Length <= scoreLength)
                 return scoreString;
 
             var suffixesList = new List<Tuple<int, string>>()
@@ -35,9 +49,9 @@ namespace GalaxyBlox.Utils
                 {
                     var tmpScoreString = scoreString;
                     scoreString = tmpScoreString.Substring(0, scoreString.Length - suffixItem.Item1);
-                    if (scoreString.Length < scoreLenght)
+                    if (scoreString.Length < scoreLength)
                     {
-                        var rest = tmpScoreString.Substring(scoreString.Length, scoreLenght - scoreString.Length);
+                        var rest = tmpScoreString.Substring(scoreString.Length, scoreLength - scoreString.Length);
                         if (rest.Replace("0", "").Count() > 0)
                             scoreString += "." + rest;
                     }

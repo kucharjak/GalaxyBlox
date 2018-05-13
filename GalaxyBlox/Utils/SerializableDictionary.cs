@@ -3,11 +3,14 @@ using System.Xml.Serialization;
 
 namespace GalaxyBlox.Utils
 {
+    /// <summary>
+    /// Dictionary that is seriazeble. Credits to https://www.codeproject.com/Questions/454134/Serialize-Dictionary-in-csharp. 
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
     [XmlRoot("dictionary")]
-    public class SerializableDictionary<TKey, TValue>
-    : Dictionary<TKey, TValue>, IXmlSerializable
+    public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IXmlSerializable
     {
-        #region IXmlSerializable Members
         public System.Xml.Schema.XmlSchema GetSchema()
         {
             return null;
@@ -65,6 +68,5 @@ namespace GalaxyBlox.Utils
                 writer.WriteEndElement();
             }
         }
-        #endregion
     }
 }

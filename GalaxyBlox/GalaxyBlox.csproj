@@ -101,6 +101,7 @@
     <Compile Include="Rooms\MenuRoom.cs" />
     <Compile Include="Rooms\SettingsRoom.cs" />
     <Compile Include="Static\Contents.cs" />
+    <Compile Include="Static\SettingClasses.cs" />
     <Compile Include="Static\SettingOptions.cs" />
     <Compile Include="Static\Settings.cs" />
     <Compile Include="Utils\Colors.cs" />

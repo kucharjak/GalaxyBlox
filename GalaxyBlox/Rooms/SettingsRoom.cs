@@ -38,9 +38,9 @@ namespace GalaxyBlox.Rooms
             this.Size = new Vector2(600, 630);
             CenterParent();
 
-            newIndicator = Settings.Game.UserSettings.Indicator;
-            newVibration = Settings.Game.UserSettings.Vibration;
-            newUseExtendedShapesLibrary = Settings.Game.UserSettings.UseExtendedShapeLibrary;
+            newIndicator = Settings.UserSettings.Indicator;
+            newVibration = Settings.UserSettings.Vibration;
+            newUseExtendedShapesLibrary = Settings.UserSettings.UseExtendedShapeLibrary;
 
             var margin = new { top = 129, left = 25, right = 25, bottom = 35 }; // anonymous type for margin
             
@@ -77,7 +77,7 @@ namespace GalaxyBlox.Rooms
             btnVibration = Bank.Buttons.GetEmptyButton(this);
             btnVibration.Size = settingsItemSize;
             btnVibration.TextHeight = settingsItemTextHeight;
-            btnVibration.Text = Settings.Game.UserSettings.Vibration ? "YES" : "NO";
+            btnVibration.Text = Settings.UserSettings.Vibration ? "YES" : "NO";
             btnVibration.Position = new Vector2(Size.X - btnVibration.Size.X - margin.right - itemPadding, btnIndicator.Position.Y + btnIndicator.Size.Y + itemPadding);
             btnVibration.Click += BtnVibration_Click;
             Objects.Add(btnVibration);
@@ -92,7 +92,7 @@ namespace GalaxyBlox.Rooms
             btnExtendedShapes = Bank.Buttons.GetEmptyButton(this);
             btnExtendedShapes.Size = settingsItemSize;
             btnExtendedShapes.TextHeight = settingsItemTextHeight;
-            btnExtendedShapes.Text = Settings.Game.UserSettings.UseExtendedShapeLibrary ? "YES" : "NOPE";
+            btnExtendedShapes.Text = Settings.UserSettings.UseExtendedShapeLibrary ? "YES" : "NOPE";
             btnExtendedShapes.Position = new Vector2(Size.X - btnExtendedShapes.Size.X - margin.right - itemPadding, btnVibration.Position.Y + btnVibration.Size.Y + itemPadding);
             btnExtendedShapes.Click += BtnExtendedShapes_Click;
             Objects.Add(btnExtendedShapes);
@@ -131,11 +131,11 @@ namespace GalaxyBlox.Rooms
 
         private void BtnOK_Click(object sender, EventArgs e)
         {
-            Settings.Game.UserSettings.Indicator = newIndicator;
-            Settings.Game.UserSettings.Vibration = newVibration;
-            Settings.Game.UserSettings.UseExtendedShapeLibrary = newUseExtendedShapesLibrary;
+            Settings.UserSettings.Indicator = newIndicator;
+            Settings.UserSettings.Vibration = newVibration;
+            Settings.UserSettings.UseExtendedShapeLibrary = newUseExtendedShapesLibrary;
 
-            Settings.Game.SaveUserSettings();
+            Settings.SaveUserSettings();
             End();
         }
 

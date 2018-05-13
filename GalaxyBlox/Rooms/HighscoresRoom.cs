@@ -10,6 +10,7 @@ using GalaxyBlox.Objects;
 using GalaxyBlox.Static;
 using static GalaxyBlox.Static.SettingOptions;
 using static GalaxyBlox.Static.Settings;
+using static GalaxyBlox.Static.SettingClasses;
 
 namespace GalaxyBlox.Rooms
 {
@@ -114,7 +115,7 @@ namespace GalaxyBlox.Rooms
             btnOK.Click += BtnOK_Click;
             Objects.Add(btnOK);
 
-            SelectedMode = Settings.Game.UserSettings.LastGameMode;
+            SelectedMode = Settings.UserSettings.LastGameMode;
         }
 
         private void UpdateHighscoreList()
@@ -129,7 +130,7 @@ namespace GalaxyBlox.Rooms
             }
 
             var highscoresCount = 5;
-            var mode = Settings.Game.Highscores.Items.Where(gameMode => gameMode.Key == SelectedMode).FirstOrDefault();
+            var mode = Settings.Highscores.Items.Where(gameMode => gameMode.Key == SelectedMode).FirstOrDefault();
 
             var highscores = new List<Score>();
             if (mode.Value != null)

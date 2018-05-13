@@ -41,12 +41,12 @@ namespace GalaxyBlox
         {
             base.Initialize();
 
-            Static.Settings.Game.LoadAll();
+            Static.Settings.LoadAll();
 
             GameContent = Content;
             Random = new Random(unchecked((int)DateTime.Now.Ticks));
 
-            new Rooms.MenuRoom("Room_Menu", Static.Settings.Game.WindowSize, new Vector2()).Show();
+            new Rooms.MenuRoom("Room_Menu", Static.Settings.WindowSize, new Vector2()).Show();
         }
 
         /// <summary>
@@ -57,6 +57,8 @@ namespace GalaxyBlox
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            ///// LOADING TEXTURES /////
 
             Fonts.PlainTextFont = Content.Load<SpriteFont>("Fonts/PlainText");
             Fonts.PixelArtTextFont = Content.Load<SpriteFont>("Fonts/PixelArtText");
@@ -72,7 +74,9 @@ namespace GalaxyBlox
             Textures.GameUI_Backgrounds = Content.Load<Texture2D>("Backgrounds/gameUI");
             Textures.Game_Background = Content.Load<Texture2D>("Backgrounds/background");
 
-            ///// LOADING SPRITES /////
+            Textures.Animations = Content.Load<Texture2D>("Animations/animations");
+
+            ///// CREATING SPRITES /////
 
             Sprites.Pix = new Sprite(Textures.Pix, Textures.Pix.GetRectangle());
 
@@ -117,11 +121,9 @@ namespace GalaxyBlox
 
             Sprites.FrozenStars = new Sprite(Textures.FrozenStars, Textures.FrozenStars.GetRectangle());
 
-            ///// LOADING ANIMATIONS //////
+            ///// CREATING ANIMATIONS //////
 
             var tmpSprites = new List<Sprite>();
-
-            Textures.Animations = Content.Load<Texture2D>("Animations/animations");
             for (int i = 0; i < 10; i++)
                 tmpSprites.Add(new Sprite(Textures.Animations, new Rectangle(i * 32, 0, 32, 32)));
             Animations.Explosion = new SpriteAnimation(tmpSprites, 20, true) { Loop = false };
@@ -139,24 +141,6 @@ namespace GalaxyBlox
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
-            //Static.Contents.Textures.Pix.Dispose();
-            //Static.Contents.Textures.Pix = null;
-            //Static.Contents.Textures.ControlButton_fall.Dispose();
-            //Static.Contents.Textures.ControlButton_fall = null;
-            //Static.Contents.Textures.ControlButton_left.Dispose();
-            //Static.Contents.Textures.ControlButton_left = null;
-            //Static.Contents.Textures.ControlButton_right.Dispose();
-            //Static.Contents.Textures.ControlButton_right = null;
-            //Static.Contents.Textures.ControlButton_rotate.Dispose();
-            //Static.Contents.Textures.ControlButton_rotate = null;
-            //Static.Contents.Textures.ControlButton_pause.Dispose();
-            //Static.Contents.Textures.ControlButton_pause = null;
-            //Static.Contents.Textures.BackgroundGame.Dispose();
-            //Static.Contents.Textures.BackgroundGame = null;
-            //Static.Contents.Textures.BackgroundMenu.Dispose();
-            //Static.Contents.Textures.BackgroundMenu = null;
-            //Static.Contents.Textures.BorderedButtonBackground.Dispose();
-            //Static.Contents.Textures.BorderedButtonBackground = null;
         }
 
         /// <summary>

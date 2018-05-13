@@ -51,7 +51,7 @@ namespace GalaxyBlox.Rooms
 
         protected override void Initialize()
         {
-            gameMode = Settings.Game.UserSettings.LastGameMode;
+            gameMode = Settings.UserSettings.LastGameMode;
             FullScreen = true;
             Background = Contents.Sprites.Game_Background;
 

@@ -292,28 +292,28 @@ namespace GalaxyBlox.Rooms
             {
                 case GameMode.Normal:
                     {
-                        Settings.Game.UserSettings.LastGameMode = GameMode.Normal;
-                        Settings.Game.ArenaSize = new Vector2(12, 20);
-                        new GameRoom(this, "Room_Game", Settings.Game.WindowSize, new Vector2()).Show();
+                        Settings.UserSettings.LastGameMode = GameMode.Normal;
+                        Settings.ArenaSize = new Vector2(12, 20);
+                        new GameRoom(this, "Room_Game", Settings.WindowSize, new Vector2()).Show();
                         break;
                     }
                 case GameMode.Extreme:
                     {
-                        Settings.Game.UserSettings.LastGameMode = GameMode.Extreme;
-                        Settings.Game.ArenaSize = new Vector2(18, 30);
-                        new GameRoom(this, "Room_Game", Settings.Game.WindowSize, new Vector2()).Show();
+                        Settings.UserSettings.LastGameMode = GameMode.Extreme;
+                        Settings.ArenaSize = new Vector2(18, 30);
+                        new GameRoom(this, "Room_Game", Settings.WindowSize, new Vector2()).Show();
                         break;
                     }
                 case GameMode.Classic:
                     {
-                        Settings.Game.UserSettings.LastGameMode = GameMode.Classic;
-                        Settings.Game.ArenaSize = new Vector2(12, 20);
-                        new GameRoom(this, "Room_Game", Settings.Game.WindowSize, new Vector2()).Show();
+                        Settings.UserSettings.LastGameMode = GameMode.Classic;
+                        Settings.ArenaSize = new Vector2(12, 20);
+                        new GameRoom(this, "Room_Game", Settings.WindowSize, new Vector2()).Show();
                         break;
                     }
             }
 
-            Settings.Game.SaveUserSettings();
+            Settings.SaveUserSettings();
         }
 
         private void TapStartButton_Click(object sender, EventArgs e)
@@ -361,7 +361,7 @@ namespace GalaxyBlox.Rooms
                 else
                 {
                     selectebleGameModes = availableGameModes.ToList();
-                    SelectedGameMode = selectebleGameModes[selectebleGameModes.FindIndex(mode => mode == Settings.Game.UserSettings.LastGameMode)];
+                    SelectedGameMode = selectebleGameModes[selectebleGameModes.FindIndex(mode => mode == Settings.UserSettings.LastGameMode)];
                 }
 
                 hider.Show(true);
