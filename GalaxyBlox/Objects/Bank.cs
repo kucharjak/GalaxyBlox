@@ -4,68 +4,22 @@ using Microsoft.Xna.Framework;
 
 namespace GalaxyBlox.Objects
 {
+    /// <summary>
+    /// Bank with game objects for easier object initialization. 
+    /// </summary>
     public static class Bank
     {
+        /// <summary>
+        /// Game buttons
+        /// </summary>
         public static class Buttons
         {
-            public static Button GetPauseButton(Room parentRoom)
-            {
-                var button = new Button(parentRoom)
-                {
-                    SpriteImage = Contents.Sprites.Button_pause,
-                    Alpha = 1f,
-                    BaseColor = Contents.Colors.ButtonBackgroundColor,
-                    DefaultBackgroundColor = Contents.Colors.ButtonBackgroundColor,
-                    SelectedBackgroundColor = Contents.Colors.ButtonSelectedColor,
-                    PressBackgroundColor = Contents.Colors.ButtonBackgroundColor,
-                    ShowText = false,
-                    TextSpriteFont = Contents.Fonts.PlainTextFont,
-                    TextColor = Contents.Colors.MenuButtonTextColor,
-                    LayerDepth = 0.05f
-                };
-
-                return button;
-            }
-
-            public static Button GetControlButton(Room parentRoom)
-            {
-                var button = new Button(parentRoom)
-                {
-                    Alpha = 1f,
-                    BaseColor = Contents.Colors.ButtonBackgroundColor,
-                    DefaultBackgroundColor = Contents.Colors.ButtonBackgroundColor,
-                    SelectedBackgroundColor = Contents.Colors.ButtonSelectedColor,
-                    PressBackgroundColor = Contents.Colors.ButtonSelectedColor,
-                    ShowText = false,
-                    TextSpriteFont = Contents.Fonts.PlainTextFont,
-                    TextColor = Contents.Colors.MenuButtonTextColor,
-                    LayerDepth = 0.05f
-                };
-
-                return button;
-            }
-
-            public static Button GetMenuButton(Room parentRoom)
-            {
-                var button = new Button(parentRoom)
-                {
-                    SpriteImage = Contents.Sprites.Pix,
-                    Alpha = 1f,
-                    BaseColor = Contents.Colors.ButtonBackgroundColor,
-                    DefaultBackgroundColor = Contents.Colors.ButtonBackgroundColor,
-                    SelectedBackgroundColor = Contents.Colors.ButtonSelectedColor,
-                    PressBackgroundColor = Contents.Colors.ButtonSelectedColor,
-                    TextSpriteFont = Contents.Fonts.PlainTextFont,
-                    Text = "",
-                    ShowText = true,
-                    TextAlignment = TextAlignment.Center,
-                    LayerDepth = 0.05f
-                };
-
-                return button;
-            }
-
-            public static Button GetEmptyButton(Room parentRoom)
+            /// <summary>
+            /// Returns basic button with visible text, default font, colors and empty sprite image.
+            /// </summary>
+            /// <param name="parentRoom"></param>
+            /// <returns></returns>
+            public static Button GetBasicButton(Room parentRoom)
             {
                 var button = new Button(parentRoom)
                 {
@@ -86,67 +40,45 @@ namespace GalaxyBlox.Objects
                 return button;
             }
 
-            public static Button GetGameOverButton(Room parentRoom)
+            /// <summary>
+            /// Returns plain button without visible text and blank image sprite.
+            /// </summary>
+            /// <param name="parentRoom"></param>
+            /// <returns></returns>
+            public static Button GetPlainButton(Room parentRoom)
             {
-                var button = new Button(parentRoom)
-                {
-                    SpriteImage = Contents.Sprites.Pix,
-                    Alpha = 0.5f,
-                    BaseColor = Contents.Colors.MenuButtonBackgroundColor,
-                    DefaultBackgroundColor = Contents.Colors.MenuButtonBackgroundColor,
-                    SelectedBackgroundColor = Contents.Colors.MenuButtonSelectedColor,
-                    PressBackgroundColor = Contents.Colors.MenuButtonPressColor,
-                    TextColor = Contents.Colors.MenuButtonTextColor,
-                    TextSpriteFont = Contents.Fonts.PlainTextFont,
-                    Text = "",
-                    ShowText = true,
-                    TextAlignment = TextAlignment.Center,
-                    LayerDepth = 0.05f
-                };
+                var button = GetBasicButton(parentRoom);
+                button.SpriteImage = Contents.Sprites.Pix;
+                button.ShowText = false;
+
+                return button;
+            }
+
+            /// <summary>
+            /// Returns plain button with visible text, default font, colors and blank image sprite.
+            /// </summary>
+            /// <param name="parentRoom"></param>
+            /// <returns></returns>
+            public static Button GetPlainButtonWithText(Room parentRoom)
+            {
+                var button = GetBasicButton(parentRoom);
+                button.SpriteImage = Contents.Sprites.Pix;
 
                 return button;
             }
         }
 
+        /// <summary>
+        /// Visual objects like labels.
+        /// </summary>
         public static class Visuals
         {
-            public static GameObject GetPanelLabel(Room parentRoom)
-            {
-                var label = new GameObject(parentRoom)
-                {
-                    LayerDepth = 0.05f,
-                    SpriteImage = Contents.Sprites.Pix,
-                    BaseColor = Contents.Colors.PanelHeaderBackgroundColor,
-                    Alpha = 1f,
-                    TextAlignment = TextAlignment.Center,
-                    TextSpriteFont = Contents.Fonts.PlainTextFont,
-                    Text = "",
-                    ShowText = true,
-                    TextColor = Color.White,
-                };
-
-                return label;
-            }
-
-            public static GameObject GetPanelBoard(Room parentRoom)
-            {
-                var label = new GameObject(parentRoom)
-                {
-                    LayerDepth = 0.05f,
-                    TextAlignment = TextAlignment.Center,
-                    SpriteImage = Contents.Sprites.Pix,
-                    BaseColor = Contents.Colors.PanelContentBackgroundColor,
-                    Alpha = 1f,
-                    TextSpriteFont = Contents.Fonts.PlainTextFont,
-                    Text = "",
-                    ShowText = true,
-                    TextColor = Color.White,
-                };
-
-                return label;
-            }
-
-            public static GameObject GetSettingsLabel(Room parentRoom)
+            /// <summary>
+            /// Returns label like object with basic font, colors and text set to left.
+            /// </summary>
+            /// <param name="parentRoom"></param>
+            /// <returns></returns>
+            public static GameObject GetLabelLeft(Room parentRoom)
             {
                 var label = new GameObject(parentRoom)
                 {
@@ -162,18 +94,15 @@ namespace GalaxyBlox.Objects
                 return label;
             }
 
-            public static GameObject GetGameOverLabel(Room parentRoom)
+            /// <summary>
+            /// Returns label like object with basic font, colors and text set to center.
+            /// </summary>
+            /// <param name="parentRoom"></param>
+            /// <returns></returns>
+            public static GameObject GetLabelCenter(Room parentRoom)
             {
-                var label = new GameObject(parentRoom)
-                {
-                    LayerDepth = 0.05f,
-                    Alpha = 1f,
-                    TextAlignment = TextAlignment.Center,
-                    TextSpriteFont = Contents.Fonts.PixelArtTextFont,
-                    Text = "",
-                    ShowText = true,
-                    TextColor = Color.White,
-                };
+                var label = GetLabelLeft(parentRoom);
+                label.TextAlignment = TextAlignment.Center;
 
                 return label;
             }

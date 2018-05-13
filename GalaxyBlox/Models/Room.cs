@@ -12,6 +12,9 @@ namespace GalaxyBlox.Models
 {
     public class Room
     {
+        /// <summary>
+        /// Event after closing room.
+        /// </summary>
         public event EventHandler Closed;
         protected virtual void OnClosed(EventArgs e)
         {
@@ -22,17 +25,46 @@ namespace GalaxyBlox.Models
             }
         }
 
+        /// <summary>
+        /// Parent room - if null that indicates that this room is last in RoomManager and therefore should not by closed.
+        /// </summary>
         public Room Parent { get; protected set; }
 
+        /// <summary>
+        /// List of active objects in room.
+        /// </summary>
         public List<GameObject> Objects { get; set; } = new List<GameObject>();
+
+        /// <summary>
+        /// Room background.
+        /// </summary>
         public Sprite Background;
         public Color BackgroundColor { get { return BaseColor * Alpha; } }
         public Color BaseColor = Color.White;
+
+        /// <summary>
+        /// Indicator of fullscreen - if set true room is drawn over whole screen.
+        /// </summary>
         public bool FullScreen = false;
+
+        /// <summary>
+        /// Indicator of dialog - if set true room is drawn like dialog to center of it's parent room (or screen if null) with dialog like background with egdes.
+        /// </summary>
+        public bool IsDialog = false;
+        /// <summary>
+        /// Blocky dialog background.
+        /// </summary>
         public Sprite DialogBackground;
+
+        /// <summary>
+        /// Dialog icon that is drawn when room is used like a dialog.
+        /// </summary>
         public Sprite DialogIcon;
         public int DialogBackgroundScale = 1;
-        public bool IsDialog = false;
+        
+        /// <summary>
+        /// Indicator for closing dialog when tapping off it.
+        /// </summary>
         public bool DialogOffscreenClose = false;
         public float Alpha = 1f;
         public Vector2 Size;
@@ -75,6 +107,9 @@ namespace GalaxyBlox.Models
             //Initialize();
         }
 
+        /// <summary>
+        /// Method that is responsible for center of room inside it's parent (or screen when null).
+        /// </summary>
         public void CenterParent()
         {
             if (Parent != null)
@@ -83,23 +118,35 @@ namespace GalaxyBlox.Models
                 CenterWindow();
         }
 
+        /// <summary>
+        /// Method that is responsible for center of room on screen.
+        /// </summary>
         public void CenterWindow()
         {
             var windowSize = Static.Settings.WindowSize;
             Position = new Vector2((windowSize.X - Size.X) / 2, (windowSize.Y - Size.Y) / 2);
         }
 
+        /// <summary>
+        /// Room show method - when called room is inserted inside RoomManager's room colection.
+        /// </summary>
         public void Show()
         {
             RoomManager.ShowRoom(this);
         }
 
+        /// <summary>
+        /// Room close method - when called room becomes invisible to player.
+        /// </summary>
         public void Close()
         {
             RoomManager.CloseRoom(this);
             OnClosed(new EventArgs());
         }
 
+        /// <summary>
+        /// Room end method - when called room removed from RoomManager's room colection.
+        /// </summary>
         public void End()
         {
             RoomManager.EndRoom(this);
@@ -122,6 +169,11 @@ namespace GalaxyBlox.Models
                 obj.Update(gameTime);
         }
 
+        /// <summary>
+        /// Method responsible for preparing room before drawing - if dialog it's background and icon is drawn.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="graphicsDevice"></param>
         public virtual void Prepare(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
             if (IsDialog && Background == null && DialogBackground != null)
@@ -190,12 +242,16 @@ namespace GalaxyBlox.Models
         {
         }
 
+        /// <summary>
+        /// Method responsible for handling input on room.
+        /// </summary>
+        /// <param name="input"></param>
         protected virtual void HandleInput(TouchLocation input)
         {
-            if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.Back))
+            if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.Back)) // handles back button call - end room if posible
                 HandleBackButton();
             
-            var rectInput = new Rectangle((int)input.Position.X, (int)input.Position.Y, 1, 1);
+            var rectInput = new Rectangle((int)input.Position.X, (int)input.Position.Y, 1, 1); // get touch position
 
             if (IsDialog && DialogOffscreenClose && !rectInput.Intersects(DisplayRectWithScale()))
             {
@@ -203,7 +259,7 @@ namespace GalaxyBlox.Models
                 return;
             }
 
-            var swipe = Objects.Where(area => area.Type == "swipe_area").ToArray();
+            var swipe = Objects.Where(area => area.Type == "swipe_area").ToArray(); // swipe handling
             bool swiped = false;
             if (swipe.Count() > 0)
             {
@@ -221,7 +277,7 @@ namespace GalaxyBlox.Models
                 }
             }
 
-            var buttons = Objects.Where(btn => btn.Type == "button").ToArray();
+            var buttons = Objects.Where(btn => btn.Type == "button").ToArray(); // input is designed to work just with buttons for easier handling
             if (buttons.Count() > 0)
             {
                 Button touchedButton = null;
@@ -262,6 +318,10 @@ namespace GalaxyBlox.Models
                 End();
         }
 
+        /// <summary>
+        /// Returns room real on-screen size.
+        /// </summary>
+        /// <returns></returns>
         public Rectangle DisplayRectWithScale()
         {
             var resultRect = new Rectangle(
@@ -272,7 +332,7 @@ namespace GalaxyBlox.Models
             return resultRect;
         }
 
-        private Vector2 UnScaleVector(Vector2 vect)
+        private Vector2 UnScaleVector2(Vector2 vect)
         {
             var resultVect = new Vector2(vect.X / Scale - InGameOffsetX, vect.Y / Scale - InGameOffsetY);
             return resultVect;

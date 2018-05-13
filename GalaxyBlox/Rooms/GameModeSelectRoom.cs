@@ -39,7 +39,7 @@ namespace GalaxyBlox.Rooms
             var posX = (Size.X - btnSize.X) / 2;
             var posY = (Size.Y - (btnSize.Y * btnCount + pading * (btnCount - 1))) / 2;            
 
-            btnClassicMode = Bank.Buttons.GetEmptyButton(this);
+            btnClassicMode = Bank.Buttons.GetBasicButton(this);
             btnClassicMode.Position = new Vector2(posX, posY);
             btnClassicMode.Size = btnSize;
             btnClassicMode.Text = "Clasický";
@@ -48,7 +48,7 @@ namespace GalaxyBlox.Rooms
             Objects.Add(btnClassicMode);
             posY += (int)btnClassicMode.Size.Y + pading;
 
-            btnNormalMode = Bank.Buttons.GetEmptyButton(this);
+            btnNormalMode = Bank.Buttons.GetBasicButton(this);
             btnNormalMode.Position = new Vector2(posX, posY);
             btnNormalMode.Size = btnSize;
             btnNormalMode.Text = "Normální";
@@ -57,7 +57,7 @@ namespace GalaxyBlox.Rooms
             Objects.Add(btnNormalMode);
             posY += (int)btnNormalMode.Size.Y + pading;
 
-            btnExtremeMode = Bank.Buttons.GetEmptyButton(this);
+            btnExtremeMode = Bank.Buttons.GetBasicButton(this);
             btnExtremeMode.Position = new Vector2(posX, posY);
             btnExtremeMode.Size = btnSize;
             btnExtremeMode.Text = "Extrémní";

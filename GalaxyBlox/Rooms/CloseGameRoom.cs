@@ -39,7 +39,7 @@ namespace GalaxyBlox.Rooms
             var btnDialogSize = new Vector2(160, 80);
             var btnDialogTextHeight = (int)(btnDialogSize.Y * 0.3f);
             
-            GameObject obj = Bank.Visuals.GetSettingsLabel(this);
+            GameObject obj = Bank.Visuals.GetLabelLeft(this);
             obj.TextHeight = settingsItemTextHeight;
             obj.Text = "DO YOU REALLY WANT TO \n\nCLOSE THIS AWESOME GAME?";
             obj.TextAlignment = Models.TextAlignment.Left;
@@ -47,14 +47,14 @@ namespace GalaxyBlox.Rooms
             obj.Position = new Vector2(margin.left, margin.top);
             Objects.Add(obj);
 
-            btnOK = Bank.Buttons.GetEmptyButton(this);
+            btnOK = Bank.Buttons.GetBasicButton(this);
             btnOK.Size = btnDialogSize;
             btnOK.Text = "YEP";
             btnOK.TextHeight = btnDialogTextHeight;
             btnOK.Click += BtnOK_Click;
             Objects.Add(btnOK);
 
-            btnCancel = Bank.Buttons.GetEmptyButton(this);
+            btnCancel = Bank.Buttons.GetBasicButton(this);
             btnCancel.Size = btnDialogSize;
             btnCancel.Text = "NOPE";
             btnCancel.TextHeight = btnDialogTextHeight;

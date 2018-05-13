@@ -59,7 +59,7 @@ namespace GalaxyBlox.Rooms
             obj.LayerDepth = 0.04f;
             Objects.Add(obj);
 
-            btnIndicator = Bank.Buttons.GetEmptyButton(this);
+            btnIndicator = Bank.Buttons.GetBasicButton(this);
             btnIndicator.Size = settingsItemSize;
             btnIndicator.TextHeight = settingsItemTextHeight;
             btnIndicator.Text = newIndicator.ToString().ToUpper();
@@ -67,14 +67,14 @@ namespace GalaxyBlox.Rooms
             btnIndicator.Click += BtnSetIndicator_Click;
             Objects.Add(btnIndicator);
 
-            obj = Bank.Visuals.GetSettingsLabel(this);
+            obj = Bank.Visuals.GetLabelLeft(this);
             obj.Text = "INDICATOR:";
             obj.Size = settingsItemSize;
             obj.TextHeight = settingsItemTextHeight;
             obj.Position = new Vector2(margin.left + itemPadding, btnIndicator.Position.Y);
             Objects.Add(obj);
 
-            btnVibration = Bank.Buttons.GetEmptyButton(this);
+            btnVibration = Bank.Buttons.GetBasicButton(this);
             btnVibration.Size = settingsItemSize;
             btnVibration.TextHeight = settingsItemTextHeight;
             btnVibration.Text = Settings.UserSettings.Vibration ? "YES" : "NO";
@@ -82,14 +82,14 @@ namespace GalaxyBlox.Rooms
             btnVibration.Click += BtnVibration_Click;
             Objects.Add(btnVibration);
 
-            obj = Bank.Visuals.GetSettingsLabel(this);
+            obj = Bank.Visuals.GetLabelLeft(this);
             obj.Text = "VIBRATION:";
             obj.Size = settingsItemSize;
             obj.TextHeight = settingsItemTextHeight;
             obj.Position = new Vector2(margin.left + itemPadding, btnVibration.Position.Y);
             Objects.Add(obj);
 
-            btnExtendedShapes = Bank.Buttons.GetEmptyButton(this);
+            btnExtendedShapes = Bank.Buttons.GetBasicButton(this);
             btnExtendedShapes.Size = settingsItemSize;
             btnExtendedShapes.TextHeight = settingsItemTextHeight;
             btnExtendedShapes.Text = Settings.UserSettings.UseExtendedShapeLibrary ? "YES" : "NOPE";
@@ -97,21 +97,21 @@ namespace GalaxyBlox.Rooms
             btnExtendedShapes.Click += BtnExtendedShapes_Click;
             Objects.Add(btnExtendedShapes);
 
-            obj = Bank.Visuals.GetSettingsLabel(this);
+            obj = Bank.Visuals.GetLabelLeft(this);
             obj.Text = "MORE BLOCKs:";
             obj.Size = settingsItemSize;
             obj.TextHeight = settingsItemTextHeight;
             obj.Position = new Vector2(margin.left + itemPadding, btnExtendedShapes.Position.Y);
             Objects.Add(obj);
 
-            btnOK = Bank.Buttons.GetEmptyButton(this);
+            btnOK = Bank.Buttons.GetBasicButton(this);
             btnOK.Size = btnDialogSize;
             btnOK.Text = "SAVE";
             btnOK.TextHeight = btnDialogTextHeight;
             btnOK.Click += BtnOK_Click;
             Objects.Add(btnOK);
 
-            btnCancel = Bank.Buttons.GetEmptyButton(this);
+            btnCancel = Bank.Buttons.GetBasicButton(this);
             btnCancel.Size = btnDialogSize;
             btnCancel.Text = "CANCEL";
             btnCancel.TextHeight = btnDialogTextHeight;

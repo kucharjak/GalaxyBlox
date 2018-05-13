@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace GalaxyBlox.Models
 {
+    /// <summary>
+    /// Framecounter class for basic frame counting needs - thanks to craftworkgames https://stackoverflow.com/a/20679895.
+    /// </summary>
     public class FrameCounter
     {
         public FrameCounter()

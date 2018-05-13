@@ -86,7 +86,7 @@ namespace GalaxyBlox.Rooms
             ////// ADDING BUTTONS //////
             //// EXIT BUTTON ////
             var btnPauseSize = 100;
-            objToAdd = Bank.Buttons.GetMenuButton(this);
+            objToAdd = Bank.Buttons.GetPlainButtonWithText(this);
             objToAdd.SpriteImage = Contents.Sprites.Button_exit;
             objToAdd.Size = new Vector2(btnPauseSize);
             objToAdd.Position = new Vector2(15, 15);
@@ -113,7 +113,7 @@ namespace GalaxyBlox.Rooms
             //// PLAY BUTTON ////
             var playButtonSize = new Vector2(280, 180);
 
-            objToAdd = Bank.Buttons.GetMenuButton(this);
+            objToAdd = Bank.Buttons.GetPlainButtonWithText(this);
             objToAdd.SpriteImage = Contents.Sprites.Button_play;
             objToAdd.Size = playButtonSize;
             objToAdd.Position = new Vector2((Size.X - objToAdd.Size.X) / 2, Size.Y - objToAdd.Size.Y - padding);
@@ -125,7 +125,7 @@ namespace GalaxyBlox.Rooms
             var sideButtonsSize = new Vector2(136, 112);
 
             //// SETTINGS BUTTON ////
-            objToAdd = Bank.Buttons.GetMenuButton(this);
+            objToAdd = Bank.Buttons.GetPlainButtonWithText(this);
             objToAdd.SpriteImage = Contents.Sprites.Button_settings;
             objToAdd.Size = sideButtonsSize;
             objToAdd.Position = new Vector2((playButtonsPosition.X - sideButtonsSize.X) / 2, playButtonsPosition.Y + (playButtonSize.Y - sideButtonsSize.Y) / 2);
@@ -136,7 +136,7 @@ namespace GalaxyBlox.Rooms
             var offset = playButtonsPosition.X + playButtonSize.X;
 
             //// HIGHSCORE BUTTON ////
-            objToAdd = Bank.Buttons.GetMenuButton(this);
+            objToAdd = Bank.Buttons.GetPlainButtonWithText(this);
             objToAdd.SpriteImage = Contents.Sprites.Button_highscore;
             objToAdd.Size = sideButtonsSize;
             objToAdd.Position = new Vector2(offset + (Size.X - offset - sideButtonsSize.X) / 2, playButtonsPosition.Y + (playButtonSize.Y - sideButtonsSize.Y) / 2);
@@ -181,7 +181,7 @@ namespace GalaxyBlox.Rooms
             var arrowButtonsSize = new Vector2(60, 112);
 
             //// SELECT LEFT GAMEMODE BUTTON ////
-            objToAdd = Bank.Buttons.GetMenuButton(this);
+            objToAdd = Bank.Buttons.GetPlainButtonWithText(this);
             objToAdd.SpriteImage = Contents.Sprites.Button_left;
             objToAdd.Size = arrowButtonsSize;
             objToAdd.Position = new Vector2(padding, lblSelectedGameMode.Position.Y + (lblSelectedGameMode.Size.Y - arrowButtonsSize.Y) / 2);
@@ -190,7 +190,7 @@ namespace GalaxyBlox.Rooms
             hider.HideObject(objToAdd, HidePlace.Left);
 
             //// SELECT RIGH GAMEMODE BUTTON ////
-            objToAdd = Bank.Buttons.GetMenuButton(this);
+            objToAdd = Bank.Buttons.GetPlainButtonWithText(this);
             objToAdd.SpriteImage = Contents.Sprites.Button_right;
             objToAdd.Size = arrowButtonsSize;
             objToAdd.Position = new Vector2(Size.X - padding - arrowButtonsSize.X, lblSelectedGameMode.Position.Y + (lblSelectedGameMode.Size.Y - arrowButtonsSize.Y) / 2);
@@ -224,7 +224,7 @@ namespace GalaxyBlox.Rooms
             hider.AllHidden += Hider_AllHidden;
 
             //// ADDING TAP START BUTTON ////
-            btnTapToStart = Bank.Buttons.GetMenuButton(this);
+            btnTapToStart = Bank.Buttons.GetPlainButtonWithText(this);
             btnTapToStart.Position = new Vector2(0, 0);
             btnTapToStart.Size = this.Size;
             btnTapToStart.Alpha = 0f;

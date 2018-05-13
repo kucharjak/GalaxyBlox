@@ -1,38 +1,34 @@
 Zmìny 
-	- pøemyslet jak vykreslit PlayingArenu na zaèízeních s rùzným rozlišením pro zlepšní vzhledu hry
 
 Rozšíøení 
-	- upravit slovník pro Indicator Name, aby byl univerzálnìjší a možný použít i na jiných místech projektu
-	- pokud kliknu mimo místnost (které nejsou fullscrenn a jsou aktivní), tak se zavøe (popø endne, záleží podle konkrétní místnosti)
-	- dát dohromady grafický styl hry
-	- pøidat do nastavení reset tlaèíko na score
  
 Gameplay
  
 Features
-	- zmìnit background (upravit pùvodní - vymazat hvìzdy, upravit barvy) a pøidat hvìzdy jako jiný objekty i s animací + pøidat padající "komety" za náhodnou dobu
-	- pøidat animaci pro znièení kostièek (dùležitý) - rychlou animaci, aby nenarušovala flow hry
-	- pøidat zpùsob na animování objektù (šlo by asi o to, že by se udìlal sytém animací, který by byly schopný mìnit buï aktuálnì zobrazenou texturu/sprite, barvu, scale objektu) a po ukonèení animace by se vykonal nìjaký event
-	- pøidat animace na tlaèítka (když na nìm hoveruju, tak bude pulzovat a když na nìj kliknu, tak se zmáèkne)
  
 Kontrola / Bugy
 	- uèesat kód hry
-	- pøi vytváøení "nových" tvarù z oøíznutím tìch exsitujících zmìnit velikost všude, kde je potøeba a ne pouze jenom ze strany X
 
 Nápady
-	- vytvoøit "Color schemes", kdy budu schopný mít color scheme na tlaèítko a ten si jen podám do toho tlaèítka, pøidávání barev postupnì v kontruktoru a nebudu si díky tomu muset držet v pamìti tøi barvy, ale jen jednu referenci "noice"
  
 Možná 
-	- zmìnit vykreslování effectù na playing arenì
-	- pøidat pøklikávání mezi aktivníma kostkama v extrémním módu
-	- pøidat animace na místnosti - viz vyhodit ze hry room changer
-	- vyhodit ze hry room changer - animace øešit tím, že se vytvoøí "Místnost" která bude dìlat animaci sama o sobì (nebudou swipovací, ale nejspíše jenom fade animace)
-	- vymyslet jiný tvary, než ty základní - pøidat pozdìji (bude potøeba odladit)
+	
  
 ----------------------------------
 --------------HOTOVO--------------
 ----------------------------------
 
+- upravit slovník pro Indicator Name, aby byl univerzálnìjší a možný použít i na jiných místech projektu
+- pokud kliknu mimo místnost (které nejsou fullscrenn a jsou aktivní), tak se zavøe (popø endne, záleží podle konkrétní místnosti)
+- dát dohromady grafický styl hry
+- pøi vytváøení "nových" tvarù z oøíznutím tìch exsitujících zmìnit velikost všude, kde je potøeba a ne pouze jenom ze strany X
+- pøidat animace na tlaèítka (když na nìm hoveruju, tak bude pulzovat a když na nìj kliknu, tak se zmáèkne)
+- pøidat zpùsob na animování objektù (šlo by asi o to, že by se udìlal sytém animací, který by byly schopný mìnit buï aktuálnì zobrazenou texturu/sprite, barvu, scale objektu) a po ukonèení animace by se vykonal nìjaký event
+- zmìnit background (upravit pùvodní - vymazat hvìzdy, upravit barvy) a pøidat hvìzdy jako jiný objekty i s animací + pøidat padající "komety" za náhodnou dobu
+- zmìnit vykreslování effectù na playing arenì
+- vymyslet jiný tvary, než ty základní - pøidat pozdìji (bude potøeba odladit)
+- pøidat animace na místnosti - viz vyhodit ze hry room changer
+- pøemyslet jak vykreslit PlayingArenu na zaèízeních s rùzným rozlišením pro zlepšní vzhledu hry
 - klasický mód "Vanila" - zjistit jak se choval pøesnì pùvodní tetris i s poèítáním skóre
 - novej mód - mód, kdy padá na zemi více objektù najednou rùznì rychle a je potøeba mezi nimi pøepínat a postupnì je ovládat
 - pøidat násobení skóre (podpoøit tak rychlost hraní)
@@ -83,6 +79,7 @@ Možná
 ------------ODLOŽENO---------------
 -----------------------------------
 
+- pøidat do nastavení reset tlaèíko na score
 - pokud to pùjde - zmìnit pøekleslování na konkrétní èásti playingAreny (není potøeba, výkon staèí)
 - zaèít implementovat možnost 2 jazykù do hry
 - rozšíøit a pøidat další zpùsob ovládání (swipnutí dolù pošle dolù a kliknutí na daný místa playingAreny vykoná posunutí a rotaci)

@@ -76,7 +76,7 @@ namespace GalaxyBlox.Rooms
             var arrowButtonsSize = new Vector2(40, 60);
 
             //// SELECT LEFT GAMEMODE BUTTON ////
-            GameObject objToAdd = Bank.Buttons.GetMenuButton(this);
+            GameObject objToAdd = Bank.Buttons.GetPlainButtonWithText(this);
             objToAdd.SpriteImage = Contents.Sprites.Button_left_small;
             objToAdd.Size = arrowButtonsSize;
             objToAdd.Position = new Vector2(margin.left, lblSelectedGameMode.Position.Y + (lblSelectedGameMode.Size.Y - arrowButtonsSize.Y) / 2);
@@ -84,7 +84,7 @@ namespace GalaxyBlox.Rooms
             Objects.Add(objToAdd);
 
             //// SELECT RIGH GAMEMODE BUTTON ////
-            objToAdd = Bank.Buttons.GetMenuButton(this);
+            objToAdd = Bank.Buttons.GetPlainButtonWithText(this);
             objToAdd.SpriteImage = Contents.Sprites.Button_right_small;
             objToAdd.Size = arrowButtonsSize;
             objToAdd.Position = new Vector2(Size.X - margin.right - arrowButtonsSize.X, lblSelectedGameMode.Position.Y + (lblSelectedGameMode.Size.Y - arrowButtonsSize.Y) / 2);
@@ -107,7 +107,7 @@ namespace GalaxyBlox.Rooms
             //obj.Position = new Vector2(margin.left, btnIndicator.Position.Y);
             //Objects.Add(obj);
 
-            btnOK = Bank.Buttons.GetEmptyButton(this);
+            btnOK = Bank.Buttons.GetBasicButton(this);
             btnOK.Size = btnDialogSize;
             btnOK.Position = new Vector2((Size.X - btnOK.Size.X) / 2, Size.Y - btnOK.Size.Y - margin.bottom);
             btnOK.Text = "NICE";

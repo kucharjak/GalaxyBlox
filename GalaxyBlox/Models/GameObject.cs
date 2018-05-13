@@ -3,11 +3,24 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GalaxyBlox.Models
 {
+    /// <summary>
+    /// Basic object that game handles.
+    /// All non bassic objects inherit from this.
+    /// </summary>
     public class GameObject
     {
         public string Name = "";
         public string Type = "";
+
+        /// <summary>
+        /// Room in which object exists.
+        /// </summary>
         protected Room ParentRoom;
+
+        /// <summary>
+        /// Position relative to room in which object exists.
+        /// </summary>
+        public Vector2 Position;
 
         private Vector2 size;
         public Vector2 Size
@@ -15,9 +28,16 @@ namespace GalaxyBlox.Models
             get { return size; }
             set { size = value; UpdateTextPosition(); }
         }
-        public Vector2 Position;
+
+        /// <summary>
+        /// Origin of object used for scaling and centering object to right position.
+        /// </summary>
         public Vector2 Origin;
-        public float Scale = 1f; // scale for drawing - for example when i need bigger object for a second (animation, or just to stand out like hovered button)
+
+        /// <summary>
+        /// scale for drawing - for example when i need bigger object for a second (animation, or just to stand out like hovered button)
+        /// </summary>
+        public float Scale = 1f;
 
         private string text = "";
         public string Text
@@ -25,16 +45,21 @@ namespace GalaxyBlox.Models
             get { return text; }
             set { text = value; UpdateTextPosition(); }
         }
-        public Vector2 TextPosition { get { return new Vector2(Position.X + textOffset.X, Position.Y + textOffset.Y); } }
+
         private TextAlignment textAlignment;
+        /// <summary>
+        /// Text alignment - left, right and center.
+        /// </summary>
         public TextAlignment TextAlignment
         {
             get { return textAlignment; }
             set { textAlignment = value; UpdateTextPosition(); }
-        } 
+        }
+        public Vector2 TextPosition { get { return new Vector2(Position.X + textOffset.X, Position.Y + textOffset.Y); } }
+        private Point textOffset = new Point();
+
         public bool ShowText = false;
         public Color TextColor = Color.Black;
-        private Point textOffset = new Point();
 
         private SpriteFont textSpriteFont = null;
         public SpriteFont TextSpriteFont
@@ -59,7 +84,6 @@ namespace GalaxyBlox.Models
         public Sprite SpriteImage = null;
         public SpriteAnimation SpriteAnimation = null;
 
-        //public Texture2D BackgroundImage = null;
         public Color Color { get { return BaseColor * Alpha; } }
         public Color BaseColor = Color.White;
         public float Alpha = 1f;
@@ -111,6 +135,9 @@ namespace GalaxyBlox.Models
                 spriteBatch.DrawString(TextSpriteFont, Text, DisplayTextPosition(), TextColor * Alpha * baseAlpha, 0f, new Vector2(), Scale * textScale * ParentRoom.Scale, SpriteEffects.None, ParentRoom.LayerDepth + LayerDepth + 0.01f);
         }
 
+        /// <summary>
+        /// Whenever something related to text is changed this method recalculate right text position.
+        /// </summary>
         private void UpdateTextPosition()
         {
             if (string.IsNullOrEmpty(text))
@@ -127,6 +154,10 @@ namespace GalaxyBlox.Models
             }
         }
 
+        /// <summary>
+        /// Method that returns real position of text on-screen.
+        /// </summary>
+        /// <returns></returns>
         public Vector2 DisplayTextPosition()
         {
             var textSize = textSpriteFont.MeasureString(text);
@@ -141,6 +172,11 @@ namespace GalaxyBlox.Models
             return resultVect;
         }
 
+        /// <summary>
+        /// Method that returns real positon of object on-screen.
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <returns></returns>
         public Rectangle DisplayRect(Rectangle rect)
         {
             var offsetX = Origin.X * (Size.X * Scale - Size.X);
@@ -154,21 +190,20 @@ namespace GalaxyBlox.Models
             return resultRect;
         }
 
+        /// <summary>
+        /// Method that returns real positon of object on-screen.
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <returns></returns>
         public Rectangle DisplayRect()
         {
             return DisplayRect(new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y));
-            //var offsetX = Origin.X * (Size.X * Scale - Size.X);
-            //var offsetY = Origin.Y * (Size.Y * Scale - Size.Y);
-
-            //var resultRect = new Rectangle(
-            //    (int)((Position.X + ParentRoom.Position.X - offsetX) * ParentRoom.Scale + ParentRoom.InGameOffsetX),
-            //    (int)((Position.Y + ParentRoom.Position.Y - offsetY) * ParentRoom.Scale + ParentRoom.InGameOffsetY),
-            //    (int)(Size.X * ParentRoom.Scale * Scale),
-            //    (int)(Size.Y * ParentRoom.Scale * Scale));
-            //return resultRect;
         }
     }
 
+    /// <summary>
+    /// Text alignment setting options.
+    /// </summary>
     public enum TextAlignment
     {
         Left,

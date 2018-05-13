@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using GalaxyBlox.Utils;
 using GalaxyBlox.Models;
-using Microsoft.Xna.Framework.Content;
 
 namespace GalaxyBlox.Static
 {

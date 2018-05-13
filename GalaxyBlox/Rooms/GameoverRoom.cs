@@ -50,7 +50,7 @@ namespace GalaxyBlox.Rooms
 
             var itemPadding = 50;
             
-            GameObject obj = Bank.Visuals.GetGameOverLabel(this);
+            GameObject obj = Bank.Visuals.GetLabelCenter(this);
             obj.Size = new Vector2(Size.X, 60);
             obj.Position = new Vector2(0, margin.top + backgroundMargin.top);
             obj.Text = "GAME OVER";
@@ -58,7 +58,7 @@ namespace GalaxyBlox.Rooms
             Objects.Add(obj);
 
             var lastObj = obj;
-            obj = Bank.Visuals.GetGameOverLabel(this);
+            obj = Bank.Visuals.GetLabelCenter(this);
             obj.Size = new Vector2(Size.X, 30);
             obj.Position = new Vector2(0, lastObj.Position.Y + lastObj.Size.Y +  itemPadding);
             obj.Text = isNewHighscore? "HIGHSCORE!" : "SCORE";
@@ -66,7 +66,7 @@ namespace GalaxyBlox.Rooms
             Objects.Add(obj);
 
             lastObj = obj;
-            obj = Bank.Visuals.GetGameOverLabel(this);
+            obj = Bank.Visuals.GetLabelCenter(this);
             obj.Size = new Vector2(Size.X, 40);
             obj.Position = new Vector2(0, lastObj.Position.Y + lastObj.Size.Y + itemPadding);
             obj.Text = Utils.Strings.ScoreToLongString(score);
@@ -78,7 +78,7 @@ namespace GalaxyBlox.Rooms
             if (isNewHighscore)
             {
                 lastObj = obj;
-                obj = Bank.Visuals.GetGameOverLabel(this);
+                obj = Bank.Visuals.GetLabelCenter(this);
                 obj.Size = new Vector2(Size.X, 30);
                 obj.Position = new Vector2(0, lastObj.Position.Y + lastObj.Size.Y + itemPadding);
                 obj.Text = "SELECT NAME";
@@ -98,7 +98,7 @@ namespace GalaxyBlox.Rooms
 
                 for (int i = 0; i < maxCharacters; i++)
                 {
-                    var arrUp = Bank.Buttons.GetMenuButton(this);
+                    var arrUp = Bank.Buttons.GetPlainButtonWithText(this);
                     arrUp.SpriteImage = Contents.Sprites.Button_up_medium;
                     arrUp.Size = btnArrowSize;
                     arrUp.Position = new Vector2(posX + i * (btnArrowSize.X + charItemPadding), posY);
@@ -117,7 +117,7 @@ namespace GalaxyBlox.Rooms
                     Objects.Add(character);
                     charactersList.Add(character);
 
-                    var arrDown = Bank.Buttons.GetMenuButton(this);
+                    var arrDown = Bank.Buttons.GetPlainButtonWithText(this);
                     arrDown.SpriteImage = Contents.Sprites.Button_down_medium;
                     arrDown.Size = btnArrowSize;
                     arrDown.Position = new Vector2(posX + i * (btnArrowSize.X + charItemPadding), character.Position.Y + character.Size.Y + charItemPadding);
@@ -156,7 +156,7 @@ namespace GalaxyBlox.Rooms
 
             Size = new Vector2(Size.X, lastObj.Position.Y + lastObj.Size.Y + btnDialogSize.Y + 2 * btnPadding + backgroundMargin.bottom);
             
-            btnOK = Bank.Buttons.GetEmptyButton(this);
+            btnOK = Bank.Buttons.GetBasicButton(this);
             btnOK.Size = btnDialogSize;
             btnOK.Position = new Vector2((Size.X - btnOK.Size.X) / 2, Size.Y - btnOK.Size.Y - btnPadding);
             btnOK.Text = isNewHighscore ? "NICE" : "DAMN";

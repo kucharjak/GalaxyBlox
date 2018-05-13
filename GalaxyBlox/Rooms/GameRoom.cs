@@ -100,7 +100,8 @@ namespace GalaxyBlox.Rooms
 
             var btnPauseSize = new Vector2(116, 100);
             // PAUSE BUTTON
-            btnPause = Bank.Buttons.GetPauseButton(this);
+            btnPause = Bank.Buttons.GetPlainButton(this);
+            btnPause.SpriteImage = Contents.Sprites.Button_pause;
             btnPause.Size = btnPauseSize;
             btnPause.Position = new Vector2(lastObj.Position.X + lastObj.Size.X - btnPauseSize.X - 16, lastObj.Position.Y + 16);
             btnPause.Click += btnPause_Click;
@@ -224,7 +225,7 @@ namespace GalaxyBlox.Rooms
             }
 
             // CONTROL BUTTON LEFT
-            btnControlLeft = Bank.Buttons.GetControlButton(this);
+            btnControlLeft = Bank.Buttons.GetPlainButton(this);
             btnControlLeft.SpriteImage = Contents.Sprites.ControlButton_left;
             btnControlLeft.Size = btnSize;
             btnControlLeft.Position = new Vector2(lastObj.Position.X + 16, controlButtonsStartY);
@@ -234,7 +235,7 @@ namespace GalaxyBlox.Rooms
             hider.HideObject(Objects.Last(), HidePlace.Bottom);
 
             // CONTROL BUTTON FALL
-            btnControlFall = Bank.Buttons.GetControlButton(this);
+            btnControlFall = Bank.Buttons.GetPlainButton(this);
             btnControlFall.SpriteImage = Contents.Sprites.ControlButton_fall;
             btnControlFall.Size = btnSize;
             btnControlFall.Position = new Vector2(lastObj.Position.X + 192, controlButtonsStartY);
@@ -245,7 +246,7 @@ namespace GalaxyBlox.Rooms
             hider.HideObject(Objects.Last(), HidePlace.Bottom);
 
             // CONTROL BUTTON ROTATE
-            btnControlRotate = Bank.Buttons.GetControlButton(this);
+            btnControlRotate = Bank.Buttons.GetPlainButton(this);
             btnControlRotate.SpriteImage = Contents.Sprites.ControlButton_rotate;
             btnControlRotate.Size = btnSize;
             btnControlRotate.Position = new Vector2(lastObj.Position.X + 368, controlButtonsStartY);
@@ -254,7 +255,7 @@ namespace GalaxyBlox.Rooms
             hider.HideObject(Objects.Last(), HidePlace.Bottom);
 
             // CONTROL BUTTON RIGHT
-            btnControlRight = Bank.Buttons.GetControlButton(this);
+            btnControlRight = Bank.Buttons.GetPlainButton(this);
             btnControlRight.SpriteImage = Contents.Sprites.ControlButton_right;
             btnControlRight.Size = btnSize;
             btnControlRight.Position = new Vector2(lastObj.Position.X + 544, controlButtonsStartY);
@@ -370,7 +371,7 @@ namespace GalaxyBlox.Rooms
             {
                 if (bonus.Type != BonusType.None && bonus.Progress >= 100)
                 {
-                    var btn = Bank.Buttons.GetEmptyButton(this);
+                    var btn = Bank.Buttons.GetBasicButton(this);
                     btn.Enabled = bonus.Enabled;
                     btn.Name = "BonusButton_" + i.ToString();
                     btn.Size = btnBonusSize;
