@@ -4,10 +4,20 @@ using System.Collections.Generic;
 
 namespace GalaxyBlox.Models
 {
+    /// <summary>
+    /// Sprite animation component - list of sprite images, timer and events (AnimationEnd, AnimationLoop, AnimationNext).
+    /// To be able to fire animation events correctly there exists a reference to parent GameObject - that is not an ideal way and  it should be done differently. 
+    /// </summary>
     public class SpriteAnimation
     {
+        /// <summary>
+        /// Reference to parent object.
+        /// </summary>
         public GameObject Parent;
 
+        /// <summary>
+        /// Currently visible frame from animation.
+        /// </summary>
         public Sprite ActiveSprite;
         public int Position;
         public int Rounds;
@@ -57,16 +67,22 @@ namespace GalaxyBlox.Models
             }
         }
 
+        /// <summary>
+        /// Sprite Animation Constructor
+        /// </summary>
+        /// <param name="sprites">SpriteImages collection</param>
+        /// <param name="fps">Frames per second</param>
+        /// <param name="start">True - animation starts immediately / False - you need to start animation yourself</param>
         public SpriteAnimation(List<Sprite> sprites, int fps, bool start = true)
         {
             this.sprites = sprites;
-            FPS = fps;
-            Rounds = 0;
-            Position = 0;
+            this.FPS = fps;
+            this.Rounds = 0;
+            this.Position = 0;
             this.start = start;
 
             if (sprites != null && sprites.Count > 0)
-                ActiveSprite = sprites[Position];
+                this.ActiveSprite = sprites[Position];
         }
 
         public void Update(GameTime gameTime)

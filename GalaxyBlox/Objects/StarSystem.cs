@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
 namespace GalaxyBlox.Objects
-{
+{ 
     class StarSystem : GameObject
     {
         private Dictionary<Star.StarType, int> starSizes;

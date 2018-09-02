@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using GalaxyBlox.Models;
 using GalaxyBlox.EventArgsClasses;
 using Microsoft.Xna.Framework;
-using Android.Util;
 
 namespace GalaxyBlox.Objects
 {
+    /// <summary>
+    /// Object responsible for reacting to swipes on itself - logicaly works like button, but with swipe gestures.
+    /// </summary>
     class SwipeArea : GameObject
     {
         public event EventHandler Swipe;
