@@ -205,7 +205,7 @@ namespace GalaxyBlox.Rooms
             Objects.Add(objToAdd);
 
             //// ADDING LOGO ////
-            objToAdd = new BreathingObject(this)
+            var logo = new BreathingObject(this)
             {
                 SpriteImage = Contents.Sprites.Logo,
                 Position = new Vector2(0, 140),
@@ -216,6 +216,14 @@ namespace GalaxyBlox.Rooms
                 TimerLimit = 5000,
                 Timer = 2500
             };
+            Objects.Add(logo);
+            hider.HideObject(logo, HidePlace.Top);
+
+            objToAdd = Bank.Buttons.GetPlainButton(this);
+            objToAdd.Alpha = 0f;
+            objToAdd.Position = new Vector2(0, 140);
+            objToAdd.Size = new Vector2(720, 256);
+            (objToAdd as Button).Click += ((sender, e) => { logo.BreathIn(); });
             Objects.Add(objToAdd);
             hider.HideObject(objToAdd, HidePlace.Top);
 
