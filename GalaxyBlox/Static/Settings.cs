@@ -1,5 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
 using System.IO.IsolatedStorage;
+using Microsoft.Xna.Framework;
 using static GalaxyBlox.Static.SettingClasses;
 
 namespace GalaxyBlox.Static
@@ -11,7 +12,6 @@ namespace GalaxyBlox.Static
     {
         public static readonly bool ShowFPS = false;
 
-        private static IsolatedStorageFile dataFile = IsolatedStorageFile.GetUserStoreForDomain();
         private const string settingsPath = "settings.xml";
         private const string highscoresPath = "highscores.xml";
         public const int MaxHighscoresPerGameMod = 5;
@@ -38,11 +38,7 @@ namespace GalaxyBlox.Static
 
         public static void LoadUserSettings()
         {
-            var tmpUserSettings = new UserSettings();
-            if (!Utils.XmlIsoStore.TryDeserialize(out tmpUserSettings, settingsPath))
-                tmpUserSettings = new UserSettings() { Indicator = SettingOptions.Indicator.Shape, LastGameMode = SettingOptions.GameMode.Normal };
-
-            UserSettings = tmpUserSettings;
+            Utils.XmlIsoStore.TryDeserialize(out UserSettings, settingsPath);
         }
 
         public static void SaveUserSettings()
@@ -52,11 +48,7 @@ namespace GalaxyBlox.Static
 
         public static void LoadHighscores()
         {
-            var tmpHighscores = new Highscores();
-            if (!Utils.XmlIsoStore.TryDeserialize(out tmpHighscores, highscoresPath))
-                tmpHighscores = new Highscores();
-
-            Highscores = tmpHighscores;
+            Utils.XmlIsoStore.TryDeserialize(out Highscores, highscoresPath);
         }
 
         public static void SaveHighscores()

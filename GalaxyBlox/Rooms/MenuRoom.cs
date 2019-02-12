@@ -1,13 +1,12 @@
-﻿using System;
-using GalaxyBlox.Models;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework;
-using GalaxyBlox.Objects;
+﻿
+using System;
 using System.Linq;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using GalaxyBlox.Models;
+using GalaxyBlox.Objects;
 using GalaxyBlox.Static;
 using static GalaxyBlox.Static.SettingOptions;
-using System.Collections.Generic;
 
 namespace GalaxyBlox.Rooms
 {
@@ -85,14 +84,14 @@ namespace GalaxyBlox.Rooms
 
             ////// ADDING BUTTONS //////
             //// EXIT BUTTON ////
-            var btnPauseSize = 100;
-            objToAdd = Bank.Buttons.GetPlainButtonWithText(this);
-            objToAdd.SpriteImage = Contents.Sprites.Button_exit;
-            objToAdd.Size = new Vector2(btnPauseSize);
-            objToAdd.Position = new Vector2(15, 15);
-            (objToAdd as Button).Click += btnFinish_Click;
-            Objects.Add(objToAdd);
-            hider.HideObject(objToAdd, HidePlace.Top);
+            //var btnPauseSize = 100;
+            //objToAdd = Bank.Buttons.GetPlainButtonWithText(this);
+            //objToAdd.SpriteImage = Contents.Sprites.Button_exit;
+            //objToAdd.Size = new Vector2(btnPauseSize);
+            //objToAdd.Position = new Vector2(15, 15);
+            //(objToAdd as Button).Click += btnFinish_Click;
+            //Objects.Add(objToAdd);
+            //hider.HideObject(objToAdd, HidePlace.Top);
 
             var nameSize = new Vector2(Size.X - 15, 25);
             objToAdd = new GameObject(this)
@@ -100,7 +99,7 @@ namespace GalaxyBlox.Rooms
                 Size = nameSize,
                 Position = new Vector2(0, 15),
                 TextSpriteFont = Contents.Fonts.PixelArtTextFont,
-                Text = "Jakub Kuchar 2018",
+                Text = Constants.Texts.Creator,
                 TextColor = Color.White,
                 TextHeight = (int)(nameSize.Y * 0.8f),
                 TextAlignment = TextAlignment.Right,
@@ -174,7 +173,7 @@ namespace GalaxyBlox.Rooms
             objToAdd.TextHeight = modeLabelTextSize;
             objToAdd.ShowText = true;
             objToAdd.TextColor = Color.White;
-            objToAdd.Text = "- SELECT GAME -";
+            objToAdd.Text = Constants.Texts.SelectGame;
             Objects.Add(objToAdd);
             hider.HideObject(objToAdd, HidePlace.Bottom);
 
@@ -189,7 +188,7 @@ namespace GalaxyBlox.Rooms
             Objects.Add(objToAdd);
             hider.HideObject(objToAdd, HidePlace.Left);
 
-            //// SELECT RIGH GAMEMODE BUTTON ////
+            //// SELECT RIGHT GAMEMODE BUTTON ////
             objToAdd = Bank.Buttons.GetPlainButtonWithText(this);
             objToAdd.SpriteImage = Contents.Sprites.Button_right;
             objToAdd.Size = arrowButtonsSize;
@@ -237,7 +236,7 @@ namespace GalaxyBlox.Rooms
                 Position = new Vector2(0, Size.Y / 2),
                 Size = new Vector2(Size.X, Size.Y / 2),
                 TextSpriteFont = Contents.Fonts.PixelArtTextFont,
-                Text = "TAP TO START",
+                Text = Constants.Texts.TapToStart,
                 TextColor = new Color(252, 239, 0),
                 TextHeight = 50,
                 TextAlignment = TextAlignment.Center,
@@ -380,7 +379,7 @@ namespace GalaxyBlox.Rooms
 
         private void btnHighscore_click(object sender, EventArgs e)
         {
-            new HighscoresRoom(this, "Room_Settings", Vector2.Zero, Vector2.Zero).Show();
+            new HighscoresRoom(this, "Room_Highscores", Vector2.Zero, Vector2.Zero).Show();
         }
 
         private void btnControls_Click(object sender, EventArgs e)

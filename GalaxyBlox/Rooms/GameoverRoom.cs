@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
-using GalaxyBlox.Models;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
+using GalaxyBlox.Models;
 using GalaxyBlox.Objects;
 using GalaxyBlox.Static;
 using static GalaxyBlox.Static.SettingOptions;
-using static GalaxyBlox.Static.Settings;
 using static GalaxyBlox.Static.SettingClasses;
 
 namespace GalaxyBlox.Rooms
@@ -53,7 +49,7 @@ namespace GalaxyBlox.Rooms
             GameObject obj = Bank.Visuals.GetLabelCenter(this);
             obj.Size = new Vector2(Size.X, 60);
             obj.Position = new Vector2(0, margin.top + backgroundMargin.top);
-            obj.Text = "GAME OVER";
+            obj.Text = Constants.Texts.GameOver;
             obj.TextHeight = (int)obj.Size.Y;
             Objects.Add(obj);
 
@@ -61,7 +57,7 @@ namespace GalaxyBlox.Rooms
             obj = Bank.Visuals.GetLabelCenter(this);
             obj.Size = new Vector2(Size.X, 30);
             obj.Position = new Vector2(0, lastObj.Position.Y + lastObj.Size.Y +  itemPadding);
-            obj.Text = isNewHighscore? "HIGHSCORE!" : "SCORE";
+            obj.Text = isNewHighscore? Constants.Texts.NewHighscore : Constants.Texts.Score;
             obj.TextHeight = (int)obj.Size.Y;
             Objects.Add(obj);
 
@@ -81,7 +77,7 @@ namespace GalaxyBlox.Rooms
                 obj = Bank.Visuals.GetLabelCenter(this);
                 obj.Size = new Vector2(Size.X, 30);
                 obj.Position = new Vector2(0, lastObj.Position.Y + lastObj.Size.Y + itemPadding);
-                obj.Text = "SELECT NAME";
+                obj.Text = Constants.Texts.SelectName;
                 obj.TextHeight = (int)obj.Size.Y;
                 Objects.Add(obj);
 
@@ -111,7 +107,7 @@ namespace GalaxyBlox.Rooms
                     character.TextAlignment = TextAlignment.Center;
                     character.TextSpriteFont = Contents.Fonts.PixelArtTextFont;
                     character.TextHeight = (int)(charItemSize.Y * 0.8f);
-                    character.Text = Settings.UseLastHighscoreName && !String.IsNullOrEmpty(lastName) && lastName.Count() > i ? lastName[i].ToString() : Contents.Constants.AvailableNameChars.First().ToString();
+                    character.Text = Settings.UseLastHighscoreName && !String.IsNullOrEmpty(lastName) && lastName.Count() > i ? lastName[i].ToString() : Constants.AvailableNameChars.First().ToString();
                     character.TextColor = Color.White;
                     character.LayerDepth = 0.05f;
                     Objects.Add(character);
@@ -126,7 +122,7 @@ namespace GalaxyBlox.Rooms
                     arrDown.Click += delegate
                     {
                         var c = character.Text.First();
-                        var selection = Contents.Constants.AvailableNameChars;
+                        var selection = Constants.AvailableNameChars;
                         var index = selection.IndexOf(c, 0);
                         index++;
                         if (index >= selection.Count())
@@ -138,7 +134,7 @@ namespace GalaxyBlox.Rooms
                     arrUp.Click += delegate 
                     {
                         var c = character.Text.First();
-                        var selection = Contents.Constants.AvailableNameChars;
+                        var selection = Constants.AvailableNameChars;
                         var index = selection.IndexOf(c, 0);
                         index--;
                         if (index < 0)
@@ -159,7 +155,7 @@ namespace GalaxyBlox.Rooms
             btnOK = Bank.Buttons.GetBasicButton(this);
             btnOK.Size = btnDialogSize;
             btnOK.Position = new Vector2((Size.X - btnOK.Size.X) / 2, Size.Y - btnOK.Size.Y - btnPadding);
-            btnOK.Text = isNewHighscore ? "NICE" : "DAMN";
+            btnOK.Text = isNewHighscore ? Constants.Texts.CheekyOk : Constants.Texts.CheekyCancel;
             btnOK.TextHeight = btnDialogTextHeight;
             btnOK.Click += BtnOK_Click;
             Objects.Add(btnOK);
@@ -181,7 +177,7 @@ namespace GalaxyBlox.Rooms
             if (charactersList == null)
                 return;
 
-            if (charactersList.Any(c => c.Text == Contents.Constants.AvailableNameChars.First().ToString()))
+            if (charactersList.Any(c => c.Text == Constants.AvailableNameChars.First().ToString()))
                 btnOK.Enabled = false;
             else
                 btnOK.Enabled = true;

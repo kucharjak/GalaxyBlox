@@ -225,12 +225,6 @@ namespace GalaxyBlox.Static
                 var nextShape = shapeRandom.Next(0, shapes.Count);
                 return shapes[nextShape];
             }
-
-        }
-
-        public static class Constants
-        {
-            public static string AvailableNameChars = "-ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         }
     }
 }

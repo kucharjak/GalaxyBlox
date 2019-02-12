@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Linq;
-using GalaxyBlox.Models;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using GalaxyBlox.Models;
 using GalaxyBlox.Objects;
 using GalaxyBlox.Static;
 using GalaxyBlox.Utils;
 using GalaxyBlox.EventArgsClasses;
-using Microsoft.Xna.Framework.Input;
-using static GalaxyBlox.Static.SettingOptions;
-using System.Collections.Generic;
 using GalaxyBlox.Objects.PlayingArenas;
+using static GalaxyBlox.Static.SettingOptions;
 
 namespace GalaxyBlox.Rooms
 {
@@ -119,7 +116,7 @@ namespace GalaxyBlox.Rooms
                 Size = lblScoreSize,
                 Position = new Vector2(148, lastObj.Position.Y + 24),
                 TextSpriteFont = Contents.Fonts.PixelArtTextFont,
-                Text = "SCORE",
+                Text = Constants.Texts.Score,
                 TextHeight = (int)lblScoreSize.Y,
                 TextAlignment = TextAlignment.Center,
                 TextColor = Color.White,
@@ -154,7 +151,7 @@ namespace GalaxyBlox.Rooms
                 Size = lblLevelSize,
                 Position = new Vector2(148, lastObj.Position.Y + 88),
                 TextSpriteFont = Contents.Fonts.PixelArtTextFont,
-                Text = "LEVEL",
+                Text = Constants.Texts.Level,
                 TextHeight = (int)lblLevelSize.Y,
                 TextAlignment = TextAlignment.Center,
                 TextColor = Color.White,
@@ -516,7 +513,7 @@ namespace GalaxyBlox.Rooms
                     lblScore.Text = newValue;
                 }
                 else
-                    lblScore.Text = "SCORE";
+                    lblScore.Text = Constants.Texts.Score;
             }
 
             if (lblLevel != null)
@@ -530,7 +527,7 @@ namespace GalaxyBlox.Rooms
                     lblLevel.Text = newValue;
                 }
                 else
-                    lblLevel.Text = "LEVEL";
+                    lblLevel.Text = Constants.Texts.Level;
             }
         }
 

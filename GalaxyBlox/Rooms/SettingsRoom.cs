@@ -68,7 +68,7 @@ namespace GalaxyBlox.Rooms
             Objects.Add(btnIndicator);
 
             obj = Bank.Visuals.GetLabelLeft(this);
-            obj.Text = "INDICATOR:";
+            obj.Text = Constants.Texts.Indicator;
             obj.Size = settingsItemSize;
             obj.TextHeight = settingsItemTextHeight;
             obj.Position = new Vector2(margin.left + itemPadding, btnIndicator.Position.Y);
@@ -77,13 +77,13 @@ namespace GalaxyBlox.Rooms
             btnVibration = Bank.Buttons.GetBasicButton(this);
             btnVibration.Size = settingsItemSize;
             btnVibration.TextHeight = settingsItemTextHeight;
-            btnVibration.Text = Settings.UserSettings.Vibration ? "YES" : "NO";
+            btnVibration.Text = Settings.UserSettings.Vibration ? Constants.Texts.Yes : Constants.Texts.CheekyNo;
             btnVibration.Position = new Vector2(Size.X - btnVibration.Size.X - margin.right - itemPadding, btnIndicator.Position.Y + btnIndicator.Size.Y + itemPadding);
             btnVibration.Click += BtnVibration_Click;
             Objects.Add(btnVibration);
 
             obj = Bank.Visuals.GetLabelLeft(this);
-            obj.Text = "VIBRATION:";
+            obj.Text = Constants.Texts.Vibration;
             obj.Size = settingsItemSize;
             obj.TextHeight = settingsItemTextHeight;
             obj.Position = new Vector2(margin.left + itemPadding, btnVibration.Position.Y);
@@ -92,13 +92,13 @@ namespace GalaxyBlox.Rooms
             btnExtendedShapes = Bank.Buttons.GetBasicButton(this);
             btnExtendedShapes.Size = settingsItemSize;
             btnExtendedShapes.TextHeight = settingsItemTextHeight;
-            btnExtendedShapes.Text = Settings.UserSettings.UseExtendedShapeLibrary ? "YES" : "NOPE";
+            btnExtendedShapes.Text = Settings.UserSettings.UseExtendedShapeLibrary ? Constants.Texts.Yes : Constants.Texts.CheekyNo;
             btnExtendedShapes.Position = new Vector2(Size.X - btnExtendedShapes.Size.X - margin.right - itemPadding, btnVibration.Position.Y + btnVibration.Size.Y + itemPadding);
             btnExtendedShapes.Click += BtnExtendedShapes_Click;
             Objects.Add(btnExtendedShapes);
 
             obj = Bank.Visuals.GetLabelLeft(this);
-            obj.Text = "MORE BLOCKs:";
+            obj.Text = Constants.Texts.NewShapes;
             obj.Size = settingsItemSize;
             obj.TextHeight = settingsItemTextHeight;
             obj.Position = new Vector2(margin.left + itemPadding, btnExtendedShapes.Position.Y);
@@ -106,14 +106,14 @@ namespace GalaxyBlox.Rooms
 
             btnOK = Bank.Buttons.GetBasicButton(this);
             btnOK.Size = btnDialogSize;
-            btnOK.Text = "SAVE";
+            btnOK.Text = Constants.Texts.Save;
             btnOK.TextHeight = btnDialogTextHeight;
             btnOK.Click += BtnOK_Click;
             Objects.Add(btnOK);
 
             btnCancel = Bank.Buttons.GetBasicButton(this);
             btnCancel.Size = btnDialogSize;
-            btnCancel.Text = "CANCEL";
+            btnCancel.Text = Constants.Texts.Cancel;
             btnCancel.TextHeight = btnDialogTextHeight;
             btnCancel.Click += BtnCancel_Click;
             Objects.Add(btnCancel);
@@ -149,13 +149,13 @@ namespace GalaxyBlox.Rooms
         private void BtnVibration_Click(object sender, EventArgs e)
         {
             newVibration = !newVibration;
-            btnVibration.Text = newVibration ? "YES" : "NO";
+            btnVibration.Text = newVibration ? Constants.Texts.Yes : Constants.Texts.CheekyNo;
         }
 
         private void BtnExtendedShapes_Click(object sender, EventArgs e)
         {
             newUseExtendedShapesLibrary = !newUseExtendedShapesLibrary;
-            btnExtendedShapes.Text = newUseExtendedShapesLibrary ? "YES" : "NO";
+            btnExtendedShapes.Text = newUseExtendedShapesLibrary ? Constants.Texts.Yes : Constants.Texts.CheekyNo;
         }
     }
 }

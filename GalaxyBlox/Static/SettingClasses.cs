@@ -55,6 +55,9 @@ namespace GalaxyBlox.Static
             [XmlElement]
             public bool Vibration = true;
 
+            /// <summary>
+            /// Settings for using more than classic shapes.
+            /// </summary>
             [XmlElement]
             public bool UseExtendedShapeLibrary = true;
         }

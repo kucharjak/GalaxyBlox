@@ -110,7 +110,7 @@ namespace GalaxyBlox.Rooms
             btnOK = Bank.Buttons.GetBasicButton(this);
             btnOK.Size = btnDialogSize;
             btnOK.Position = new Vector2((Size.X - btnOK.Size.X) / 2, Size.Y - btnOK.Size.Y - margin.bottom);
-            btnOK.Text = "NICE";
+            btnOK.Text = Constants.Texts.CheekyOk;
             btnOK.TextHeight = btnDialogTextHeight;
             btnOK.Click += BtnOK_Click;
             Objects.Add(btnOK);
