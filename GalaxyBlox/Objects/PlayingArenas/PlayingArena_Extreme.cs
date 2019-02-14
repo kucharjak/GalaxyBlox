@@ -28,6 +28,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
             maxBonuses = 3;
             availableBonuses = new List<GameBonus>();
             AddGameBonuses();
+            AddGameBonuses();
             ResetBonuses();
             
             //freeBonusTimeLimit = 1; // low for testing

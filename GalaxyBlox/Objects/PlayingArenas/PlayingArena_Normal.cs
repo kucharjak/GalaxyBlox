@@ -115,6 +115,7 @@ namespace GalaxyBlox.Objects.PlayingArenas
             maxBonuses = 2;
             availableBonuses = new List<GameBonus>();
             AddGameBonuses();
+            AddGameBonuses();
             ResetBonuses();
 
             slowDownLimit = 7500;
@@ -424,6 +425,9 @@ namespace GalaxyBlox.Objects.PlayingArenas
 
                 gameBonuses.RemoveAt(bonusIndex);
                 gameBonuses.Insert(bonusIndex, availableBonuses[index]);
+
+                availableBonuses.RemoveAt(index);
+                if (availableBonuses.Count == 0) AddGameBonuses();
             }
             RefreshBonuses();
         }
