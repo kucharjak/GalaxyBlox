@@ -85,11 +85,11 @@ namespace GalaxyBlox.Static
             public static List<Color> GameCubesColors = new List<Color>
             {
                 new Color(255, 255, 255) * 0.3f, // first possition reserved for neutral/ empty like color
-                new Color(76, 255, 0, 255), // Green
-                //Color.Red,
-                //Color.Yellow,
-                //new Color(42, 0, 255), // Blue
-                //new Color(255, 114, 0) // Orange
+                new Color(76, 255, 0),  // Green
+                new Color(255, 208, 0), // Orange
+                new Color(233, 255, 0), // Lime green
+                new Color(255, 0, 246), // Toxic pink
+                new Color(0, 255, 233), // Aqua
             };
 
             public static float NonActiveColorFactor = 0.4f;

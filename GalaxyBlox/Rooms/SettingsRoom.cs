@@ -16,10 +16,12 @@ namespace GalaxyBlox.Rooms
         private SettingOptions.Indicator newIndicator;
         private bool newVibration;
         private bool newUseExtendedShapesLibrary;
+        private bool newSingleColor;
 
         Button btnIndicator;
         Button btnVibration;
         Button btnExtendedShapes;
+        Button btnSingleColor;
         Button btnOK;
         Button btnCancel;
 
@@ -35,12 +37,13 @@ namespace GalaxyBlox.Rooms
             DialogBackgroundScale = 4;
             IsDialog = true;
 
-            this.Size = new Vector2(600, 630);
+            this.Size = new Vector2(600, 735);
             CenterParent();
 
             newIndicator = Settings.UserSettings.Indicator;
             newVibration = Settings.UserSettings.Vibration;
             newUseExtendedShapesLibrary = Settings.UserSettings.UseExtendedShapeLibrary;
+            newSingleColor = Settings.UserSettings.UseSingleColor;
 
             var margin = new { top = 129, left = 25, right = 25, bottom = 35 }; // anonymous type for margin
             
@@ -51,14 +54,16 @@ namespace GalaxyBlox.Rooms
             var btnDialogSize = new Vector2(160, 80);
             var btnDialogTextHeight = (int)(btnDialogSize.Y * 0.3f);
 
-            var highscoreBackgroundSize = new Vector2(Size.X - margin.left - margin.right, 3 * settingsItemSize.Y + 4 * itemPadding);
+            var highscoreBackgroundSize = new Vector2(Size.X - margin.left - margin.right, 4 * settingsItemSize.Y + 5 * itemPadding);
 
+            // ADDING BACKGROUND 
             GameObject obj = new DynamicBackgroundObject(this, Contents.Sprites.Dialog_inside, 4);
             obj.Position = new Vector2(margin.left, margin.top);
             obj.Size = highscoreBackgroundSize;
             obj.LayerDepth = 0.04f;
             Objects.Add(obj);
 
+            // INDICATOR SETTINGS
             btnIndicator = Bank.Buttons.GetBasicButton(this);
             btnIndicator.Size = settingsItemSize;
             btnIndicator.TextHeight = settingsItemTextHeight;
@@ -74,6 +79,7 @@ namespace GalaxyBlox.Rooms
             obj.Position = new Vector2(margin.left + itemPadding, btnIndicator.Position.Y);
             Objects.Add(obj);
 
+            // VIBRATTION SETTINS
             btnVibration = Bank.Buttons.GetBasicButton(this);
             btnVibration.Size = settingsItemSize;
             btnVibration.TextHeight = settingsItemTextHeight;
@@ -89,6 +95,7 @@ namespace GalaxyBlox.Rooms
             obj.Position = new Vector2(margin.left + itemPadding, btnVibration.Position.Y);
             Objects.Add(obj);
 
+            // SHAPES SETTINGS
             btnExtendedShapes = Bank.Buttons.GetBasicButton(this);
             btnExtendedShapes.Size = settingsItemSize;
             btnExtendedShapes.TextHeight = settingsItemTextHeight;
@@ -98,12 +105,29 @@ namespace GalaxyBlox.Rooms
             Objects.Add(btnExtendedShapes);
 
             obj = Bank.Visuals.GetLabelLeft(this);
-            obj.Text = Constants.Texts.NewShapes;
+            obj.Text = Constants.Texts.ExtendedShapesLibrary;
             obj.Size = settingsItemSize;
             obj.TextHeight = settingsItemTextHeight;
             obj.Position = new Vector2(margin.left + itemPadding, btnExtendedShapes.Position.Y);
             Objects.Add(obj);
 
+            // SINGLE COLOR SETTINGS
+            btnSingleColor = Bank.Buttons.GetBasicButton(this);
+            btnSingleColor.Size = settingsItemSize;
+            btnSingleColor.TextHeight = settingsItemTextHeight;
+            btnSingleColor.Text = Settings.UserSettings.UseSingleColor ? Constants.Texts.Yes : Constants.Texts.CheekyNo;
+            btnSingleColor.Position = new Vector2(Size.X - btnSingleColor.Size.X - margin.right - itemPadding, btnExtendedShapes.Position.Y + btnExtendedShapes.Size.Y + itemPadding);
+            btnSingleColor.Click += BtnSingleColor_Click;
+            Objects.Add(btnSingleColor);
+
+            obj = Bank.Visuals.GetLabelLeft(this);
+            obj.Text = Constants.Texts.SingleColor;
+            obj.Size = settingsItemSize;
+            obj.TextHeight = settingsItemTextHeight;
+            obj.Position = new Vector2(margin.left + itemPadding, btnSingleColor.Position.Y);
+            Objects.Add(obj);
+
+            // OK AND CANCEL BUTTONS
             btnOK = Bank.Buttons.GetBasicButton(this);
             btnOK.Size = btnDialogSize;
             btnOK.Text = Constants.Texts.Save;
@@ -134,6 +158,7 @@ namespace GalaxyBlox.Rooms
             Settings.UserSettings.Indicator = newIndicator;
             Settings.UserSettings.Vibration = newVibration;
             Settings.UserSettings.UseExtendedShapeLibrary = newUseExtendedShapesLibrary;
+            Settings.UserSettings.UseSingleColor = newSingleColor;
 
             Settings.SaveUserSettings();
             End();
@@ -156,6 +181,12 @@ namespace GalaxyBlox.Rooms
         {
             newUseExtendedShapesLibrary = !newUseExtendedShapesLibrary;
             btnExtendedShapes.Text = newUseExtendedShapesLibrary ? Constants.Texts.Yes : Constants.Texts.CheekyNo;
+        }
+
+        private void BtnSingleColor_Click(object sender, EventArgs e)
+        {
+            newSingleColor = !newSingleColor;
+            btnSingleColor.Text = newSingleColor ? Constants.Texts.Yes : Constants.Texts.CheekyNo;
         }
     }
 }

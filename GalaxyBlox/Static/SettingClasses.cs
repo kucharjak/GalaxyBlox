@@ -55,6 +55,9 @@ namespace GalaxyBlox.Static
             [XmlElement]
             public bool Vibration = true;
 
+            [XmlElement]
+            public bool UseSingleColor = true;
+
             /// <summary>
             /// Settings for using more than classic shapes.
             /// </summary>

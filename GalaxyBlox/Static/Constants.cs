@@ -32,7 +32,8 @@
 
             public const string Indicator = "INDICATOR:";
             public const string Vibration = "VIBRATION:";
-            public const string NewShapes = "MORE SHAPES:";
+            public const string ExtendedShapesLibrary = "EXTRA SHAPES:";
+            public const string SingleColor = "SINGLE COLOR:";
 
             public const string ExitMsg = "DO YOU REALLY WANT TO \n\nCLOSE THIS AWESOME GAME?";
         }

@@ -7,8 +7,6 @@ using Microsoft.Xna.Framework.Graphics;
 using GalaxyBlox.EventArgsClasses;
 using GalaxyBlox.Models;
 using GalaxyBlox.Rooms;
-using static GalaxyBlox.Static.Settings;
-using static GalaxyBlox.Static.SettingOptions;
 using GalaxyBlox.Utils;
 
 namespace GalaxyBlox.Objects
@@ -89,6 +87,8 @@ namespace GalaxyBlox.Objects
         protected int playgroundCubeMargin;
         public int CubeMargin { get { return playgroundCubeMargin; } }
 
+        protected int cubeColorIndex = 0;
+
         protected int fallingPause = 0; // to avoid miss clicks
 
         protected int moveTimer = 0;
@@ -143,18 +143,15 @@ namespace GalaxyBlox.Objects
 
             backgroundSize = new Vector2(
                 (arenaSize.X - 1) * (playgroundCubeSize + playgroundCubeMargin) + playgroundCubeSize + 2 * playgroundInnerPadding,
-                (arenaSize.Y - 1) * (playgroundCubeSize + playgroundCubeMargin) + playgroundCubeSize + 2 * playgroundInnerPadding
-                );
+                (arenaSize.Y - 1) * (playgroundCubeSize + playgroundCubeMargin) + playgroundCubeSize + 2 * playgroundInnerPadding);
 
             Size = new Vector2(
                 (float)Math.Ceiling(backgroundSize.X / ParentRoom.Scale),
-                (float)Math.Ceiling(backgroundSize.Y / ParentRoom.Scale)
-                );
+                (float)Math.Ceiling(backgroundSize.Y / ParentRoom.Scale));
 
             Position = new Vector2(
                 (float)Math.Ceiling(position.X + ((size.X - Size.X) / 2)),
-                (float)Math.Ceiling(position.Y + ((size.Y - Size.Y) / 2))
-                );
+                (float)Math.Ceiling(position.Y + ((size.Y - Size.Y) / 2)));
 
             //mainRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
             //backgroundRenderTarget = new RenderTarget2D(Game1.ActiveGame.GraphicsDevice, (int)backgroundSize.X, (int)backgroundSize.Y);
@@ -162,6 +159,8 @@ namespace GalaxyBlox.Objects
 
             actors = new List<Actor>();
             actorsQueue = new List<Actor>();
+
+            if (Settings.UserSettings.UseSingleColor) cubeColorIndex = Game1.Random.Next(1, Contents.Colors.GameCubesColors.Count());
         }
 
         protected virtual void InitializeArenaSettings()
@@ -396,7 +395,7 @@ namespace GalaxyBlox.Objects
             if (activeActor == null || activeActor.IsFalling || fallingPause > 0)
                 return;
 
-            activeActor.FallingSpeed = GetGameSpeed(GameSpeed.Speedup);
+            activeActor.FallingSpeed = GetGameSpeed(SettingOptions.GameSpeed.Speedup);
         }
 
         protected virtual void SlowDownActor()
@@ -404,7 +403,7 @@ namespace GalaxyBlox.Objects
             if (activeActor == null || activeActor.IsFalling)
                 return;
 
-            activeActor.FallingSpeed = GetGameSpeed(GameSpeed.Normal);
+            activeActor.FallingSpeed = GetGameSpeed(SettingOptions.GameSpeed.Normal);
         }
 
         protected virtual void MakeActorFall()
@@ -413,7 +412,7 @@ namespace GalaxyBlox.Objects
                 return;
 
             activeActor.IsFalling = true;
-            activeActor.FallingSpeed = GetGameSpeed(GameSpeed.Falling);
+            activeActor.FallingSpeed = GetGameSpeed(SettingOptions.GameSpeed.Falling);
         }
 
         protected virtual bool[,] RotateActor(bool[,] actorArray, int nTimes, bool randomlyFlip = false)
@@ -780,8 +779,9 @@ namespace GalaxyBlox.Objects
                 for (int i = 0; i < actorsToFullQueue; i++)
                 {
                     var newActorShape = GetRandomShape();
+                    var newActorColorIndex = cubeColorIndex == 0 ? Game1.Random.Next(1, Contents.Colors.GameCubesColors.Count) : cubeColorIndex;
                     newActorShape = RotateActor(newActorShape, Game1.Random.Next(0, 3), true);
-                    actorsQueue.Add(new Actor(newActorShape, new Point(), Contents.Colors.GameCubesColors[Game1.Random.Next(1, Contents.Colors.GameCubesColors.Count)]));
+                    actorsQueue.Add(new Actor(newActorShape, new Point(), Contents.Colors.GameCubesColors[newActorColorIndex]));
                 }
             }
 
@@ -790,7 +790,7 @@ namespace GalaxyBlox.Objects
             actorsQueue.Remove(actor);
             actor.Position = GetNewActorPosition(actor);
             actor.IsFalling = false;
-            actor.FallingSpeed = GetGameSpeed(GameSpeed.Normal);
+            actor.FallingSpeed = GetGameSpeed(SettingOptions.GameSpeed.Normal);
             actors.Add(actor);
             fallingPause = 150;
 
@@ -840,7 +840,7 @@ namespace GalaxyBlox.Objects
         /// <summary>
         /// Game speed is defined by game score
         /// </summary>
-        protected virtual int GetGameSpeed(GameSpeed gameSpeedSetting)
+        protected virtual int GetGameSpeed(SettingOptions.GameSpeed gameSpeedSetting)
         {
             return 0;
         }
@@ -852,11 +852,8 @@ namespace GalaxyBlox.Objects
             if (gameMode != SettingOptions.GameMode.Classic && Settings.UserSettings.Indicator != SettingOptions.Indicator.None) // draw indicator if set
                 DrawIndicator();
 
-            foreach (var actor in actors)
-            {
-                if (actor != activeActor)
-                    DrawActor(actor.Shape, actor.Position, Color.Lerp(actor.Color, Color.Black, Contents.Colors.NonActiveColorFactor));
-            }
+            foreach (var actor in actors.Where(act => act != activeActor))
+                DrawActor(actor.Shape, actor.Position, Color.Lerp(actor.Color, Color.Black, Contents.Colors.NonActiveColorFactor));
 
             if (activeActor != null)
                 DrawActor(activeActor.Shape, activeActor.Position, activeActor.Color);
