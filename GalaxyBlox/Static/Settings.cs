@@ -12,6 +12,8 @@ namespace GalaxyBlox.Static
     {
         public static readonly bool ShowFPS = false;
 
+        public static readonly bool DropActorAnimation = false;
+
         private const string settingsPath = "settings.xml";
         private const string highscoresPath = "highscores.xml";
         public const int MaxHighscoresPerGameMod = 5;

@@ -342,9 +342,7 @@ namespace GalaxyBlox.Objects
         public virtual void Resume(int resumeTimer = 0)
         {
             if (resumeTimer > 0)
-            {
                 this.resumeTimer = resumeTimer;
-            }
             else
                 IsPaused = false; 
         }
@@ -411,8 +409,25 @@ namespace GalaxyBlox.Objects
             if (activeActor == null || fallingPause > 0)
                 return;
 
-            activeActor.IsFalling = true;
-            activeActor.FallingSpeed = GetGameSpeed(SettingOptions.GameSpeed.Falling);
+            if (Settings.DropActorAnimation)
+            {
+                activeActor.IsFalling = true;
+                activeActor.FallingSpeed = GetGameSpeed(SettingOptions.GameSpeed.Falling);
+            }
+            else
+            {
+                for (; activeActor.Position.Y < playground.GetLength(1); activeActor.Position.Y++)
+                {
+                    if (ActorCollideWithPlayground(activeActor.Position, activeActor.Shape))
+                    {
+                        activeActor.Position.Y--;
+                        break;
+                    }
+                }
+
+                MoveActorDown(activeActor);
+                Vibrations.Vibrate(50);
+            }
         }
 
         protected virtual bool[,] RotateActor(bool[,] actorArray, int nTimes, bool randomlyFlip = false)
@@ -485,7 +500,7 @@ namespace GalaxyBlox.Objects
 
         protected virtual void MoveActiveActorToSide()
         {
-            if (activeActor == null || activeActorMovement == ActorMovement.None || moveTimer > 0)
+            if (activeActor == null || activeActor.IsFalling || activeActorMovement == ActorMovement.None || moveTimer > 0)
                 return;
 
             var newPos = activeActorMovement == ActorMovement.Left ? new Point(activeActor.Position.X - 1, activeActor.Position.Y) : new Point(activeActor.Position.X + 1, activeActor.Position.Y);
@@ -510,7 +525,6 @@ namespace GalaxyBlox.Objects
         protected virtual void MoveActorDown(Actor actor)
         {
             var newPosition = new Point(actor.Position.X, actor.Position.Y + 1);
-
             if (!ActorCollideWithPlayground(newPosition, actor.Shape))
             {
                 actor.Position = newPosition;
@@ -532,12 +546,12 @@ namespace GalaxyBlox.Objects
 
                 CheckGameOver();
 
-                int[] linesDestroyed;
-                if (CheckPlaygroundForFullLines(out linesDestroyed))
+                int[] fullLines;
+                if (CheckPlaygroundForFullLines(out fullLines))
                 {
-                    DestroyFullLines(linesDestroyed);
-                    IncreaseScoreForLines(linesDestroyed.Count());
-                    Vibrations.Vibrate(25 * linesDestroyed.Count());
+                    DestroyFullLines(fullLines);
+                    IncreaseScoreForLines(fullLines.Count());
+                    Vibrations.Vibrate(25 * fullLines.Count());
                 }
 
                 if (actors.Count == 0)
@@ -939,8 +953,7 @@ namespace GalaxyBlox.Objects
 
         private Color GetCubeColor(int posX, int posY)
         {
-            var result = Contents.Colors.GameCubesColors[playground[posX, posY]];
-            return result;
+            return Contents.Colors.GameCubesColors[playground[posX, posY]];
         }
 
         protected virtual Rectangle GetCubesIngamePosition(Point cubePos)
