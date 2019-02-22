@@ -96,6 +96,10 @@ namespace GalaxyBlox.Objects
         protected const int moveTimerFastest = 50;
         protected const int moveTimerSlowest = 150;
 
+        protected int blinkTimer = 0;
+        protected const int blinkMaxTimer = 350;
+        protected int[] blinkLines = new int[0];
+
         //private List<Point> playgroundChanges = new List<Point>();
 
         protected Vector2 backgroundSize;
@@ -194,6 +198,15 @@ namespace GalaxyBlox.Objects
 
             if (moveTimer < 0)
                 moveTimer = 0;
+
+            if (blinkTimer > 0)
+                blinkTimer -= gameTime.ElapsedGameTime.Milliseconds;
+
+            if (blinkTimer < 0)
+            {
+                blinkTimer = 0;
+                FinishDeleteFullLines();
+            }
 
             UpdateEffectsArray();
         }
@@ -420,10 +433,11 @@ namespace GalaxyBlox.Objects
                 {
                     if (ActorCollideWithPlayground(activeActor.Position, activeActor.Shape))
                     {
-                        activeActor.Position.Y--;
                         break;
                     }
                 }
+
+                activeActor.Position.Y--;
 
                 MoveActorDown(activeActor);
                 Vibrations.Vibrate(50);
@@ -549,14 +563,32 @@ namespace GalaxyBlox.Objects
                 int[] fullLines;
                 if (CheckPlaygroundForFullLines(out fullLines))
                 {
-                    DestroyFullLines(fullLines);
-                    IncreaseScoreForLines(fullLines.Count());
-                    Vibrations.Vibrate(25 * fullLines.Count());
+                    DeleteFullLines(fullLines);
                 }
-
-                if (actors.Count == 0)
+                else if(actors.Count == 0)
+                {
                     CreateNewActor();
+                }
             }
+        }
+
+        protected virtual void DeleteFullLines(int[] fullLines)
+        {
+            blinkLines = fullLines;
+            blinkTimer = blinkMaxTimer;
+        }
+
+        protected virtual void FinishDeleteFullLines()
+        {
+            RemoveFullLines(blinkLines);
+
+            int linesCount = blinkLines.Count();
+            IncreaseScoreForLines(linesCount);
+            Vibrations.Vibrate(25 * linesCount);
+
+            if (actors.Count == 0) CreateNewActor();
+
+            blinkLines = new int[0];
         }
 
         protected virtual void CheckGameOver()
@@ -574,7 +606,6 @@ namespace GalaxyBlox.Objects
         protected virtual void GameOver()
         {
             var isNewHighscore = false;
-
             if (score > 0)
             {
                 if (!Settings.Highscores.Items.ContainsKey(gameMode))
@@ -618,7 +649,7 @@ namespace GalaxyBlox.Objects
             return fullLines.Count() > 0;
         }
 
-        protected virtual void DestroyFullLines(int[] fullLines)
+        protected virtual void RemoveFullLines(int[] fullLines)
         {
             // refil playground with-out fullLines
             var playgroundPosY = playground.GetLength(1) - 1;
@@ -871,6 +902,22 @@ namespace GalaxyBlox.Objects
 
             if (activeActor != null)
                 DrawActor(activeActor.Shape, activeActor.Position, activeActor.Color);
+
+            DrawLinesBlink();
+        }
+
+        private void DrawLinesBlink()
+        {
+            var alpha = (float)(1 - Math.Pow(1 - blinkTimer / (float)blinkMaxTimer, 2));
+            var color = Contents.Colors.BlinkColor * alpha;
+            foreach (var y in blinkLines)
+            {
+                for (int x = 0; x < playground.GetLength(0); x++)
+                {
+                    playgroundEffectsList.Add(new Tuple<int, int, Color>(x, y, color));
+                }
+        
+            }
         }
 
         private void DrawActor(bool[,] actorToDraw, Point positionToDraw, Color colorToDraw)

@@ -113,6 +113,8 @@ namespace GalaxyBlox.Static
             public static Color PanelContentBackgroundColor = new Color(100, 118, 147);
 
             public static Color RoomsSeparateColor = new Color(0, 0, 0, 150);
+
+            public static Color BlinkColor = new Color(255, 255, 255);
         }
 
         public static class Shapes

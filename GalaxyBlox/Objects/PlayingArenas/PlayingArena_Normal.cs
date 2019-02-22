@@ -283,9 +283,9 @@ namespace GalaxyBlox.Objects.PlayingArenas
             scoreForLevelArray = scores.ToArray();
         }
 
-        protected override void DestroyFullLines(int[] fullLines)
+        protected override void RemoveFullLines(int[] fullLines)
         {
-            base.DestroyFullLines(fullLines);
+            base.RemoveFullLines(fullLines);
 
             AddProgressToBonus(fullLines.Count() * fullLines[0] / 2);
 
