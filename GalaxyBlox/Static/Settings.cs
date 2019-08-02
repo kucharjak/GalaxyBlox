@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO.IsolatedStorage;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using static GalaxyBlox.Static.SettingClasses;
 
 namespace GalaxyBlox.Static
@@ -19,15 +20,19 @@ namespace GalaxyBlox.Static
         public const int MaxHighscoresPerGameMod = 5;
         public const bool UseLastHighscoreName = false;
 
-        public static readonly Vector2 WindowSize = new Vector2(720, 1208);
+        public static Vector2 WindowSize = new Vector2(720, 1208);
 
         public static Vector2 ArenaSize = new Vector2(12, 20);
 
         public static UserSettings UserSettings;
         public static Highscores Highscores;
 
-        public static void LoadAll()
+        public static void LoadAll(Vector2 displaySize)
         {
+            var ratioX = WindowSize.X / displaySize.X;
+            var heightLeft = (displaySize.Y * ratioX) - WindowSize.Y;
+            WindowSize.Y += heightLeft;
+
             LoadUserSettings();
             LoadHighscores();
         }

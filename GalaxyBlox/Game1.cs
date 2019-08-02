@@ -41,7 +41,12 @@ namespace GalaxyBlox
         {
             base.Initialize();
 
-            Static.Settings.LoadAll();
+            var displaySize = new Vector2(
+                graphics.GraphicsDevice.Viewport.Width,
+                graphics.GraphicsDevice.Viewport.Height);
+
+            Static.Settings.LoadAll(displaySize);
+
 
             GameContent = Content;
             Random = new Random(unchecked((int)DateTime.Now.Ticks));
