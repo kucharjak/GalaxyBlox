@@ -22,7 +22,7 @@ namespace GalaxyBlox.Utils
             }
         }
 
-        public static bool TryDeserialize<T>(out T result, string filePath)
+        public static bool TryDeserialize<T>(out T result, string filePath) where T : new()
         {
             try
             {
@@ -39,7 +39,7 @@ namespace GalaxyBlox.Utils
             }
             catch (Exception e)
             {
-                result = default(T);
+                result = new T();
                 return false;
             }
         }
